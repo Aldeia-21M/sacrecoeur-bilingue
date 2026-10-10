@@ -55,18 +55,15 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .pill.lv-h[aria-pressed="true"]{background:#ffd9a8;border-color:#e08a1e}
 .pill.lv-v[aria-pressed="true"]{background:#f9b9cf;border-color:#d6336c}
 .tr-info{margin:8px 0 10px;color:#5b6478;font-size:15px}
-.tr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-@media (min-width:600px){.tr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (min-width:900px){.tr-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.tc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;border-radius:16px;padding:8px;border:2px solid var(--line)}
+.tr-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;container-type:inline-size}
+.tc{display:flex;flex-direction:column;align-items:stretch;gap:6px;border-radius:16px;padding:8px;border:2px solid var(--line)}
 .tc.c0{background:#d9ecfb}.tc.c1{background:#dff4dc}.tc.c2{background:#fff0b8}.tc.c3{background:#fde0ec}.tc.c4{background:#e9defa}
 .td,.tw{border:0;cursor:pointer;font-family:inherit;color:inherit;touch-action:manipulation;border-radius:12px;min-height:46px;background:rgba(255,255,255,.7)}
-.td{font-weight:700;font-size:clamp(22px,6vw,30px);color:#1f5fd6;padding:2px 12px;min-width:56px}
-.tw{flex:1 1 120px;min-width:0;text-align:left;padding:4px 8px;font-size:clamp(17px,4.6vw,22px);line-height:1.55;background:rgba(255,255,255,.85)}
+.td{font-weight:700;font-size:clamp(24px,6vw,34px);color:#1f5fd6;padding:2px 8px;text-align:center;width:100%}
+.tw{min-width:0;width:100%;text-align:center;padding:4px 4px;font-size:clamp(12px,3.4vw,22px);font-size:clamp(12px,3.4cqw,22px);line-height:1.6;overflow-wrap:anywhere;background:rgba(255,255,255,.85)}
 .gp{border-radius:7px;padding:0 3px}
 .g-u{color:#1f5fd6}.g-und{background:#9be29b}.g-zw{background:#ffe27a}.g-zig{background:#f7b7d6}.g-zehn{background:#f6a85f}.g-hund{background:#a9d8f5}.g-taus{background:#cfa8f0}.g-sp{color:#e5383b}.g-faint{opacity:.5}
 .ck{white-space:nowrap}
-@media (min-width:900px){.tr-grid.wide{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .tw.hid .gp{display:none}
 .tw.hid::before{content:"👀 touche pour voir";color:#5b6478;font-size:15px}
 .tc .playing{outline:3px solid #1f5fd6;background:#fff0b8}
