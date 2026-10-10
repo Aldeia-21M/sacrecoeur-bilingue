@@ -65,6 +65,8 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .tw{flex:1 1 120px;min-width:0;text-align:left;padding:4px 8px;font-size:clamp(17px,4.6vw,22px);line-height:1.55;background:rgba(255,255,255,.85)}
 .gp{border-radius:7px;padding:0 3px}
 .g-u{color:#1f5fd6}.g-und{background:#9be29b}.g-zw{background:#ffe27a}.g-zig{background:#f7b7d6}.g-zehn{background:#f6a85f}.g-hund{background:#a9d8f5}.g-taus{background:#cfa8f0}.g-sp{color:#e5383b}.g-faint{opacity:.5}
+.ck{white-space:nowrap}
+@media (min-width:900px){.tr-grid.wide{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .tw.hid .gp{display:none}
 .tw.hid::before{content:"👀 touche pour voir";color:#5b6478;font-size:15px}
 .tc .playing{outline:3px solid #1f5fd6;background:#fff0b8}
@@ -243,10 +245,14 @@ function sample(a,b,k){ const s=new Set(); while(s.size<k) s.add(a+Math.floor(Ma
 function render(){
   const [a,b,label]=LV[lvl];
   info.textContent=label+' · 12 nombres tirés au hasard';
+  grid.classList.toggle('wide',lvl==='very');
   const nums=sample(a,b,12);
   grid.innerHTML=nums.map((n,i)=>{
     const p=numParts(n), say=speech(p);
-    const html=p.map(([w,c])=>`<span class="gp g-${c}">${w}</span>`).join('<wbr>');
+    const sp=([w,c])=>`<span class="gp g-${c}">${w}</span>`;
+    const hi=p.findIndex(x=>x[1]==='hund');
+    const chunks=hi>=0&&hi<p.length-1?[p.slice(0,hi+1),p.slice(hi+1)]:[p];
+    const html=chunks.map(c=>`<span class="ck">${c.map(sp).join('')}</span>`).join('<wbr>');
     return `<div class="tc c${i%5}"><button class="td" data-say="${n}" data-lang="fr" aria-label="${n}">${n}</button><button class="tw${hide?' hid':''}" data-say="${say}" data-lang="de">${html}</button></div>`;
   }).join('');
 }
