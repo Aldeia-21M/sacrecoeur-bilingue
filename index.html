@@ -659,7 +659,7 @@ function show(i,s){
   try{ localStorage.setItem('dl-tab', i); localStorage.setItem('dl-sec', sec); }catch(e){}
 }
 let start=0, ss='de'; try{ start=parseInt(localStorage.getItem('dl-tab')||'0',10)||0; ss=localStorage.getItem('dl-sec')||'de'; }catch(e){}
-start=Math.min(start,pages.length-1); show(start,secsOf(start).includes(ss)?ss:secsOf(start)[0]);
+start=Math.min(start,pages.length-1); { const s0=secsOf(start).includes(ss)?ss:secsOf(start)[0]; setSec(s0,true); show(start,s0); }
 
 /* ---------- Entraînement : nombres au hasard ---------- */
 (function(){
