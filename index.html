@@ -530,12 +530,25 @@ function speakSeq(items){
 }
 window.DLspeakSeq=speakSeq;
 /* verdict parlé : « Bravo ! » ou « Pas tout à fait. La bonne réponse est… » puis la bonne réponse dans sa langue */
-window.DLverdict=function(ok,parts,noLead){
-  const pk=a=>a[Math.floor(Math.random()*a.length)];
-  const seq=[{t:ok?pk(['Bravo !','Très bien !','Super !','Exact !']):pk(['Pas tout à fait.','Oh, ce n’est pas ça.','Presque !']),l:'fr',pause:350}];
-  if(!ok&&!noLead&&parts&&parts.length) seq.push({t:'La bonne réponse est :',l:'fr',pause:350});
+window.DLverdict=function(ok,parts,noLead,extra){
+  extra=extra||{}; const pk=a=>a[Math.floor(Math.random()*a.length)]; const seq=[];
+  if(!ok&&extra.wrong&&extra.wrong.t){
+    seq.push({t:'Non, ça c’est :',l:'fr',pause:800},{t:extra.wrong.t,l:extra.wrong.l||'fr',pause:1300});
+    if(parts&&parts.length&&!noLead) seq.push({t:extra.lead||'La bonne réponse est :',l:'fr',pause:800});
+  } else {
+    seq.push({t:ok?pk(['Bravo !','Très bien !','Super !','Exact !']):pk(['Pas tout à fait.','Oh, ce n’est pas ça.','Presque !']),l:'fr',pause:350});
+    if(!ok&&!noLead&&parts&&parts.length) seq.push({t:extra.lead||'La bonne réponse est :',l:'fr',pause:800});
+  }
   (parts||[]).forEach(x=>seq.push({t:x.t,l:x.l||'fr',pause:x.pause}));
   speakSeq(seq);
+};
+/* nom de la réponse choisie (fausse), lu dans sa langue */
+window.DLwrongOf=function(options,k,correct,reveal){
+  const t=String(options[k]==null?'':options[k]); if(!t) return null;
+  const same=reveal&&String(reveal.t)===String(options[correct]);
+  let l=same?reveal.l:'fr';
+  if(/^\d+$/.test(t)&&reveal&&reveal.l==='de'&&window.DL&&DL.numWord){ return {t:DL.numWord(+t),l:'de'}; }
+  return {t:t.replace(/<[^>]+>/g,''),l:l};
 };
 document.addEventListener('click', e=>{
   const t = e.target.closest('[data-say]'); if(!t) return;
@@ -1111,7 +1124,7 @@ function askQuestion(p,d){
       fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances de <b>${d}</b> case${d>1?'s':''}.`
                       :`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu avances de <b>${d-1}</b> case${d-1>1?'s':''} (le total moins un).`;
-      next.hidden=false; DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}]); curQ=Object.assign({},q,{answered:true});
+      next.hidden=false; DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)}); curQ=Object.assign({},q,{answered:true});
       next.onclick=()=>{ ov.remove(); res(ok); };
     };
   });
@@ -1359,9 +1372,9 @@ function startLoto(cfg){
       c.by=L.turn; L.scores[L.turn]++; L.target=null; paint(); msg(`✅ <b>Bravo !</b> ${esc(c.it.fr)} = ${esc(c.it.de)}`); DLverdict(true,[{t:c.it.de,l:c.it.lang||'de'}]);
       await sleep(1500); L.turn=(L.turn+1)%cfg.players.length; L.busy=false; next();
     } else {
-      L.errors++; b.classList.add('shake'); msg(`❌ Ce n’est pas la bonne case…${multi?' Au suivant !':' Réécoute !'}`);
+      L.errors++; const wrongC=c; b.classList.add('shake'); msg(`❌ Ce n’est pas la bonne case…${multi?' Au suivant !':' Réécoute !'}`);
       await sleep(900); b.classList.remove('shake'); if(multi) L.turn=(L.turn+1)%cfg.players.length; L.busy=false; paint();
-      const q=cfg.players[L.turn]; msg(`${q.emoji} <b>${esc(q.name)}</b>, à toi ! Même mot.`); DLspeakSeq([{t:'Ce n’est pas la bonne case. Écoute encore :',l:'fr',pause:450},{t:L.target.it.de,l:L.target.it.lang||'de',pause:900},{t:L.target.it.de,l:L.target.it.lang||'de'}]);
+      const q=cfg.players[L.turn]; msg(`${q.emoji} <b>${esc(q.name)}</b>, à toi ! Même mot.`); DLspeakSeq([{t:'Non, ça c’est :',l:'fr',pause:800},{t:wrongC.it.de,l:wrongC.it.lang||'de',pause:1300},{t:'Cherche :',l:'fr',pause:800},{t:L.target.it.de,l:L.target.it.lang||'de'}]);
     }
   };
   function finish(){
@@ -1404,7 +1417,7 @@ function startRace(cfg){
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances d’une case.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu restes sur place.`;
-      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}]);
+      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       if(ok){ R.pos[R.turn]++; paint(); }
       R.q=Object.assign({},q,{answered:true});
       const nx=box.querySelector('.g-next'); nx.hidden=false;
@@ -1454,7 +1467,7 @@ function mcq(box,q,done){
   box.querySelector('.g-opts').onclick=e=>{
     const b=e.target.closest('button'); if(!b||fin) return; fin=true; const k=+b.dataset.k, ok=k===q.correct;
     box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
-    DLverdict(ok,q.reveal?[{t:q.reveal.t,l:q.reveal.l}]:[]);
+    DLverdict(ok,q.reveal?[{t:q.reveal.t,l:q.reveal.l}]:[],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
     done(ok,ok?`✅ <b>Bravo !</b> ${esc(q.shown||'')}`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown||q.options[q.correct])}`);
   };
   return ()=>box.querySelectorAll('.g-opts button')[q.correct].click();
@@ -1533,7 +1546,7 @@ G.chasse=simple('🔎 Chasse au mot','La voix te demande un objet en allemand : 
    let fin=false;
    box.querySelector('.h-scene').onclick=e=>{ const b=e.target.closest('.h-obj'); if(!b||fin) return; fin=true; const x=pick[+b.dataset.i], ok=x===target;
      box.querySelectorAll('.h-obj').forEach((o,i)=>{ o.disabled=true; if(pick[i]===target) o.classList.add('ok'); else if(i===+b.dataset.i) o.classList.add('ko'); });
-     DLverdict(ok,[{t:target.de,l:'de'}]); done(ok,ok?`✅ <b>Bravo !</b> ${esc(target.fr)} = ${esc(target.de)}`:`❌ C’était : ${esc(target.fr)} = <b>${esc(target.de)}</b>`); };
+     DLverdict(ok,[{t:target.de,l:'de'}],false,{wrong:ok?null:{t:x.de,l:'de'},lead:'Tu cherchais :'}); done(ok,ok?`✅ <b>Bravo !</b> ${esc(target.fr)} = ${esc(target.de)}`:`❌ C’était : ${esc(target.fr)} = <b>${esc(target.de)}</b>`); };
    return ()=>box.querySelectorAll('.h-obj')[pick.indexOf(target)].click();
  }}));
 
@@ -1573,7 +1586,7 @@ G.mur=simple('⚡ Mur de nombres','Un nombre est lu en allemand : touche-le le p
    const t0=Date.now(); let fin=false; const iv=setInterval(()=>{ const c=box.querySelector('#mC'); if(c&&!fin) c.textContent=((Date.now()-t0)/1000).toFixed(1)+' s'; else clearInterval(iv); },100);
    box.querySelector('.h-wall').onclick=e=>{ const b=e.target.closest('.h-wc'); if(!b||fin) return; fin=true; clearInterval(iv); const ok=+b.dataset.n===t, sec=((Date.now()-t0)/1000).toFixed(1);
      box.querySelectorAll('.h-wc').forEach(x=>{ x.disabled=true; if(+x.dataset.n===t) x.classList.add('ok'); else if(x===b) x.classList.add('ko'); });
-     DLverdict(ok,[{t:nw(t),l:'de'}]); done(ok,ok?`✅ <b>Bravo !</b> ${t} = ${nw(t)} · ${sec} s`:`❌ C’était <b>${t}</b> = ${nw(t)}`); };
+     DLverdict(ok,[{t:nw(t),l:'de'}],false,{wrong:ok?null:{t:nw(+b.dataset.n),l:'de'},lead:'Tu cherchais :'}); done(ok,ok?`✅ <b>Bravo !</b> ${t} = ${nw(t)} · ${sec} s`:`❌ C’était <b>${t}</b> = ${nw(t)}`); };
    return ()=>[...box.querySelectorAll('.h-wc')].find(x=>+x.dataset.n===t).click();
  }}));
 
@@ -2066,7 +2079,7 @@ function MkSeries(rootId,cfg){
     else { Q.tiles=shuffle(Q.answer.split('').map((c,i)=>({c,used:false}))); inp=`<div class="h-ans" id="${rootId}Ans"></div><div class="h-tiles" id="${rootId}Tl"></div><button class="g-ghost" id="${rootId}Bk">⌫ Effacer une lettre</button>`; }
     P.innerHTML=`<div class="mx-play">${run.review?'<div class="mx-rev">🔁 Je refais mes erreurs</div>':''}${dots()}${Q.vis?`<div class="sr-vis">${Q.vis}</div>`:''}<div class="sr-q">${Q.prompt}</div>${Q.say?`<button class="mx-hear top" id="${rootId}H">🔊 Écouter</button>`:''}${inp}<div class="mx-fb" id="${rootId}Fb" hidden></div></div>`;
     const H=P.querySelector('#'+rootId+'H'); if(H){ H.onclick=()=>say(Q.say,Q.lang); setTimeout(()=>say(Q.say,Q.lang),FAST?0:300); }
-    if(Q.kind==='mcq') P.querySelector('.cj-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||run.locked) return; run.locked=true; const k=+b.dataset.k;
+    if(Q.kind==='mcq') P.querySelector('.cj-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||run.locked) return; run.locked=true; const k=+b.dataset.k; run.lastK=k;
       P.querySelectorAll('.cj-opts button').forEach((x,j)=>{ x.disabled=true; if(j===Q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); }); resolve(k===Q.correct); };
     else if(Q.kind==='num') P.querySelector('.mx-pad').onclick=e=>{ const b=e.target.closest('button'); if(!b||run.locked) return; const k=b.dataset.k;
       if(k==='del') run.typed=run.typed.slice(0,-1); else if(k==='ok'){ if(!run.typed) return; run.locked=true; P.querySelector('#'+rootId+'In').classList.add(+run.typed===Q.answer?'good':'bad'); return resolve(+run.typed===Q.answer); } else if(run.typed.length<5) run.typed+=k;
@@ -2093,7 +2106,10 @@ function MkSeries(rootId,cfg){
   function resolve(ok){
     if(run.fin) return; run.fin=true; run.res[run.i]=ok; if(ok) run.ok++; else run.wrong.push(Q);
     const fb=P.querySelector('#'+rootId+'Fb'); fb.hidden=false; fb.className='mx-fb '+(ok?'ok':'ko'); fb.innerHTML=ok?`✅ <b>Bravo !</b> ${Q.explain||''}`:`❌ ${Q.explain||'Pas tout à fait.'}`;
-    DLverdict(ok,[{t:Q.after||(Q.explain&&strip(Q.explain))||'',l:Q.afterLang||(Q.after?(Q.lang||'fr'):'fr')}],true);
+    { const aL=Q.afterLang||(Q.after?(Q.lang||'fr'):'fr'), aT=Q.after||(Q.explain&&strip(Q.explain))||'';
+      if(!ok&&Q.kind==='mcq'&&run.lastK!=null&&Q.options){ const rv={t:Q.after||'',l:aL}, w=DLwrongOf(Q.options,run.lastK,Q.correct,rv), c=DLwrongOf(Q.options,Q.correct,Q.correct,rv);
+        const parts=[]; if(c) parts.push(Object.assign({pause:900},c)); if(aT&&(!c||aT!==c.t)) parts.push({t:aT,l:aL}); DLverdict(false,parts,false,{wrong:w}); }
+      else DLverdict(ok,[{t:aT,l:aL}],true); }
     run.i++; const nx=document.createElement('button'); nx.className='mx-go'; nx.textContent=run.i>=run.total?'Voir mon score ▶':'Suivant ▶'; nx.onclick=next; fb.after(nx);
     P.querySelector('.mx-dots').outerHTML=dots();
   }
@@ -2624,32 +2640,33 @@ const MENU=[
 
 /* ---- générateurs : {vis, fr, de, opts:[{h,ok}], cls} ---- */
 function nums(n,lo,hi){ const s=new Set([n]); while(s.size<3) s.add(Math.max(lo,Math.min(hi,n+rnd(7)-3))); return shuffle([...s]); }
+const nn=x=>({fr:NUMF[x]!==undefined?String(NUMF[x]):String(x),de:NUMD[x]!==undefined?String(NUMD[x]):String(x)});
 const things=(e,n)=>n>10?e.repeat(10)+'<br>'+e.repeat(n-10):e.repeat(n);
 const GEN={
  count(){ const th=THINGS[rnd(THINGS.length)], n=1+rnd(10); const o=nums(n,1,10);
-  return {vis:`<div class="pt-things">${things(th[0],n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
+  return {vis:`<div class="pt-things">${things(th[0],n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
  count20(){ const th=THINGS[rnd(THINGS.length)], n=11+rnd(10); const o=nums(n,11,20);
-  return {vis:`<div class="pt-things sm">${things(th[0],n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
+  return {vis:`<div class="pt-things sm">${things(th[0],n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
  hear(){ const n=1+rnd(10); const o=nums(n,1,10);
-  return {vis:'<div class="pt-ear">👂</div>',fr:`Écoute : ${NUMF[n]}. Touche le bon nombre !`,de:`Hör zu: ${NUMD[n]}. Tippe die richtige Zahl!`,opts:o.map(x=>({h:x,ok:x===n}))}; },
+  return {vis:'<div class="pt-ear">👂</div>',fr:`Écoute : ${NUMF[n]}. Touche le bon nombre !`,de:`Hör zu: ${NUMD[n]}. Tippe die richtige Zahl!`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
  add(){ const th=THINGS[rnd(THINGS.length)], a=1+rnd(5), b=1+rnd(5), n=a+b; const o=nums(n,2,10);
-  return {vis:`<div class="pt-things">${th[0].repeat(a)} ➕ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} plus ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} plus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
+  return {vis:`<div class="pt-things">${th[0].repeat(a)} ➕ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} plus ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} plus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
  bigger(){ let a=1+rnd(20), b=1+rnd(20); while(a===b) b=1+rnd(20); const big=Math.random()<.65;
-  return {vis:'',fr:`Touche le nombre le plus ${big?'grand':'petit'} !`,de:`Tippe auf die ${big?'grösste':'kleinste'} Zahl!`,cls:'two',opts:[a,b].map(x=>({h:x,ok:big?x===Math.max(a,b):x===Math.min(a,b)}))}; },
+  return {vis:'',fr:`Touche le nombre le plus ${big?'grand':'petit'} !`,de:`Tippe auf die ${big?'grösste':'kleinste'} Zahl!`,cls:'two',opts:[a,b].map(x=>({h:x,n:nn(x),ok:big?x===Math.max(a,b):x===Math.min(a,b)}))}; },
  color(){ const o=shuffle(COLS).slice(0,4), c=o[rnd(4)];
-  return {vis:'',fr:`Touche la couleur ${c[0]} !`,de:`Tippe auf ${c[1]}!`,opts:o.map(x=>({h:`<i class="pt-dot" style="background:${x[2]}"></i>`,ok:x===c}))}; },
+  return {vis:'',fr:`Touche la couleur ${c[0]} !`,de:`Tippe auf ${c[1]}!`,opts:o.map(x=>({h:`<i class="pt-dot" style="background:${x[2]}"></i>`,n:{fr:x[0],de:x[1]},ok:x===c}))}; },
  shape(){ const o=shuffle(SHAPES).slice(0,4), c=o[rnd(4)];
-  return {vis:'',fr:`Touche ${c[0]} !`,de:`Wo ist ${c[1]}?`,opts:o.map(x=>({h:x[2],ok:x===c}))}; },
+  return {vis:'',fr:`Touche ${c[0]} !`,de:`Wo ist ${c[1]}?`,opts:o.map(x=>({h:x[2],n:{fr:x[0],de:x[1]},ok:x===c}))}; },
  animal(){ const o=shuffle(ANI).slice(0,3), c=o[rnd(3)];
-  if(c[3]&&Math.random()<.5) return {vis:'<div class="pt-ear">🔊</div>',fr:`Qui fait « ${c[3]} » ?`,de:`Wer macht „${c[4]}“?`,opts:o.map(x=>({h:x[0],ok:x===c}))};
-  return {vis:'',fr:`Touche ${c[1]} !`,de:`Wo ist ${c[2]}?`,opts:o.map(x=>({h:x[0],ok:x===c}))}; },
+  if(c[3]&&Math.random()<.5) return {vis:'<div class="pt-ear">🔊</div>',fr:`Qui fait « ${c[3]} » ?`,de:`Wer macht „${c[4]}“?`,opts:o.map(x=>({h:x[0],n:{fr:x[1],de:x[2]},ok:x===c}))};
+  return {vis:'',fr:`Touche ${c[1]} !`,de:`Wo ist ${c[2]}?`,opts:o.map(x=>({h:x[0],n:{fr:x[1],de:x[2]},ok:x===c}))}; },
  more(){ const th=THINGS[rnd(THINGS.length)]; let a=1+rnd(9), b=1+rnd(9); while(b===a) b=1+rnd(9); const more=Math.random()<.6;
   const ok=more?(a>b?0:1):(a<b?0:1);
   return {vis:'',fr:`Où y a-t-il ${more?'plus':'moins'} de ${th[1]} ?`,de:`Wo sind ${more?'mehr':'weniger'} ${th[2]}?`,cls:'two',opts:[a,b].map((x,i)=>({h:`<span class="pt-grp">${th[0].repeat(x)}</span>`,ok:i===ok}))}; },
  letter(){ const o=shuffle(LET).slice(0,3), c=o[rnd(3)];
-  return {vis:'',fr:`Touche la lettre ${c} !`,de:`Tippe auf den Buchstaben ${c}!`,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,ok:x===c}))}; },
+  return {vis:'',fr:`Touche la lettre ${c} !`,de:`Tippe auf den Buchstaben ${c}!`,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,n:{fr:x,de:x},ok:x===c}))}; },
  firstletter(){ const w=FL[rnd(FL.length)], L=pickL(); const fr=L==='fr'; const c=fr?w[2]:w[4]; const pool=shuffle(LET.filter(x=>x!==c)).slice(0,2); const o=shuffle([c].concat(pool));
-  return {vis:`<div class="pt-things">${w[0]}</div>`,fr:`Par quelle lettre commence « ${w[1]} » ?`,de:`Mit welchem Buchstaben beginnt „${w[3]}“?`,forceL:L,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,ok:x===c}))}; },
+  return {vis:`<div class="pt-things">${w[0]}</div>`,fr:`Par quelle lettre commence « ${w[1]} » ?`,de:`Mit welchem Buchstaben beginnt „${w[3]}“?`,forceL:L,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,n:{fr:x,de:x},ok:x===c}))}; },
  pattern(){ const E=shuffle(['🔴','🔵','🟡','🟢','⭐','❤️','🍎','🐟']), [a,b,c]=E; const kind=rnd(3);
   const seq=kind===0?[a,b,a,b,a]:kind===1?[a,a,b,a,a]:[a,b,c,a,b]; const ans=kind===0?b:kind===1?b:c;
   const o=shuffle([ans].concat(E.slice(3,5).concat([a]).filter(x=>x!==ans)).slice(0,3));
@@ -2661,11 +2678,11 @@ const SYL=[['🐱','chat',1,'Katze'],['🥖','pain',1,'Brot'],['🌙','lune',2,'
 const RHY=[['🐱','chat','🐀','rat'],['🥖','pain','🖐️','main'],['🌙','lune','🍑','prune'],['🐔','poule','⚽','boule'],['🍌','banane','🌴','cabane'],['🌸','fleur','❤️','cœur']];
 Object.assign(window.PETV,{SIZES,ODD,SYL,RHY});
 GEN.sub=function(){ const th=THINGS[rnd(THINGS.length)], a=2+rnd(8), b=1+rnd(a-1), n=a-b; const o=nums(n,0,9);
-  return {vis:`<div class="pt-things">${th[0].repeat(a)} ➖ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} moins ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} minus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,ok:x===n}))}; };
+  return {vis:`<div class="pt-things">${th[0].repeat(a)} ➖ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} moins ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} minus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; };
 GEN.next=function(){ const n=1+rnd(18), after=Math.random()<.6, r=after?n+1:n; const ans=after?n+1:n; const m=after?n:n+1; const o=nums(ans,0,20);
-  return {vis:`<div class="pt-things">${after?m+' ➡️ ❓':'❓ ⬅️ '+m}</div>`,fr:after?`Quel nombre vient après ${m} ?`:`Quel nombre vient avant ${m} ?`,de:after?`Welche Zahl kommt nach ${m}?`:`Welche Zahl kommt vor ${m}?`,opts:o.map(x=>({h:x,ok:x===ans}))}; };
+  return {vis:`<div class="pt-things">${after?m+' ➡️ ❓':'❓ ⬅️ '+m}</div>`,fr:after?`Quel nombre vient après ${m} ?`:`Quel nombre vient avant ${m} ?`,de:after?`Welche Zahl kommt nach ${m}?`:`Welche Zahl kommt vor ${m}?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===ans}))}; };
 GEN.sizes=function(){ const o=shuffle(SIZES).slice(0,3); const big=Math.random()<.6; const s=o.slice().sort((a,b)=>a[1]-b[1]); if(s[2][1]===s[1][1]||s[0][1]===s[1][1]) return GEN.sizes(); const c=big?s[2]:s[0];
-  return {vis:'',fr:big?'Touche le plus grand animal !':'Touche le plus petit animal !',de:big?'Tippe auf das grösste Tier!':'Tippe auf das kleinste Tier!',opts:o.map(x=>({h:x[0],ok:x===c}))}; };
+  return {vis:'',fr:big?'Touche le plus grand animal !':'Touche le plus petit animal !',de:big?'Tippe auf das grösste Tier!':'Tippe auf das kleinste Tier!',opts:o.map(x=>({h:x[0],n:{fr:x[2],de:x[3]},ok:x===c}))}; };
 GEN.odd=function(){ const [A,B]=shuffle(ODD).slice(0,2); const three=shuffle(A).slice(0,3), odd=pick(B); const all=shuffle(three.concat([odd]));
   return {vis:'',fr:'Touche l’intrus : celui qui ne va pas avec les autres !',de:'Welches Bild passt nicht zu den anderen?',opts:all.map(x=>({h:x,ok:x===odd}))}; };
 GEN.syll=function(){ const w=pick(SYL), n=w[2]; const o=shuffle([1,2,3,4].filter(x=>x!==n)).slice(0,2).concat([n]); const oo=shuffle(o);
@@ -2673,9 +2690,9 @@ GEN.syll=function(){ const w=pick(SYL), n=w[2]; const o=shuffle([1,2,3,4].filter
 GEN.rhyme=function(){ const r=pick(RHY); const others=shuffle(RHY.filter(x=>x!==r)).slice(0,2); const all=shuffle([[r[2],r[3]]].concat(others.map(x=>[x[0],x[1]])));
   return {vis:`<div class="pt-things">${r[0]}</div>`,fr:`Quel mot rime avec « ${r[1]} » ?`,forceL:'fr',opts:all.map(x=>({h:x[0],ok:x[1]===r[3]}))}; };
 GEN.lower=function(){ const L=pick('ABCDEFGHILMOPRSTU'.split('')), l=L.toLowerCase(); const o=shuffle([L].concat(shuffle('abcdefghilmoprstu'.split('').filter(x=>x!==l)).slice(0,2)).map(x=>x===L?l:x));
-  return {vis:`<div class="pt-things"><span class="pt-let">${L}</span></div>`,fr:`Touche la petite lettre qui va avec ${L} !`,de:`Welcher Kleinbuchstabe passt zu ${L}?`,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,ok:x===l}))}; };
+  return {vis:`<div class="pt-things"><span class="pt-let">${L}</span></div>`,fr:`Touche la petite lettre qui va avec ${L} !`,de:`Welcher Kleinbuchstabe passt zu ${L}?`,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,n:{fr:x,de:x},ok:x===l}))}; };
 Object.keys(VOC).forEach(k=>{ GEN[k]=function(){ const V=VOC[k], o=shuffle(V.l).slice(0,3), c=o[rnd(3)];
-  return {vis:'',fr:(V.pf||(n=>`Touche ${n} !`))(c[1]),de:(V.pd||(n=>`Wo ist ${n}?`))(c[2]),opts:o.map(x=>({h:x[0],ok:x===c}))}; }; });
+  return {vis:'',fr:(V.pf||(n=>`Touche ${n} !`))(c[1]),de:(V.pd||(n=>`Wo ist ${n}?`))(c[2]),opts:o.map(x=>({h:x[0],n:{fr:x[1],de:x[2]},ok:x===c}))}; }; });
 T.GEN=GEN;
 
 /* ---- vues ---- */
@@ -2707,9 +2724,13 @@ function rounds(id){
     S.w=0; const say=()=>sayKey(q[L],L); root.querySelector('#ptS').onclick=say; setTimeout(say,FAST?0:250);
     root.querySelector('#ptO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const o=q.opts[+b.dataset.k];
       if(o.ok){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.i++; sp((L==='de'?OKD:OKF)[rnd(3)],L); await sleep(1300); next(); }
-      else { S.first=false; S.w++; b.classList.add('ko'); b.disabled=true; const fb=root.querySelector('#ptFb'); fb.hidden=false; fb.textContent=L==='de'?'❌ Nicht ganz. Versuch’s nochmal!':'❌ Pas tout à fait. Essaie encore !';
+      else { S.first=false; S.w++; b.classList.add('ko'); b.disabled=true; const nm=(o.n&&o.n[L])||''; const key=keyOf(q[L],L), de=L==='de';
+        const fb=root.querySelector('#ptFb'); fb.hidden=false; fb.textContent=nm?(de?'❌ Nein, das ist: ':'❌ Non, ça c’est : ')+nm:(de?'❌ Nicht ganz. Versuch’s nochmal!':'❌ Pas tout à fait. Essaie encore !');
         if(S.w>=2){ const c=root.querySelectorAll('#ptO button')[q.opts.findIndex(x=>x.ok)]; if(c) c.classList.add('hint'); }
-        if(window.DLspeakSeq) DLspeakSeq([{t:L==='de'?'Nicht ganz. Versuch’s nochmal!':'Pas tout à fait. Essaie encore !',l:L,pause:600}].concat(S.w>=2?[{t:L==='de'?'Schau, hier ist es!':'Regarde, c’est celui-là !',l:L}]:[])); else sp(L==='de'?'Versuch’s nochmal!':'Essaie encore !',L); } };
+        const seq=[]; if(nm){ seq.push({t:de?'Nein, das ist:':'Non, ça c’est :',l:L,pause:800},{t:nm,l:L,pause:1300}); if(key) seq.push({t:de?'Suche:':'Cherche :',l:L,pause:800},{t:key,l:L,pause:900}); else seq.push({t:de?'Versuch’s nochmal!':'Essaie encore !',l:L,pause:600}); }
+        else seq.push({t:de?'Nicht ganz. Versuch’s nochmal!':'Pas tout à fait. Essaie encore !',l:L,pause:600});
+        if(S.w>=2) seq.push({t:de?'Schau, hier ist es!':'Regarde, c’est celui-là !',l:L});
+        if(window.DLspeakSeq) DLspeakSeq(seq); else sp(de?'Versuch’s nochmal!':'Essaie encore !',L); } };
   }
   T.solve=()=>{ const q=T.q; root.querySelectorAll('#ptO button')[q.opts.findIndex(o=>o.ok)].click(); };
   function end(){
