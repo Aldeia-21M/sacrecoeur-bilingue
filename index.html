@@ -606,14 +606,18 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 #onbar .ob-t{font-size:14px;color:#1b5e4a;display:flex;align-items:center;gap:6px;white-space:nowrap}.ob-d{width:10px;height:10px;border-radius:50%;background:#adb5bd;display:inline-block}.ob-d.on{background:#2fbf71;box-shadow:0 0 0 3px #b2f2bb}
 #onbar .ob-b{border:0;border-radius:10px;background:#0b7285;color:#fff;font:800 14px inherit;font-family:inherit;padding:6px 12px;min-height:34px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:68%}#onbar .ob-b small{font-size:10px;background:#f08c00;border-radius:999px;padding:1px 6px;margin-left:4px}#onbar .ob-b.hot{animation:obp 1.6s ease-in-out infinite}
 @keyframes obp{50%{box-shadow:0 0 0 5px rgba(11,114,133,.25)}}
+
+.bar{flex-wrap:wrap}
+@media (max-width:759px){#onbar{order:-1;flex:1 0 100%;margin:0 0 4px}}
+@media (min-width:760px){.bar{flex-wrap:nowrap}#onbar .ob-b{max-width:none;overflow:visible}#onbar{align-self:center;margin:0 4px 0 auto;background:transparent;border:0;padding:0;gap:12px;min-height:0;flex:0 0 auto}}
 </style>
 </head>
 <body>
 <header>
-  <div id="onbar" hidden></div>
   <div class="secs" role="tablist" aria-label="Rubrique"><button class="sec-b" data-s="de" aria-pressed="true"><span class="e">🇩🇪</span><span>Allemand</span></button><button class="sec-b" data-s="fr" aria-pressed="false"><span class="e">🇫🇷</span><span>Français</span></button><button class="sec-b" data-s="ma" aria-pressed="false"><span class="e">🧮</span><span>Maths</span></button><button class="sec-b" data-s="pt" aria-pressed="false"><span class="e">🧸</span><span>Petits</span></button><button class="sec-b" data-s="fa" aria-pressed="false"><span class="e">🏆</span><span>Grand Quiz</span></button></div>
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
+    <div id="onbar" hidden></div>
     <button class="tab gear" id="usrbtn" aria-controls="upanel" aria-selected="false"><span class="ic">🏠</span><span class="lb">Famille</span><small class="av-b" id="usrBadge" hidden></small></button>
     <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel" aria-label="Voix : choisir et régler les voix"><span class="ic">🔊</span><span class="lb">Voix</span></button>
     <button class="tab gear" id="avisbtn" aria-controls="setpanel"><span class="ic">💬</span><span class="lb">Avis</span><small class="av-b" id="avisBadge" hidden></small></button>
@@ -698,7 +702,7 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
-    { v: "3.9", desc: "Salon : joueurs en ligne, bouton Rejoindre en haut" },
+    { v: "3.9", desc: "Salon : joueurs en ligne, bouton Rejoindre" },
     { v: "3.8", desc: "Joueur actif visible partout, Famille repensée" },
     { v: "3.7", desc: "Salon à distance en direct (bêta), icône Famille" },
     { v: "3.6", desc: "Fermer la fenêtre de fin de partie" },
