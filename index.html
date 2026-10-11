@@ -357,11 +357,16 @@ body[data-sec="pt"] .bar nav{justify-content:flex-start}body[data-sec="pt"] .tab
 .pt-mem .f{display:none}.pt-mem button.open .f,.pt-mem button.done .f{display:inline}.pt-mem button.open .b,.pt-mem button.done .b{display:none}.pt-mem button.open,.pt-mem button.done{background:#fff}.pt-mem button.done{border-color:#2f9e44;background:#e4f8e4}
 .pt-end{text-align:center}.pt-end .st{font-size:64px}.pt-end h3{margin:4px 0;font-size:34px}
 .g-opts.pic button{font-size:clamp(34px,10vw,48px)}
+.secs{gap:5px}.sec-b{flex-direction:column;gap:0;line-height:1.1;min-height:52px;padding:2px 2px!important;font-size:clamp(10.5px,3vw,16px)!important}.sec-b .e{font-size:1.45em}
+.sec-b[data-s="fa"][aria-pressed="true"]{background:#e9defa;border-color:#8f6fd6}
+body[data-sec="fa"] .bar nav{justify-content:flex-start}body[data-sec="fa"] .tab:not(.gear){flex:0 1 auto;min-width:120px;padding:5px 14px}
+.pt-gt{margin:14px 2px 6px;font-size:18px}.pt-menu+.pt-gt{margin-top:14px}.pt-things.sm{font-size:clamp(26px,7.5vw,34px)}.pt-opts button{overflow:hidden}
+#gameRoot .clk,#gameRoot .pie{width:min(42vw,160px)}#gameRoot .sr-vis{margin:2px 0 4px}
 </style>
 </head>
 <body>
 <header>
-  <div class="secs" role="tablist" aria-label="Langue"><button class="sec-b" data-s="de" aria-pressed="true">🇩🇪 Allemand</button><button class="sec-b" data-s="fr" aria-pressed="false">🇫🇷 Français</button><button class="sec-b" data-s="ma" aria-pressed="false">🧮 Maths</button><button class="sec-b" data-s="pt" aria-pressed="false">🧸 Petits</button></div>
+  <div class="secs" role="tablist" aria-label="Rubrique"><button class="sec-b" data-s="de" aria-pressed="true"><span class="e">🇩🇪</span><span>Allemand</span></button><button class="sec-b" data-s="fr" aria-pressed="false"><span class="e">🇫🇷</span><span>Français</span></button><button class="sec-b" data-s="ma" aria-pressed="false"><span class="e">🧮</span><span>Maths</span></button><button class="sec-b" data-s="pt" aria-pressed="false"><span class="e">🧸</span><span>Petits</span></button><button class="sec-b" data-s="fa" aria-pressed="false"><span class="e">🏆</span><span>Famille</span></button></div>
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
     <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel"><span class="ic">⚙️</span><span class="lb">Réglages</span></button>
@@ -409,7 +414,7 @@ body[data-sec="pt"] .bar nav{justify-content:flex-start}body[data-sec="pt"] .tab
 <section class="page" data-sec="ma" id="p-heure" data-label="🕐 Heure"></section>
 <section class="page" data-sec="ma" id="p-monnaie" data-label="💰 Monnaie"></section>
 <section class="page" data-sec="pt" id="p-petits" data-label="🧸 Activités"></section>
-<section class="page" data-sec="de,fr,ma,pt" id="p-game" data-label="🎲 Jeu"><div id="gameRoot"><div id="gHub"></div><div id="gView" hidden><button class="g-ghost" id="gBack">← Tous les jeux</button><div id="gBody"></div><div id="gamePlateau"></div></div></div></section>
+<section class="page" data-sec="de,fr,ma,pt,fa" id="p-game" data-label="🎲 Jeu"><div id="gameRoot"><div id="gHub"></div><div id="gView" hidden><button class="g-ghost" id="gBack">← Tous les jeux</button><div id="gBody"></div><div id="gamePlateau"></div></div></div></section>
 </main>
 <div class="toast" id="toast"></div>
 <script>
@@ -485,13 +490,16 @@ document.getElementById('tfr').addEventListener('click',()=>speak('Bonjour ! Auj
 const tabs=document.getElementById('tabs'), pages=[...document.querySelectorAll('.page')];
 let cur=0, sec='de'; const lastTab={};
 const secsOf=i=>(pages[i].dataset.sec||'de').split(',');
-window.DLsec=()=>sec==='fr'?['conj']:sec==='ma'?['calc']:sec==='pt'?['petit']:['zahlen','math','school','cal'];
+window.DLsec=()=>sec==='fr'?['conj','ortho']:sec==='ma'?['calc','histoire','heure','monnaie']:sec==='pt'||sec==='fa'?['zahlen','math','school','cal','conj','calc','histoire','heure','monnaie','ortho','petit']:['zahlen','math','school','cal'];
 window.DLgrade=()=>sec==='pt'?'1H':'4H';
+window.DLfam=()=>sec==='fa';
+window.DLpet=()=>{ const A=['count','hear','color','shape','animal','vocab','letter','more','add','bigger','firstletter'];
+  return sec==='de'?{kinds:['count','hear','color','shape','animal','vocab','firstletter'],lang:'de'}:sec==='fr'?{kinds:['letter','firstletter','color','shape','animal','vocab','count'],lang:'fr'}:sec==='ma'?{kinds:['count','hear','more','add','bigger'],lang:'fr'}:{kinds:A,lang:null}; };
 pages.forEach((p,i)=>{
   const [ic,...rest]=p.dataset.label.split(' ');
   secsOf(i).forEach(sc=>{
     const b=document.createElement('button'); b.className='tab'; b.role='tab'; b.dataset.sec=sc; b.dataset.i=i;
-    b.innerHTML=`<span class="ic">${ic}</span><span class="lb">${rest.join(' ')}</span>`;
+    { let I=ic,R=rest.join(' '); if(p.id==='p-game'){ I=sc==='fa'?'🏆':'🎲'; R=sc==='fa'?'Grand quiz':'Réviser'; } b.innerHTML=`<span class="ic">${I}</span><span class="lb">${R}</span>`; }
     if(p.id==='p-game') b.classList.add('game'); b.setAttribute('aria-selected','false'); b.onclick=()=>show(i,sc); tabs.appendChild(b);
   });
 });
@@ -500,7 +508,7 @@ function setSec(s,keep){
   sec=s; document.body.dataset.sec=s;
   secBtns.forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===s));
   [...tabs.children].forEach(b=>b.hidden=b.dataset.sec!==s);
-  if(!keep){ const l=lastTab[s]; show(l!=null?l:pages.findIndex((p,i)=>secsOf(i)[0]===s),s); }
+  if(!keep){ const l=lastTab[s]; show(l!=null?l:pages.findIndex((p,i)=>secsOf(i).includes(s)),s); }
 }
 secBtns.forEach(b=>b.onclick=()=>setSec(b.dataset.s));
 let sx=0, sy=0, st=0;
@@ -520,6 +528,7 @@ function show(i,s){
   s=s||(secsOf(i).includes(sec)?sec:secsOf(i)[0]);
   if(s!==sec) setSec(s,true);
   cur=i; lastTab[sec]=i;
+  try{ window.DLH&&window.DLH.refreshHub&&window.DLH.refreshHub(); }catch(e){}
   [...tabs.children].forEach(b=>b.setAttribute('aria-selected', +b.dataset.i===i&&b.dataset.sec===sec));
   pages.forEach((p,j)=>p.classList.toggle('on', j===i));
   try{ synth && synth.cancel(); }catch(e){}
@@ -714,6 +723,10 @@ const TOPICS={
   cal:{label:'📅 Calendrier',badge:'📅 Kalender',color:'#fff0b8'},
   conj:{label:'📘 Conjugaison',badge:'📘 Conjugaison',color:'#e9defa'},
   calc:{label:'🧮 Calcul',badge:'🧮 Calcul',color:'#fff0b8'},
+  histoire:{label:'📖 Histoires',badge:'📖 Histoires',color:'#dff4dc'},
+  heure:{label:'🕐 Heure',badge:'🕐 Heure',color:'#d9ecfb'},
+  monnaie:{label:'💰 Monnaie',badge:'💰 Monnaie',color:'#fff0b8'},
+  ortho:{label:'✏️ Orthographe',badge:'✏️ Orthographe',color:'#fde0ec'},
   petit:{label:'🧸 Images (1H)',badge:'🧸 Petits',color:'#fde0ec'}
 };
 const RANGE={easy:[1,20],hard:[21,99],very:[100,999]};
@@ -773,28 +786,38 @@ function qConj(){
   const uniq=[...new Set(pool.filter(x=>x!==F.f))], opts=shuffle([F.f].concat(shuffle(uniq).slice(0,3)));
   return {cat:'conj',prompt:'Conjugue <b>'+vb+'</b> au <b>'+t.t.toLowerCase()+'</b> : <span class="big">'+esc(C.PR[i])+' …</span>',audio:null,options:opts,correct:opts.indexOf(F.f),reveal:{t:F.say,l:'fr'},shown:F.pe+F.f};
 }
-const PET_TH=[['🍎','pommes','Äpfel'],['⭐','étoiles','Sterne'],['🎈','ballons','Ballons'],['🚗','voitures','Autos'],['🌸','fleurs','Blumen'],['🐟','poissons','Fische']];
-const PET_COL=[['rouge','rot','🔴'],['bleu','blau','🔵'],['jaune','gelb','🟡'],['vert','grün','🟢'],['orange','orange','🟠'],['violet','lila','🟣']];
-const PET_SH=[['le rond','der Kreis','⚫'],['l’étoile','der Stern','⭐'],['le cœur','das Herz','❤️'],['le triangle','das Dreieck','🔺'],['le carré','das Quadrat','🟦']];
-const PET_AN=[['🐶','le chien','der Hund'],['🐱','le chat','die Katze'],['🐮','la vache','die Kuh'],['🐷','le cochon','das Schwein'],['🐑','le mouton','das Schaf'],['🐴','le cheval','das Pferd'],['🐸','la grenouille','der Frosch'],['🐔','la poule','das Huhn']];
-const PET_NF=['','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix'], PET_ND=['','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn'];
+function qSeries(topic,grade){
+  const Q=window.SERGEN[topic](grade==='6H'?'6H':'4H'); const strip=h=>String(h||'').replace(/<[^>]+>/g,'');
+  let options,correct;
+  if(Q.kind==='num'){ const a=Q.answer, set=new Set(); [1,-1,2,-2,10,-10,5].forEach(d=>{ if(a+d>0) set.add(a+d); }); const o=shuffle([a].concat(shuffle([...set]).slice(0,3))); options=o.map(x=>x+(Q.unit?' '+Q.unit:'')); correct=o.indexOf(a); }
+  else { options=Q.options; correct=Q.correct; }
+  return {cat:topic,prompt:(Q.vis?'<div class="sr-vis">'+Q.vis+'</div>':'')+'<div>'+Q.prompt+'</div>',audio:Q.say?{t:Q.say,l:Q.lang||'fr'}:null,options,correct,reveal:{t:strip(Q.after||Q.explain),l:'fr'},shown:strip(Q.explain||options[correct])};
+}
 function qPetit(){
-  const r=rnd(5), de=Math.random()<.5, l=de?'de':'fr';
-  if(r===0){ const th=PET_TH[rnd(PET_TH.length)], n=1+rnd(8); const o=shuffle([n].concat(shuffle([1,2,3,4,5,6,7,8,9].filter(x=>x!==n)).slice(0,2)));
-    return {cat:'petit',prompt:'Combien ? <span class="big">'+th[0].repeat(n)+'</span>',audio:{t:de?'Wie viele '+th[2]+'?':'Combien de '+th[1]+' ?',l},options:o.map(String),correct:o.indexOf(n),reveal:{t:de?PET_ND[n]:PET_NF[n],l},shown:n+' '+th[0]}; }
-  if(r===1){ const n=1+rnd(10); const o=shuffle([n].concat(shuffle([1,2,3,4,5,6,7,8,9,10].filter(x=>x!==n)).slice(0,2)));
-    return {cat:'petit',prompt:'Écoute et touche le bon nombre',audio:{t:de?PET_ND[n]:PET_NF[n],l},options:o.map(String),correct:o.indexOf(n),reveal:{t:de?PET_ND[n]:PET_NF[n],l},shown:String(n)}; }
-  if(r===2){ const o=shuffle(PET_COL).slice(0,4), c=o[rnd(4)];
-    return {cat:'petit',prompt:'Touche la bonne couleur',audio:{t:de?c[1]:c[0],l},options:o.map(x=>x[2]),correct:o.indexOf(c),reveal:{t:de?c[1]:c[0],l},shown:c[2]+' '+c[0]+' = '+c[1]}; }
-  if(r===3){ const o=shuffle(PET_SH).slice(0,4), c=o[rnd(4)];
-    return {cat:'petit',prompt:'Touche la bonne forme',audio:{t:de?c[1]:c[0],l},options:o.map(x=>x[2]),correct:o.indexOf(c),reveal:{t:de?c[1]:c[0],l},shown:c[2]+' '+c[0]+' = '+c[1]}; }
-  const o=shuffle(PET_AN).slice(0,3), c=o[rnd(3)];
-  return {cat:'petit',prompt:'Touche le bon animal',audio:{t:de?c[2]:c[1],l},options:o.map(x=>x[0]),correct:o.indexOf(c),reveal:{t:de?c[2]:c[1],l},shown:c[0]+' '+c[1]+' = '+c[2]};
+  const P=window.PETV, c=(window.DLpet&&window.DLpet())||{kinds:['count','hear','color','shape','animal','vocab','letter','more','add','bigger','firstletter'],lang:null};
+  const kind=c.kinds[rnd(c.kinds.length)], de=c.lang?c.lang==='de':Math.random()<.5, l=de?'de':'fr', NF=P.NUMF, ND=P.NUMD;
+  const nm=n=>de?ND[n]:NF[n];
+  const mk=(prompt,aud,opts,ans,shown,rev)=>{ const o=shuffle(opts); return {cat:'petit',prompt,audio:{t:aud,l},options:o.map(String),correct:o.indexOf(ans),reveal:{t:rev||aud,l},shown}; };
+  const others=(n,lo,hi,k)=>{ const a=[]; for(let x=lo;x<=hi;x++) if(x!==n) a.push(x); return shuffle(a).slice(0,k); };
+  if(kind==='count'){ const th=P.THINGS[rnd(P.THINGS.length)], n=1+rnd(8); return mk('Combien ? <span class="big">'+th[0].repeat(n)+'</span>',de?'Wie viele '+th[2]+'?':'Combien de '+th[1]+' ?',[n].concat(others(n,1,9,2)),n,n+' '+th[0],nm(n)); }
+  if(kind==='hear'){ const n=1+rnd(10); return mk('Écoute et touche le bon nombre',nm(n),[n].concat(others(n,1,10,2)),n,String(n)); }
+  if(kind==='color'){ const o=shuffle(P.COLS.filter(x=>x[3])).slice(0,4), x=o[rnd(4)]; return mk('Touche la bonne couleur',de?x[1]:x[0],o.map(y=>y[3]),x[3],x[3]+' '+x[0]+' = '+x[1]); }
+  if(kind==='shape'){ const o=shuffle(P.SHAPES.filter(x=>x[3])).slice(0,4), x=o[rnd(4)]; return mk('Touche la bonne forme',de?x[1]:x[0],o.map(y=>y[3]),x[3],x[3]+' '+x[0]+' = '+x[1]); }
+  if(kind==='animal'){ const o=shuffle(P.ANI).slice(0,3), x=o[rnd(3)]; return mk('Touche le bon animal',de?x[2]:x[1],o.map(y=>y[0]),x[0],x[0]+' '+x[1]+' = '+x[2]); }
+  if(kind==='vocab'){ const ks=Object.keys(P.VOC), V=P.VOC[ks[rnd(ks.length)]], o=shuffle(V.l).slice(0,3), x=o[rnd(3)]; return mk('Touche la bonne image',de?x[2]:x[1],o.map(y=>y[0]),x[0],x[0]+' '+x[1]+' = '+x[2]); }
+  if(kind==='letter'){ const o=shuffle(P.LET).slice(0,3), x=o[rnd(3)]; return mk('Touche la bonne lettre',de?'der Buchstabe '+x:'la lettre '+x,o,x,x); }
+  if(kind==='firstletter'){ const w=P.FL[rnd(P.FL.length)], L=(c.lang==='de'||(!c.lang&&de))?'de':'fr', fr=L==='fr', x=fr?w[2]:w[4]; const o=[x].concat(shuffle(P.LET.filter(y=>y!==x)).slice(0,2)); const q=mk('Par quelle lettre commence <span class="big">'+w[0]+'</span> ?',fr?'Par quelle lettre commence '+w[1]+' ?':'Mit welchem Buchstaben beginnt '+w[3]+'?',o,x,w[0]+' '+(fr?w[1]:w[3])+' → '+x); q.audio.l=L; q.reveal.l=L; return q; }
+  if(kind==='more'){ const th=P.THINGS[rnd(P.THINGS.length)]; let a=1+rnd(9), b=1+rnd(9); while(a===b) b=1+rnd(9); const more=Math.random()<.6, win=more?Math.max(a,b):Math.min(a,b); const A=th[0].repeat(a), B=th[0].repeat(b);
+    return mk('Touche où il y en a <b>'+(more?'plus':'moins')+'</b>',de?'Wo sind '+(more?'mehr':'weniger')+' '+th[2]+'?':'Où y a-t-il '+(more?'plus':'moins')+' de '+th[1]+' ?',[A,B],th[0].repeat(win),a+' et '+b); }
+  if(kind==='add'){ const th=P.THINGS[rnd(P.THINGS.length)], a=1+rnd(5), b=1+rnd(5), n=a+b; return mk('<span class="big">'+th[0].repeat(a)+' + '+th[0].repeat(b)+' = ?</span>',nm(a)+(de?' plus ':' plus ')+nm(b),[n].concat(others(n,2,10,2)),n,a+' + '+b+' = '+n,nm(a)+' plus '+nm(b)+(de?' ist ':' égale ')+nm(n)); }
+  let a=1+rnd(20), b=1+rnd(20); while(a===b) b=1+rnd(20); const big=Math.random()<.65, win=big?Math.max(a,b):Math.min(a,b);
+  return mk('Touche le nombre le plus <b>'+(big?'grand':'petit')+'</b>',de?(big?'Tippe auf die größte Zahl':'Tippe auf die kleinste Zahl'):(big?'Touche le plus grand nombre':'Touche le plus petit nombre'),[a,b],win,String(win));
 }
 function makeQuestion(topics,grade){
   if(grade==='1H') return qPetit();
   let pool=topics.filter(t=>t!=='petit'&&(grade==='6H'||(t!=='math'&&t!=='conj'))); if(!pool.length) pool=['zahlen','school','cal'];
   const cat=pool[rnd(pool.length)];
+  if(['heure','monnaie','histoire','ortho'].includes(cat)) return qSeries(cat,grade);
   if(cat==='zahlen'){ const r=Math.random(); return qNumber(grade==='6H'?(r<.25?'easy':r<.6?'hard':'very'):(r<.5?'easy':'hard')); }
   if(cat==='conj') return qConj();
   if(cat==='calc') return qCalc(grade);
@@ -1023,7 +1046,7 @@ function win(p,i){
     if(b.dataset.a==='again'){ G.players.forEach(x=>x.pos=0); G.cur=0; G.over=false; G.busy=false; renderGame(); } else renderSetup(); };
 }
 
-function fitOpts(el){ const o=el.querySelector('.g-opts'); if(!o) return; const m=Math.max(...[...o.children].map(b=>b.textContent.length)); o.classList.toggle('pic',[...o.children].every(b=>/^[\p{Extended_Pictographic}\u200d\ufe0f\d ]+$/u.test(b.textContent))); o.classList.toggle('long',m>13); o.classList.toggle('xlong',m>19); }
+function fitOpts(el){ const o=el.querySelector('.g-opts'); if(!o) return; const m=Math.max(...[...o.children].map(b=>b.textContent.length)); o.classList.toggle('pic',[...o.children].every(b=>/^[\p{Extended_Pictographic}\u200d\ufe0f\d ]+$/u.test(b.textContent)&&/\p{Extended_Pictographic}/u.test(b.textContent))); o.classList.toggle('long',m>13); o.classList.toggle('xlong',m>19); }
 window.DL={setTopics:(a,g)=>{ setup.topics=new Set(a); if(g==='1H') setup.pl.forEach(p=>p.gr='1H'); else setup.pl.forEach(p=>{ if(p.gr==='1H') p.gr='4H'; }); if(!G) renderSetup(); },fitOpts,esc,rnd,shuffle,numWord,makeQuestion,TOPICS,CHARS,COLORS,POOLS:{math:MATH,school:SCHOOL,cal:CAL},say,sleep};
 renderSetup();
 })();
@@ -1062,8 +1085,11 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  hub.innerHTML=`<h2 class="g-h">🎲 Jeux</h2><p class="g-p">Choisis un jeu. Chaque joueur choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b> : les questions s’adaptent. La <b>conjugaison</b> (être, avoir, aller) est du niveau <b>6H</b>. Le <b>calcul</b> : additions et soustractions en 4H, multiplications et divisions en 6H.</p>`+
-   GROUPS.map(([t,list])=>`<h3 class="h-gt">${t}</h3>`+list.map(g=>`<button class="h-gc" data-g="${g.id}" style="--gc:${g.c}"><span class="ic">${g.ic}</span><span class="tx"><b>${g.t}</b><small>${g.d}</small></span><span class="go">▶</span></button>`).join('')).join('');
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','duel','bataille'];
+  const head=fam?`<h2 class="g-h">🏆 Grand quiz de famille</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
+   :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
+  const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
+  hub.innerHTML=head+groups.map(([t,list])=>`<h3 class="h-gt">${t}</h3>`+list.map(g=>`<button class="h-gc" data-g="${g.id}" style="--gc:${g.c}"><span class="ic">${g.ic}</span><span class="tx"><b>${g.t}</b><small>${g.d}</small></span><span class="go">▶</span></button>`).join('')).join('');
   hub.onclick=e=>{ const b=e.target.closest('.h-gc'); if(b) openGame(b.dataset.g); };
 }
 function showHub(){ try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
@@ -1297,7 +1323,7 @@ function startRace(cfg){
     endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Tu franchis la ligne d’arrivée en premier !',color:p.color},()=>startRace(cfg)); }
   ask();
 }
-window.DLH={body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
+window.DLH={refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
 
 </script>
@@ -1798,6 +1824,7 @@ function MkSeries(rootId,cfg){
   }
 }
 window.MkSeries=MkSeries;
+window.SERGEN={histoire:g=>genStory(g),heure:g=>Math.random()<.5?genClock(g):genFrac(g),monnaie:g=>genMoney(g,Math.random()<.5?'count':'change'),ortho:g=>genOrtho(g,(g==='6H'?['article','pluriel','homo','homo']:['article','pluriel'])[rnd(g==='6H'?4:2)])};
 
 /* ================= HISTOIRES ================= */
 const NAMES=[['Léa','f'],['Noé','m'],['Mia','f'],['Lucas','m'],['Emma','f'],['Nathan','m'],['Zoé','f'],['Louis','m']];
@@ -1953,59 +1980,91 @@ paintO();
 /* ====== Section Petits (1H) : activités guidées par la voix ====== */
 (function(){
 'use strict';
-const root=document.getElementById('p-petits'); if(!root) return;
 const rnd=n=>Math.floor(Math.random()*n); const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
 const FAST=/#test/.test(location.hash); const T=(window.__pt={});
 const sleep=ms=>new Promise(r=>setTimeout(r,FAST?0:ms));
 let LANG='mix'; try{ LANG=localStorage.getItem('dl-pt-lang')||'mix'; }catch(e){}
 const pickL=()=>LANG==='mix'?(Math.random()<.5?'fr':'de'):LANG;
 const sp=(t,l)=>{ try{ if(t) speak(t,l); }catch(e){} };
-const NUMF=['','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix'], NUMD=['','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn'];
+const NUMF=['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix'], NUMD=['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn'];
 const THINGS=[['🍎','pommes','Äpfel'],['⭐','étoiles','Sterne'],['🎈','ballons','Ballons'],['🚗','voitures','Autos'],['🌸','fleurs','Blumen'],['🐟','poissons','Fische'],['🍓','fraises','Erdbeeren']];
-const COLS=[['rouge','rot','#e03131'],['bleu','blau','#1f5fd6'],['jaune','gelb','#fcc419'],['vert','grün','#2f9e44'],['orange','orange','#f76707'],['rose','rosa','#f783ac'],['violet','lila','#9c36b5'],['noir','schwarz','#212529'],['marron','braun','#8d5524']];
+const COLS=[['rouge','rot','#e03131','🔴'],['bleu','blau','#1f5fd6','🔵'],['jaune','gelb','#fcc419','🟡'],['vert','grün','#2f9e44','🟢'],['orange','orange','#f76707','🟠'],['rose','rosa','#f783ac',null],['violet','lila','#9c36b5','🟣'],['noir','schwarz','#212529','⚫'],['marron','braun','#8d5524','🟤']];
 const svg=p=>`<svg viewBox="0 0 100 100" class="pt-shape">${p}</svg>`; const FILL='fill="#f59f00" stroke="#1d2433" stroke-width="5" stroke-linejoin="round"';
-const SHAPES=[['le cercle','der Kreis',svg(`<circle cx="50" cy="50" r="40" ${FILL}/>`)],['le carré','das Quadrat',svg(`<rect x="12" y="12" width="76" height="76" ${FILL}/>`)],['le triangle','das Dreieck',svg(`<path d="M50 10 L92 86 L8 86 Z" ${FILL}/>`)],['le rectangle','das Rechteck',svg(`<rect x="6" y="26" width="88" height="48" ${FILL}/>`)],['l’étoile','der Stern',svg(`<path d="M50 6 L62 38 L96 38 L68 58 L79 92 L50 71 L21 92 L32 58 L4 38 L38 38 Z" ${FILL}/>`)],['le cœur','das Herz',svg(`<path d="M50 90 C10 58 6 32 26 20 C38 14 48 22 50 32 C52 22 62 14 74 20 C94 32 90 58 50 90 Z" ${FILL}/>`)]];
+const SHAPES=[['le cercle','der Kreis',svg(`<circle cx="50" cy="50" r="40" ${FILL}/>`),'⚫'],['le carré','das Quadrat',svg(`<rect x="12" y="12" width="76" height="76" ${FILL}/>`),'🟦'],['le triangle','das Dreieck',svg(`<path d="M50 10 L92 86 L8 86 Z" ${FILL}/>`),'🔺'],['le rectangle','das Rechteck',svg(`<rect x="6" y="26" width="88" height="48" ${FILL}/>`),null],['l’étoile','der Stern',svg(`<path d="M50 6 L62 38 L96 38 L68 58 L79 92 L50 71 L21 92 L32 58 L4 38 L38 38 Z" ${FILL}/>`),'⭐'],['le cœur','das Herz',svg(`<path d="M50 90 C10 58 6 32 26 20 C38 14 48 22 50 32 C52 22 62 14 74 20 C94 32 90 58 50 90 Z" ${FILL}/>`),'❤️']];
 const ANI=[['🐶','le chien','der Hund','ouaf ouaf','wau wau'],['🐱','le chat','die Katze','miaou','miau'],['🐮','la vache','die Kuh','meuh','muh'],['🦆','le canard','die Ente','coin coin','quak quak'],['🐷','le cochon','das Schwein','groin groin','oink oink'],['🐑','le mouton','das Schaf','bêê','mäh'],['🐴','le cheval','das Pferd','hihihi','iah'],['🐔','la poule','das Huhn','cot cot','gack gack'],['🐸','la grenouille','der Frosch','coa coa','quak quak'],['🐰','le lapin','der Hase','','']];
 const LET='ABCDEFGHILMOPRSTU'.split('');
+const FL=[['🍎','pomme','P','Apfel','A'],['🐱','chat','C','Katze','K'],['🏠','maison','M','Haus','H'],['🌙','lune','L','Mond','M'],['🐟','poisson','P','Fisch','F'],['🌞','soleil','S','Sonne','S'],['🚗','voiture','V','Auto','A'],['🍌','banane','B','Banane','B'],['🐸','grenouille','G','Frosch','F'],['🦁','lion','L','Löwe','L'],['🌸','fleur','F','Blume','B'],['🎈','ballon','B','Ballon','B'],['🐶','chien','C','Hund','H'],['🥖','pain','P','Brot','B']];
+const VOC={
+ fruits:{ic:'🍎',t:'Les fruits',l:[['🍎','la pomme','der Apfel'],['🍌','la banane','die Banane'],['🍓','la fraise','die Erdbeere'],['🍇','le raisin','die Traube'],['🍊','l’orange','die Orange'],['🍋','le citron','die Zitrone'],['🍒','les cerises','die Kirschen'],['🍉','la pastèque','die Wassermelone'],['🍐','la poire','die Birne']]},
+ body:{ic:'🖐️',t:'Le corps',l:[['🖐️','la main','die Hand'],['👁️','l’œil','das Auge'],['👂','l’oreille','das Ohr'],['👃','le nez','die Nase'],['👄','la bouche','der Mund'],['🦶','le pied','der Fuß'],['🦵','la jambe','das Bein']]},
+ family:{ic:'👨‍👩‍👧',t:'La famille',l:[['👩','maman','die Mama'],['👨','papa','der Papa'],['👶','le bébé','das Baby'],['👵','mamie','die Oma'],['👴','papi','der Opa'],['👧','la fille','das Mädchen'],['👦','le garçon','der Junge']]},
+ clothes:{ic:'👕',t:'Les habits',l:[['👕','le t-shirt','das T-Shirt'],['👖','le pantalon','die Hose'],['🧦','la chaussette','die Socke'],['🧢','la casquette','die Kappe'],['👟','la chaussure','der Schuh'],['🧥','le manteau','die Jacke'],['👗','la robe','das Kleid'],['🧤','les gants','die Handschuhe']]},
+ food:{ic:'🥖',t:'À manger',l:[['🥖','le pain','das Brot'],['🧀','le fromage','der Käse'],['🥛','le lait','die Milch'],['🍫','le chocolat','die Schokolade'],['🥚','l’œuf','das Ei'],['🥕','la carotte','die Karotte'],['🍕','la pizza','die Pizza']]},
+ transport:{ic:'🚗',t:'Les transports',l:[['🚗','la voiture','das Auto'],['🚌','le bus','der Bus'],['🚲','le vélo','das Fahrrad'],['✈️','l’avion','das Flugzeug'],['🚂','le train','der Zug'],['🚢','le bateau','das Schiff'],['🚜','le tracteur','der Traktor']]},
+ weather:{ic:'☀️',t:'La météo',l:[['☀️','le soleil','die Sonne'],['🌧️','la pluie','der Regen'],['☁️','le nuage','die Wolke'],['❄️','la neige','der Schnee'],['🌈','l’arc-en-ciel','der Regenbogen'],['💨','le vent','der Wind']]},
+ greet:{ic:'👋',t:'Les mots magiques',pf:n=>`Quelle image veut dire « ${n} » ?`,pd:n=>`Welches Bild passt zu „${n}“?`,l:[['👋','bonjour','Hallo'],['🙏','merci','Danke'],['😊','s’il te plaît','Bitte'],['🌙','bonne nuit','Gute Nacht']]}
+};
+window.PETV={NUMF,NUMD,THINGS,COLS,SHAPES,ANI,LET,FL,VOC};
 const OKF=['Bravo !','Super !','Génial !'], OKD=['Bravo!','Super!','Toll!'];
 
-const ACTS=[
- ['count','🔢','Compter'],['hear','👂','Écouter un nombre'],['color','🎨','Les couleurs'],['shape','🔺','Les formes'],
- ['animal','🐶','Les animaux'],['more','⚖️','Plus ou moins'],['letter','🔤','Les lettres'],['memory','🧩','Memory']];
+/* ---- menu ---- */
+const MENU=[
+ ['🔢 Les nombres',[['count','🔢','Compter 1 à 10'],['count20','🔟','Compter jusqu’à 20'],['hear','👂','Écouter un nombre'],['add','➕','Petites additions'],['more','⚖️','Plus ou moins'],['bigger','📏','Le plus grand'],['pattern','🔁','Les suites']]],
+ ['🎨 Couleurs et formes',[['color','🎨','Les couleurs'],['shape','🔺','Les formes']]],
+ ['🔤 Les lettres',[['letter','🔤','Les lettres'],['firstletter','🅰️','Par quelle lettre ?']]],
+ ['🐶 Les mots en images',[['animal','🐶','Les animaux']].concat(Object.keys(VOC).map(k=>[k,VOC[k].ic,VOC[k].t]))],
+ ['🧩 Un jeu',[['memory','🧩','Memory']]]
+];
 
-/* ---- générateurs d'une question : {vis, fr, de, opts:[{h,ok}], again?} ---- */
+/* ---- générateurs : {vis, fr, de, opts:[{h,ok}], cls} ---- */
 function nums(n,lo,hi){ const s=new Set([n]); while(s.size<3) s.add(Math.max(lo,Math.min(hi,n+rnd(7)-3))); return shuffle([...s]); }
+const things=(e,n)=>n>10?e.repeat(10)+'<br>'+e.repeat(n-10):e.repeat(n);
 const GEN={
  count(){ const th=THINGS[rnd(THINGS.length)], n=1+rnd(10); const o=nums(n,1,10);
-  return {vis:`<div class="pt-things">${th[0].repeat(n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,ok:x===n})),say:{fr:NUMF[n],de:NUMD[n]}}; },
+  return {vis:`<div class="pt-things">${things(th[0],n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
+ count20(){ const th=THINGS[rnd(THINGS.length)], n=11+rnd(10); const o=nums(n,11,20);
+  return {vis:`<div class="pt-things sm">${things(th[0],n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
  hear(){ const n=1+rnd(10); const o=nums(n,1,10);
   return {vis:'<div class="pt-ear">👂</div>',fr:`Écoute : ${NUMF[n]}. Touche le bon nombre !`,de:`Hör zu: ${NUMD[n]}. Tippe die richtige Zahl!`,opts:o.map(x=>({h:x,ok:x===n}))}; },
+ add(){ const th=THINGS[rnd(THINGS.length)], a=1+rnd(5), b=1+rnd(5), n=a+b; const o=nums(n,2,10);
+  return {vis:`<div class="pt-things">${th[0].repeat(a)} ➕ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} plus ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} plus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
+ bigger(){ let a=1+rnd(20), b=1+rnd(20); while(a===b) b=1+rnd(20); const big=Math.random()<.65;
+  return {vis:'',fr:`Touche le nombre le plus ${big?'grand':'petit'} !`,de:`Tippe auf die ${big?'größte':'kleinste'} Zahl!`,cls:'two',opts:[a,b].map(x=>({h:x,ok:big?x===Math.max(a,b):x===Math.min(a,b)}))}; },
  color(){ const o=shuffle(COLS).slice(0,4), c=o[rnd(4)];
   return {vis:'',fr:`Touche la couleur ${c[0]} !`,de:`Tippe auf ${c[1]}!`,opts:o.map(x=>({h:`<i class="pt-dot" style="background:${x[2]}"></i>`,ok:x===c}))}; },
  shape(){ const o=shuffle(SHAPES).slice(0,4), c=o[rnd(4)];
-  return {vis:'',fr:`Touche ${c[0]} !`,de:`Tippe auf ${c[1]}!`,opts:o.map(x=>({h:x[2],ok:x===c}))}; },
+  return {vis:'',fr:`Touche ${c[0]} !`,de:`Wo ist ${c[1]}?`,opts:o.map(x=>({h:x[2],ok:x===c}))}; },
  animal(){ const o=shuffle(ANI).slice(0,3), c=o[rnd(3)];
   if(c[3]&&Math.random()<.5) return {vis:'<div class="pt-ear">🔊</div>',fr:`Qui fait « ${c[3]} » ?`,de:`Wer macht „${c[4]}“?`,opts:o.map(x=>({h:x[0],ok:x===c}))};
-  return {vis:'',fr:`Touche ${c[1]} !`,de:`Tippe auf ${c[2]}!`,opts:o.map(x=>({h:x[0],ok:x===c}))}; },
+  return {vis:'',fr:`Touche ${c[1]} !`,de:`Wo ist ${c[2]}?`,opts:o.map(x=>({h:x[0],ok:x===c}))}; },
  more(){ const th=THINGS[rnd(THINGS.length)]; let a=1+rnd(9), b=1+rnd(9); while(b===a) b=1+rnd(9); const more=Math.random()<.6;
   const ok=more?(a>b?0:1):(a<b?0:1);
   return {vis:'',fr:`Où y a-t-il ${more?'plus':'moins'} de ${th[1]} ?`,de:`Wo sind ${more?'mehr':'weniger'} ${th[2]}?`,cls:'two',opts:[a,b].map((x,i)=>({h:`<span class="pt-grp">${th[0].repeat(x)}</span>`,ok:i===ok}))}; },
  letter(){ const o=shuffle(LET).slice(0,3), c=o[rnd(3)];
-  return {vis:'',fr:`Touche la lettre ${c} !`,de:`Tippe auf den Buchstaben ${c}!`,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,ok:x===c}))}; }
+  return {vis:'',fr:`Touche la lettre ${c} !`,de:`Tippe auf den Buchstaben ${c}!`,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,ok:x===c}))}; },
+ firstletter(){ const w=FL[rnd(FL.length)], L=pickL(); const fr=L==='fr'; const c=fr?w[2]:w[4]; const pool=shuffle(LET.filter(x=>x!==c)).slice(0,2); const o=shuffle([c].concat(pool));
+  return {vis:`<div class="pt-things">${w[0]}</div>`,fr:`Par quelle lettre commence « ${w[1]} » ?`,de:`Mit welchem Buchstaben beginnt „${w[3]}“?`,forceL:L,opts:o.map(x=>({h:`<span class="pt-let">${x}</span>`,ok:x===c}))}; },
+ pattern(){ const E=shuffle(['🔴','🔵','🟡','🟢','⭐','❤️','🍎','🐟']), [a,b,c]=E; const kind=rnd(3);
+  const seq=kind===0?[a,b,a,b,a]:kind===1?[a,a,b,a,a]:[a,b,c,a,b]; const ans=kind===0?b:kind===1?b:c;
+  const o=shuffle([ans].concat(E.slice(3,5).concat([a]).filter(x=>x!==ans)).slice(0,3));
+  return {vis:`<div class="pt-things">${seq.join(' ')} ❓</div>`,fr:'Quelle image vient ensuite ?',de:'Was kommt als Nächstes?',opts:o.map(x=>({h:x,ok:x===ans}))}; }
 };
+Object.keys(VOC).forEach(k=>{ GEN[k]=function(){ const V=VOC[k], o=shuffle(V.l).slice(0,3), c=o[rnd(3)];
+  return {vis:'',fr:(V.pf||(n=>`Touche ${n} !`))(c[1]),de:(V.pd||(n=>`Wo ist ${n}?`))(c[2]),opts:o.map(x=>({h:x[0],ok:x===c}))}; }; });
+T.GEN=GEN;
 
 /* ---- vues ---- */
 function menu(){
   T.cur=null; try{ speechSynthesis.cancel(); }catch(e){}
   root.innerHTML=`<div class="mx-head"><h2>🧸 Les Petits</h2><p>Touche une image : la voix explique tout !</p></div>
   <div class="pt-lang" id="ptL">${[['fr','🇫🇷'],['de','🇩🇪'],['mix','🇫🇷🇩🇪']].map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===LANG}">${t}</button>`).join('')}</div>
-  <div class="pt-menu" id="ptM">${ACTS.map(([id,ic,t])=>`<button data-a="${id}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`;
+  <div id="ptM">${MENU.map(([t,l])=>`<h3 class="pt-gt">${t}</h3><div class="pt-menu">${l.map(([id,ic,tx])=>`<button data-a="${id}"><i>${ic}</i><span>${tx}</span></button>`).join('')}</div>`).join('')}</div>`;
   root.querySelector('#ptL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; LANG=b.dataset.v; try{ localStorage.setItem('dl-pt-lang',LANG); }catch(x){} root.querySelectorAll('#ptL button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===LANG));
     sp(LANG==='de'?'Wir sprechen Deutsch!':LANG==='fr'?'On parle français !':'Français et Deutsch zusammen !',LANG==='de'?'de':'fr'); };
   root.querySelector('#ptM').onclick=e=>{ const b=e.target.closest('button'); if(b) play(b.dataset.a); };
 }
-function frame(id,inner){
-  const a=ACTS.find(x=>x[0]===id);
+const root=document.getElementById('p-petits'); if(!root) return;
+function frame(inner){
   root.innerHTML=`<button class="g-ghost pt-back" id="ptB">← Menu</button><div class="pt-card">${inner}</div>`;
   root.querySelector('#ptB').onclick=menu; window.scrollTo(0,0);
 }
@@ -2015,8 +2074,8 @@ function rounds(id){
   const dots=()=>Array.from({length:S.total},(_,k)=>`<i class="${k<S.i?'ok':k===S.i?'cur':''}"></i>`).join('');
   function next(){
     if(S.i>=S.total) return end();
-    const q=GEN[id](); S.first=true; S.locked=false; const L=pickL(); T.q=q; q.L=L;
-    frame(id,`<div class="pt-dots">${dots()}</div>${q.vis}<button class="pt-say" id="ptS">🔊 <span>${q[L]}</span></button>
+    const q=GEN[id](); S.first=true; S.locked=false; const L=q.forceL||pickL(); T.q=q; q.L=L;
+    frame(`<div class="pt-dots">${dots()}</div>${q.vis}<button class="pt-say" id="ptS">🔊 <span>${q[L]}</span></button>
       <div class="pt-opts ${q.cls||''} n${q.opts.length}" id="ptO">${q.opts.map((o,k)=>`<button data-k="${k}">${o.h}</button>`).join('')}</div>`);
     const say=()=>sp(q[L],L); root.querySelector('#ptS').onclick=say; setTimeout(say,FAST?0:250);
     root.querySelector('#ptO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const o=q.opts[+b.dataset.k];
@@ -2026,7 +2085,7 @@ function rounds(id){
   T.solve=()=>{ const q=T.q; root.querySelectorAll('#ptO button')[q.opts.findIndex(o=>o.ok)].click(); };
   function end(){
     const st=S.ok>=7?3:S.ok>=4?2:1; const L=pickL();
-    frame(id,`<div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${LANG==='de'?'Super gemacht!':'Bravo !'}</h3>
+    frame(`<div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${LANG==='de'?'Super gemacht!':'Bravo !'}</h3>
      <button class="mx-go" id="ptAg">🔁 Encore !</button><button class="mx-go alt" id="ptMn">🏠 Menu</button></div>`);
     sp(L==='de'?'Super gemacht!':'Bravo, tu as gagné des étoiles !',L);
     root.querySelector('#ptAg').onclick=()=>rounds(id); root.querySelector('#ptMn').onclick=menu;
@@ -2036,7 +2095,7 @@ function rounds(id){
 function memory(){
   const pick=shuffle(ANI).slice(0,6); const cards=shuffle(pick.concat(pick).map((a,i)=>({a,i,open:false,done:false})));
   let first=null,busy=false,found=0,tries=0; T.mem={cards};
-  frame('memory',`<div class="pt-say static">🧩 <span>${LANG==='de'?'Finde die Paare!':'Trouve les paires !'}</span></div><div class="pt-mem" id="ptG">${cards.map((c,k)=>`<button data-k="${k}"><span class="b">❓</span><span class="f">${c.a[0]}</span></button>`).join('')}</div>`);
+  frame(`<div class="pt-say static">🧩 <span>${LANG==='de'?'Finde die Paare!':'Trouve les paires !'}</span></div><div class="pt-mem" id="ptG">${cards.map((c,k)=>`<button data-k="${k}"><span class="b">❓</span><span class="f">${c.a[0]}</span></button>`).join('')}</div>`);
   sp(LANG==='de'?'Finde die Paare!':'Trouve les paires !',LANG==='de'?'de':'fr');
   const G=root.querySelector('#ptG');
   G.onclick=async e=>{ const b=e.target.closest('button'); if(!b||busy) return; const k=+b.dataset.k, c=cards[k]; if(c.open||c.done) return;
@@ -2045,7 +2104,7 @@ function memory(){
     const f=cards[first]; tries++; busy=true;
     if(f.a===c.a){ f.done=c.done=true; found++; G.children[first].classList.add('done'); b.classList.add('done'); first=null; busy=false;
       if(found===6){ await sleep(900); sp(LANG==='de'?'Super gemacht!':'Bravo !',LANG==='de'?'de':'fr'); const st=tries<=8?3:tries<=12?2:1;
-        frame('memory',`<div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${LANG==='de'?'Super!':'Bravo !'}</h3><button class="mx-go" id="ptAg">🔁 Encore !</button><button class="mx-go alt" id="ptMn">🏠 Menu</button></div>`);
+        frame(`<div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${LANG==='de'?'Super!':'Bravo !'}</h3><button class="mx-go" id="ptAg">🔁 Encore !</button><button class="mx-go alt" id="ptMn">🏠 Menu</button></div>`);
         root.querySelector('#ptAg').onclick=memory; root.querySelector('#ptMn').onclick=menu; } }
     else { await sleep(1100); f.open=c.open=false; G.children[first].classList.remove('open'); b.classList.remove('open'); first=null; busy=false; } };
   T.memSolve=async()=>{ const g={}; cards.forEach((c,k)=>{ (g[c.a[0]]=g[c.a[0]]||[]).push(k); }); for(const v of Object.values(g)){ G.children[v[0]].click(); await sleep(0); G.children[v[1]].click(); await sleep(10); } };
