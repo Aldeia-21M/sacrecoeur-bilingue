@@ -126,7 +126,8 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .g-big{display:block;width:100%;min-height:58px;border-radius:999px;border:2px solid #174aa8;background:#1f5fd6;color:#fff;font-weight:700;font-size:clamp(18px,4.8vw,22px);box-shadow:0 4px 0 #174aa8;margin-top:6px}
 .g-big:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #174aa8}
 .g-big:disabled{opacity:.55;cursor:default}
-.g-top>span .g-ghost{padding:2px 10px;font-size:14px}.g-npcsay{font-weight:700;margin:4px 0 8px;color:#495057}.g-top>span{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.g-ghost{min-height:40px;border-radius:999px;border:2px solid rgba(29,36,51,.2);background:#fff;padding:2px 12px;font-size:15px}
+.g-top>span .g-ghost{padding:2px 10px;font-size:14px}body.gp-play header{background:rgba(253,252,248,.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:3px 10px}body.gp-play .tab .lb{display:none}body.gp-play .tab{padding:3px 6px;min-height:0}body.gp-play .sec-b{padding-top:3px;padding-bottom:3px}body.gp-play .legend{display:none}
+.g-npcsay{font-weight:700;margin:4px 0 8px;color:#495057}.g-top>span{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.g-ghost{min-height:40px;border-radius:999px;border:2px solid rgba(29,36,51,.2);background:#fff;padding:2px 12px;font-size:15px}
 
 /* partie */
 .g-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}.g-top>.g-turn{flex:1 1 150px;min-width:0}#rsG{--pc:#1f5fd6}
@@ -1092,9 +1093,11 @@ function makeQuestion0(topics,grade){
 }
 
 /* ---- plateau ---- */
-const COLS=6, ROWS=10, EXTRA=0.62, HT=ROWS+EXTRA, SIZE=60;
-const LADDERS={3:15,9:22,21:33,29:41,38:50}, SLIDES={19:7,26:13,35:24,44:31,52:39,59:46};
-const STARS=[8,17,30,43,54], SNAILS=[12,25,36,48,55];
+const COLS=6, EXTRA=0.62; let ROWS=10, HT=ROWS+EXTRA, SIZE=60;
+const L0={3:15,9:22,21:33,29:41,38:50}, S0={19:7,26:13,35:24,44:31,52:39,59:46}, ST0=[8,17,30,43,54], SN0=[12,25,36,48,55];
+let LADDERS=L0, SLIDES=S0, STARS=ST0, SNAILS=SN0;
+function applySize(n){ SIZE=n; ROWS=n/COLS; HT=ROWS+EXTRA; const ok=x=>x<SIZE-2, f=o=>Object.fromEntries(Object.entries(o).filter(([a,b])=>ok(+a)&&ok(+b)));
+  LADDERS=f(L0); SLIDES=f(S0); STARS=ST0.filter(ok); SNAILS=SN0.filter(ok); }
 const CHARS=[['🦊','Renard'],['🐻','Ours'],['🐼','Panda'],['🐸','Grenouille'],['🦁','Lion'],['🐯','Tigre'],['🐰','Lapin'],['🐵','Singe'],['🦄','Licorne'],['🐧','Pingouin'],['🐱','Chat'],['🐶','Chien']];
 const COLORS=[['#e5383b','Rouge'],['#1f5fd6','Bleu'],['#2f9e44','Vert'],['#f08c00','Orange'],['#8f6fd6','Violet'],['#e64980','Rose']];
 const CELLC=['#d9ecfb','#dff4dc','#fff0b8','#fde0ec','#e9defa'];
@@ -1105,7 +1108,7 @@ function cellXY(n){
 const SLOTS=[[-.27,-.2],[0,-.2],[.27,-.2],[-.27,.2],[0,.2],[.27,.2]];
 
 /* ---- état ---- */
-let setup={n:2,npc:false,topics:new Set(['zahlen','math','school','cal','conj','calc']),level:'easy',
+let setup={n:2,npc:false,len:60,exact:false,topics:new Set(['zahlen','math','school','cal','conj','calc']),level:'easy',
   pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,co:i,gr:'4H'}))};
 let G=null; // partie en cours
 let curQ=null;
@@ -1114,18 +1117,25 @@ if(FAST) window.__mq=makeQuestion;
 
 /* ================= ÉCRAN DE RÉGLAGE ================= */
 function renderSetup(){
-  G=null;
+  G=null; document.body.classList.remove('gp-play');
   root.innerHTML=`<h2 class="g-h">🎲 Jeu de plateau</h2>
-  <p class="g-p">Lance les deux dés et réponds à la question : <b>bonne réponse = tu avances du total des dés</b>, sinon d’une case de moins ! Échelles, toboggans et cases spéciales t’attendent. Le premier arrivé à la case 60 gagne.</p>
+  <p class="g-p">Lance les deux dés et réponds à la question : <b>bonne réponse = tu avances du total des dés</b>, sinon d’une case de moins ! Échelles, toboggans et cases spéciales t’attendent. Le premier arrivé à la case ${setup.len} gagne.</p>
   <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="gN"></div></div>
   <div id="gPl"></div>
   ${setup.n<6?`<div class="g-sec"><button class="g-npc" id="gNpc" aria-pressed="${setup.npc}"><span><i class="mx"></i></span><b>Jouer avec PoutchouPoutchou</b><small>${setup.npc?'Il joue avec toi : c’est lui qui répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
+  <div class="g-sec"><div class="g-lab">Longueur du plateau</div><div class="g-seg" id="gLen"></div></div>
+  <div class="g-sec"><div class="g-lab">Arrivée</div><div class="g-seg" id="gEx"></div><p class="g-p g-note" id="gExN"></p></div>
   <div class="g-sec"><div class="g-lab">Sujets des questions</div><div class="g-chips" id="gTp"></div></div>
   <p class="g-p g-note"><b>1H</b> : images, couleurs, formes, animaux, petits nombres (la voix lit tout). <b>4H</b> : nombres jusqu’à 100, fournitures, calendrier. <b>6H</b> : tout ça + nombres jusqu’à 999, vocabulaire de maths et conjugaison (être, avoir, aller). <b>Calcul</b> : additions et soustractions en 4H ; en 6H, les quatre opérations.</p>
   <button class="g-big" id="gGo">▶ Commencer la partie</button>`;
   const N=root.querySelector('#gN');
   N.innerHTML=[1,2,3,4,5,6].map(k=>`<button data-n="${k}" aria-pressed="${k===setup.n}">${k}</button>`).join('');
   N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.n=+b.dataset.n; renderSetup(); };
+  { const Lg=root.querySelector('#gLen'); Lg.innerHTML=[[30,'Courte · 30'],[42,'Moyenne · 42'],[60,'Longue · 60']].map(([v,t])=>`<button data-v="${v}" aria-pressed="${setup.len===v}">${t}</button>`).join('');
+    Lg.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.len=+b.dataset.v; renderSetup(); };
+    const Ex=root.querySelector('#gEx'); Ex.innerHTML=[[0,'⚡ Directe'],[1,'🎯 Pile']].map(([v,t])=>`<button data-v="${v}" aria-pressed="${(setup.exact?1:0)===v}">${t}</button>`).join('');
+    root.querySelector('#gExN').innerHTML=setup.exact?'<b>Pile</b> : il faut tomber <b>exactement</b> sur la dernière case. Si les dés dépassent, on <b>recule</b> du nombre de cases en trop. Plus difficile !':'<b>Directe</b> : on gagne dès que les dés dépassent la dernière case.';
+    Ex.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.exact=+b.dataset.v===1; renderSetup(); }; }
   renderPlayers();
   { const nb=root.querySelector('#gNpc'); if(nb) nb.onclick=()=>{ setup.npc=!setup.npc; renderSetup(); }; }
   const T=root.querySelector('#gTp');
@@ -1157,7 +1167,7 @@ function renderPlayers(){
 function startGame(){
   const list=setup.pl.slice(0,setup.n).map((p,i)=>({name:(p.name||'').trim()||('Joueur '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[p.co][0],gr:p.gr||'4H',pos:0}));
   if(setup.npc&&list.length<6){ const used=new Set(list.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; list.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:col,gr:list[0].gr,pos:0,npc:true}); }
-  G={players:list,cur:0,busy:false,topics:[...setup.topics],level:setup.level,over:false,tokens:[]};
+  applySize(setup.len); G={players:list,cur:0,busy:false,topics:[...setup.topics],level:setup.level,over:false,tokens:[],exact:setup.exact};
   renderGame();
 }
 function renderGame(){
@@ -1166,14 +1176,14 @@ function renderGame(){
   <div class="g-board" id="gBoard"></div>
   <div class="g-ctl"><div class="g-msg" id="gMsg">Touche les dés pour jouer !</div>
   <div class="g-dicebox"><div class="g-die" id="gDie"></div><div class="g-die" id="gDie2"></div><button class="g-big" id="gRoll" style="margin:0">🎲 Lancer les dés</button></div></div>`;
-  buildBoard(); showDie(1); showDie(1,'#gDie2'); updateTurn(); layoutTokens(); setTimeout(followPlayers,60);
+  document.body.classList.add('gp-play'); buildBoard(); showDie(1); showDie(1,'#gDie2'); updateTurn(); layoutTokens(); setTimeout(followPlayers,60);
   const q=root.querySelector('#gQuit'); let armed=0;
   q.onclick=()=>{ if(armed){ renderSetup(); return; } armed=1; q.textContent='Sûr ? Retouche'; setTimeout(()=>{armed=0;q.textContent='↩ Quitter';},3000); };
   root.querySelector('#gRoll').onclick=takeTurn;
   root.querySelector('#gRestart').onclick=()=>restartDialog();
 }
 function buildBoard(){
-  const b=root.querySelector('#gBoard'); let h='';
+  const b=root.querySelector('#gBoard'); b.style.aspectRatio=COLS+'/'+HT; let h='';
   for(let n=1;n<=SIZE;n++){
     const {c,r}=cellXY(n);
     let ic=''; if(STARS.includes(n)) ic='⭐'; else if(SNAILS.includes(n)) ic='🐌'; else if(n===SIZE) ic='🏆';
@@ -1262,9 +1272,9 @@ async function takeTurn(auto){
   msg(`${p.emoji} <b>${esc(p.name)}</b> a fait <b>${d}</b> ! Réponds pour avancer…`);
   await sleep(700);
   const ok=p.npc?await npcAnswer(p,d):await askQuestion(p,d);
-  let target=Math.min(SIZE,p.pos+d);
   msg(ok?`✅ Bonne réponse ! ${p.npc?esc(p.name)+' avance':'Tu avances'} de <b>${d}</b>.`:`❌ Raté… ${p.npc?esc(p.name)+' avance':'tu avances'} de <b>${d-1}</b> (le total moins un).`);
-  while(p.pos<target) await hop(p,i,1);
+  { let dir=1, steps=d, bounced=0; while(steps>0){ if(dir===1&&p.pos>=SIZE){ if(!G.exact) break; dir=-1; } await hop(p,i,dir); if(dir===-1) bounced++; steps--; }
+    if(bounced){ msg(`↩️ <b>Trop loin !</b> Il faut tomber pile sur la case ${SIZE} : ${p.npc?esc(p.name)+' recule':'tu recules'} de <b>${bounced}</b>.`); await sleep(700); } }
   if(!ok){ await sleep(250); p.pos>0&&await hop(p,i,-1); }
   if(p.pos>=SIZE){ return win(p,i); }
   let extra=false; const n=p.pos;
@@ -1357,7 +1367,7 @@ function win(p,i){
   const ov=document.createElement('div'); ov.className='g-ov'; ov.style.alignItems='center';
   ov.innerHTML=`<div class="g-win" style="--pc:${p.color}"><div class="cup">🏆</div>
     <h2 class="g-h">Bravo ${esc(p.name)} ! ${p.emoji}</h2>
-    <p class="g-p">Tu as atteint la case 60 !</p>
+    <p class="g-p">Tu as atteint la case ${SIZE} !</p>
     <button class="g-big replay" data-a="again">▶ Rejouer</button><button class="g-ghost" data-a="grade" style="margin-top:8px">🎓 Changer de classe</button></div>`;
   document.body.appendChild(ov); DLmore(ov.querySelector('.g-win'),window.DLH.hubItems('plateau').map(it=>({ic:it.ic,t:it.t,go:()=>{ ov.remove(); conf.forEach(c=>c.remove()); it.go(); }})),'Ou joue à un autre jeu :');
   const conf=[]; for(let k=0;k<36;k++){ const c=document.createElement('span'); c.className='g-conf'; c.textContent=['🎉','⭐','🎊','✨'][k%4];
@@ -1416,7 +1426,7 @@ function renderHub(){
   hub.innerHTML=head+groups.map(([t,list])=>`<h3 class="h-gt">${t}</h3>`+list.map(g=>`<button class="h-gc" data-g="${g.id}" style="--gc:${g.c}"><span class="ic">${g.ic}</span><span class="tx"><b>${g.t}</b><small>${g.d}</small></span><span class="go">▶</span></button>`).join('')).join('');
   hub.onclick=e=>{ const b=e.target.closest('.h-gc'); if(b) openGame(b.dataset.g); };
 }
-function showHub(){ GCUR=null; try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
+function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
   const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille'];
@@ -1444,6 +1454,7 @@ function gradeDialog(){
 }
 root.querySelector('#gGrade').onclick=gradeDialog;
 function openGame(id){
+  document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
   if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
