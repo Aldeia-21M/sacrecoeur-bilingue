@@ -601,10 +601,16 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 @keyframes banin{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
 #salonBan .bn-i{font-size:28px;line-height:1}#salonBan .bn-i .mx{display:inline-block;width:1.2em;height:1.2em}#salonBan .bn-t{flex:1;line-height:1.2}#salonBan small{display:block;opacity:.85;font-size:12px}
 #salonBan .bn-j{border:0;border-radius:12px;background:#fff;color:#0b7285;font:800 15px inherit;font-family:inherit;padding:10px 12px;min-height:44px;cursor:pointer}#salonBan .bn-x{border:0;background:transparent;color:#fff;font-size:18px;width:36px;height:44px;cursor:pointer}
+
+#onbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-2px 0 6px;padding:3px 4px 3px 10px;border-radius:12px;background:#e6fcf5;border:2px solid #96f2d7;min-height:38px}#onbar[hidden]{display:none}body.gp-play #onbar{display:none}
+#onbar .ob-t{font-size:14px;color:#1b5e4a;display:flex;align-items:center;gap:6px;white-space:nowrap}.ob-d{width:10px;height:10px;border-radius:50%;background:#adb5bd;display:inline-block}.ob-d.on{background:#2fbf71;box-shadow:0 0 0 3px #b2f2bb}
+#onbar .ob-b{border:0;border-radius:10px;background:#0b7285;color:#fff;font:800 14px inherit;font-family:inherit;padding:6px 12px;min-height:34px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:68%}#onbar .ob-b small{font-size:10px;background:#f08c00;border-radius:999px;padding:1px 6px;margin-left:4px}#onbar .ob-b.hot{animation:obp 1.6s ease-in-out infinite}
+@keyframes obp{50%{box-shadow:0 0 0 5px rgba(11,114,133,.25)}}
 </style>
 </head>
 <body>
 <header>
+  <div id="onbar" hidden></div>
   <div class="secs" role="tablist" aria-label="Rubrique"><button class="sec-b" data-s="de" aria-pressed="true"><span class="e">🇩🇪</span><span>Allemand</span></button><button class="sec-b" data-s="fr" aria-pressed="false"><span class="e">🇫🇷</span><span>Français</span></button><button class="sec-b" data-s="ma" aria-pressed="false"><span class="e">🧮</span><span>Maths</span></button><button class="sec-b" data-s="pt" aria-pressed="false"><span class="e">🧸</span><span>Petits</span></button><button class="sec-b" data-s="fa" aria-pressed="false"><span class="e">🏆</span><span>Grand Quiz</span></button></div>
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
@@ -692,7 +698,7 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
-    { v: "3.9", desc: "Salon : joueurs en ligne et appel à jouer" },
+    { v: "3.9", desc: "Salon : joueurs en ligne, bouton Rejoindre en haut" },
     { v: "3.8", desc: "Joueur actif visible partout, Famille repensée" },
     { v: "3.7", desc: "Salon à distance en direct (bêta), icône Famille" },
     { v: "3.6", desc: "Fermer la fenêtre de fin de partie" },
@@ -4635,16 +4641,22 @@ async function poll(){ if(!S.code||!alive()) return; const m=me(); if(!m) return
   schedule(); }
 function schedule(){ clearTimeout(S.timer); if(!S.code||!alive()) return; const ph=S.room&&S.room.phase; const d=document.hidden?6000:(ph==='play'||ph==='vote')?1400:2600; S.timer=setTimeout(poll,d); }
 const alive=()=>!!document.getElementById('slRoot');
-function setRoom(r){ if(S.room&&r.v===S.room.v&&r.phase===S.room.phase){ S.room=r; return; } S.room=r; S.v=r.v; paint(); }
-function leaveLocal(){ S.code=null; S.room=null; S.v=0; sg('dl-salon',null); S.asked={}; S.sent={}; S.endDone=null; paint(); }
+function setRoom(r){ setTimeout(onbar,0); if(S.room&&r.v===S.room.v&&r.phase===S.room.phase){ S.room=r; return; } S.room=r; S.v=r.v; paint(); }
+function leaveLocal(){ setTimeout(onbar,0); S.code=null; S.room=null; S.v=0; sg('dl-salon',null); S.asked={}; S.sent={}; S.endDone=null; paint(); }
 
 /* qui est en ligne ? (présence anonyme) */
 function anonId(){ const m=me(); if(m) return m.id; try{ let a=localStorage.getItem('dl-anon'); if(!a){ a='a'+Math.random().toString(36).slice(2,12); localStorage.setItem('dl-anon',a); } return a; }catch(e){ return 'a'+Math.random().toString(36).slice(2,12); } }
 function lobH(){ const L=S.lob, o=L.open||[]; if(!(L.online>0)&&!o.length) return '';
   return `${o.length?`<div class="sl-ask"><b>📣 Des joueurs t’attendent !</b>${o.map(x=>`<button type="button" data-j="${x.c}"><span>${avH(x.av)}</span> <b>${esc(x.nm)}</b> · ${x.n} joueur${x.n>1?'s':''}<em>Rejoindre</em></button>`).join('')}</div>`:''}
   ${L.online>1?`<p class="sl-on">🟢 ${L.online-1} autre${L.online>2?'s':''} joueur${L.online>2?'s':''} en ligne</p>`:''}`; }
-function lobbyRefresh(){ const el=document.getElementById('slLob'); if(el) el.innerHTML=lobH(); }
-function goJoin(c){ window.__salonPending=c; const b=document.querySelector('.sec-b[data-s="fa"]'); if(b) b.click(); setTimeout(()=>H.openGame('salon'),150); }
+function lobbyRefresh(){ const el=document.getElementById('slLob'); if(el) el.innerHTML=lobH(); onbar(); }
+function onbar(){ const el=document.getElementById('onbar'); if(!el||!S.lob.ok) return; const L=S.lob, o=(L.open||[])[0], oth=Math.max(0,(L.online||1)-1), inRoom=!!S.code;
+  const txt=oth?`<b>${oth}</b> en ligne`:'Personne d’autre en ligne';
+  const lab=inRoom?'🌐 Retour au salon':o?'🌐 Rejoindre le salon':'🌐 Créer un salon';
+  el.hidden=false; el.dataset.c=inRoom?'':(o?o.c:'NEW'); el.dataset.in=inRoom?'1':'';
+  el.innerHTML=`<span class="ob-t"><i class="ob-d${oth?' on':''}"></i>${txt}</span><button type="button" class="ob-b${o&&!inRoom?' hot':''}">${lab} <small>bêta</small></button>`; }
+(function(){ const el=document.getElementById('onbar'); if(el) el.onclick=e=>{ if(!e.target.closest('button')) return; if(el.dataset.in){ goJoin(null); return; } goJoin(el.dataset.c||'NEW'); }; })();
+function goJoin(c){ window.__salonPending=c||null; const b=document.querySelector('.sec-b[data-s="fa"]'); if(b) b.click(); setTimeout(()=>H.openGame('salon'),150); }
 function banner(){ let el=document.getElementById('salonBan'); const o=(S.lob.open||[]).find(x=>!S.dis[x.c]);
   if(!o||S.code||(root()&&!S.code)||document.hidden){ if(el) el.remove(); return; }
   if(!el){ el=document.createElement('div'); el.id='salonBan'; el.setAttribute('role','status'); document.body.appendChild(el);
@@ -4653,7 +4665,7 @@ function banner(){ let el=document.getElementById('salonBan'); const o=(S.lob.op
 async function lobbyPing(){ if(document.hidden||location.protocol==='file:'||/#test/.test(location.hash)) return; S.lastPing=Date.now();
   try{ const m=me(); let q='lobby=1&p='+encodeURIComponent(anonId()); const r=S.room;
     if(root()&&r&&r.phase==='lobby'&&S.openSalon&&m&&r.players.some(x=>x.id===m.id)) q+='&c='+r.code;
-    const j=await (await fetch(API+'?'+q,{cache:'no-store'})).json(); if(j&&j.open){ S.lob=j; lobbyRefresh(); banner(); } }catch(e){} }
+    const j=await (await fetch(API+'?'+q,{cache:'no-store'})).json(); if(j&&j.open){ S.lob=j; S.lob.ok=1; lobbyRefresh(); banner(); } }catch(e){} }
 setInterval(lobbyPing,25000); setTimeout(lobbyPing,2500); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) lobbyPing(); else banner(); });
 
 /* écrans */
@@ -4719,7 +4731,7 @@ function bind(R){
     const s=b.dataset.s;
     if(s==='chg'){ try{ localStorage.removeItem('dl-salon-guest'); }catch(x){} paint(); return; }
     if(s==='create'||s==='join'){ ensureMe(R); const m=me(); if(!m){ S.msg='⚠️ Écris ton prénom ou ton pseudo.'; paint(); return; }
-      S.msg=''; if(s==='create'){ S.code=null; const j=await api({a:'create',profile:m}); if(j.room){ S.code=j.room.code; sg('dl-salon',S.code); S.v=0; setRoom(j.room); S.v=j.room.v; paint(); schedule(); } else { S.msg=j.error==='net'?'⚠️ Pas de connexion au serveur.':'⚠️ Impossible de créer le salon ('+esc(j.error||'?')+').'; paint(); } }
+      S.msg=''; if(s==='create'){ await createRoom(m); }
       else { const c=(R.querySelector('#slCode').value||'').toUpperCase().replace(/[^A-Z0-9]/g,''); S.prefill=c; if(c.length!==5){ S.msg='⚠️ Le code a 5 signes (lettres et chiffres).'; paint(); return; } await joinRoom(c,m); }
       return; }
     if(s==='copy'){ try{ await navigator.clipboard.writeText(S.code); S.msg='✅ Code copié !'; }catch(x){ S.msg='Code : '+S.code; } paint(); return; }
@@ -4734,6 +4746,7 @@ function bind(R){
       await api({a:'answer',n:u.n,k}); return; } };
 }
 function ensureMe(R){ if(me()) return; const n=(R.querySelector('#slName')||{}).value; if(!n||!n.trim()) return; const av=(R.querySelector('#slAvs button[aria-pressed=true]')||{}).dataset; const gr=(R.querySelector('#slGr button[aria-pressed=true]')||{}).dataset; saveGuest(n.trim(),(av&&av.av)||'🦊',(gr&&gr.gr)||'4H'); }
+async function createRoom(m){ S.code=null; const j=await api({a:'create',profile:m}); if(j.room){ S.code=j.room.code; sg('dl-salon',S.code); S.v=0; setRoom(j.room); S.v=j.room.v; paint(); schedule(); } else { S.msg=j.error==='net'?'⚠️ Pas de connexion au serveur.':'⚠️ Impossible de créer le salon ('+esc(j.error||'?')+').'; paint(); } }
 async function joinRoom(c,m){ S.code=c; const j=await api({a:'join',profile:m||me()});
   if(j.room&&!j.error){ sg('dl-salon',c); S.v=0; setRoom(j.room); S.v=j.room.v; paint(); schedule(); return true; }
   S.code=null; S.msg=j.error==='absent'?'⚠️ Salon introuvable ou expiré : vérifie le code.':j.error==='plein'?'⚠️ Ce salon est complet (8 joueurs).':j.error==='net'?'⚠️ Pas de connexion au serveur.':'⚠️ Impossible de rejoindre ('+esc(j.error||'?')+').'; paint(); return false; }
@@ -4754,10 +4767,10 @@ function tick(){ const R=root(); if(!R){ clearInterval(S.tk); S.tk=null; return;
 
 /* entrée */
 window.DLG.salon=function(){ body.innerHTML='<div id="slRoot" class="sl"></div>'; S.msg=''; S.gname='';
-  const pend=window.__salonPending; window.__salonPending=null; if(pend) S.prefill=pend;
+  let pend=window.__salonPending; window.__salonPending=null; const mk=pend==='NEW'; if(mk) pend=null; if(pend) S.prefill=pend;
   const saved=S.code||sg('dl-salon'); const m=me();
   if(saved&&m){ S.code=saved; paint(); joinRoom(saved,m).then(ok=>{ if(!ok) paint(); }); }
-  else { paint(); if(pend&&m) joinRoom(pend,m); }
+  else { paint(); if(pend&&m) joinRoom(pend,m); else if(mk&&m) createRoom(m); else if(mk) { S.msg='⚠️ Écris ton prénom, puis touche « Créer un salon ».'; paint(); } }
   tick(); };
 /* lien d'invitation ?salon=CODE */
 try{ const c=(new URLSearchParams(location.search).get('salon')||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5); if(c.length===5){ window.__salonPending=c; setTimeout(()=>{ const b=document.querySelector('.sec-b[data-s="fa"]'); if(b) b.click(); setTimeout(()=>H.openGame('salon'),150); },700); } }catch(e){}
