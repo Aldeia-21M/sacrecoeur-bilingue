@@ -1083,7 +1083,7 @@ function cellXY(n){
 const SLOTS=[[-.27,-.2],[0,-.2],[.27,-.2],[-.27,.2],[0,.2],[.27,.2]];
 
 /* ---- état ---- */
-let setup={n:2,topics:new Set(['zahlen','math','school','cal','conj','calc']),level:'easy',
+let setup={n:2,npc:false,topics:new Set(['zahlen','math','school','cal','conj','calc']),level:'easy',
   pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,co:i,gr:'4H'}))};
 let G=null; // partie en cours
 let curQ=null;
@@ -1097,6 +1097,7 @@ function renderSetup(){
   <p class="g-p">Lance les deux dés et réponds à la question : <b>bonne réponse = tu avances du total des dés</b>, sinon d’une case de moins ! Échelles, toboggans et cases spéciales t’attendent. Le premier arrivé à la case 60 gagne.</p>
   <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="gN"></div></div>
   <div id="gPl"></div>
+  ${setup.n<6?`<div class="g-sec"><button class="g-npc" id="gNpc" aria-pressed="${setup.npc}"><span>🤖</span><b>Jouer avec PoutchouPoutchou</b><small>${setup.npc?'Il joue avec toi : c’est lui qui répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
   <div class="g-sec"><div class="g-lab">Sujets des questions</div><div class="g-chips" id="gTp"></div></div>
   <p class="g-p g-note"><b>1H</b> : images, couleurs, formes, animaux, petits nombres (la voix lit tout). <b>4H</b> : nombres jusqu’à 100, fournitures, calendrier. <b>6H</b> : tout ça + nombres jusqu’à 999, vocabulaire de maths et conjugaison (être, avoir, aller). <b>Calcul</b> : additions et soustractions en 4H ; en 6H, les quatre opérations.</p>
   <button class="g-big" id="gGo">▶ Commencer la partie</button>`;
@@ -1104,6 +1105,7 @@ function renderSetup(){
   N.innerHTML=[1,2,3,4,5,6].map(k=>`<button data-n="${k}" aria-pressed="${k===setup.n}">${k}</button>`).join('');
   N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.n=+b.dataset.n; renderSetup(); };
   renderPlayers();
+  { const nb=root.querySelector('#gNpc'); if(nb) nb.onclick=()=>{ setup.npc=!setup.npc; renderSetup(); }; }
   const T=root.querySelector('#gTp');
   T.innerHTML=Object.keys(TOPICS).map(k=>`<button class="g-chip" data-k="${k}" aria-pressed="${setup.topics.has(k)}">${TOPICS[k].label}</button>`).join('');
   T.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const k=b.dataset.k;
@@ -1132,6 +1134,7 @@ function renderPlayers(){
 /* ================= PARTIE ================= */
 function startGame(){
   const list=setup.pl.slice(0,setup.n).map((p,i)=>({name:(p.name||'').trim()||('Joueur '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[p.co][0],gr:p.gr||'4H',pos:0}));
+  if(setup.npc&&list.length<6){ const used=new Set(list.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; list.push({name:'PoutchouPoutchou',emoji:'🤖',color:col,gr:list[0].gr,pos:0,npc:true}); }
   G={players:list,cur:0,busy:false,topics:[...setup.topics],level:setup.level,over:false,tokens:[]};
   renderGame();
 }
@@ -1195,7 +1198,7 @@ function layoutTokens(){
 function updateTurn(){
   const p=G.players[G.cur], t=root.querySelector('#gTurn');
   t.style.setProperty('--pc',p.color);
-  t.innerHTML=`<span class="t">${p.emoji}</span><span><b>${esc(p.name)}</b>, à toi de jouer !</span>`;
+  t.innerHTML=`<span class="t">${p.emoji}</span><span><b>${esc(p.name)}</b>${p.npc?' joue…':', à toi de jouer !'}</span>`;
 }
 function msg(h){ const m=root.querySelector('#gMsg'); if(m) m.innerHTML=h; }
 function showDie(v,id){
@@ -1217,17 +1220,17 @@ async function glide(p,i,to){
 }
 
 /* ---- tour ---- */
-async function takeTurn(){
-  if(!G||G.busy||G.over) return;
+async function takeTurn(auto){
+  if(!G||G.over||(G.busy&&auto!==true)) return;
   G.busy=true; const btn=root.querySelector('#gRoll'); btn.disabled=true;
   const i=G.cur, p=G.players[i];
   msg(`${p.emoji} <b>${esc(p.name)}</b> lance les dés…`);
   const d=await rollDie();
   msg(`${p.emoji} <b>${esc(p.name)}</b> a fait <b>${d}</b> ! Réponds pour avancer…`);
   await sleep(700);
-  const ok=await askQuestion(p,d);
+  const ok=p.npc?await npcAnswer(p):await askQuestion(p,d);
   let target=Math.min(SIZE,p.pos+d);
-  msg(ok?`✅ Bonne réponse ! Tu avances de <b>${d}</b>.`:`❌ Raté… tu avances de <b>${d-1}</b> (le total moins un).`);
+  msg(ok?`✅ Bonne réponse ! ${p.npc?esc(p.name)+' avance':'Tu avances'} de <b>${d}</b>.`:`❌ Raté… ${p.npc?esc(p.name)+' avance':'tu avances'} de <b>${d-1}</b> (le total moins un).`);
   while(p.pos<target) await hop(p,i,1);
   if(!ok){ await sleep(250); p.pos>0&&await hop(p,i,-1); }
   if(p.pos>=SIZE){ return win(p,i); }
@@ -1238,9 +1241,13 @@ async function takeTurn(){
   else if(SNAILS.includes(n)){ msg(`🐌 <b>L’escargot…</b> ${p.emoji} recule de 2 cases.`); await sleep(500); await hop(p,i,-1); await hop(p,i,-1); }
   await sleep(500);
   if(!extra) G.cur=(G.cur+1)%G.players.length;
-  G.busy=false; btn.disabled=false; updateTurn(); layoutTokens();
-  msg(`Touche les dés : c’est au tour de ${G.players[G.cur].emoji} <b>${esc(G.players[G.cur].name)}</b>.`);
+  const nx=G.players[G.cur]; updateTurn(); layoutTokens();
+  if(nx.npc){ G.busy=true; btn.disabled=true; msg(`${nx.emoji} <b>${esc(nx.name)}</b> va jouer…`); setTimeout(()=>takeTurn(true),FAST?50:1500); }
+  else { G.busy=false; btn.disabled=false; msg(`Touche les dés : c’est au tour de ${nx.emoji} <b>${esc(nx.name)}</b>.`); }
 }
+
+/* ---- le compagnon répond à sa place ---- */
+async function npcAnswer(p){ const ok=Math.random()<.65; msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); await sleep(FAST?30:1300); try{ window.PCev&&0; }catch(e){} return ok; }
 
 /* ---- question ---- */
 function askQuestion(p,d){
@@ -1404,19 +1411,21 @@ function pickItems(topics,grade,count){
 
 /* écran de réglage commun */
 function playerSetup(o,done){
-  const st={n:o.defN,pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null};
+  const st={n:o.defN,npc:false,pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null};
   function draw(){
     const list=st.pl.slice(0,st.n);
     body.innerHTML=`<h2 class="g-h">${o.title}</h2><p class="g-p">${o.intro}</p>
       <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="hN"></div></div>
       ${o.perGrade?'':'<div class="g-sec"><div class="g-lab">Classe</div><div class="g-seg" id="hG"></div></div>'}
       <div id="hPl"></div>
+      ${o.npc&&st.n<o.max?`<div class="g-sec"><button class="g-npc" id="hNpc" aria-pressed="${st.npc}"><span>🤖</span><b>Jouer avec PoutchouPoutchou</b><small>${st.npc?'Il joue avec toi et répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
       ${o.noTopics?'':'<div class="g-sec"><div class="g-lab">Sujets des questions</div><div class="g-chips" id="hT"></div></div>'}
       ${o.extra?`<div class="g-sec"><div class="g-lab">${o.extra.label}</div><div class="g-seg" id="hX"></div></div>`:''}
       ${o.noNote?'':''}<p class="g-p g-note"><b>1H</b> : images, couleurs, formes, animaux, petits nombres (la voix lit tout). <b>4H</b> : nombres jusqu’à 100, fournitures, calendrier. <b>6H</b> : tout ça + nombres jusqu’à 999, vocabulaire de maths et conjugaison (être, avoir, aller). <b>Calcul</b> : additions et soustractions en 4H ; en 6H, les quatre opérations.</p>
       <button class="g-big" id="hGo">▶ Jouer</button>`;
-    const N=body.querySelector('#hN'); let nb=''; for(let k=o.min;k<=o.max;k++) nb+=`<button data-n="${k}" aria-pressed="${k===st.n}">${k}</button>`; N.innerHTML=nb;
-    N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.n=+b.dataset.n; draw(); };
+    const N=body.querySelector('#hN'); let nb=''; for(let k=(o.npc?1:o.min);k<=o.max;k++) nb+=`<button data-n="${k}" aria-pressed="${k===st.n}">${k}</button>`; N.innerHTML=nb;
+    N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.n=+b.dataset.n; if(o.npc&&st.n<o.min) st.npc=true; if(st.npc&&st.n>=o.max) st.npc=false; draw(); };
+    { const nb2=body.querySelector('#hNpc'); if(nb2) nb2.onclick=()=>{ st.npc=!st.npc; if(!st.npc&&st.n<o.min) st.n=o.min; draw(); }; }
     if(!o.perGrade){ const G=body.querySelector('#hG'); G.innerHTML=['1H','4H','6H'].map(g=>`<button data-g="${g}" aria-pressed="${st.grade===g}">Classe ${g}</button>`).join('');
       G.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.grade=b.dataset.g; G.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.g===st.grade)); }; }
     const box=body.querySelector('#hPl');
@@ -1437,6 +1446,7 @@ function playerSetup(o,done){
       X.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.x=+b.dataset.x; X.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',+x.dataset.x===st.x)); }; }
     body.querySelector('#hGo').onclick=()=>{
       const players=list.map((p,i)=>({name:(p.name||'').trim()||((o.who||'Joueur')+' '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[i][0],gr:o.perGrade?p.gr:st.grade}));
+      if(o.npc&&st.npc&&players.length<o.max){ const used=new Set(players.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; players.push({name:'PoutchouPoutchou',emoji:'🤖',color:col,gr:o.perGrade?players[0].gr:st.grade,npc:true}); }
       done({players,topics:[...st.topics],grade:st.grade,x:st.x});
     };
   }
@@ -1533,7 +1543,7 @@ function startLoto(cfg){
 
 /* ================= COURSE ================= */
 function race(){
-  playerSetup({title:'🚀 Course',intro:'À chaque tour, une question. Bonne réponse = tu avances d’une case. Le premier arrivé à l’arrivée gagne ! Chaque joueur choisit sa classe.',min:2,max:6,defN:2,perGrade:true,
+  playerSetup({title:'🚀 Course',npc:true,intro:'À chaque tour, une question. Bonne réponse = tu avances d’une case. Le premier arrivé à l’arrivée gagne ! Chaque joueur choisit sa classe.',min:2,max:6,defN:2,perGrade:true,
     extra:{label:'Longueur de la course',opts:[[5,'Courte (5)'],[8,'Normale (8)'],[12,'Longue (12)']],def:8}},startRace);
 }
 function startRace(cfg){
@@ -1549,8 +1559,13 @@ function startRace(cfg){
       l.querySelector('.tok').style.left=`calc(${pc*100}% - ${pc*34}px)`; l.querySelector('.fill').style.width=`calc(${pc*100}% )`; });
   }
   function ask(){
-    const p=cfg.players[R.turn]; const q=makeQuestion(cfg.topics,p.gr); R.q=q; R.busy=false; paint();
-    const box=body.querySelector('#rQ'); box.style.setProperty('--pc',p.color);
+    const p=cfg.players[R.turn]; const box=body.querySelector('#rQ'); box.style.setProperty('--pc',p.color);
+    if(p.npc){ R.busy=true; R.q=null; paint(); box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+      sleep(FAST?30:1500).then(async()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il avance d’une case.`:`❌ ${esc(p.name)} s’est trompé… il reste sur place.`}</div>`;
+        if(ok){ R.pos[R.turn]++; paint(); } await sleep(FAST?30:1600);
+        if(ok&&R.pos[R.turn]>=LEN) return winRace(); R.turn=(R.turn+1)%cfg.players.length; ask(); });
+      return; }
+    const q=makeQuestion(cfg.topics,p.gr); R.q=q; R.busy=false; paint();
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Suivant ▶</button>`;
@@ -3707,6 +3722,18 @@ const css=document.createElement('style'); css.textContent=`
 #pcP .pc-nm{font-size:12px;font-weight:800;color:#b07a00;margin-bottom:2px}
 #pcP .pc-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 #pcP .pc-btns button{min-height:48px;border-radius:14px;border:2px solid #d8cfae;background:#fff;font:700 14px/1.15 system-ui,sans-serif;color:#1d2433;cursor:pointer;padding:6px}
+#pcP .pc-btns #pcBy{grid-column:1/-1}
+.g-npc{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;width:100%;text-align:left;padding:10px 14px;border-radius:16px;border:3px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;font-family:inherit;color:#1d2433;font-size:16px}.g-npc span{grid-row:1/3;font-size:34px}.g-npc small{opacity:.75;font-weight:600}.g-npc[aria-pressed=true]{background:#bfeebf;border-color:#2f9e44}
+#pcG{position:fixed;inset:0;z-index:100001;background:linear-gradient(#cfe8ff,#e9defa);overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+#pcG .gb{position:absolute;bottom:-130px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 30% 28%,#fff 0,rgba(255,255,255,.55) 14%,var(--bc) 62%,rgba(255,255,255,.35) 100%);box-shadow:inset 0 0 12px rgba(255,255,255,.8),0 4px 10px rgba(29,36,51,.12);transition:transform var(--t) linear;-webkit-tap-highlight-color:transparent}
+#pcG .gb.up{transform:translateY(calc(-100vh - 280px))}
+#pcG .gb.pop{transition:transform .22s ease-out,opacity .22s;transform:scale(1.6)!important;opacity:0;pointer-events:none}
+#pcG .gh{position:absolute;top:10px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;font:800 22px system-ui,sans-serif;color:#1d2433;pointer-events:none}
+#pcG .gh button{pointer-events:auto;border:0;background:#fff;border-radius:999px;min-width:44px;height:44px;font-size:22px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+#pcG .gend{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;background:rgba(255,255,255,.7)}
+#pcG .gend>div{background:#fff;border-radius:24px;padding:22px 20px;max-width:340px;box-shadow:0 6px 24px rgba(0,0,0,.18);font:700 18px/1.35 system-ui,sans-serif;color:#1d2433}
+#pcG .gend img{width:84px;height:84px;border-radius:50%;object-fit:cover;object-position:50% 40%}
+#pcG .gend button{margin:8px 4px 0;min-height:48px;border-radius:14px;border:2px solid #2f6fd6;background:#e8f0ff;font:800 16px system-ui,sans-serif;padding:0 14px;cursor:pointer}
 #pcP .pc-btns button.on{background:#d8f5dc;border-color:#2f9e44}
 #pcP .pc-btns button.glow{border-color:#f0b400;background:#fff3c4}
 #pcP .pc-x{position:absolute;top:4px;right:8px;border:0;background:none;font-size:22px;cursor:pointer;color:#666}
@@ -3716,7 +3743,7 @@ const fab=document.createElement('button'); fab.id='pcFab'; fab.setAttribute('ar
 const nudge=document.createElement('div'); nudge.id='pcNudge'; nudge.hidden=true;
 const P=document.createElement('div'); P.id='pcP'; P.hidden=true;
 P.innerHTML=`<button class="pc-x" aria-label="Fermer">×</button><div class="pc-top"><img src="${IMG_B}" alt=""><div class="pc-say"><div class="pc-nm">PoutchouPoutchou</div><span id="pcT"></span></div></div>
-<div class="pc-btns"><button id="pcRe">🔊 Répète la question</button><button id="pcHi">💡 Un coup de pouce</button><button id="pcMu">🎵 Musique douce</button><button id="pcBy">👋 Merci, ça va !</button></div>`;
+<div class="pc-btns"><button id="pcRe">🔊 Répète la question</button><button id="pcHi">💡 Un coup de pouce</button><button id="pcMu">🎵 Musique douce</button><button id="pcGa">🫧 Une pause jeu</button><button id="pcBy">👋 Merci, ça va !</button></div>`;
 document.body.append(fab,nudge,P);
 const T=P.querySelector('#pcT');
 const say=(t,l)=>{ try{ if(window.speak) window.speak(t,l||'fr'); }catch(e){} };
@@ -3761,14 +3788,36 @@ function music(on){ const b=P.querySelector('#pcMu');
 P.querySelector('#pcMu').onclick=()=>music(!playing);
 /* il observe et propose une pause */
 let wrong=0,lastPause=Date.now();
-function suggestPause(why){ lastPause=Date.now(); wrong=0; const b=P.querySelector('#pcMu'); b.classList.add('glow'); show(why,true); }
+function suggestPause(why){ lastPause=Date.now(); wrong=0; P.querySelector('#pcMu').classList.add('glow'); P.querySelector('#pcGa').classList.add('glow'); show(why,true); }
 window.PCev=function(ok){
   if(ok){ wrong=0; fab.classList.remove('hop'); void fab.offsetWidth; fab.classList.add('hop'); return; }
   wrong++; if(wrong===2&&P.hidden) push('Besoin d’un coup de pouce ? 💡');
-  if(wrong>=4) suggestPause('Ce n’est pas facile en ce moment. Et si on faisait une petite pause avec de la musique ?'); };
-setInterval(()=>{ if(!document.hidden&&Date.now()-lastPause>12*60000) suggestPause('Tu travailles bien depuis un moment ! Et si on faisait une petite pause avec de la musique ?'); },30000);
+  if(wrong>=4) suggestPause('Ce n’est pas facile en ce moment. Et si on faisait une petite pause : de la musique ou un petit jeu ?'); };
+setInterval(()=>{ if(!document.hidden&&Date.now()-lastPause>12*60000) suggestPause('Tu travailles bien depuis un moment ! Et si on faisait une petite pause : de la musique ou un petit jeu ?'); },30000);
 const v0=window.DLverdict; if(v0) window.DLverdict=function(ok){ try{ window.PCev(ok); }catch(e){} return v0.apply(this,arguments); };
-window.__pc={show,music,suggestPause,P};
+/* mini-jeu de pause : bulles à éclater (animation CSS seulement, 45 s) */
+let gOv=null;
+function pop(){ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain(); o.type='sine'; o.frequency.setValueAtTime(520+rnd(380),t); o.frequency.exponentialRampToValueAtTime(140,t+.12); g.gain.setValueAtTime(.18,t); g.gain.exponentialRampToValueAtTime(.001,t+.14); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+.16); }catch(e){} }
+function bubbles(){
+  if(gOv) return; P.hidden=true; nudge.hidden=true; P.querySelector('#pcGa').classList.remove('glow');
+  const COL=['#ffd6e5','#cfe8ff','#d9f2d1','#ffe58a','#e4d6fb','#ffd9b3','#c5f6fa'];
+  gOv=document.createElement('div'); gOv.id='pcG'; let score=0, left=45, spawn, clock, alive=true;
+  gOv.innerHTML='<div class="gh"><span id="gS">🫧 0</span><span id="gT">45</span><button aria-label="Fermer">×</button></div>';
+  document.body.appendChild(gOv); const S=gOv.querySelector('#gS'), Tm=gOv.querySelector('#gT');
+  function close(){ alive=false; clearInterval(spawn); clearInterval(clock); if(gOv){ gOv.remove(); gOv=null; } }
+  gOv.querySelector('.gh button').onclick=close;
+  function add(){ if(!alive||!gOv) return; const b=document.createElement('button'); const s=64+rnd(56), d=6+Math.random()*4;
+    b.className='gb'; b.setAttribute('aria-label','bulle'); b.style.cssText=`left:${rnd(Math.max(10,innerWidth-s-10))}px;width:${s}px;height:${s}px;--bc:${pick(COL)};--t:${d}s`;
+    b.onpointerdown=e=>{ e.preventDefault(); if(b.classList.contains('pop')) return; b.classList.add('pop'); pop(); score++; S.textContent='🫧 '+score; setTimeout(()=>b.remove(),260); };
+    gOv.appendChild(b); requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('up'))); setTimeout(()=>b.remove(),d*1000+300); }
+  add(); add(); spawn=setInterval(add,650);
+  clock=setInterval(()=>{ left--; Tm.textContent=left; if(left<=0){ clearInterval(spawn); clearInterval(clock); end(); } },1000);
+  function end(){ if(!gOv) return; const e=document.createElement('div'); e.className='gend'; const msg=score>=25?'Wow, tu es rapide !':score>=12?'Joli travail !':'Bien joué !';
+    e.innerHTML=`<div><img src="${IMG_B}" alt=""><br>${msg}<br>Tu as éclaté <b>${score}</b> bulles.<br><button id="gA">🫧 Encore</button><button id="gB">📚 On y retourne !</button></div>`;
+    gOv.appendChild(e); say(msg+' On retourne travailler ?'); e.querySelector('#gA').onclick=()=>{ close(); bubbles(); }; e.querySelector('#gB').onclick=close; }
+}
+P.querySelector('#pcGa').onclick=bubbles;
+window.__pc={show,music,suggestPause,P,bubbles};
 })();
 </script>
 </body>
