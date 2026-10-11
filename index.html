@@ -532,7 +532,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .u-tip{padding:10px 12px;border-radius:12px;background:#fff4e6;border:1px solid #ffd8a8;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem}.u-tip.ok{background:#ebfbee;border-color:#b2f2bb}
 .u-b{border:2px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;font:700 14px inherit;font-family:inherit;cursor:pointer;min-height:40px;color:#2b3350}
 .u-b.pr{background:#1f5fd6;border-color:#1f5fd6;color:#fff}.u-b.dg{background:#fff5f5;border-color:#ffa8a8;color:#c92a2a}
-.u-new{justify-self:start}
+.u-new{justify-self:start}.u-in{font:700 18px/1 inherit;font-family:ui-monospace,monospace;letter-spacing:1px;text-transform:uppercase;padding:10px;border-radius:12px;border:2px solid var(--line);min-height:44px;flex:1;min-width:150px}.u-codebox{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.u-code{font:800 22px/1.2 ui-monospace,monospace;letter-spacing:2px;background:#fff8e1;border:2px dashed #fcc419;border-radius:12px;padding:8px 14px;user-select:all}
 .u-rk{display:grid;gap:5px}.u-rk div{display:grid;grid-template-columns:28px 36px 1fr auto;gap:8px;align-items:center;padding:4px 8px;border-radius:12px;background:#f7f8fc}.u-rk .u-av{width:34px;height:34px;font-size:20px}.u-rk em{font-style:normal;font-weight:800;color:#1f5fd6}
 .u-pl{display:grid;gap:7px}.u-pc{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:stretch}
 .u-pick{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;text-align:left;border:2px solid #e2e7f3;background:#fff;border-radius:14px;padding:8px 10px;cursor:pointer;font-family:inherit;color:inherit;min-height:56px}
@@ -638,6 +638,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "3.1", desc: "Code famille : données sur tous appareils" },
     { v: "3.0", desc: "Profils, points, défis hebdo, évolution" },
     { v: "2.2", desc: "Version et historique dans Réglages" },
     { v: "2.1", desc: "Historique des versions en bas de page" },
@@ -4094,9 +4095,10 @@ let storeOk=true;
 function load(){ try{ const r=localStorage.getItem(KEY); if(r){ const d=JSON.parse(r); if(d&&Array.isArray(d.profiles)) return d; } }catch(e){ storeOk=false; }
   return {v:1,active:null,profiles:[],lastBackup:0}; }
 let D=load();
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){ storeOk=false; } }
+D.del=D.del||{}; D.sync=D.sync||null;
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){ storeOk=false; } sched(); }
 function mk(o){ return {id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),name:o.name,av:o.av,col:o.col,gr:o.gr||'4H',t0:Date.now(),
-  pts:0,days:{},wk:{},bd:{},tot:{a:0,ok:0,g:0,mr:0,bs:0},sec:{},run:0}; }
+  pts:0,days:{},wk:{},bd:{},tot:{a:0,ok:0,g:0,mr:0,bs:0},sec:{},run:0,mt:Date.now()}; }
 const act=()=>D.profiles.find(p=>p.id===D.active)||null;
 const byName=n=>{ n=norm(n); return n?D.profiles.find(p=>norm(p.name)===n)||null:null; };
 const avH=a=>a==='mx'?'<i class="mx"></i>':esc(a||'🙂');
@@ -4210,6 +4212,57 @@ function onEnd(){
   }catch(e){ if(window.console) console.warn('DLU',e); }
 }
 
+
+/* ---------- code famille : sauvegarde en ligne (pseudos et points seulement) ---------- */
+const API='/.netlify/functions/profil', CODE_RE=/^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/;
+const normCode=s=>{ const c=String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,''); return c.length===12?c.match(/.{4}/g).join('-'):String(s||'').toUpperCase().trim(); };
+function genCode(){ const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789', r=new Uint8Array(12); (window.crypto||window.msCrypto).getRandomValues(r); const c=[...r].map(x=>A[x%A.length]).join(''); return c.match(/.{4}/g).join('-'); }
+function mergeDay(x,y){ if(!x) return y; if(!y) return x; return (x.a+x.g*5)>=(y.a+y.g*5)?x:y; }
+function mergeP(a,b){
+  const base=(b.mt||0)>(a.mt||0)?b:a, o=JSON.parse(JSON.stringify(base)); o.t0=Math.min(a.t0||Date.now(),b.t0||Date.now()); o.mt=Math.max(a.mt||0,b.mt||0);
+  o.days={}; new Set([...Object.keys(a.days||{}),...Object.keys(b.days||{})]).forEach(k=>{ o.days[k]=JSON.parse(JSON.stringify(mergeDay((a.days||{})[k],(b.days||{})[k]))); });
+  o.wk={}; new Set([...Object.keys(a.wk||{}),...Object.keys(b.wk||{})]).forEach(k=>{ const x=(a.wk||{})[k]||{ch:{}}, y=(b.wk||{})[k]||{ch:{}}; o.wk[k]={ch:Object.assign({},x.ch,y.ch),mr:Math.max(x.mr||0,y.mr||0),bonus:Math.max(x.bonus||0,y.bonus||0)}; });
+  o.bd=Object.assign({},b.bd||{},a.bd||{}); const ta=a.tot||{}, tb=b.tot||{};
+  let pts=0,A=0,OK=0,G=0; o.sec={}; Object.values(o.days).forEach(d=>{ pts+=d.pts; A+=d.a; OK+=d.ok; G+=d.g; for(const s in d.s){ const r=o.sec[s]||(o.sec[s]=[0,0]); r[0]+=d.s[s][0]; r[1]+=d.s[s][1]; } });
+  o.pts=pts; o.tot={a:A,ok:OK,g:G,mr:Math.max(ta.mr||0,tb.mr||0),bs:Math.max(ta.bs||0,tb.bs||0)}; o.run=Math.max(a.run||0,b.run||0); return o; }
+function mergeIn(rem){
+  const del=Object.assign({},D.del||{},rem.del||{}); let n=0;
+  (rem.profiles||[]).forEach(q=>{ if(!q||!q.id||del[q.id]) return; q.days=q.days||{}; q.wk=q.wk||{}; q.bd=q.bd||{}; q.sec=q.sec||{}; q.tot=Object.assign({a:0,ok:0,g:0,mr:0,bs:0},q.tot||{});
+    const i=D.profiles.findIndex(x=>x.id===q.id); if(i<0){ D.profiles.push(q); n++; } else D.profiles[i]=mergeP(D.profiles[i],q); });
+  D.profiles=D.profiles.filter(p=>!del[p.id]); D.del=del; if(!act()) D.active=(D.profiles[0]||{}).id||null; return n; }
+const SY={st:'',t:0,timer:null,busy:false};
+function sched(){ if(!D.sync||!D.sync.code) return; clearTimeout(SY.timer); SY.timer=setTimeout(()=>sync(false),3500); }
+async function sync(manual){
+  if(!D.sync||!D.sync.code||SY.busy) return; SY.busy=true; const code=D.sync.code;
+  try{
+    let n=0, r=await fetch(API+'?c='+encodeURIComponent(code),{cache:'no-store'});
+    if(r.ok){ const j=await r.json(); n=mergeIn(j.data||{}); } else if(r.status!==404) throw new Error('get '+r.status);
+    try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){}
+    r=await fetch(API,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({code,data:{profiles:D.profiles,del:D.del}})});
+    if(!r.ok) throw new Error('put '+r.status);
+    D.sync.last=Date.now(); try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){}
+    SY.st='ok'; if(manual) V.msg=n?`✅ Synchronisé : ${n} profil${n>1?'s':''} retrouvé${n>1?'s':''}.`:'✅ Synchronisé.';
+  }catch(e){ SY.st='err'; if(manual) V.msg='⚠️ Pas de connexion pour l’instant. Les données restent ici, on réessaiera.'; }
+  SY.busy=false; paintBtn(); if(!P.hidden) render(); }
+async function joinCode(raw){
+  const code=normCode(raw); if(!CODE_RE.test(code)){ V.msg='⚠️ Ce code n’a pas la bonne forme (12 signes, par exemple K7QM-X2TP-9WDA).'; render(); return; }
+  try{ const r=await fetch(API+'?c='+encodeURIComponent(code),{cache:'no-store'});
+    if(r.status===404){ V.msg='⚠️ Code inconnu. Vérifie-le (lettres et chiffres, sans O ni I).'; render(); return; }
+    if(!r.ok) throw 0; const j=await r.json(); const n=mergeIn(j.data||{});
+    D.sync={code,last:Date.now()}; save(); V.join=false; V.form=null; V.tab=D.profiles.length?'def':'pro'; paintBtn(); V.msg=`✅ Code reconnu : ${n} profil${n>1?'s':''} retrouvé${n>1?'s':''}.`; render(); toast(`☁️ <b>Données retrouvées</b> (${D.profiles.map(p=>esc(p.name)).join(', ')})`,{ms:3000}); sync(false);
+  }catch(e){ V.msg='⚠️ Pas de connexion pour l’instant. Réessaie dans un moment.'; render(); } }
+function secSync(){
+  const s=D.sync;
+  if(!s) return `<h4 class="u-h">☁️ Retrouver mes données sur un autre appareil</h4>
+  <p class="u-note">Pas de compte ni de mot de passe : tu reçois un <b>code</b>. Tape-le sur un autre appareil et tu retrouves tes points. Seuls les <b>pseudos</b> et les <b>points</b> sont enregistrés en ligne (rien de privé : évite le nom de famille). Si tu perds le code, ce n’est pas grave : tu repars de zéro.</p>
+  <div class="u-sv"><button type="button" class="u-b pr" data-act="syon">☁️ Créer mon code</button><button type="button" class="u-b" data-act="syjoin">🔑 J’ai déjà un code</button></div>
+  ${V.join?`<div class="u-sv"><input class="u-in" id="uCode" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX"><button type="button" class="u-b pr" data-act="sygo">Retrouver</button></div>`:''}`;
+  const st=SY.busy?'🔄 Synchronisation…':SY.st==='err'?'⚠️ Hors connexion : on réessaiera':s.last?'✅ Synchronisé à '+new Date(s.last).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'}):'';
+  return `<h4 class="u-h">☁️ Mon code <small>${st}</small></h4>
+  <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier</button></div>
+  <p class="u-note"><b>Note ce code.</b> Sur un autre appareil : <b>Profil → J’ai déjà un code</b>. Toute personne qui le connaît peut voir et modifier ces points : garde-le pour ta famille. Perdu ? Pas grave, on repart de zéro.</p>
+  <div class="u-sv"><button type="button" class="u-b" data-act="sysync">🔄 Synchroniser</button><button type="button" class="u-b" data-act="syoff">Arrêter ici</button></div>`; }
+
 /* ---------- bouton de l’en-tête ---------- */
 const BTN=$('#usrbtn'), BAD=$('#usrBadge');
 function paintBtn(){ const p=act();
@@ -4220,10 +4273,10 @@ function paintBtn(){ const p=act();
 
 /* ---------- panneau ---------- */
 const P=$('#upanel'), K=$('#setbk'), ease='transform .32s cubic-bezier(.22,1,.36,1)'; let busy=false;
-const V={tab:'def',edit:null,form:null,msg:'',code:false};
+const V={tab:'def',edit:null,form:null,msg:'',code:false,join:false};
 function openP(tab,forceNew){ if(busy||!P.hidden){ if(tab) { V.tab=tab; if(forceNew&&!D.profiles.length) startForm(null); render(); } return; }
   if(window.setPanel) window.setPanel(false); const av=$('#avgrab'); if($('#avpanel')&&!$('#avpanel').hidden&&av) av.click();
-  V.tab=D.profiles.length?(tab||'def'):'pro'; V.edit=null; V.msg=''; if(!D.profiles.length) startForm(null); render();
+  V.tab=D.profiles.length?(tab||'def'):'pro'; V.edit=null; V.msg=''; V.join=false; sync(false); if(!D.profiles.length) startForm(null); render();
   busy=true; P.hidden=false; K.hidden=false; P.style.transition='none'; P.style.transform='translateY(-105%)'; K.style.opacity=0; P.scrollTop=0; void P.offsetWidth;
   P.style.transition=ease; P.style.transform='translateY(0)'; K.style.opacity=1; BTN.setAttribute('aria-selected',true);
   setTimeout(()=>{ P.style.transition=''; busy=false; },330); setTimeout(()=>{ if(!P.hidden){ K.hidden=false; K.style.opacity=1; } },345); }
@@ -4298,8 +4351,9 @@ function tabPro(){
   <h4 class="u-h">👥 Profils <small>touche un profil pour jouer avec</small></h4>
   <div class="u-pl">${D.profiles.map(p=>{ const l=level(p.pts), on=p.id===D.active; return `<div class="u-pc${on?' on':''}" style="--pc:${p.col}"><button type="button" class="u-pick" data-pick="${p.id}" aria-pressed="${on}"><span class="u-av">${avH(p.av)}</span><span class="u-pi"><b>${esc(p.name)}</b><small>${l.e} Niv. ${l.n} · ${p.pts} pts · Classe ${p.gr}</small></span><span class="u-act">${on?'✔ Actif':'Choisir'}</span></button><button type="button" class="u-b" data-edit="${p.id}" aria-label="Modifier ${esc(p.name)}">✏️</button></div>`; }).join('')||'<p class="u-empty">Aucun profil pour l’instant.</p>'}</div>
   ${D.profiles.length<8?'<button type="button" class="u-b pr u-new" data-new="1">＋ Nouveau profil</button>':''}
-  <h4 class="u-h">💾 Sauvegarde</h4>
-  <p class="u-note">Les profils sont gardés <b>dans cet appareil</b> (aucun compte, aucune donnée envoyée). ${storeOk?'':'<b style="color:#c92a2a">⚠️ La mémoire du navigateur est désactivée (navigation privée ?) : rien ne sera conservé.</b> '}Fais une sauvegarde de temps en temps, surtout si tu vides les données du navigateur ou changes d’appareil.</p>
+  ${secSync()}
+  <h4 class="u-h">💾 Sauvegarde dans un fichier</h4>
+  <p class="u-note">Sans code, les profils sont gardés <b>dans cet appareil</b> seulement. ${storeOk?'':'<b style="color:#c92a2a">⚠️ La mémoire du navigateur est désactivée (navigation privée ?) : rien ne sera conservé.</b> '}Fais une sauvegarde de temps en temps, surtout si tu vides les données du navigateur ou changes d’appareil.</p>
   <div class="u-sv"><button type="button" class="u-b" data-act="dl">⬇️ Télécharger</button><button type="button" class="u-b" data-act="cp">📋 Copier le code</button><button type="button" class="u-b" data-act="im">⬆️ Restaurer</button></div>
   <p class="u-note ${anyPts&&(last===null||last>14)?'warn':''}">${last===null?'Aucune sauvegarde faite pour l’instant.':last===0?'Dernière sauvegarde : aujourd’hui.':'Dernière sauvegarde : il y a '+last+' jour'+(last>1?'s':'')+'.'}</p>
   ${V.code?`<textarea class="u-ta" id="uTa" rows="4" placeholder="Colle ici le code de sauvegarde, ou choisis un fichier ci-dessous"></textarea><div class="u-sv"><input type="file" id="uFile" accept=".json,application/json,text/plain"><button type="button" class="u-b pr" data-act="go">Restaurer maintenant</button></div>`:''}
@@ -4314,7 +4368,7 @@ function formH(){ const f=V.form, nw=!f.id;
   <div class="u-f">Ma couleur<div class="u-col-g" id="fCol">${COLS.map(c=>`<button type="button" data-col="${c}" style="--c:${c}" aria-pressed="${f.col===c}" aria-label="couleur"></button>`).join('')}</div></div>
   <div class="u-f">Ma classe<div class="u-seg" id="fGr">${['1H','4H','6H'].map(g=>`<button type="button" data-gr="${g}" aria-pressed="${f.gr===g}">${g}</button>`).join('')}</div></div>
   ${V.msg?`<p class="u-msg" role="status">${V.msg}</p>`:''}
-  <div class="u-sv"><button type="button" class="u-b pr" data-act="fsave">${nw?'Créer le profil':'Enregistrer'}</button>${D.profiles.length||!nw?'<button type="button" class="u-b" data-act="fcancel">Annuler</button>':'<button type="button" class="u-b" data-act="frest">📥 J’ai déjà une sauvegarde</button>'}</div>
+  <div class="u-sv"><button type="button" class="u-b pr" data-act="fsave">${nw?'Créer le profil':'Enregistrer'}</button>${D.profiles.length||!nw?'<button type="button" class="u-b" data-act="fcancel">Annuler</button>':'<button type="button" class="u-b" data-act="frest">🔑 J’ai déjà un code</button>'}</div>
   ${!nw?'<div class="u-sv"><button type="button" class="u-b" data-act="freset">↺ Remettre à zéro</button><button type="button" class="u-b dg" data-act="fdel">🗑 Supprimer</button></div>':''}`; }
 
 function render(){
@@ -4328,7 +4382,7 @@ function render(){
 P.addEventListener('click',async e=>{
   const t=e.target.closest('button'); if(!t) return;
   if(t.id==='uX'||t.id==='ugrab'||e.target.closest('#ugrab')){ closeP(); return; }
-  if(t.dataset.t){ V.tab=t.dataset.t; V.form=null; V.msg=''; V.code=false; render(); P.scrollTop=0; return; }
+  if(t.dataset.t){ V.tab=t.dataset.t; V.form=null; V.msg=''; V.code=false; V.join=false; render(); P.scrollTop=0; return; }
   if(t.dataset.go){ const b=document.querySelector('.sec-b[data-s="'+t.dataset.go+'"]'); closeP(); if(b) setTimeout(()=>b.click(),340); return; }
   if(t.dataset.pick){ D.active=t.dataset.pick; save(); paintBtn(); V.tab='def'; V.msg=''; render(); toast(`👋 Salut <b>${esc(act().name)}</b> !`,{ms:1500}); return; }
   if(t.dataset.edit){ startForm(t.dataset.edit); V.msg=''; render(); P.scrollTop=0; return; }
@@ -4338,17 +4392,23 @@ P.addEventListener('click',async e=>{
   if(t.dataset.gr&&V.form){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.gr=t.dataset.gr; render(); return; }
   const a=t.dataset.act; if(!a) return;
   if(a==='fcancel'){ V.form=null; V.msg=''; render(); return; }
-  if(a==='frest'){ V.form=null; V.msg=''; V.code=true; render(); return; }
+  if(a==='frest'){ V.form=null; V.msg=''; V.join=true; render(); setTimeout(()=>{ const i=$('#uCode'); if(i) i.focus(); },50); return; }
+  if(a==='syon'){ D.sync={code:genCode(),last:0}; save(); V.msg='✅ Code créé. Note-le !'; render(); sync(true); return; }
+  if(a==='syjoin'){ V.join=!V.join; V.msg=''; render(); setTimeout(()=>{ const i=$('#uCode'); if(i) i.focus(); },50); return; }
+  if(a==='sygo'){ await joinCode(($('#uCode')||{}).value); return; }
+  if(a==='sysync'){ V.msg=''; sync(true); render(); return; }
+  if(a==='sycp'){ let ok=false; try{ await navigator.clipboard.writeText(D.sync.code); ok=true; }catch(x){} V.msg=ok?'✅ Code copié.':'Note le code affiché.'; render(); return; }
+  if(a==='syoff'){ if(await ask('Arrêter la synchronisation sur <b>cet appareil</b> ?<br><small>Les données restent ici. Tu pourras retaper le code plus tard.</small>','Arrêter',true)){ D.sync=null; save(); V.msg=''; render(); } return; }
   if(a==='fsave'){ const f=V.form, nm=(($('#fName')||{}).value||'').trim();
     if(!nm){ V.msg='⚠️ Écris un prénom ou un pseudo.'; V.form.name=''; render(); return; }
     if(D.profiles.some(x=>x.id!==f.id&&norm(x.name)===norm(nm))){ V.msg='⚠️ Ce prénom existe déjà : choisis-en un autre.'; V.form.name=nm; render(); return; }
     f.name=nm; V.msg='';
-    if(f.id){ const p=D.profiles.find(x=>x.id===f.id); Object.assign(p,{name:nm,av:f.av,col:f.col,gr:f.gr}); }
+    if(f.id){ const p=D.profiles.find(x=>x.id===f.id); Object.assign(p,{name:nm,av:f.av,col:f.col,gr:f.gr,mt:Date.now()}); }
     else { const p=mk(f); D.profiles.push(p); D.active=p.id; V.tab='def'; }
     V.form=null; save(); paintBtn(); render(); toast('✅ Profil enregistré',{ms:1600}); return; }
   if(a==='fdel'){ const p=D.profiles.find(x=>x.id===V.form.id); if(!p) return;
     if(await ask(`Supprimer le profil <b>${esc(p.name)}</b> et toute sa progression ? <br><small>Cela ne peut pas être annulé (pense à la sauvegarde).</small>`,'Supprimer',true)){
-      D.profiles=D.profiles.filter(x=>x.id!==p.id); if(D.active===p.id) D.active=D.profiles[0]?D.profiles[0].id:null; V.form=null; V.msg=''; save(); paintBtn(); if(!D.profiles.length) startForm(null); render(); } return; }
+      D.profiles=D.profiles.filter(x=>x.id!==p.id); D.del[p.id]=Date.now(); if(D.active===p.id) D.active=D.profiles[0]?D.profiles[0].id:null; V.form=null; V.msg=''; save(); paintBtn(); if(!D.profiles.length) startForm(null); render(); } return; }
   if(a==='freset'){ const p=D.profiles.find(x=>x.id===V.form.id); if(!p) return;
     if(await ask(`Remettre à zéro les points, défis et badges de <b>${esc(p.name)}</b> ?`,'Remettre à zéro',true)){
       Object.assign(p,{pts:0,days:{},wk:{},bd:{},tot:{a:0,ok:0,g:0,mr:0,bs:0},sec:{},run:0}); V.form=null; save(); paintBtn(); render(); toast('↺ Progression remise à zéro',{ms:1800}); } return; }
@@ -4391,6 +4451,8 @@ window.DLU={
   _d:()=>D, _rec:onAnswer, _end:onEnd, _lv:level, _ch:challenges, _mon:curMonday, _save:save
 };
 paintBtn(); hook();
+if(D.sync) setTimeout(()=>sync(false),1500);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&D.sync) sync(false); });
 })();
 </script>
 </body>
