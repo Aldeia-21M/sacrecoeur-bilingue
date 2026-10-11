@@ -403,7 +403,8 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cw.bad{background:#ffe3ea}
 .mx-seg.wrap.one{grid-template-columns:1fr}.mx-seg.wrap.one button{text-align:left;padding-left:14px}
 .cx-meth{margin:6px 0 4px;padding:8px 10px 8px 28px;background:#fff;border:2px dashed #e3d9a8;border-radius:12px;font-size:15px;font-weight:500;line-height:1.35}.cx-meth li{margin:2px 0}.cx-why{margin:8px 0 0;padding-left:0;list-style:none;font-size:15px}.cx-why li{margin:6px 0;padding:6px 8px;background:#fff;border-radius:10px}.cx-why small{display:block;color:#4a5370;font-size:14px;margin-top:2px}
-.tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko,.tx-fb.ok{background:none;border:0;padding:4px 2px}.tx-text.ok-box{border-color:#2f9e44;background:#effaf0}.tx-text.ko-box{border-color:#e03131;background:#fff1f1}.cx-solh{margin:10px 2px 4px;font-weight:800}.cx-solh small{font-weight:500;color:#555}.tx-text.cx-sol{border-color:#2f9e44;cursor:pointer}.cx-sol .cw{cursor:help}
+.tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko,.tx-fb.ok{background:none;border:0;padding:4px 2px}.tx-text.ok-box{border-color:#2f9e44;background:#effaf0}.tx-text.ko-box{border-color:#e03131;background:#fff1f1}.cw{position:relative}.cx-x{position:absolute;top:-13px;right:-9px;min-width:22px;height:22px;border-radius:50%;background:#e03131;color:#fff;font:800 13px/22px system-ui,sans-serif;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.35);cursor:pointer;z-index:2}.cx-why li.glow{animation:cxg 1s ease-in-out 3;outline:3px solid #e03131}@keyframes cxg{0%,100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}50%{box-shadow:0 0 14px 5px rgba(224,49,49,.55)}}
+.cx-solh{margin:10px 2px 4px;font-weight:800}.cx-solh small{font-weight:500;color:#555}.tx-text.cx-sol{border-color:#2f9e44;cursor:pointer}.cx-sol .cw{cursor:help}
 .tx-btns{display:flex;gap:8px;margin-top:8px}.tx-btns>*{flex:1}
 /* ---- séries, défi, petits ---- */
 #p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
@@ -3162,7 +3163,7 @@ const PT={}; Object.keys(TXT).forEach(g=>{ PT[g]=[]; TXT[g].forEach(tx=>{ let cu
 const S={g:'6H',lv:0,cur:null,ti:-1,toks:[],marks:[],done:false};
 const act=()=>MODES[S.g][S.lv][2];
 const cnt=toks=>{ let n=0; toks.forEach(t=>act().forEach(x=>{ if(EXP(t,x)) n++; })); return n; };
-function newText(){ const L=PT[S.g]; const ok=L.map((t,i)=>i).filter(i=>i!==S.ti&&cnt(L[i])>=1); const k=ok.length?ok[rnd(ok.length)]:rnd(L.length); S.ti=k; S.toks=L[k]; S.marks=S.toks.map(()=>[]); S.done=false; }
+function newText(){ S.errAt={}; const L=PT[S.g]; const ok=L.map((t,i)=>i).filter(i=>i!==S.ti&&cnt(L[i])>=1); const k=ok.length?ok[rnd(ok.length)]:rnd(L.length); S.ti=k; S.toks=L[k]; S.marks=S.toks.map(()=>[]); S.done=false; }
 root.innerHTML=`<div class="cx"><h2>🖍️ Colorie la phrase</h2>
  <button class="cx-rb" id="txRb" aria-expanded="false">📘 Apprendre les règles du coloriage</button><div class="cx-rp" id="txRp" hidden></div>
  <div class="tx-top"><div class="gk-top"><span>Ta classe</span><div class="mx-seg" id="txG"></div></div><div class="gk-lab">Qu’est-ce que je cherche ?</div><div class="gk-chips" id="txL"></div></div>
@@ -3189,7 +3190,8 @@ const joinUL=k=>{ const u=tenOf(k); return u&&k<S.toks.length-1&&tenOf(k+1)===u&
 function build(){
   const n=S.toks.length; let h='';
   const word=k=>{ const w=wordCls(k), u=tenOf(k); const st=(w.ms?`--mc:${CR[w.ms][1]};`:'')+(u?`--uc:${CR[u][1]};`:'');
-    return `<span class="cw ${w.cls}${u?' ul':''}" data-i="${k}" data-xs="${S.marks[k].join(',')}"${st?` style="${st}"`:''}>${esc(S.toks[k].w)}${joinUL(k)?' ':''}</span>`; };
+    const er=S.done&&S.errAt&&S.errAt[k]!==undefined?`<b class="cx-x" data-e="${S.errAt[k]}" role="button" aria-label="Voir pourquoi">✕</b>`:'';
+    return `<span class="cw ${w.cls}${u?' ul':''}" data-i="${k}" data-xs="${S.marks[k].join(',')}"${st?` style="${st}"`:''}>${esc(S.toks[k].w)}${er}${joinUL(k)?' ':''}</span>`; };
   const spc=k=>joinUL(k)?'':sp(k);
   for(let i=0;i<n;){
     const b=boxOf(i);
@@ -3213,6 +3215,7 @@ function paintAll(keep){
   $('txH').innerHTML='💡 '+CR[S.cur][2]; $('txH').style.setProperty('--cc',CR[S.cur][1]);
   paintRules(); if(!keep){ $('txF').hidden=true; $('txSolW').hidden=true; $('txT').classList.remove('ok-box','ko-box'); } $('txV').textContent=S.done?'➡️ Phrase suivante':'✅ Vérifier'; paintT();
 }
+$('txT').addEventListener('click',e=>{ const x=e.target.closest('.cx-x'); if(!x) return; e.stopPropagation(); const li=document.getElementById('cxe'+x.dataset.e); if(!li) return; root.querySelectorAll('.cx-why li.glow').forEach(l=>l.classList.remove('glow')); void li.offsetWidth; li.classList.add('glow'); li.scrollIntoView({block:'center',behavior:'smooth'}); },true);
 $('txSolW').onclick=e=>{ const sol=e.target.closest('#txSol'); if(!sol) return; const w=e.target.closest('.cw'); if(!w) return; const run=w.closest('.tx-run'); const codes=[]; if(run) codes.push(run.dataset.x); (w.dataset.xs||'').split(',').filter(Boolean).forEach(c=>{ if(!codes.includes(c)) codes.push(c); }); $('txTip').innerHTML=codes.filter(c=>CR[c]).map(ruleCard).join('')||''; };
 $('txRb').onclick=()=>{ const o=$('txRp').hidden; $('txRp').hidden=!o; $('txRb').setAttribute('aria-expanded',o); $('txRb').textContent=o?'✖ Fermer les règles du coloriage':'📘 Apprendre les règles du coloriage'; };
 $('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; S.ti=-1; newText(); paintAll(); };
@@ -3262,8 +3265,8 @@ function explain(){
     const miss=[],bad=[]; S.toks.forEach((t,k)=>{ const e=EXP(t,x), h=S.marks[k].includes(x), tol=x==='x'&&t.c.includes('y'); if(e&&!h) miss.push(k); else if(h&&!e&&!tol) bad.push(k); });
     runs(bad).forEach(r=>{ const rl=role(r[0]); const same=rl&&rl!==x&&r.every(k=>role(k)===rl); r.forEach(k=>cover.add((rl||'')+'|'+k));
       const no=(NO[x]?NO[x](r,rl):CR[x][2]); const yes=same?(IS[rl]?IS[rl](r):CR[rl][2]):'';
-      msg.push(`❌ « <b>${esc(txt(r))}</b> » n’est pas ${NAME[x]}${same?` : c’est ${NAME[rl]}`:''}.<small><b>Pourquoi ?</b> ${no}${yes?' <br>'+yes:''}</small>`); });
-    runs(miss).forEach(r=>{ if(r.every(k=>cover.has(x+'|'+k))) return; msg.push(`🔎 Tu as oublié « <b>${esc(txt(r))}</b> » : c’est ${NAME[x]}.<small><b>Pourquoi ?</b> ${IS[x]?IS[x](r):CR[x][2]}</small>`); });
+      msg.push({bad:r,h:`❌ « <b>${esc(txt(r))}</b> » n’est pas ${NAME[x]}${same?` : c’est ${NAME[rl]}`:''}.<small><b>Pourquoi ?</b> ${no}${yes?' <br>'+yes:''}</small>`}); });
+    runs(miss).forEach(r=>{ if(r.every(k=>cover.has(x+'|'+k))) return; msg.push({bad:null,h:`🔎 Tu as oublié « <b>${esc(txt(r))}</b> » : c’est ${NAME[x]}.<small><b>Pourquoi ?</b> ${IS[x]?IS[x](r):CR[x][2]}</small>`}); });
   });
   return msg.slice(0,5);
 }
@@ -3272,10 +3275,10 @@ function check(){
   S.toks.forEach((t,k)=>A.forEach(x=>{ const e=EXP(t,x), h=S.marks[k].includes(x), tol=x==='x'&&t.c.includes('y');
     if(e){ exp++; if(h) hit++; } else if(h&&!tol) bad++; }));
   S.done=true; paintT();
-  const ok=hit===exp&&bad===0, f=$('txF'); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
+  const ok=hit===exp&&bad===0, f=$('txF'); const msgs=ok?[]:explain(); S.errAt={}; msgs.forEach((m,n)=>{ if(m.bad) S.errAt[m.bad[0]]=n; }); paintT(); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
   const tb=$('txT'), sw=$('txSolW'); tb.classList.toggle('ok-box',ok); tb.classList.toggle('ko-box',!ok);
   sw.hidden=ok; sw.innerHTML=ok?'':`<div class="cx-solh">✅ La bonne réponse <small>(touche un bloc pour voir sa règle)</small></div><div class="tx-text cx-sol" id="txSol">${solution()}</div><div id="txTip"></div>`;
-  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`<b>${hit} / ${exp}</b> bien trouvés <small>(rose = à corriger · pointillés = oublié)</small><ul class="cx-why">${explain().map(m=>'<li>'+m+'</li>').join('')}</ul>`;
+  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`<b>${hit} / ${exp}</b> bien trouvés <small>(rose = à corriger · pointillés = oublié)</small><ul class="cx-why">${msgs.map((m,n)=>'<li id="cxe'+n+'">'+m.h+'</li>').join('')}</ul>`;
   try{ window.PCev&&PCev(ok); }catch(e){}
 }
 $('txV').onclick=()=>{ if(S.done){ newText(); paintAll(); return; } check(); $('txV').textContent='➡️ Phrase suivante'; };
