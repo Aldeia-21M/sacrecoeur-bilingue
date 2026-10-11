@@ -380,21 +380,25 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cx{margin:10px 0 8px;padding:12px;border-radius:22px;border:3px solid #e0b100;background:#fffbe6}
 .cx h2{margin:2px 2px 4px;font-size:clamp(22px,6vw,30px)}.tx-in{margin:0 2px 8px;opacity:.85}
 .tx-sub{margin:18px 4px 0;font-size:clamp(17px,4.6vw,21px);color:#33405f}
-.tx-pal{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
-.tx-pal button{display:flex;align-items:center;gap:8px;min-height:46px;padding:4px 14px;border-radius:999px;border:3px solid rgba(29,36,51,.15);background:#fff;font-weight:800;font-size:16px}
-.tx-pal button[aria-pressed=true]{border-color:var(--cc);box-shadow:0 0 0 3px var(--cc) inset;background:#fff}
+.tx-pal{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.tx-pal button{display:flex;align-items:center;gap:6px;min-height:38px;padding:2px 11px;border-radius:999px;border:2px solid rgba(29,36,51,.14);background:#fff;font-weight:700;font-size:14.5px;color:#33405f}
+.tx-pal button[aria-pressed=true]{border-color:var(--cc);box-shadow:0 0 0 2px var(--cc) inset;color:#1d2433}
+.tx-hint{margin:4px 2px 8px;font-size:13.5px;line-height:1.4;color:#5b6478}
+.tx-set{margin:0 0 8px}.tx-set summary{cursor:pointer;list-style:none;font-size:14px;color:#5b6478;padding:4px 2px}.tx-set summary::-webkit-details-marker{display:none}.tx-set summary b{color:#33405f}.tx-set summary span{margin-left:6px;text-decoration:underline}
+.tx-mini{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:6px}.tx-mini button{min-height:36px;padding:2px 12px;border-radius:999px;border:0;background:transparent;font-size:14px;color:#5b6478;font-weight:600}
+.tx-text{margin:6px 0 10px;padding:22px 14px;border-radius:20px;background:#fff;border:3px solid #1d2433;box-shadow:0 5px 0 rgba(29,36,51,.15);font-size:clamp(26px,7.4vw,36px);line-height:2.35;text-align:center;-webkit-user-select:none;user-select:none}
+.tx-goal{margin:2px 2px 8px;font-size:clamp(17px,4.6vw,20px);font-weight:700;line-height:1.35}
 .sw{display:inline-block;width:22px;height:12px;border-radius:4px;background:var(--cc)}
-.tw{cursor:pointer;padding:2px 1px;border-radius:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;-webkit-tap-highlight-color:transparent}
-.tw.m-p,.tw.m-v{border-bottom-color:#e03131}.tw.m-i{border-bottom-color:#7048e8}.tw.m-u{border-bottom-color:#e8590c}.tw.m-c{border-bottom-color:#1c7ed6}.tw.m-n{border-bottom-color:#2f9e44}
-.tw.m-g{border-top-color:#5f3dc4}.tw.m-x{background:#b2f2bb}
-.tw.m-D{background:#cfe8ff}.tw.m-N{background:#ffd6e5}.tw.m-J{background:#ffe58a}.tw.m-R{background:#d9f2d1}.tw.m-V{background:#e4d6fb}.tw.m-B{background:#ffd9b3}.tw.m-P{background:#c5f6fa}.tw.m-C{background:#f3d9fa}
+.cw{cursor:pointer;padding:2px 3px;font-size:inherit;border-radius:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;-webkit-tap-highlight-color:transparent}
+.cw.m-p,.cw.m-v{border-bottom-color:#e03131}.cw.m-i{border-bottom-color:#7048e8}.cw.m-u{border-bottom-color:#e8590c}.cw.m-c{border-bottom-color:#1c7ed6}.cw.m-n{border-bottom-color:#2f9e44}
+.cw.m-g{border-top-color:#5f3dc4}.cw.m-x{background:#b2f2bb}
+.cw.m-D{background:#cfe8ff}.cw.m-N{background:#ffd6e5}.cw.m-J{background:#ffe58a}.cw.m-R{background:#d9f2d1}.cw.m-V{background:#e4d6fb}.cw.m-B{background:#ffd9b3}.cw.m-P{background:#c5f6fa}.cw.m-C{background:#f3d9fa}
 .tx-run{border:3px solid var(--rc);border-radius:10px;padding:2px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.tw.miss{outline:3px dashed var(--mc);outline-offset:1px}
-.tw.bad{background:#ffe3ea}
-.tx-goal{margin:4px 2px 6px;font-size:clamp(15px,4vw,17px);font-weight:700}
+.cw.miss{outline:3px dashed var(--mc);outline-offset:1px}
+.cw.bad{background:#ffe3ea}
 .mx-seg.wrap.one{grid-template-columns:1fr}.mx-seg.wrap.one button{text-align:left;padding-left:14px}
 .tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko{background:#fff0e0;border:2px solid #e08a1e}
-.tx-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.tx-btns>*{flex:1 1 140px}
+.tx-btns{display:flex;gap:8px;margin-top:8px}.tx-btns>*{flex:1}
 /* ---- séries, défi, petits ---- */
 #p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
 .sec-b[data-s="pt"][aria-pressed="true"]{background:#ffe0ef;border-color:#e64980}
@@ -3111,20 +3115,21 @@ const MODES={
 };
 const BOX=['s','o','k','t','e'], TEN=['p','i','u','c','n','v'], NAT=['D','N','J','R','B','P','C','V'];
 const EXP=(t,x)=>x==='v'?/[piuc]/.test(t.c):t.c.includes(x);
-const PT={}; Object.keys(TXT).forEach(g=>PT[g]=TXT[g].map(PARSE));
+const PT={}; Object.keys(TXT).forEach(g=>{ PT[g]=[]; TXT[g].forEach(tx=>{ let cur=[]; PARSE(tx).forEach(t=>{ cur.push(t); if(/[.!?]/.test(t.p)){ PT[g].push(cur); cur=[]; } }); if(cur.length) PT[g].push(cur); }); });
 const S={g:'6H',lv:0,cur:null,ti:-1,toks:[],marks:[],done:false};
 const act=()=>MODES[S.g][S.lv][2];
 const cnt=toks=>{ let n=0; toks.forEach(t=>act().forEach(x=>{ if(EXP(t,x)) n++; })); return n; };
-function newText(){ const L=PT[S.g]; const ok=L.map((t,i)=>i).filter(i=>i!==S.ti&&cnt(L[i])>=3); const k=ok.length?ok[rnd(ok.length)]:rnd(L.length); S.ti=k; S.toks=L[k]; S.marks=S.toks.map(()=>[]); S.done=false; }
-root.innerHTML=`<div class="cx"><h2>🖍️ Colorie le texte</h2><p class="tx-in">C’est l’exercice de la classe ! Choisis ce que tu cherches, prends le bon crayon et touche les mots. Les fiches plus bas t’aident à réussir.</p>
- <div class="mx-sec"><div class="mx-lab">Ta classe</div><div class="mx-seg wrap" id="txG"></div></div>
- <div class="mx-sec"><div class="mx-lab">Je cherche…</div><div class="mx-seg wrap one" id="txL"></div></div>
+function newText(){ const L=PT[S.g]; const ok=L.map((t,i)=>i).filter(i=>i!==S.ti&&cnt(L[i])>=1); const k=ok.length?ok[rnd(ok.length)]:rnd(L.length); S.ti=k; S.toks=L[k]; S.marks=S.toks.map(()=>[]); S.done=false; }
+root.innerHTML=`<div class="cx"><h2>🖍️ Colorie la phrase</h2>
+ <details class="tx-set" id="txD"><summary id="txSum"></summary>
+  <div class="mx-sec"><div class="mx-lab">Ta classe</div><div class="mx-seg" id="txG"></div></div>
+  <div class="mx-sec"><div class="mx-lab">Je cherche…</div><div class="mx-seg wrap one" id="txL"></div></div></details>
  <div class="tx-goal" id="txO"></div>
- <div class="tx-pal" id="txC"></div><div class="tx-hint" id="txH"></div>
  <div class="tx-text" id="txT"></div>
  <div class="tx-fb" id="txF" hidden></div>
- <div class="tx-btns"><button class="mx-hear" id="txS">🔊 Écouter</button><button class="mx-go" id="txV">✅ Vérifier</button></div>
- <div class="tx-btns"><button class="g-ghost" id="txR">🧽 Tout effacer</button><button class="g-ghost" id="txN">🔄 Autre texte</button></div></div>`;
+ <div class="tx-pal" id="txC"></div><div class="tx-hint" id="txH"></div>
+ <div class="tx-btns"><button class="mx-go" id="txV">✅ Vérifier</button></div>
+ <div class="tx-mini"><button id="txS">🔊 Écouter</button><button id="txR">🧽 Effacer</button><button id="txN">➡️ Autre phrase</button></div></div>`;
 const $=id=>root.querySelector('#'+id);
 const segH=(list,cur)=>list.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v==cur}">${t}</button>`).join('');
 const sp=k=>(k<S.toks.length-1&&!/’$/.test(S.toks[k].w))?' ':'';
@@ -3138,7 +3143,7 @@ function wordCls(k){
 const boxOf=k=>S.marks[k].find(x=>BOX.includes(x));
 function paintT(){
   const n=S.toks.length; let h='';
-  const word=k=>{ const w=wordCls(k); return `<span class="tw ${w.cls}" data-i="${k}"${w.ms?` style="--mc:${CR[w.ms][1]}"`:''}>${esc(S.toks[k].w)}</span>`; };
+  const word=k=>{ const w=wordCls(k); return `<span class="cw ${w.cls}" data-i="${k}"${w.ms?` style="--mc:${CR[w.ms][1]}"`:''}>${esc(S.toks[k].w)}</span>`; };
   for(let i=0;i<n;){
     const b=boxOf(i);
     if(b){ let j=i; while(j+1<n&&boxOf(j+1)===b&&!S.toks[j].p) j++;
@@ -3151,16 +3156,16 @@ function paintAll(keep){
   const M=MODES[S.g][S.lv];
   $('txG').innerHTML=segH([['4H','4H'],['6H','6H']],S.g);
   $('txL').innerHTML=segH(MODES[S.g].map((x,i)=>[i,x[0]]),S.lv);
-  $('txO').innerHTML='🎯 '+M[1];
+  $('txO').innerHTML=M[1]; $('txSum').innerHTML=`⚙️ <b>${S.g}</b> · ${M[0]} <span>changer</span>`;
   const A=act(); if(!A.includes(S.cur)) S.cur=A[0];
   $('txC').innerHTML=A.map(x=>`<button data-c="${x}" aria-pressed="${x===S.cur}" style="--cc:${CR[x][1]}"><i class="sw"></i>${CR[x][0]}</button>`).join('');
   $('txH').innerHTML='💡 '+CR[S.cur][2]; $('txH').style.setProperty('--cc',CR[S.cur][1]);
-  if(!keep) $('txF').hidden=true; paintT();
+  if(!keep) $('txF').hidden=true; $('txV').textContent=S.done?'➡️ Phrase suivante':'✅ Vérifier'; paintT();
 }
 $('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; S.ti=-1; newText(); paintAll(); };
-$('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.v; S.ti=-1; newText(); paintAll(); };
+$('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.v; S.ti=-1; newText(); paintAll(); $('txD').open=false; };
 $('txC').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.cur=b.dataset.c; paintAll(true); };
-$('txT').onclick=e=>{ const w=e.target.closest('.tw'); if(!w||S.done) return; const k=+w.dataset.i, m=S.marks[k], c=S.cur;
+$('txT').onclick=e=>{ const w=e.target.closest('.cw'); if(!w||S.done) return; const k=+w.dataset.i, m=S.marks[k], c=S.cur;
   const grp=BOX.includes(c)?BOX:TEN.includes(c)?TEN:NAT.includes(c)?NAT:[c];
   S.marks[k]=m.includes(c)?m.filter(x=>x!==c):m.filter(x=>!grp.includes(x)).concat(c);
   paintT(); };
@@ -3177,7 +3182,7 @@ function check(){
   f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`<b>${hit} / ${exp}</b> bien trouvés${bad?` · <b>${bad}</b> à corriger (en rose)`:''}.<br><small>Les pointillés montrent ce que tu as oublié.</small>`;
   try{ DLverdict(ok,[{t:ok?'Parfait, tout est juste':hit+' sur '+exp+'. Regarde les pointillés.',l:'fr'}]); }catch(e){}
 }
-$('txV').onclick=()=>{ if(S.done) return; check(); };
+$('txV').onclick=()=>{ if(S.done){ newText(); paintAll(); return; } check(); $('txV').textContent='➡️ Phrase suivante'; };
 window.__tx={S,check,MISSING,PT,MODES,EXP};
 newText(); paintAll();
 })();
