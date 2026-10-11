@@ -427,7 +427,7 @@ body[data-sec="pt"] .bar nav{justify-content:flex-start}body[data-sec="pt"] .tab
 .pt-menu i{font-style:normal;font-size:54px;line-height:1}.pt-menu span{font-weight:800;font-size:clamp(16px,4.4vw,20px)}
 .pt-back{margin:4px 0 8px}.pt-card{padding:12px;border-radius:22px;border:3px solid #e64980;background:#fff8fb}
 .pt-dots{display:flex;gap:6px;justify-content:center;margin-bottom:10px}.pt-dots i{width:16px;height:16px;border-radius:50%;background:#e2e7ef;border:2px solid #cdd4e0}.pt-dots i.cur{background:#ffd54a;border-color:#d9a400}.pt-dots i.ok{background:#2f9e44;border-color:#2f9e44}
-.pt-things{font-size:clamp(34px,10vw,48px);line-height:1.2;text-align:center;letter-spacing:3px;margin:6px 0 10px;overflow-wrap:anywhere}.pt-ear{font-size:70px;text-align:center;margin:6px 0}
+.pt-things{font-size:clamp(34px,10vw,48px);line-height:1.2;text-align:center;letter-spacing:3px;margin:6px 0 10px;overflow-wrap:anywhere}.pt-ear{font-size:70px;text-align:center;margin:6px 0}.pt-key{font-size:clamp(30px,9vw,42px);font-weight:800;text-align:center;margin:10px 0 12px;padding:6px 14px;background:#fff6d6;border:2px dashed #f0b400;border-radius:14px;color:#1d2433}
 .pt-say{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;padding:6px 12px;border-radius:999px;border:2px solid #1f5fd6;background:#fff;color:#1f5fd6;font-weight:700;font-size:clamp(16px,4.4vw,20px);margin-bottom:12px;text-align:center}.pt-say.static{border-color:#e64980;color:#a61e4d}
 .pt-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.pt-opts.n4,.pt-opts.two{grid-template-columns:1fr 1fr}
 .pt-opts button{min-height:116px;border-radius:22px;border:4px solid rgba(29,36,51,.18);background:#fff;font-size:58px;font-weight:800;color:#1d2433;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 rgba(29,36,51,.15)}
@@ -620,15 +620,23 @@ function speakSeq(items){
 window.DLspeakSeq=speakSeq;
 /* verdict parlé : « Bravo ! » ou « Pas tout à fait. La bonne réponse est… » puis la bonne réponse dans sa langue */
 window.DLverdict=function(ok,parts,noLead,extra){
-  extra=extra||{}; const pk=a=>a[Math.floor(Math.random()*a.length)]; const seq=[];
-  if(!ok&&extra.wrong&&extra.wrong.t){
-    seq.push({t:'Non, ça c’est :',l:'fr',pause:800},{t:extra.wrong.t,l:extra.wrong.l||'fr',pause:1300});
-    if(parts&&parts.length&&!noLead) seq.push({t:extra.lead||'La bonne réponse est :',l:'fr',pause:800});
+  extra=extra||{}; const pk=a=>a[Math.floor(Math.random()*a.length)]; const seq=[]; parts=parts||[];
+  const de=parts.length&&parts.some(x=>x.l==='de'), hasW=!ok&&extra.wrong&&extra.wrong.t;
+  if(de){
+    /* allemand : on entend le mot juste, puis un compliment ; en cas d’erreur « Nein, das ist nicht … » */
+    if(ok){ parts.forEach(x=>seq.push({t:x.t,l:x.l||'fr',pause:x.pause||500})); seq.push({t:pk(['Richtig!','Gut!','Sehr gut!','Super!','Genau!','Toll!']),l:'de'}); }
+    else {
+      if(hasW) seq.push({t:'Nein, das ist nicht',l:'de',pause:500},{t:extra.wrong.t,l:extra.wrong.l||'de',pause:1000});
+      else seq.push({t:'Nein.',l:'de',pause:400});
+      if(!noLead&&parts.length){ seq.push({t:'Das ist',l:'de',pause:400}); parts.forEach(x=>seq.push({t:x.t,l:x.l||'fr',pause:x.pause})); }
+    }
+  } else if(ok){
+    seq.push({t:pk(['Bravo !','Très bien !','Super !','Exact !']),l:'fr',pause:350}); parts.forEach(x=>seq.push({t:x.t,l:x.l||'fr',pause:x.pause}));
   } else {
-    seq.push({t:ok?pk(['Bravo !','Très bien !','Super !','Exact !']):pk(['Pas tout à fait.','Oh, ce n’est pas ça.','Presque !']),l:'fr',pause:350});
-    if(!ok&&!noLead&&parts&&parts.length) seq.push({t:extra.lead||'La bonne réponse est :',l:'fr',pause:800});
+    if(hasW) seq.push({t:'Non, ce n’est pas',l:'fr',pause:500},{t:extra.wrong.t,l:extra.wrong.l||'fr',pause:1000});
+    else seq.push({t:pk(['Pas tout à fait.','Oh, ce n’est pas ça.','Presque !']),l:'fr',pause:450});
+    if(!noLead&&parts.length){ seq.push({t:hasW?'C’est':(extra.lead||'La bonne réponse est :'),l:'fr',pause:500}); parts.forEach(x=>seq.push({t:x.t,l:x.l||'fr',pause:x.pause})); }
   }
-  (parts||[]).forEach(x=>seq.push({t:x.t,l:x.l||'fr',pause:x.pause}));
   speakSeq(seq);
 };
 /* nom de la réponse choisie (fausse), lu dans sa langue */
@@ -3321,7 +3329,8 @@ const KEYS={de:[/^Wo ist (.+?)\?$/,/^Tippe auf den Buchstaben (.+?)!?$/,/^Tippe 
  fr:[/^Touche la couleur (.+?) !$/,/^Touche la lettre (.+?) !$/,/^Touche (le plus (?:grand|petit)) (?:animal|nombre) !$/,/^Touche (.+?) !$/,/^Quelle image veut dire « (.+) » \?$/,/^Quel mot rime avec « (.+) » \?$/,/^Par quelle lettre commence « (.+) » \?$/,/^Frappe dans tes mains : combien de syllabes dans « (.+) » \?$/,/^Quel nombre vient (?:après|avant) (.+?) \?$/]};
 function keyOf(t,L){ for(const r of (KEYS[L]||[])){ const m=String(t).match(r); if(m) return m[1]; } return ''; }
 /* consigne, silence, puis le mot-clé seul : il ressort bien de la phrase */
-function sayKey(t,L){ const k=keyOf(t,L); if(k&&window.DLspeakSeq&&k!==t) DLspeakSeq([{t:t,l:L,pause:1100},{t:k,l:L}]); else sp(t,L); }
+function sayKey(t,L,q){ if(q&&q.ask&&window.DLspeakSeq){ DLspeakSeq([{t:q.ask[L],l:L,pause:1000},{t:q.key[L],l:L}]); return; }
+   const k=keyOf(t,L); if(k&&window.DLspeakSeq&&k!==t) DLspeakSeq([{t:t,l:L,pause:1100},{t:k,l:L}]); else sp(t,L); }
 const NUMF=['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix'], NUMD=['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn'];
 const THINGS=[['🍎','pommes','Äpfel'],['⭐','étoiles','Sterne'],['🎈','ballons','Ballons'],['🚗','voitures','Autos'],['🌸','fleurs','Blumen'],['🐟','poissons','Fische'],['🍓','fraises','Erdbeeren']];
 const COLS=[['rouge','rot','#e03131','🔴'],['bleu','blau','#1f5fd6','🔵'],['jaune','gelb','#fcc419','🟡'],['vert','grün','#2f9e44','🟢'],['orange','orange','#f76707','🟠'],['rose','rosa','#f783ac',null],['violet','lila','#9c36b5','🟣'],['noir','schwarz','#212529','⚫'],['marron','braun','#8d5524','🟤']];
@@ -3368,7 +3377,7 @@ const GEN={
  count20(){ const th=THINGS[rnd(THINGS.length)], n=11+rnd(10); const o=nums(n,11,20);
   return {vis:`<div class="pt-things sm">${things(th[0],n)}</div>`,fr:`Combien de ${th[1]} vois-tu ?`,de:`Wie viele ${th[2]} siehst du?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
  hear(){ const n=1+rnd(10); const o=nums(n,1,10);
-  return {vis:'<div class="pt-ear">👂</div>',fr:`Écoute : ${NUMF[n]}. Touche le bon nombre !`,de:`Hör zu: ${NUMD[n]}. Tippe die richtige Zahl!`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
+  return {vis:'<div class="pt-ear">👂</div>',ask:{fr:'Quel nombre entends-tu ?',de:'Welche Zahl hörst du?'},key:{fr:NUMF[n],de:NUMD[n]},fr:`Quel nombre entends-tu ? ${NUMF[n]}`,de:`Welche Zahl hörst du? ${NUMD[n]}`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
  add(){ const th=THINGS[rnd(THINGS.length)], a=1+rnd(5), b=1+rnd(5), n=a+b; const o=nums(n,2,10);
   return {vis:`<div class="pt-things">${th[0].repeat(a)} ➕ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} plus ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} plus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; },
  bigger(){ let a=1+rnd(20), b=1+rnd(20); while(a===b) b=1+rnd(20); const big=Math.random()<.65;
@@ -3440,15 +3449,15 @@ function rounds(id){
   function next(){
     if(S.i>=S.total) return end();
     let q,tt=0; S.seen=S.seen||new Set(); do{ q=GEN[id](); tt++; }while(S.seen.has(q.fr+'|'+q.opts.map(o=>o.h+o.ok).join())&&tt<12); S.seen.add(q.fr+'|'+q.opts.map(o=>o.h+o.ok).join()); S.first=true; S.locked=false; const L=q.forceL||pickL(); T.q=q; q.L=L;
-    frame(`<div class="pt-dots">${dots()}</div>${q.vis}<button class="pt-say" id="ptS">🔊 <span>${q[L]}</span></button>
+    frame(`<div class="pt-dots">${dots()}</div>${q.vis}<button class="pt-say" id="ptS">🔊 <span>${q.ask?q.ask[L]:q[L]}</span></button>${q.ask?'':(()=>{const k=keyOf(q[L],L);return k&&k.length<24?`<div class="pt-key">${k}</div>`:'';})()}
       <div class="pt-opts ${q.cls||''} n${q.opts.length}" id="ptO">${q.opts.map((o,k)=>`<button data-k="${k}">${o.h}</button>`).join('')}</div><div class="pt-fb" id="ptFb" hidden></div>`);
-    S.w=0; const say=()=>sayKey(q[L],L); root.querySelector('#ptS').onclick=say; setTimeout(say,FAST?0:250);
+    S.w=0; const say=()=>sayKey(q[L],L,q); root.querySelector('#ptS').onclick=say; setTimeout(say,FAST?0:250);
     root.querySelector('#ptO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const o=q.opts[+b.dataset.k];
-      if(o.ok){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.i++; sp((L==='de'?OKD:OKF)[rnd(3)],L); await sleep(1300); next(); }
+      if(o.ok){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.i++; { const nmR=(o.n&&o.n[L])||'', pr=L==='de'?['Richtig!','Gut!','Sehr gut!','Super!','Genau!','Toll!']:['Bravo !','Très bien !','Super !','Exact !','Génial !']; const sq=[]; if(nmR) sq.push({t:nmR,l:L,pause:500}); sq.push({t:pick(pr),l:L}); if(window.DLspeakSeq) DLspeakSeq(sq); else sp(pick(pr),L); } await sleep(2200); next(); }
       else { S.first=false; S.w++; b.classList.add('ko'); b.disabled=true; const nm=(o.n&&o.n[L])||''; const key=keyOf(q[L],L), de=L==='de';
-        const fb=root.querySelector('#ptFb'); fb.hidden=false; fb.textContent=nm?(de?'❌ Nein, das ist: ':'❌ Non, ça c’est : ')+nm:(de?'❌ Nicht ganz. Versuch’s nochmal!':'❌ Pas tout à fait. Essaie encore !');
+        const fb=root.querySelector('#ptFb'); fb.hidden=false; fb.textContent=nm?(de?'❌ Nein, das ist nicht: ':'❌ Non, ce n’est pas : ')+nm:(de?'❌ Nicht ganz. Versuch’s nochmal!':'❌ Pas tout à fait. Essaie encore !');
         if(S.w>=2){ const c=root.querySelectorAll('#ptO button')[q.opts.findIndex(x=>x.ok)]; if(c) c.classList.add('hint'); }
-        const seq=[]; if(nm){ seq.push({t:de?'Nein, das ist:':'Non, ça c’est :',l:L,pause:800},{t:nm,l:L,pause:1300}); if(key) seq.push({t:de?'Suche:':'Cherche :',l:L,pause:800},{t:key,l:L,pause:900}); else seq.push({t:de?'Versuch’s nochmal!':'Essaie encore !',l:L,pause:600}); }
+        const seq=[]; if(nm){ seq.push({t:de?'Nein, das ist nicht':'Non, ce n’est pas',l:L,pause:500},{t:nm,l:L,pause:1300}); if(key) seq.push({t:de?'Suche:':'Cherche :',l:L,pause:800},{t:key,l:L,pause:900}); else seq.push({t:de?'Versuch’s nochmal!':'Essaie encore !',l:L,pause:600}); }
         else seq.push({t:de?'Nicht ganz. Versuch’s nochmal!':'Pas tout à fait. Essaie encore !',l:L,pause:600});
         if(S.w>=2) seq.push({t:de?'Schau, hier ist es!':'Regarde, c’est celui-là !',l:L});
         if(window.DLspeakSeq) DLspeakSeq(seq); else sp(de?'Versuch’s nochmal!':'Essaie encore !',L); } };
