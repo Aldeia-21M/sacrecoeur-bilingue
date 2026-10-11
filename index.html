@@ -3280,7 +3280,7 @@ function explain(){
   wrongs.forEach(({x,r})=>{ const rl=role(r[0]); const same=rl&&rl!==x; r.forEach(k=>cover.add(rl+'|'+k));
     const no=(NO[x]?NO[x](r,rl):CR[x][2]); const yes=same?(IS[rl]?IS[rl](r):CR[rl][2]):'';
     msg.push({bad:r,h:`❌ « ${hl(same?rl:null,'<b>'+esc(txt(r))+'</b>')} » n’est pas ${NAME[x]}${same?' : c’est '+hl(rl,NAME[rl]):''}.<small><b>Pourquoi ?</b> ${no}${yes?' <br>'+yes:''}</small>`}); });
-  misses.forEach(({x,r})=>{ if(r.every(k=>cover.has(x+'|'+k))) return; msg.push({bad:null,h:`🔎 Tu as oublié « ${hl(x,'<b>'+esc(txt(r))+'</b>')} » : c’est ${hl(x,NAME[x])}.<small><b>Pourquoi ?</b> ${IS[x]?IS[x](r):CR[x][2]}</small>`}); });
+  misses.forEach(({x,r})=>{ if(r.every(k=>cover.has(x+'|'+k))) return; msg.push({bad:null,miss:r,h:`🔎 Tu as oublié « ${hl(x,'<b>'+esc(txt(r))+'</b>')} » : c’est ${hl(x,NAME[x])}.<small><b>Pourquoi ?</b> ${IS[x]?IS[x](r):CR[x][2]}</small>`}); });
   return msg.slice(0,5);
 }
 function check(){
@@ -3288,7 +3288,7 @@ function check(){
   S.toks.forEach((t,k)=>A.forEach(x=>{ const e=EXP(t,x), h=S.marks[k].includes(x), tol=x==='x'&&t.c.includes('y');
     if(e){ exp++; if(h) hit++; } else if(h&&!tol) bad++; }));
   S.done=true; paintT();
-  const ok=hit===exp&&bad===0, f=$('txF'); const msgs=ok?[]:explain(); S.errAt={}; msgs.forEach((m,n)=>{ if(m.bad) S.errAt[m.bad[0]]=n; }); paintT(); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
+  const ok=hit===exp&&bad===0, f=$('txF'); const msgs=ok?[]:explain(); S.errAt={}; msgs.forEach((m,n)=>{ if(m.bad) S.errAt[m.bad[0]]=n; else if(m.miss) m.miss.forEach(k=>{ if(S.errAt[k]===undefined) S.errAt[k]=n; }); }); paintT(); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
   const tb=$('txT'), sw=$('txSolW'); tb.classList.toggle('ok-box',ok); tb.classList.toggle('ko-box',!ok);
   sw.hidden=ok; sw.innerHTML=ok?'':`<div class="cx-solh">✅ La bonne réponse <small>(touche un bloc pour voir sa règle)</small></div><div class="tx-text cx-sol" id="txSol">${solution()}</div><div id="txTip"></div>`;
   f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`<b>${hit} / ${exp}</b> bien trouvés <small>(rose = à corriger · pointillés = oublié)</small><ul class="cx-why">${msgs.map((m,n)=>'<li id="cxe'+n+'">'+m.h+'</li>').join('')}</ul>`;
