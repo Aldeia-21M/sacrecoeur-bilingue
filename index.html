@@ -574,7 +574,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 <section class="page" data-sec="ma" id="p-heure" data-label="🕐 Heure"></section>
 <section class="page" data-sec="ma" id="p-monnaie" data-label="💰 Monnaie"></section>
 <section class="page" data-sec="pt" id="p-petits" data-label="🧸 Activités"></section>
-<section class="page" data-sec="de,fr,ma,pt,fa" id="p-game" data-label="🎲 Jeu"><div id="gameRoot"><div id="gHub"></div><div id="gView" hidden><button class="g-ghost" id="gBack">← Tous les jeux</button><div id="gBody"></div><div id="gamePlateau"></div></div></div></section>
+<section class="page" data-sec="de,fr,ma,pt,fa" id="p-game" data-label="🎲 Jeu"><div id="gameRoot"><div id="gHub"></div><div id="gView" hidden><button class="g-ghost" id="gBack">← Tous les jeux</button> <button class="g-ghost" id="gGrade" hidden>🎓 Classe</button><div id="gBody"></div><div id="gamePlateau"></div></div></div></section>
 </main>
 <div class="toast" id="toast"></div>
 <script>
@@ -1369,6 +1369,7 @@ function win(p,i){
 }
 
 function fitOpts(el){ const o=el.querySelector('.g-opts'); if(!o) return; const m=Math.max(...[...o.children].map(b=>b.textContent.length)); o.classList.toggle('pic',[...o.children].every(b=>/^[\p{Extended_Pictographic}\u200d\ufe0f\d ]+$/u.test(b.textContent)&&/\p{Extended_Pictographic}/u.test(b.textContent))); o.classList.toggle('long',m>13); o.classList.toggle('xlong',m>19); }
+window.DLpl={grade:()=>G&&!G.over&&G.players?G.players[0].gr:null,setGrade:g=>{ if(!G) return false; G.players.forEach(p=>p.gr=g); setup.pl.forEach(p=>p.gr=g); try{ msg(`🎓 On passe en <b>classe ${g}</b> : les prochaines questions changent.`); }catch(e){} return true; }};
 window.DL={setTopics:(a,g)=>{ setup.topics=new Set(a); if(g==='1H') setup.pl.forEach(p=>p.gr='1H'); else setup.pl.forEach(p=>{ if(p.gr==='1H') p.gr='4H'; }); if(!G) renderSetup(); },fitOpts,esc,rnd,shuffle,numWord,makeQuestion,TOPICS,CHARS,COLORS,POOLS:{math:MATH,school:SCHOOL,cal:CAL},say,sleep};
 renderSetup();
 })();
@@ -1415,12 +1416,33 @@ function renderHub(){
   hub.innerHTML=head+groups.map(([t,list])=>`<h3 class="h-gt">${t}</h3>`+list.map(g=>`<button class="h-gc" data-g="${g.id}" style="--gc:${g.c}"><span class="ic">${g.ic}</span><span class="tx"><b>${g.t}</b><small>${g.d}</small></span><span class="go">▶</span></button>`).join('')).join('');
   hub.onclick=e=>{ const b=e.target.closest('.h-gc'); if(b) openGame(b.dataset.g); };
 }
-function showHub(){ try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
-let curGame=null;
+function showHub(){ GCUR=null; try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
+let curGame=null, GCUR=null;
 function hubItems(ex){
   const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
+
+/* ---- changer de classe en cours de jeu ---- */
+const RESTART_GAMES=['memory','loto','domino'];
+function curGrade(){ return curGame==='plateau'?(window.DLpl&&DLpl.grade()):(GCUR&&GCUR.game===curGame?(GCUR.cfg.players[0]&&GCUR.cfg.players[0].gr):null); }
+function paintGradeChip(){ const b=root.querySelector('#gGrade'); if(!b) return; const g=view.hidden?null:curGrade(); b.hidden=!g; if(g) b.textContent='🎓 Classe '+g; }
+setInterval(paintGradeChip,600);
+function gradeDialog(){
+  const cur=curGrade(); if(!cur) return; let gr=cur; const restart=curGame!=='plateau'&&RESTART_GAMES.includes(curGame);
+  const ov=document.createElement('div'); ov.className='g-ov'; ov.style.alignItems='center'; ov.style.zIndex=90;
+  ov.innerHTML=`<div class="g-win"><h2 class="g-h">🎓 Changer de classe</h2><p class="g-p">${restart?'La partie <b>recommence</b> avec la nouvelle classe.':'On <b>continue</b> : les prochaines questions seront de la nouvelle classe.'}</p>
+    <div class="g-gr" id="gcG" style="--pc:#1f5fd6">${['1H','4H','6H'].map(g=>`<button data-gr="${g}" aria-pressed="${gr===g}">Classe ${g}</button>`).join('')}</div>
+    <button class="g-big" id="gcGo">✔ Valider</button><button class="g-ghost" id="gcNo" style="margin-top:8px">Annuler</button></div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#gcG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; gr=b.dataset.gr; ov.querySelectorAll('#gcG button').forEach(x=>x.setAttribute('aria-pressed',x===b)); };
+  ov.querySelector('#gcNo').onclick=()=>ov.remove();
+  ov.querySelector('#gcGo').onclick=()=>{ ov.remove(); if(gr===cur) return;
+    if(curGame==='plateau'){ DLpl.setGrade(gr); }
+    else if(GCUR){ const c=GCUR.cfg; c.players.forEach(p=>p.gr=gr); c.grade=gr; root.querySelectorAll('.h-lane small').forEach(x=>x.textContent=gr); if(restart) GCUR.done(c); }
+    paintGradeChip(); };
+}
+root.querySelector('#gGrade').onclick=gradeDialog;
 function openGame(id){
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
@@ -1483,6 +1505,7 @@ function pickItems(topics,grade,count){
 
 /* écran de réglage commun */
 function playerSetup(o,done){
+  GCUR=null;
   const st={n:o.defN,npc:false,pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null};
   function draw(){
     const list=st.pl.slice(0,st.n);
@@ -1519,7 +1542,7 @@ function playerSetup(o,done){
     body.querySelector('#hGo').onclick=()=>{
       const players=list.map((p,i)=>({name:(p.name||'').trim()||((o.who||'Joueur')+' '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[i][0],gr:o.perGrade?p.gr:st.grade}));
       if(o.npc&&st.npc&&players.length<o.max){ const used=new Set(players.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; players.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:col,gr:o.perGrade?players[0].gr:st.grade,npc:true}); }
-      done({players,topics:[...st.topics],grade:st.grade,x:st.x});
+      const cfg0={players,topics:[...st.topics],grade:st.grade,x:st.x}; GCUR={cfg:cfg0,done,game:curGame}; done(cfg0);
     };
   }
   draw();
