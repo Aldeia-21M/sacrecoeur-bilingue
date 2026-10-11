@@ -277,7 +277,9 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cj-ban small{display:block;font-size:.8rem;color:#5b6478;line-height:1}.cj-ban b{font-size:clamp(26px,7.5vw,38px);line-height:1.1}
 .cj-sign{flex:none;margin-left:8px;padding:6px 10px;background:#fff;border:3px solid #1d2433;border-radius:12px;text-align:center;line-height:1.15;font-weight:800;font-size:.9rem;max-width:34%}.cj-sign small{display:block;font-weight:600;font-size:.72rem;color:#5b6478}
 .cj-note{margin:0 2px 10px;padding:10px 12px;border-radius:14px;background:#fff8dc;border:2px solid #f0d88a;font-size:clamp(15px,4vw,17px);line-height:1.4}.cj-note:empty{display:none}
-.cj-tools{margin:0 2px 10px}.cj-row .r{background:#ffd3e4;border-radius:6px;padding:0 2px}.cj-row .t{background:#bfdcff;border-radius:6px;padding:0 2px;margin-left:1px}
+.cj-tools{margin:0 2px 10px}.cj-row .r,.cj-lg .r{background:#ffd3e4;border-radius:6px;padding:0 2px}.cj-row .t,.cj-lg .t{background:#bfdcff;border-radius:6px;padding:0 2px;margin-left:1px}.cj-row .d,.cj-lg .d{color:#d6191c;background:#ffe3e3;border-radius:6px;padding:0 2px;font-weight:900;text-decoration:underline wavy #d6191c;text-underline-offset:3px}
+.cj-lg{display:grid;gap:4px;margin:-2px 2px 10px;font-size:.88rem;color:#5b6478}.cj-lg i{font-style:normal;font-weight:800;color:#1d2433;margin-right:4px}.cj-lg .d{text-decoration:none}
+.cj-tips{grid-column:1/-1;margin-top:4px;padding:10px 14px;border-radius:18px;background:#f3f6fd;border:2px solid #c9d3ea}.cj-tips h3{margin:0 0 6px;font-size:1.05rem}.cj-tips ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:clamp(15px,4vw,17px);line-height:1.4}
 .cj-opts.g3{grid-template-columns:1fr}
 .cj-verbs button{flex:1 1 90px;min-height:54px;border-radius:16px;border:3px solid var(--line);background:#fff;font-weight:800;font-size:clamp(18px,5vw,24px);display:flex;align-items:center;justify-content:center;gap:8px}
 .cj-verbs button i{font-style:normal;font-size:1.2em}.cj-verbs button[aria-pressed="true"]{background:#d6ebfb;border-color:#1f5fd6}
@@ -1989,7 +1991,8 @@ root.innerHTML=`<div class="cj-head"><h2>📘 La conjugaison <span class="cj-lvl
   <button class="pill cj-chg" id="cjC" aria-expanded="false">🔄 Changer de verbe ▾</button>
   <div class="cj-verbs" id="cjV" hidden></div>
   <div class="cj-note" id="cjN"></div>
-  <div class="cj-tools"><button class="pill" id="cjHl" aria-pressed="false">🖍️ Radical et terminaison</button></div>
+  <div class="cj-tools"><button class="pill" id="cjHl" aria-pressed="false">🎨 Repérer en couleur</button></div>
+  <div class="cj-lg" id="cjLg" hidden><span><i class="r">radical</i> le début qui ne change presque pas</span><span><i class="t">terminaison</i> la fin qui change</span><span><i class="d">difficulté</i> attention, piège !</span></div>
   <div class="cj-grid" id="cjG"></div>
   <button class="cj-toggle" id="cjT" aria-expanded="false"><span>🎯 Je m’entraîne<small>Choisis la bonne forme du verbe</small></span><span class="ch">▼</span></button>
   <div class="cj-train" id="cjP" hidden></div>`;
@@ -2001,19 +2004,95 @@ CC.onclick=()=>{ gv.hidden=!gv.hidden; CC.setAttribute('aria-expanded',!gv.hidde
 gv.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; verb=b.dataset.v; gv.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===verb)); paint(); gv.hidden=true; CC.setAttribute('aria-expanded',false); CC.textContent='🔄 Changer de verbe ▾'; gh.scrollIntoView({block:'start',behavior:'auto'}); window.scrollBy(0,-165); };
 root.querySelector('#cjHl').onclick=e=>{ hl=!hl; e.currentTarget.setAttribute('aria-pressed',hl); paint(); };
 const LBL=['Je','Tu','Il, elle, on','Nous','Vous','Ils, elles'];
+/* ---- repérage en couleur : radical (rose), terminaison (bleu), difficulté (rouge) ---- */
+function marks(vb,tk,i,f){
+  const c=new Array(f.length).fill('');
+  const set=(a,b,k)=>{ for(let j=a;j<b&&j<f.length;j++) if(j>=0) c[j]=k; };
+  if(tk==='pc'){ const sp=f.indexOf(' '); set(0,sp,'t'); set(sp+1,f.length,'r'); }
+  else { const ends=endsOf(vb,tk); if(ends){ const e=ends[i]; if(f.endsWith(e)){ set(0,f.length-e.length,'r'); set(f.length-e.length,f.length,'t'); } } }
+  const m=(re,gi)=>{ const r=new RegExp(re.source,re.flags.replace('g','')+'g'); let x; while((x=r.exec(f))){ const sub=gi?x[gi]:x[0]; const st=x.index+(gi?x[0].indexOf(sub):0); set(st,st+sub.length,'d'); if(x[0].length===0) r.lastIndex++; } };
+  const all=(k)=>set(0,f.length,k);
+  if(tk==='imp'&&(i===3||i===4)) m(/(i)(?:ons|ez)$/,1);
+  if(tk==='fut') m(/(r+)(?:ai|as|a|ons|ez|ont)$/,1);
+  if(tk==='pc') m(/\(e\)s?/);
+  switch(vb){
+   case 'être': if(tk==='pres') all('d'); if(tk==='imp') m(/^ét/); if(tk==='fut') m(/^se/); if(tk==='pc') m(/été/); if(tk==='pres'&&i===4) {} break;
+   case 'avoir': if(tk==='pres') all('d'); if(tk==='fut') m(/^au/); break;
+   case 'aller': if(tk==='pres'&&![3,4].includes(i)) all('d'); if(tk==='fut') m(/^ir/); break;
+   case 'commencer': m(/ç/); break;
+   case 'manger': m(/ge(?=[ao])/,0); break;
+   case 'employer': m(/y/); m(/emplo(i)/,1); break;
+   case 'oublier': m(/ii/); break;
+   case 'voir': m(/y/); break;
+   case 'faire': if(tk!=='fut') m(/^f(ai)s(?=ons|ais|ait|ions|iez|aient)/,1); if(tk==='pres'&&(i===4||i===5)) all('d'); if(tk==='fut') m(/^f(e)r/,1); break;
+   case 'dire': if(tk==='pres'&&i===4) m(/tes$/); break;
+   case 'prendre': if(tk==='pres'&&i===5) m(/nn/); if(tk==='pres'&&i===2) m(/d$/); break;
+   case 'entendre': case 'rendre': case 'répondre': if(tk==='pres'&&i===2) m(/d$/); break;
+   case 'mettre': m(/tt/); break;
+   case 'pouvoir': case 'vouloir': if(tk==='pres'&&i<2) m(/x$/); if(vb==='vouloir'&&tk==='fut') m(/voud/); break;
+   case 'savoir': if(tk==='fut') m(/au/); break;
+   case 'devoir': if(tk==='pc') m(/û/); break;
+   case 'venir': if(tk==='pres'&&i===5) m(/nn/); if(tk==='fut') m(/viend/); break;
+   case 'écrire': m(/v/); break;
+  }
+  return c;
+}
 function fhtml(x,tk,i,ends){
-  if(!hl||!ends){ return esc(x.f); }
-  const e=ends[i]; if(!x.f.endsWith(e)) return esc(x.f);
-  return `<span class="r">${esc(x.f.slice(0,x.f.length-e.length))}</span><span class="t">${esc(e)}</span>`;
+  if(!hl) return esc(x.f);
+  const c=marks(verb,tk,i,x.f); let out='', cur=null, buf='';
+  const flush=()=>{ if(!buf) return; out+=cur?`<span class="${cur}">${esc(buf)}</span>`:esc(buf); buf=''; };
+  for(let j=0;j<x.f.length;j++){ const k=x.f[j]===' '?null:c[j]||null; if(k!==cur){ flush(); cur=k; } buf+=x.f[j]; }
+  flush(); return out;
+}
+const TIPG={
+ 1:'Verbe en <b>-er</b> : à la fin, retiens la chanson « <b>e, es, e, ons, ez, ent</b> ».',
+ 2:'2ᵉ groupe : pense au serpent qui siffle <b>ssss</b> → nous fini<b>ss</b>ons, ils fini<b>ss</b>ent.',
+ 3:'3ᵉ groupe : pas de règle simple. Dis les formes à voix haute, plusieurs fois : l’oreille retient vite !',
+ aux:'Les auxiliaires sont les deux plus importants : sans eux, pas de passé composé !'};
+const TIPV={
+ 'être':'Trois verbes font <b>vous -tes</b> : vous <b>êtes</b>, vous <b>dites</b>, vous <b>faites</b>.',
+ 'avoir':'Au passé composé, <b>avoir</b> aide presque tous les verbes : j’<b>ai</b> chanté, tu <b>as</b> mangé…',
+ 'aller':'<b>Aller</b> est un menteur : il finit par -er mais il ne suit pas la règle du 1er groupe !',
+ 'commencer':'Le <b>ç</b> (cédille) garde le son « s » devant <b>a</b> et <b>o</b>. Devant e ou i, pas besoin.',
+ 'manger':'Le <b>e</b> de mangeons garde le son « j ». Sans lui on lirait « mangons » avec un g dur.',
+ 'employer':'Le <b>y</b> devient <b>i</b> quand la fin se tait : j’emploie. Mais nous empl<b>oy</b>ons.',
+ 'oublier':'Deux <b>i</b> d’affilée : un pour le verbe, un pour l’imparfait → nous oubl<b>ii</b>ons.',
+ 'courir':'Au futur : <b>rr</b>, comme quand on court très vite : je cou<b>rr</b>ai !',
+ 'voir':'Imparfait : nous vo<b>y</b>ions, le <b>y</b> comme dans « <b>y</b>eux ». Futur : je ve<b>rr</b>ai (deux r).',
+ 'pouvoir':'Je <b>peux</b>, tu <b>peux</b>, il <b>peut</b> : « eux, eux, eut ». Futur : je pou<b>rr</b>ai (deux r).',
+ 'vouloir':'Je <b>veux</b>, tu <b>veux</b>, il <b>veut</b> : comme pouvoir ! Futur : je vou<b>dr</b>ai.',
+ 'savoir':'Au futur, le v disparaît : je <b>saur</b>ai (ça sonne « sauré »).',
+ 'faire':'Trois verbes font <b>vous -tes</b> : vous <b>êtes</b>, vous <b>dites</b>, vous <b>faites</b>. Futur : je <b>fer</b>ai.',
+ 'dire':'Trois verbes font <b>vous -tes</b> : vous <b>êtes</b>, vous <b>dites</b>, vous <b>faites</b>.',
+ 'prendre':'<b>nn</b> à « ils » : ils pre<b>nn</b>ent. Mais un seul n à « nous » : nous prenons.',
+ 'mettre':'<b>Un t</b> au singulier (je mets, il met), <b>deux t</b> dès qu’on ajoute une fin : nous me<b>tt</b>ons.',
+ 'entendre':'À « il/elle » on garde le <b>d</b> de l’infinitif : il entend, pas « entent ».',
+ 'rendre':'À « il/elle » on garde le <b>d</b> de l’infinitif : il rend, pas « rent ».',
+ 'répondre':'À « il/elle » on garde le <b>d</b> de l’infinitif : il répond, pas « répont ».',
+ 'sortir':'Sortir, partir, aller, venir : ça <b>bouge</b> ! Passé composé avec <b>être</b> : je suis sorti(e).',
+ 'partir':'Sortir, partir, aller, venir : ça <b>bouge</b> ! Passé composé avec <b>être</b> : je suis parti(e).',
+ 'venir':'Ça <b>bouge</b> → passé composé avec <b>être</b> : je suis venu(e). Futur : je vien<b>dr</b>ai (avec un d).',
+ 'devoir':'Le participe <b>dû</b> prend un accent pour ne pas être confondu avec « du ».',
+ 'écrire':'Avec <b>v</b> quand on ajoute une fin : nous écri<b>v</b>ons. Sans v tout seul : il écrit.',
+ 'finir':'FINISSONS : ajoute <b>-iss-</b> à nous, vous, ils.'};
+function tips(vb){
+  const g=grp(vb), L=[];
+  if(TIPV[vb]) L.push(TIPV[vb]);
+  if(TIPG[g]&&!(TIPV[vb]&&g===2)) L.push(TIPG[g]);
+  L.push('<b>Futur</b> : cherche le <b>R</b> avant la fin → je chante<b>r</b>ai, tu i<b>r</b>as. Le futur a toujours son R !');
+  L.push('<b>Imparfait</b> : à « nous » et « vous », n’oublie pas le <b>i</b> → nous pren<b>i</b>ons, vous all<b>i</b>ez.');
+  L.push('<b>Passé composé</b> : <b>avoir</b> (ou <b>être</b>) + participe passé → j’ai chanté, je suis allé(e).');
+  return L;
 }
 function paint(){
   const g=grp(verb), gl=GL[g];
   gh.innerHTML=`<div class="cj-mouse">🐭</div><div class="cj-ban"><small>Verbe</small><b>${esc(verb)}</b></div><div class="cj-sign"><span>${gl[0]}</span><small>${gl[1]}</small></div>`;
   gn.innerHTML='💡 '+(NOTE[verb]||(g===1?REG1:''));
+  root.querySelector('#cjLg').hidden=!hl;
   gg.innerHTML=TENSES.map(t=>{ const F=forms(verb,t.k), ends=endsOf(verb,t.k);
     return `<section class="cj-card" style="--c:${t.c};--d:${t.d}"><header><b>${t.t}</b><small>${t.sub}</small>
       <button class="cj-all" data-say="${esc(F.map(x=>x.say).join(', '))}" data-lang="fr" aria-label="Tout lire">🔊 Tout</button></header>
-      ${F.map((x,i)=>`<button class="cj-row" data-say="${esc(x.say)}" data-lang="fr"><span class="p">${i===0&&vow.test(x.f)?'J’':LBL[i]}</span><span class="f">${fhtml(x,t.k,i,ends)}</span></button>`).join('')}</section>`; }).join('');
+      ${F.map((x,i)=>`<button class="cj-row" data-say="${esc(x.say)}" data-lang="fr"><span class="p">${i===0&&vow.test(x.f)?'J’':LBL[i]}</span><span class="f">${fhtml(x,t.k,i,ends)}</span></button>`).join('')}</section>`; }).join('')+`<section class="cj-tips"><h3>🧠 Astuces pour retenir</h3><ul>${tips(verb).map(t=>'<li>'+t+'</li>').join('')}</ul></section>`;
 }
 paint();
 
