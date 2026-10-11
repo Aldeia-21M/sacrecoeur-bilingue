@@ -127,7 +127,8 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .g-big:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #174aa8}
 .g-big:disabled{opacity:.55;cursor:default}
 .g-top>span .g-ghost{padding:2px 10px;font-size:14px}body.gp-play header{background:rgba(253,252,248,.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:3px 10px}body.gp-play .tab .lb{display:none}body.gp-play .tab{padding:3px 6px;min-height:0}body.gp-play .sec-b{padding-top:3px;padding-bottom:3px}body.gp-play .legend{display:none}
-.cl{max-width:1100px;margin:28px auto 16px;padding:0 14px;color:#6b7385;font-size:14px}.cl summary{cursor:pointer;font-weight:700;padding:10px 0;min-height:24px}.cl .cl-b{border-top:1px solid var(--line);padding:6px 0 4px}.cl h4{margin:12px 0 4px;font-size:14px;color:#3b4254}.cl ul{list-style:none;margin:0;padding:0}.cl li{padding:3px 0;line-height:1.35}.cl li b{display:inline-block;min-width:3em;color:#3b4254}.cl .cl-ver{text-align:center;font-size:12px;opacity:.7;padding-top:6px}.cl,.cl li,.cl li b,.cl summary,.cl h4{font-size:14px!important;line-height:1.4!important}.cl summary{font-size:15px!important}.cl .cl-ver{font-size:12px!important}
+.cl-badge{position:absolute;top:10px;right:12px;z-index:2;border:1px solid var(--line);background:#f4f6fb;color:#6b7385;border-radius:999px;padding:2px 10px;font:600 12px/1.4 inherit;font-family:inherit;cursor:pointer;min-height:26px}.cl-badge:hover,.cl-badge[aria-expanded=true]{background:#e8ecf5;color:#3b4254}
+.cl-pop{position:fixed;z-index:80;width:min(330px,calc(100vw - 16px));max-height:min(60vh,420px);overflow-y:auto;overscroll-behavior:contain;background:#fff;border:2px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(20,26,40,.25);padding:10px 14px 12px;color:#4a5164}.cl-pop[hidden]{display:none}.cl-pop *{font-size:13px!important;line-height:1.4!important}.cl-pop .cl-t{font-weight:800;color:#1d2433;font-size:14px!important;padding-bottom:4px;border-bottom:1px solid var(--line)}.cl-pop h4{margin:10px 0 3px;color:#3b4254}.cl-pop ul{list-style:none;margin:0;padding:0}.cl-pop li{padding:2px 0}.cl-pop li b{display:inline-block;min-width:2.9em;color:#3b4254}
 .g-npcsay{font-weight:700;margin:4px 0 8px;color:#495057}.g-top>span{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.g-ghost{min-height:40px;border-radius:999px;border:2px solid rgba(29,36,51,.2);background:#fff;padding:2px 12px;font-size:15px}
 
 /* partie */
@@ -509,6 +510,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
   </div>
   <div id="setbk" hidden></div>
   <div class="vox" id="setpanel" hidden>
+    <button class="cl-badge" id="clBtn" type="button" aria-expanded="false" aria-controls="clPop" title="Historique des versions"></button>
     <div class="row">
       <button class="pill" id="slow" aria-pressed="false">🐢 Lent</button>
       <button class="pill" id="zones" aria-pressed="false">👆 Voir les zones</button>
@@ -578,12 +580,12 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 <section class="page" data-sec="pt" id="p-petits" data-label="🧸 Activités"></section>
 <section class="page" data-sec="de,fr,ma,pt,fa" id="p-game" data-label="🎲 Jeu"><div id="gameRoot"><div id="gHub"></div><div id="gView" hidden><button class="g-ghost" id="gBack">← Tous les jeux</button> <button class="g-ghost" id="gGrade" hidden>🎓 Classe</button><div id="gBody"></div><div id="gamePlateau"></div></div></div></section>
 </main>
-<footer class="cl" id="changelog"><details><summary>📜 Historique des versions</summary><div class="cl-b" id="clB"></div></details><div class="cl-ver" id="clVer"></div></footer>
 <div class="toast" id="toast"></div>
 <script>
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "2.2", desc: "Version et historique dans Réglages" },
     { v: "2.1", desc: "Historique des versions en bas de page" },
     { v: "2.0", desc: "Plateau : longueur au choix, arrivée pile" },
     { v: "1.9", desc: "Bouton Classe dans tous les jeux" },
@@ -3963,14 +3965,29 @@ P.querySelector('#pcGa').onclick=bubbles;
 window.__pc={show,music,suggestPause,P,bubbles};
 })();
 
-(function(){ /* affichage de l'historique */
+(function(){ /* historique des versions : pastille dans Réglages + fenêtre */
   const vkey=v=>v.split('.').map(n=>+n||0), vcmp=(a,b)=>{ const x=vkey(a),y=vkey(b); for(let i=0;i<Math.max(x.length,y.length);i++){ const d=(y[i]||0)-(x[i]||0); if(d) return d; } return 0; };
   const fmt=d=>{ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d); return m?`${m[3]}.${m[2]}.${m[1]}`:d; };
-  const B=document.getElementById('clB'), V=document.getElementById('clVer'); if(!B||typeof CHANGELOG==='undefined') return;
+  const btn=document.getElementById('clBtn'); if(!btn||typeof CHANGELOG==='undefined') return;
+  const pop=document.createElement('div'); pop.id='clPop'; pop.className='cl-pop'; pop.hidden=true; pop.setAttribute('role','dialog'); pop.setAttribute('aria-label','Historique des versions');
+  const t=document.createElement('div'); t.className='cl-t'; t.textContent='Historique des versions'; pop.appendChild(t);
   const days=CHANGELOG.slice().sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
-  days.forEach(day=>{ const h=document.createElement('h4'); h.textContent=fmt(day.date); B.appendChild(h); const ul=document.createElement('ul');
-    day.versions.slice().sort((a,b)=>vcmp(a.v,b.v)).forEach(x=>{ const li=document.createElement('li'); const b=document.createElement('b'); b.textContent='v'+x.v; li.appendChild(b); li.appendChild(document.createTextNode(' '+x.desc)); ul.appendChild(li); }); B.appendChild(ul); });
-  const top=days[0]&&days[0].versions.slice().sort((a,b)=>vcmp(a.v,b.v))[0]; if(top) V.textContent='v'+top.v;
+  days.forEach(day=>{ const h=document.createElement('h4'); h.textContent=fmt(day.date); pop.appendChild(h); const ul=document.createElement('ul');
+    day.versions.slice().sort((a,b)=>vcmp(a.v,b.v)).forEach(x=>{ const li=document.createElement('li'); const b=document.createElement('b'); b.textContent='v'+x.v; li.appendChild(b); li.appendChild(document.createTextNode(' '+x.desc)); ul.appendChild(li); }); pop.appendChild(ul); });
+  document.body.appendChild(pop);
+  const top=days[0]&&days[0].versions.slice().sort((a,b)=>vcmp(a.v,b.v))[0]; btn.textContent=top?'v'+top.v:'v?';
+  let timer=null;
+  function place(){ const r=btn.getBoundingClientRect(); pop.style.top=(r.bottom+6)+'px'; pop.style.right=Math.max(8,innerWidth-r.right)+'px'; }
+  function open(){ clearTimeout(timer); if(!pop.hidden) return; place(); pop.hidden=false; btn.setAttribute('aria-expanded','true'); }
+  function close(){ clearTimeout(timer); pop.hidden=true; btn.setAttribute('aria-expanded','false'); }
+  const hov=matchMedia('(hover:hover) and (pointer:fine)');
+  btn.addEventListener('click',e=>{ e.stopPropagation(); if(hov.matches) open(); else pop.hidden?open():close(); });
+  [btn,pop].forEach(el=>{ el.addEventListener('mouseenter',()=>{ if(hov.matches) open(); }); el.addEventListener('mouseleave',()=>{ if(hov.matches){ clearTimeout(timer); timer=setTimeout(close,250); } }); });
+  let swallow=false; document.addEventListener('pointerdown',e=>{ if(!pop.hidden&&!pop.contains(e.target)&&e.target!==btn){ close(); swallow=true; setTimeout(()=>swallow=false,500); } },true);
+  document.addEventListener('click',e=>{ if(swallow&&!btn.contains(e.target)){ swallow=false; e.stopPropagation(); e.preventDefault(); } },true);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+  window.addEventListener('resize',()=>{ if(!pop.hidden) place(); });
+  new MutationObserver(()=>{ const sp=document.getElementById('setpanel'); if(sp&&sp.hidden) close(); }).observe(document.getElementById('setpanel'),{attributes:true,attributeFilter:['hidden']});
 })();
 (function(){ const F=document.getElementById('avisF'); if(!F) return; const B=document.getElementById('avisB'), L=document.getElementById('avisL'), M=document.getElementById('avisM'), S=document.getElementById('avisS'), C=document.getElementById('avisC');
   const API='/.netlify/functions/avis'; let counts=null;
