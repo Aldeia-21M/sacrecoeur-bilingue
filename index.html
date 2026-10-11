@@ -386,7 +386,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .tx-hint{margin:4px 2px 8px;font-size:13.5px;line-height:1.4;color:#5b6478}
 .gk-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}.gk-nav .co{grid-column:1/-1}.gk-nav .co[hidden]{display:none}.gk-open.on{background:#bfeebf;border-color:#2f9e44;color:#14532d}.gk-open.tr{background:#fff0d6;border-color:#e08a1e;color:#6b3a00}.gk-open.co{background:#e4f8e4;border-color:#2f9e44;color:#14532d}.gk-open{display:block;width:100%;min-height:52px;margin:0;border-radius:16px;border:2px solid #2f6fd6;background:#e8f0ff;font:800 17px/1.2 system-ui,sans-serif;color:#1d3a78}
 .cx-rb{display:block;width:100%;min-height:46px;margin:0 0 10px;border-radius:14px;border:2px dashed #b8860b;background:#fff8dc;font:800 16px/1.2 system-ui,sans-serif;color:#5a4300}.cx-rp{margin:0 0 12px}.cx-rp h4{margin:12px 0 6px;font-size:16px}.cx-rc{background:#fff;border:2px solid #eadfb0;border-radius:12px;padding:8px 10px;margin:6px 0;font-size:15px;line-height:1.4}.cx-rc.now{border-color:#2f9e44;background:#f1fbf1}.cx-rc b.n{display:flex;align-items:center;gap:6px;font-size:16px}.cx-rc .sw{display:inline-block;flex:none;width:22px;height:12px;border-radius:6px}.cx-rc .tag{margin-left:auto;font-size:12px;color:#14532d;background:#d8f5dc;border-radius:999px;padding:2px 8px}.cx-ex{display:block;margin-top:3px;color:#33405f}.cx-ex i{font-style:normal;font-weight:800;background:linear-gradient(transparent 55%,var(--c) 55%);padding:0 2px}
-.gk-top{display:flex;align-items:center;gap:10px;margin:0 0 8px}.gk-top>span{font-weight:800;white-space:nowrap}.gk-top .mx-seg{flex:1}.gk-top .mx-seg button{min-height:40px}.gk-lab{font-weight:800;margin:2px 0 6px}.gk-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.gk-chips button{border:2px solid rgba(29,36,51,.16);background:#fff;border-radius:999px;padding:7px 11px;font:700 14px/1.1 system-ui,sans-serif;min-height:38px}.gk-chips button[aria-pressed="true"]{background:#bfeebf;border-color:#2f9e44}
+.gk-top{display:flex;align-items:center;gap:10px;margin:0 0 8px}.gk-top>span{font-weight:800;white-space:nowrap}.gk-top .mx-seg{flex:1}.gk-top .mx-seg button{min-height:40px}.gk-lab{font-weight:800;margin:2px 0 6px}.gk-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}#txL.gk-chips,#p-gramSA.gk-chips{display:block}.gk-grp{margin:0 0 8px}.gk-gl{font:800 12px/1 system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#7a6a2a;margin:0 0 5px}.gk-row{display:flex;flex-wrap:wrap;gap:6px}.gk-chips button{border:2px solid rgba(29,36,51,.16);background:#fff;border-radius:999px;padding:7px 11px;font:700 14px/1.1 system-ui,sans-serif;min-height:38px}.gk-chips button[aria-pressed="true"]{background:#bfeebf;border-color:#2f9e44}
 .tx-top{display:grid;grid-template-columns:1fr;gap:8px;margin:2px 0 8px}.tx-top .mx-seg button{min-height:44px}
 #txL{min-height:46px;border-radius:14px;border:3px solid var(--line);background:#fff;font:700 15.5px/1.2 inherit;font-family:inherit;padding:2px 10px;color:#1d2433;min-width:0}
 .tx-set{margin:0 0 8px}.tx-set summary{cursor:pointer;list-style:none;font-size:14px;color:#5b6478;padding:4px 2px}.tx-set summary::-webkit-details-marker{display:none}.tx-set summary b{color:#33405f}.tx-set summary span{margin-left:6px;text-decoration:underline}
@@ -2354,7 +2354,7 @@ function MkSeries(rootId,cfg){
     run=null; P.innerHTML=''; if(cfg.acts){ const al=actsOf(); if(!al.some(a=>a[0]===S.act)) S.act=al[0][0]; }
     const pr=getProg()[rootId]; const prTxt=pr?`<p class="mx-hint">🏅 Meilleur score : <b>${pr.best}/10</b> · ${pr.runs} série${pr.runs>1?'s':''} faite${pr.runs>1?'s':''}</p>`:'';
     if(cfg.compact){ const sh=t=>t.split(/\s[:(]/)[0];
-      O.innerHTML=`<div class="gk-top"><span>Ta classe</span><div class="mx-seg" id="${rootId}G">${cfg.grades.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.g}">${v}</button>`).join('')}</div></div><div class="gk-lab">Quelle règle ?</div><div class="gk-chips" id="${rootId}A">${actsOf().map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.act}">${sh(t)}</button>`).join('')}</div>${prTxt}${cfg.card?cfg.card(S.act,S.g):''}<button class="mx-go" id="${rootId}Go">▶ M’entraîner (10 questions)</button>`;
+      O.innerHTML=`<div class="gk-top"><span>Ta classe</span><div class="mx-seg" id="${rootId}G">${cfg.grades.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.g}">${v}</button>`).join('')}</div></div><div class="gk-lab">Quelle règle ?</div><div class="gk-chips" id="${rootId}A">${[...new Set(actsOf().map(a=>a[3]))].map(gr=>`<div class="gk-grp"><div class="gk-gl">${gr}</div><div class="gk-row">${actsOf().filter(a=>a[3]===gr).map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.act}">${sh(t)}</button>`).join('')}</div></div>`).join('')}</div>${prTxt}${cfg.card?cfg.card(S.act,S.g):''}<button class="mx-go" id="${rootId}Go">▶ M’entraîner (10 questions)</button>`;
     } else
     O.innerHTML=(cfg.acts?(actsOf()[0][3]?`<div id="${rootId}A">${[...new Set(actsOf().map(a=>a[3]))].map(gr=>`<div class="mx-sec"><div class="mx-lab">${gr}</div><div class="mx-seg wrap">${actsOf().filter(a=>a[3]===gr).map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.act}">${t}</button>`).join('')}</div></div>`).join('')}</div>`:seg(rootId+'A','Quel exercice ?',actsOf(),S.act)):'')+seg(rootId+'G','Ta classe',cfg.grades,S.g)+`<p class="mx-hint">${(cfg.hints&&cfg.hints[S.g])||''}</p>${prTxt}${cfg.card?cfg.card(S.act,S.g):''}<button class="mx-go" id="${rootId}Go">▶ Commencer la série (10 questions)</button>`;
     const a=O.querySelector('#'+rootId+'A'); if(a) a.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.act=b.dataset.v; paintO(); };
@@ -2997,9 +2997,20 @@ const GM_GEN={
  temps:()=>gmTemps()
 };
 
-const GM_ACTS=[['phrase','📝 La phrase : GS, GV, complément',['4H','6H'],'La phrase'],['ptype','❓ Types et formes de phrases',['4H','6H'],'La phrase'],['pcomplexe','🌳 Phrase simple · complexe',['6H'],'La phrase'],
- ['nature','🏷️ La nature des mots',['4H','6H'],'Les mots'],['det','🎀 Les déterminants',['4H','6H'],'Les mots'],['genre','👫 Genre, nombre, accords',['4H','6H'],'Les mots'],['pron','👤 Les pronoms',['4H','6H'],'Les mots'],['adverbe','🐙 L’adverbe',['6H'],'Les mots'],['prep','🐛 La préposition',['6H'],'Les mots'],['conj','🔗 La conjonction (mais, ou, et…)',['4H','6H'],'Les mots'],['fonction','🚂 La fonction : S, V, COD, COI, CC',['6H'],'Les mots'],['homo','👯 a/à, et/est, on/ont…',['4H','6H'],'Les mots'],
- ['groupes','🏖️ Groupes de verbes (1er, 2e, 3e)',['6H'],'Les verbes'],['temps','⏱️ Temps simples · composés',['6H'],'Les verbes']];
+const GM_ACTS=[['phrase','📝 La phrase : GS, GV, complément',['4H','6H'],'La phrase'],
+ ['ptype','❓ Types et formes de phrases',['4H','6H'],'La phrase'],
+ ['pcomplexe','🌳 Phrase simple · complexe',['6H'],'La phrase'],
+ ['nature','🏷️ La nature des mots',['4H','6H'],'Les mots'],
+ ['det','🎀 Les déterminants',['4H','6H'],'Les mots'],
+ ['pron','👤 Les pronoms',['4H','6H'],'Les mots'],
+ ['adverbe','🐙 L’adverbe',['6H'],'Les mots'],
+ ['prep','🐛 La préposition',['6H'],'Les mots'],
+ ['conj','🔗 La conjonction (mais, ou, et…)',['4H','6H'],'Les mots'],
+ ['fonction','🚂 La fonction : S, V, COD, COI, CC',['6H'],'Fonctions et accords'],
+ ['genre','👫 Genre, nombre, accords',['4H','6H'],'Fonctions et accords'],
+ ['groupes','🏖️ Groupes de verbes (1er, 2e, 3e)',['6H'],'Les verbes'],
+ ['temps','⏱️ Temps simples · composés',['6H'],'Les verbes'],
+ ['homo','👯 a/à, et/est, on/ont…',['4H','6H'],'Orthographe']];
 const ch=(t,c)=>`<span class="gm-ch" style="--c:${c}">${t}</span>`;
 const exs=h=>`<div class="gm-ex">${h}</div>`;
 const blk=(t,b,c)=>`<div class="gm-b" style="--c:${c||'#fff8dc'}"><b>${t}</b>${b}</div>`;
@@ -3212,7 +3223,8 @@ function paintRules(){ const A=act(); $('txRp').innerHTML=RGRP[S.g].map(([t,l])=
 function paintAll(keep){
   const M=MODES[S.g][S.lv];
   $('txG').innerHTML=segH([['4H','4H'],['6H','6H']],S.g);
-    $('txL').innerHTML=MODES[S.g].map((x,i)=>`<button data-i="${i}" aria-pressed="${i===S.lv}">${SHORT[S.g][i]}</button>`).join('');
+    { const GR={'4H':[['📝 La phrase',[2,1]],['🏷️ Les mots',[3]],['⏱️ Le verbe',[0]]],'6H':[['📝 La phrase',[2,1]],['🏷️ Les mots',[3,4]],['⏱️ Le verbe',[0]],['🚂 Les fonctions',[5,6]]]}[S.g];
+      $('txL').innerHTML=GR.map(([t,ix])=>`<div class="gk-grp"><div class="gk-gl">${t}</div><div class="gk-row">${ix.map(i=>`<button data-i="${i}" aria-pressed="${i===S.lv}">${SHORT[S.g][i]}</button>`).join('')}</div></div>`).join(''); }
   $('txO').innerHTML='🎯 <b>Ton défi :</b> '+M[1]+'<ol class="cx-meth">'+METH[S.g][S.lv].map(x=>'<li>'+x+'</li>').join('')+'</ol>';
   const A=act(); if(!A.includes(S.cur)) S.cur=A[0];
   $('txC').innerHTML=A.map(x=>`<button data-c="${x}" aria-pressed="${x===S.cur}" style="--cc:${CR[x][1]}"><i class="sw"></i>${CR[x][0]}</button>`).join('');
