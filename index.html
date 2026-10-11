@@ -264,7 +264,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .sec-b[data-s="de"][aria-pressed="true"]{background:#fff0b8;border-color:#d9a400}
 .sec-b[data-s="fr"][aria-pressed="true"]{background:#d6ebfb;border-color:#1f5fd6}
 .tab[hidden]{display:none}
-body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab:not(.gear){flex:0 1 auto;min-width:96px;padding:5px 14px}
+body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab:not(.gear){flex:1 1 auto;min-width:0;padding:5px 1px;letter-spacing:-.2px}
 /* ---- conjugaison ---- */
 .cj-lvl{display:inline-block;vertical-align:middle;margin-left:6px;padding:.25em .6em;border-radius:999px;background:#d6336c;color:#fff;border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25);font:800 .45em/1 system-ui,sans-serif}
 #p-conj{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
@@ -336,6 +336,44 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .mx-t{padding:8px;border-radius:16px;background:#fff;border:2px solid var(--line)}.mx-t h4{margin:0 0 6px;font-size:18px;color:#d6336c}
 .mx-t button{display:flex;justify-content:space-between;width:100%;min-height:38px;padding:2px 10px;margin:3px 0;border-radius:10px;border:1px solid rgba(29,36,51,.1);background:#fffdf3;font-size:17px}.mx-t button b{color:#1f5fd6}
 .mx-t button.playing{background:#fff0b8}
+
+/* ---- grammaire ---- */
+#p-gram{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
+.gm-card{margin:12px 0;border-radius:22px;border:3px solid #6b7490;background:#f3f6fd;overflow:hidden}
+.gm-card summary{display:flex;align-items:center;list-style:none;cursor:pointer;padding:8px 10px 8px 8px;position:relative}
+.gm-card summary::-webkit-details-marker{display:none}
+.gm-card summary::after{content:"▾";flex:none;margin-left:6px;font-size:22px;color:#5b6478;transition:transform .2s}
+.gm-card[open] summary::after{transform:rotate(180deg)}
+.gm-mic{flex:none;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#cfd5e0);border:3px solid #6b7490;display:flex;align-items:center;justify-content:center;font-size:36px;z-index:1}
+.gm-ti{flex:1;min-width:0;margin-left:-14px;padding:6px 12px 6px 24px;background:#e6e9f0 repeating-linear-gradient(45deg,transparent 0 3px,rgba(0,0,0,.04) 3px 4px);border:2px solid #6b7490;border-radius:0 16px 16px 0;box-shadow:0 3px 0 #a9b0c4;font-weight:800;font-size:clamp(18px,5vw,24px);line-height:1.15}
+.gm-ti small{display:block;font-size:.55em;font-weight:700;color:#5b6478;letter-spacing:.04em;text-transform:uppercase}
+.gm-body{padding:4px 10px 12px;display:grid;gap:8px}
+.gm-b{background:var(--c,#fff8dc);border:2px solid rgba(29,36,51,.12);border-radius:16px;padding:10px 12px;font-size:clamp(15px,4vw,17px);line-height:1.5}
+.gm-b>b:first-child{display:block;margin-bottom:3px;font-size:1.04em}
+.gm-b small{display:block;margin-top:4px;opacity:.85;font-size:.92em}
+.gm-ch{display:inline-block;margin:3px 2px;padding:1px 10px;border-radius:999px;background:var(--c);border:2px solid rgba(29,36,51,.1);font-weight:700;font-size:.95em}
+.gm-ex{margin:6px 0 2px;padding:6px 10px;border-radius:12px;background:#fff;border:2px dashed rgba(29,36,51,.18);font-size:1.04em}
+.gm-y,.gm-g,.gm-v{padding:0 3px;border-radius:5px;font-weight:700}
+.gm-y{box-shadow:inset 0 -.55em 0 #ffe9a0}.gm-g{box-shadow:inset 0 -.55em 0 #d4dcee}.gm-v{box-shadow:inset 0 -.55em 0 #cdeccd}
+.gm-c{color:#d6336c;font-weight:800}
+.n-d,.n-n,.n-a,.n-v{font-weight:800}.n-d{color:#1f5fd6}.n-n{color:#d6336c}.n-a{color:#d9780f}.n-v{color:#7048e8}
+.gm-two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gm-big{display:block;font-size:clamp(26px,7.5vw,38px);font-weight:900;line-height:1.1;color:#1f5fd6;margin:2px 0 4px}
+.gm-4,.gm-3{display:grid;gap:8px}.gm-4{grid-template-columns:1fr 1fr}.gm-3{grid-template-columns:1fr}
+@media(min-width:560px){.gm-3{grid-template-columns:repeat(3,1fr)}.gm-4{grid-template-columns:repeat(4,1fr)}}
+.gm-4>div,.gm-3>div{background:var(--c);border:2px solid rgba(29,36,51,.1);border-radius:14px;padding:8px 10px;font-size:.95em;line-height:1.4}
+.gm-4>div>b:first-child,.gm-3>div>b:first-child{display:block;font-size:1.02em}.gm-4>div small{display:block;font-weight:800;opacity:.65}
+.gm-train{display:flex;gap:6px;align-items:stretch;padding:2px 0 0}
+.gm-w{flex:1 1 0;min-width:0;text-align:center;padding:8px 3px;border-radius:12px;border:3px solid #1d2433;background:#ffd6e5;line-height:1.15;position:relative;font-size:clamp(12px,3.5vw,16px);box-shadow:0 5px 0 #6b7490}
+.gm-w b{display:block}.gm-w small{display:block;opacity:.75;font-size:.8em}
+.gm-w.loco{background:#ffe58a;border-radius:18px 8px 8px 18px}.gm-w.cargo{background:#cfe8ff}.gm-w.cc{background:#d9f2d1}
+.gm-w:not(:last-child)::after{content:"";position:absolute;right:-9px;top:55%;width:9px;height:4px;background:#1d2433}
+.gm-trl{display:flex;gap:6px;margin-top:6px;font-size:.78em;font-weight:800;color:#5b6478;text-align:center}
+.gm-trl span{flex:1;border-top:3px solid #a9b0c4;padding-top:2px}.gm-trl span:nth-child(2){flex:2}
+.gm-s{margin:6px 0 4px;padding:10px 14px;border-radius:16px;background:#fff;border:2px solid rgba(29,36,51,.12);font-size:clamp(20px,5.4vw,26px);font-weight:700;line-height:1.55;text-align:center}
+.gm-t{text-decoration:none;border-bottom:4px solid #1f5fd6;background:rgba(31,95,214,.08);padding:0 3px;border-radius:5px 5px 0 0}
+.gm-bl{display:inline-block;min-width:64px;border-bottom:4px solid #1f5fd6;color:transparent}
+.h-ans.wd b{margin-right:8px}.h-tile.wt{flex:0 0 auto;min-width:0;padding:2px 14px}
 
 /* ---- séries, défi, petits ---- */
 #p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
@@ -470,6 +508,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 <section class="page" data-sec="de" id="p-wort" data-label="🗣️ Wortschatz"></section>
 <section class="page" data-sec="fr" id="p-conj" data-label="📘 Conjugaison"></section>
 <section class="page" data-sec="fr" id="p-ortho" data-label="✏️ Orthographe"></section>
+<section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
 <section class="page" data-sec="ma" id="p-mesures" data-label="📏 Mesures"></section>
@@ -519,7 +558,7 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 let seqTok=0;
 function spoken(t,lang){ t=String(t==null?'':t);
   const W=lang==='de'?{'×':' mal ','÷':' geteilt durch ','−':' minus ','=':' gleich ','+':' plus '}:{'×':' fois ','÷':' divisé par ','−':' moins ','=':' égale ','+':' plus '};
-  return t.replace(/[×÷−=+]/g,c=>W[c]).replace(/\s+/g,' ').trim(); }
+  if(lang!=='de') t=t.replace(/\b(COD|COI|CC|GN|GV)\b/g,m=>m.split('').join(' ')); return t.replace(/[×÷−=+]/g,c=>W[c]).replace(/\s+/g,' ').trim(); }
 function mkUtt(text,lang){
   const u = new SpeechSynthesisUtterance(spoken(text,lang));
   u.lang = lang==='de' ? 'de-DE' : 'fr-FR';
@@ -625,8 +664,8 @@ document.getElementById('tfr').addEventListener('click',()=>speak('Bonjour ! Auj
 const tabs=document.getElementById('tabs'), pages=[...document.querySelectorAll('.page')];
 let cur=0, sec='de'; const lastTab={};
 const secsOf=i=>(pages[i].dataset.sec||'de').split(',');
-window.DLsec=()=>{ const ALL=['zahlen','math','school','cal','wort','artikel','satz','conj','ortho','calc','histoire','heure','monnaie','nombres','mesures','petit'];
-  return sec==='fr'?['conj','ortho']:sec==='ma'?['calc','histoire','heure','monnaie','nombres','mesures']:sec==='de'?['zahlen','math','school','cal','wort','artikel','satz']:ALL; };
+window.DLsec=()=>{ const ALL=['zahlen','math','school','cal','wort','artikel','satz','conj','ortho','gram','calc','histoire','heure','monnaie','nombres','mesures','petit'];
+  return sec==='fr'?['conj','ortho','gram']:sec==='ma'?['calc','histoire','heure','monnaie','nombres','mesures']:sec==='de'?['zahlen','math','school','cal','wort','artikel','satz']:ALL; };
 window.DLgrade=()=>sec==='pt'?'1H':'4H';
 window.DLfam=()=>sec==='fa';
 window.DLpet=()=>{ const A=['count','hear','color','shape','animal','vocab','letter','more','add','sub','bigger','next','firstletter','lower','sizes','odd','syll','rhyme'];
@@ -868,6 +907,7 @@ const TOPICS={
   heure:{label:'🕐 Heure',badge:'🕐 Heure',color:'#d9ecfb'},
   monnaie:{label:'💰 Monnaie',badge:'💰 Monnaie',color:'#fff0b8'},
   ortho:{label:'✏️ Orthographe',badge:'✏️ Orthographe',color:'#fde0ec'},
+  gram:{label:'📐 Grammaire',badge:'📐 Grammaire',color:'#e0f0e3'},
   petit:{label:'🧸 Images (1H)',badge:'🧸 Petits',color:'#fde0ec'}
 };
 const RANGE={easy:[1,20],hard:[21,99],very:[100,999]};
@@ -970,7 +1010,7 @@ function makeQuestion0(topics,grade){
   if(grade==='1H') return qPetit();
   let pool=topics.filter(t=>t!=='petit'&&(grade==='6H'||(t!=='math'&&t!=='conj'))); if(!pool.length) pool=['zahlen','school','cal'];
   const cat=pool[rnd(pool.length)];
-  if(['heure','monnaie','histoire','ortho','nombres','mesures','wort','artikel','satz'].includes(cat)) return qSeries(cat,grade);
+  if(['heure','monnaie','histoire','ortho','gram','nombres','mesures','wort','artikel','satz'].includes(cat)) return qSeries(cat,grade);
   if(cat==='cal'&&Math.random()<.4) return qSeries('calseq',grade,'cal');
   if(cat==='zahlen'){ const r=Math.random(); return qNumber(grade==='6H'?(r<.25?'easy':r<.6?'hard':'very'):(r<.5?'easy':'hard')); }
   if(cat==='conj') return qConj();
@@ -999,6 +1039,7 @@ let setup={n:2,topics:new Set(['zahlen','math','school','cal','conj','calc']),le
 let G=null; // partie en cours
 let curQ=null;
 if(FAST) window.__g={get q(){return curQ;},get G(){return G;}};
+if(FAST) window.__mq=makeQuestion;
 
 /* ================= ÉCRAN DE RÉGLAGE ================= */
 function renderSetup(){
@@ -2262,15 +2303,15 @@ const setProg=p=>{ try{ localStorage.setItem(PROG,JSON.stringify(p)); }catch(e){
 /* ---------- moteur ---------- */
 function MkSeries(rootId,cfg){
   const root=document.getElementById(rootId); if(!root) return;
-  const S={g:cfg.grades[0][0],act:cfg.acts?cfg.acts[0][0]:null};
+  const S={g:cfg.grades[0][0],act:cfg.acts?cfg.acts[0][0]:null}; const actsOf=()=>(cfg.acts||[]).filter(a=>!a[2]||a[2].includes(S.g));
   let run=null,Q=null; const dbg=T[rootId]={};
   root.innerHTML=`<div class="mx-head"><h2>${cfg.title}</h2><p>${cfg.intro}</p></div><div class="mx-box" id="${rootId}O"></div><div id="${rootId}P"></div>`;
   const O=root.querySelector('#'+rootId+'O'), P=root.querySelector('#'+rootId+'P');
   const seg=(id,label,list,cur)=>`<div class="mx-sec"><div class="mx-lab">${label}</div><div class="mx-seg wrap" id="${id}">${list.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===cur}">${t}</button>`).join('')}</div></div>`;
   function paintO(){
-    run=null; P.innerHTML='';
+    run=null; P.innerHTML=''; if(cfg.acts){ const al=actsOf(); if(!al.some(a=>a[0]===S.act)) S.act=al[0][0]; }
     const pr=getProg()[rootId]; const prTxt=pr?`<p class="mx-hint">🏅 Meilleur score : <b>${pr.best}/10</b> · ${pr.runs} série${pr.runs>1?'s':''} faite${pr.runs>1?'s':''}</p>`:'';
-    O.innerHTML=(cfg.acts?seg(rootId+'A','Quel exercice ?',cfg.acts,S.act):'')+seg(rootId+'G','Ta classe',cfg.grades,S.g)+`<p class="mx-hint">${(cfg.hints&&cfg.hints[S.g])||''}</p>${prTxt}<button class="mx-go" id="${rootId}Go">▶ Commencer la série (10 questions)</button>`;
+    O.innerHTML=(cfg.acts?seg(rootId+'A','Quel exercice ?',actsOf(),S.act):'')+seg(rootId+'G','Ta classe',cfg.grades,S.g)+`<p class="mx-hint">${(cfg.hints&&cfg.hints[S.g])||''}</p>${prTxt}${cfg.card?cfg.card(S.act,S.g):''}<button class="mx-go" id="${rootId}Go">▶ Commencer la série (10 questions)</button>`;
     const a=O.querySelector('#'+rootId+'A'); if(a) a.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.act=b.dataset.v; paintO(); };
     O.querySelector('#'+rootId+'G').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; paintO(); };
     O.querySelector('#'+rootId+'Go').onclick=()=>start();
@@ -2288,9 +2329,9 @@ function MkSeries(rootId,cfg){
     if(run.i>=run.total) return finish();
     Q=newQ(); dbg.Q=Q; dbg.run=run; run.typed=''; run.locked=false; run.errs=0; run.fin=false;
     let inp='';
-    if(Q.kind==='mcq') inp=`<div class="cj-opts">${Q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div>`;
+    if(Q.kind==='mcq') inp=`<div class="cj-opts${Q.wide?' g3':''}">${Q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div>`;
     else if(Q.kind==='num') inp=`<div class="mx-eq"><span class="mx-in" id="${rootId}In">?</span>${Q.unit?`<span class="mx-unit">${esc(Q.unit)}</span>`:''}</div><div class="mx-pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join('')}<button data-k="del" class="d">⌫</button><button data-k="0">0</button><button data-k="ok" class="v">✓</button></div>`;
-    else { Q.tiles=shuffle(Q.answer.split('').map((c,i)=>({c,used:false}))); inp=`<div class="h-ans" id="${rootId}Ans"></div><div class="h-tiles" id="${rootId}Tl"></div><button class="g-ghost" id="${rootId}Bk">⌫ Effacer une lettre</button>`; }
+    else { Q.tiles=shuffle((Q.parts||Q.answer.split('')).map(c=>({c,used:false}))); inp=`<div class="h-ans${Q.parts?' wd':''}" id="${rootId}Ans"></div><div class="h-tiles" id="${rootId}Tl"></div><button class="g-ghost" id="${rootId}Bk">⌫ Effacer ${Q.parts?'le dernier mot':'une lettre'}</button>`; }
     P.innerHTML=`<div class="mx-play">${run.review?'<div class="mx-rev">🔁 Je refais mes erreurs</div>':''}${dots()}${Q.vis?`<div class="sr-vis">${Q.vis}</div>`:''}<div class="sr-q">${Q.prompt}</div>${Q.say?`<button class="mx-hear top" id="${rootId}H">🔊 Écouter</button>`:''}${inp}<div class="mx-fb" id="${rootId}Fb" hidden></div></div>`;
     const H=P.querySelector('#'+rootId+'H'); if(H){ H.onclick=()=>say(Q.say,Q.lang); setTimeout(()=>say(Q.say,Q.lang),FAST?0:300); }
     if(Q.kind==='mcq') P.querySelector('.cj-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||run.locked) return; run.locked=true; const k=+b.dataset.k; run.lastK=k;
@@ -2302,17 +2343,18 @@ function MkSeries(rootId,cfg){
     if(!FAST) P.scrollIntoView({behavior:'smooth',block:'nearest'});
     dbg.solve=()=>{ if(Q.kind==='mcq') P.querySelectorAll('.cj-opts button')[Q.correct].click();
       else if(Q.kind==='num'){ [...String(Q.answer)].forEach(c=>P.querySelector('.mx-pad [data-k="'+c+'"]').click()); P.querySelector('.mx-pad [data-k=ok]').click(); }
-      else { [...Q.answer].forEach(ch=>{ const k=Q.tiles.findIndex(x=>!x.used&&x.c===ch); P.querySelectorAll('.h-tile')[k].click(); }); } };
+      else { (Q.parts||[...Q.answer]).forEach(ch=>{ const k=Q.tiles.findIndex(x=>!x.used&&x.c===ch); P.querySelectorAll('.h-tile')[k].click(); }); } };
     dbg.fail=()=>{ if(Q.kind==='mcq'){ const k=Q.options.findIndex((_,j)=>j!==Q.correct); P.querySelectorAll('.cj-opts button')[k].click(); }
       else if(Q.kind==='num'){ const w=String(Q.answer+1); [...w].forEach(c=>P.querySelector('.mx-pad [data-k="'+c+'"]').click()); P.querySelector('.mx-pad [data-k=ok]').click(); }
       else { run.locked=true; resolve(false); } };
   }
   function tilesInit(){
     const ans=P.querySelector('#'+rootId+'Ans'), tl=P.querySelector('#'+rootId+'Tl'); let typed=[];
-    const paint=()=>{ ans.innerHTML=typed.map(t=>`<b>${esc(t.c)}</b>`).join('')+'<span class="cur"></span>'; tl.innerHTML=Q.tiles.map((t,k)=>`<button class="h-tile" data-k="${k}" ${t.used?'disabled':''}>${esc(t.c)}</button>`).join(''); };
+    const W=!!Q.parts, need=W?Q.parts.length:Q.answer.length, sep=W?' ':'';
+    const paint=()=>{ ans.innerHTML=typed.map(t=>`<b>${esc(t.c)}</b>`).join('')+'<span class="cur"></span>'; tl.innerHTML=Q.tiles.map((t,k)=>`<button class="h-tile${W?' w wt':''}" data-k="${k}" ${t.used?'disabled':''}>${esc(t.c)}</button>`).join(''); };
     tl.onclick=async e=>{ const b=e.target.closest('.h-tile'); if(!b||run.locked||b.disabled) return; const t=Q.tiles[+b.dataset.k]; t.used=true; typed.push(t); paint();
-      if(typed.length===Q.answer.length){
-        if(typed.map(x=>x.c).join('')===Q.answer){ run.locked=true; ans.classList.add('good'); resolve(true); }
+      if(typed.length===need){
+        if(typed.map(x=>x.c).join(sep)===Q.answer){ run.locked=true; ans.classList.add('good'); resolve(true); }
         else { run.errs++; ans.classList.add('bad'); await sleep(700); ans.classList.remove('bad'); if(run.errs>=2){ run.locked=true; resolve(false); return; } Q.tiles.forEach(x=>x.used=false); typed=[]; paint(); } } };
     P.querySelector('#'+rootId+'Bk').onclick=()=>{ if(run.locked) return; const t=typed.pop(); if(t){ t.used=false; paint(); } };
     paint();
@@ -2684,6 +2726,207 @@ MkSeries('p-ortho',{title:'✏️ L’orthographe et la langue',intro:'Écoute, 
   grades:[['4H','4H · mots courants'],['6H','6H · plus difficile']],
   hints:{'4H':'Mots courants, un / une, pluriel avec -s, a / à, et / est, on / ont, son / sont, ou / où.','6H':'Mots plus longs, pluriels en -aux et -eux, ce / se, ces / ses, leur / leurs, accords et temps composés.'},gen:genOrtho});
 G.ortho=g=>genOrtho(g,pick(g==='6H'?['article','pluriel','homo','homo','accord','accord','contraire','genre','verbe']:['article','pluriel','homo','accord','contraire','genre','verbe']));
+/* ================= GRAMMAIRE (français 4H · 6H) ================= */
+const GM={};
+const gmP=(s)=>s.split(' ').map(t=>{ const m=/^(.+?)(?:\/([A-Za-z]+))?([.,!?;:]*)$/.exec(t); return {w:m[1],c:m[2]||'',p:m[3]||''}; });
+const gmJoin=(toks,mark)=>{ let h=''; toks.forEach((t,i)=>{ const x=esc(t.w)+esc(t.p); h+=(i&&!/’$/.test(toks[i-1].w)?' ':'')+(mark&&mark(t,i)?`<u class="gm-t">${x}</u>`:x); }); return h; };
+const gmPlain=toks=>toks.map((t,i)=>(i&&!/’$/.test(toks[i-1].w)?' ':'')+t.w+t.p).join('');
+const NATN={D:['Déterminant','un déterminant','Il précise le genre et le nombre du nom (le, la, un, une, mes…).'],N:['Nom','un nom','Il désigne une personne, un animal, une chose, un lieu…'],A:['Adjectif','un adjectif','Il donne une information sur le nom : il le qualifie.'],P:['Pronom','un pronom','Il remplace un nom ou un groupe nominal (il, elle, nous…).'],V:['Verbe','un verbe','Il indique une action ou un état. Il change avec je, tu, il…'],Av:['Adverbe','un adverbe','Il précise le sens d’un verbe, d’un adjectif… et il ne change jamais.'],Pr:['Préposition','une préposition','Elle relie deux éléments (à, dans, pour, avec…) et ne change jamais.'],C:['Conjonction','une conjonction','Elle relie deux mots ou deux phrases (mais, ou, et, or, ni, car, donc).']};
+const NAT_S=[
+ 'Le/D chat/N noir/A dort/V sur/Pr le/D canapé/N.','Mes/D cousins/N jouent/V souvent/Av au football.','Elle/P mange/V une/D pomme/N rouge/A.','Tu/P portes/V bien/Av ta/D jupe/N.',
+ 'Le/D petit/A garçon/N chante/V joyeusement/Av.','Nous/P habitons/V dans/Pr une/D grande/A maison/N.','Léa/N mange/V une/D glace/N et/C boit/V du jus.','Il/P pleut/V beaucoup/Av ce/D matin/N.',
+ 'Les/D enfants/N sont/V contents/A mais/C fatigués/A.','Mon/D oncle/N roule/V doucement/Av.','Nous/P partons/V avec/Pr nos/D amis/N.','Le/D chien/N de/Pr mon/D voisin/N aboie/V fort/Av.',
+ 'Ce/D soir/N, nous/P mangerons/V des/D pâtes/N ou/C du riz.','Il/P court/V vite/Av car/C il/P est/V en/Pr retard/N.','La/D belle/A fleur/N pousse/V dans/Pr le/D jardin/N.','Ils/P regardent/V un/D film/N drôle/A.',
+ 'Je/P mange/V trop/Av de/Pr bonbons/N.','Le/D facteur/N arrive/V toujours/Av à/Pr midi/N.','Marie/N et/C Paul/N chantent/V pour/Pr leurs/D parents/N.','Une/D grosse/A araignée/N descend/V lentement/Av.',
+ 'Elle/P sort/V sans/Pr son/D manteau/N.','Vous/P lisez/V un/D livre/N passionnant/A.','Nous/P cherchons/V partout/Av notre/D chat/N.','Lucas/N est/V très/Av grand/A.','Mes/D amis/N viennent/V après/Pr l’/D école/N.',
+ 'Un/D gentil/A voisin/N arrose/V les/D fleurs/N.','Ma/D sœur/N lit/V un/D livre/N amusant/A.','Le/D bébé/N dort/V dans/Pr son/D lit/N.','Les/D oiseaux/N chantent/V le/D matin/N.','La/D maîtresse/N écrit/V au tableau.'
+];
+const NAT_4=['D','N','A','V'], NAT_6=['D','N','A','P','V','Av','Pr','C'];
+const ADV_F=['Mon/D oncle/N roule/V doucement/Av.','Tu/P feras/V tes/D devoirs/N demain/Av.','Soudain/Av, la/D lumière/N s’est éteinte.','Tu/P portes/V bien/Av ta/D jupe/N.','Le/D chat/N dort/V paisiblement/Av.','Les/D enfants/N jouent/V dehors/Av.',
+ 'Il/P mange/V trop/Av de/Pr bonbons/N.','Nous/P partirons/V bientôt/Av en/Pr vacances/N.','Le/D train/N arrive/V vite/Av à/Pr la/D gare/N.','Ma/D sœur/N chante/V joliment/Av.','Le/D bus/N passe/V souvent/Av devant/Pr l’/D école/N.','Papa/N a/V mal/Av dormi/V cette/D nuit/N.',
+ 'Hier/Av, nous/P avons/V joué/V au parc.','Les/D oiseaux/N volent/V loin/Av.','Il/P est/V arrivé/V tard/Av ce/D soir/N.','Mon/D frère/N habite/V ici/Av.'];
+const ADV_T={lieu:['ici','partout','là-bas','dehors','dedans','loin','près','ailleurs','dessus','dessous'],temps:['demain','maintenant','hier','aujourd’hui','bientôt','tard','tôt','toujours','souvent','jamais','déjà','longtemps','parfois','enfin'],manière:['doucement','vite','mal','bien','lentement','gentiment','joliment','prudemment','calmement','rapidement'],quantité:['trop','peu','beaucoup','assez','moins','très','tellement','autant']};
+const ADV_N={lieu:['Lieu','Où ?','ici, partout, là-bas…'],temps:['Temps','Quand ?','demain, maintenant, hier…'],manière:['Manière','Comment ?','doucement, vite, mal…'],quantité:['Quantité','Combien ?','trop, peu, beaucoup…']};
+const PREP_F=['Elle/P vit/V à/Pr Paris/N.','Tu/P cours/V dans/Pr la/D forêt/N.','Le/D chat/N dort/V sur/Pr le/D canapé/N.','Nous/P mangeons/V avec/Pr nos/D amis/N.','Il/P sort/V sans/Pr son/D manteau/N.','Le/D livre/N est/V sous/Pr la/D table/N.',
+ 'Elle/P chante/V pour/Pr ses/D amis/N.','Il/P vit/V en/Pr Suisse/N.','Léa/N arrive/V après/Pr l’/D école/N.','Ils/P jouent/V dans/Pr le/D jardin/N.','Je/P marche/V vers/Pr la/D gare/N.','Le/D chien/N attend/V devant/Pr la/D porte/N.','Papa/N travaille/V jusqu’à/Pr midi/N.','Le/D soleil/N se/P cache/V derrière/Pr les/D nuages/N.'];
+const PREP_FILL=[['Elle vit ___ Paris.','à',['pendant','sans','depuis']],['Passe le balai ___ la table.','sous',['pendant','depuis','pour']],['Il est si triste ___ toi.','pour',['sous','depuis','pendant']],['Je viens une fois ___ an.','par',['sous','vers','sans']],['Je dîne ___ tante Ana.','avec',['sous','pendant','depuis']],['Le livre est ___ la table.','sur',['pendant','depuis','pour']],['Il est parti ___ dire au revoir.','sans',['dans','sur','sous']],['Une machine ___ laver.','à',['sous','pendant','depuis']],['Il habite ___ Suisse.','en',['sur','sous','pendant']],['Le voleur s’est caché ___ le lit.','sous',['pendant','depuis','pour']],['Tu bois du lait ___ sucre.','sans',['sur','sous','pendant']],['Le bébé dort ___ son lit.','dans',['pendant','depuis','pour']],['Un pot ___ fleurs.','de',['sur','sous','pendant']]];
+const PREP_FAM={voyage:['🧳 Le voyage d’Adam','à, dans, par, pour, en, vers, avec, de, sans, sous'],place:['🏖️ Chacun sa place','devant, derrière, sur, près de, au-dessus de'],temps:['⌚ La montre du temps','avant, après, depuis, pendant, jusqu’à']};
+const PREP_W={voyage:['à','dans','par','pour','en','vers','avec','de','sans'],place:['devant','derrière','sur','près de','au-dessus de'],temps:['avant','après','depuis','pendant','jusqu’à']};
+const CONJ_F=['Marie/N et/C Paul/N chantent/V.','Veux-tu/V du thé ou/C du chocolat ?','Il/P sort/V car/C il/P a/V peur/N.','Je/P veux/V jouer/V mais/C il/P pleut/V.','Il/P pleut/V donc/C je/P prends/V mon/D parapluie/N.','Léa/N mange/V une/D pomme/N et/C une/D banane/N.','Sucré/A ou/C salé/A ?','Tu/P chantes/V et/C elle/P danse/V.','Il/P est/V fatigué/A mais/C il/P travaille/V.','Elle/P rit/V car/C le/D film/N est/V drôle/A.'];
+const CONJ_FILL=[['Veux-tu du jus d’orange ___ du soda ?','ou',['car','donc','mais']],['Suzie ne peut pas aller jouer ___ son vélo est cassé.','car',['donc','ou','mais']],['Il pleut ___ je prends mon parapluie.','donc',['car','ou','mais']],['Je veux jouer dehors ___ il pleut.','mais',['donc','ou','ni']],['Papa ___ maman sont à la maison.','et',['mais','car','donc']],['Je n’aime ni les épinards ___ le chou.','ni',['et','ou','mais']],['Tu viens avec nous ___ tu restes à la maison ?','ou',['car','donc','et']],['Il est fatigué ___ il a bien dormi.','mais',['car','donc','ou']],['Elle est contente ___ elle a gagné.','car',['mais','ou','ni']],['Il a faim, ___ il mange un sandwich.','donc',['car','ou','ni']],['Il a un vélo ___ il préfère marcher.','mais',['donc','car','ou']],['Marie ___ Paul sont frères.','et',['ni','car','donc']]];
+const CONJ4=['ou','car','mais','et'];
+const FN_N={S:'Sujet',COD:'COD',COI:'COI',AT:'Attribut du sujet',CC:'CC (circonstanciel)',CDN:'Complément du nom',EP:'Adjectif épithète'};
+const FN_SAY={S:'sujet',COD:'complément d’objet direct',COI:'complément d’objet indirect',AT:'attribut du sujet',CC:'complément circonstanciel',CDN:'complément du nom',EP:'adjectif épithète'};
+const FN_E={S:'Le <b>sujet</b> dit <b>qui</b> fait l’action. Pose la question : « Qui est-ce qui … ? »',COD:'Le <b>COD</b> répond à « quoi ? / qui ? » juste après le verbe, <b>sans préposition</b>.',COI:'Le <b>COI</b> est introduit par une préposition (<b>à, de</b>…) : « à qui ? à quoi ? de quoi ? ».',AT:'L’<b>attribut du sujet</b> suit un verbe d’état (être, devenir, sembler, rester) et décrit le sujet.',CC:'Le <b>complément circonstanciel</b> donne un détail (où ? quand ? comment ? pourquoi ?). On peut le supprimer ou le déplacer.',CDN:'Le <b>complément du nom</b> précise un nom, souvent avec <b>de</b>.',EP:'L’<b>adjectif épithète</b> est collé au nom, sans verbe d’état.'};
+const FN_S=[
+ ['Le chat mange sa pâtée dans la cuisine.',[['Le chat','S'],['sa pâtée','COD'],['dans la cuisine','CC']]],['Léa parle à sa maîtresse.',[['Léa','S'],['à sa maîtresse','COI']]],['Mon frère est très gentil.',[['Mon frère','S'],['très gentil','AT']]],
+ ['Les enfants regardent un film ce soir.',[['Les enfants','S'],['un film','COD'],['ce soir','CC']]],['Nous jouons au foot demain.',[['Nous','S'],['au foot','COI'],['demain','CC']]],['Le facteur distribue le courrier dans le village.',[['Le facteur','S'],['le courrier','COD'],['dans le village','CC']]],
+ ['Pierre est devenu pompier.',[['Pierre','S'],['pompier','AT']]],['Elle téléphone à son amie.',[['Elle','S'],['à son amie','COI']]],['La maîtresse corrige les cahiers.',[['La maîtresse','S'],['les cahiers','COD']]],['Mes parents parlent de leurs vacances.',[['Mes parents','S'],['de leurs vacances','COI']]],
+ ['Papa lave la voiture le samedi.',[['Papa','S'],['la voiture','COD'],['le samedi','CC']]],['Julie semble fatiguée.',[['Julie','S'],['fatiguée','AT']]],['Le soir, les oiseaux chantent.',[['Le soir','CC'],['les oiseaux','S']]],['Tu as offert un cadeau à ta sœur.',[['Tu','S'],['un cadeau','COD'],['à ta sœur','COI']]],
+ ['Le chien de mon voisin aboie.',[['de mon voisin','CDN'],['Le chien de mon voisin','S']]],['La voiture de Papa est rouge.',[['de Papa','CDN'],['rouge','AT']]],['Une grosse araignée descend du plafond.',[['grosse','EP'],['Une grosse araignée','S']]],['Elle porte une robe bleue.',[['bleue','EP'],['une robe bleue','COD']]],
+ ['Le petit garçon mange une glace.',[['petit','EP'],['une glace','COD']]],['Le livre de maths est sur la table.',[['de maths','CDN'],['sur la table','CC']]],['Mon cousin dort dans le salon.',[['Mon cousin','S'],['dans le salon','CC']]],['Les enfants ont joué dans la cour pendant la récréation.',[['dans la cour','CC'],['pendant la récréation','CC']]],
+ ['Je lis un livre passionnant.',[['passionnant','EP'],['un livre passionnant','COD']]],['Ma tante cuisine un gâteau au chocolat.',[['au chocolat','CDN'],['un gâteau au chocolat','COD']]],['Nous mangeons des pâtes ce midi.',[['des pâtes','COD'],['ce midi','CC']]],['Tom est le meilleur ami de Léa.',[['le meilleur ami de Léa','AT'],['de Léa','CDN']]],['Elle pense à ses vacances.',[['à ses vacances','COI']]]
+];
+const PC_S=[
+ ['Je prends une douche.',1,['je prends']],['J’adore la glace.',1,['j’adore']],['Le chat dort sur le canapé.',1,['dort']],['Nous mangeons à midi.',1,['nous mangeons']],['Elle veut partir en vacances.',1,['elle veut'],'Partir est à l’infinitif : il ne compte pas.'],
+ ['Les enfants aiment chanter.',1,['les enfants aiment'],'Chanter est à l’infinitif : il ne compte pas.'],['Mon frère joue au foot avec ses amis.',1,['joue']],['Tu finiras tes devoirs demain.',1,['tu finiras']],['Papa a lavé la voiture.',1,['papa a lavé'],'« a lavé » est un seul verbe conjugué (temps composé).'],['Nous allons voir un film.',1,['nous allons'],'Voir est à l’infinitif : il ne compte pas.'],
+ ['Je prends une douche et je me lave les dents.',2,['je prends','je me lave'],'c','et'],['Il sort car il a peur.',2,['il sort','il a'],'c','car'],['Tu finis tes devoirs et tu regardes un film.',2,['tu finis','tu regardes'],'c','et'],['Je veux jouer mais il pleut.',2,['je veux','il pleut'],'c','mais'],['Elle chante et il danse.',2,['elle chante','il danse'],'c','et'],
+ ['Il pleut donc je prends mon parapluie.',2,['il pleut','je prends'],'c','donc'],['Il court vite car il est en retard.',2,['il court','il est'],'c','car'],['Je prends ma douche, je me lave les dents.',2,['je prends','je me lave'],'j'],['J’ai fini mes devoirs, je regarde un film.',2,['j’ai fini','je regarde'],'j'],['Il fait beau : nous allons à la plage.',2,['il fait','nous allons'],'j'],
+ ['Je suis fatigué ; je vais faire une sieste.',2,['je suis','je vais'],'j'],['Le soleil brille, les oiseaux chantent.',2,['le soleil brille','les oiseaux chantent'],'j'],['Elle arrive, il sourit.',2,['elle arrive','il sourit'],'j'],['J’apprends la cuisine, j’excelle en pâtisserie et j’adore manger.',3,['j’apprends','j’excelle','j’adore']],['Il entre, il enlève son manteau et il s’assoit.',3,['il entre','il enlève','il s’assoit']],['Je lis, tu dessines et elle chante.',3,['je lis','tu dessines','elle chante']]
+];
+const GV_G={1:['1er groupe','il finit par -er (sauf aller)'],2:['2ᵉ groupe','il finit par -ir et fait -issant (en finissant)'],3:['3ᵉ groupe','c’est un autre verbe : -ir sans -issant, -re, -oir, et aller']};
+const GV_L={1:['jouer','sauter','danser','parler','chanter','rester','bouger','aimer','louer','regarder','manger','donner','trouver','commencer'],2:['finir','grandir','grossir','bondir','atterrir','affranchir','applaudir','choisir','réussir','remplir','obéir','punir','rougir','ralentir'],3:['aller','partir','mentir','sortir','venir','prendre','comprendre','dire','faire','peindre','vouloir','pouvoir','savoir','devoir','avoir','voir','courir','ouvrir','offrir','écrire','lire','mettre','attendre','entendre','rendre','boire','croire','dormir','servir']};
+const GV_ING={2:[['finir','finissant'],['grandir','grandissant'],['grossir','grossissant'],['applaudir','applaudissant'],['choisir','choisissant'],['remplir','remplissant']],3:[['partir','partant'],['prendre','prenant'],['pouvoir','pouvant'],['dire','disant'],['sortir','sortant'],['venir','venant'],['vouloir','voulant'],['faire','faisant']]};
+const TS_S=[
+ ['Nous jouons','simple','présent','Nous <b>jouons</b> dans la cour.'],['Elles chanteront','simple','futur simple','Elles <b>chanteront</b> demain.'],['Tu finissais','simple','imparfait','Tu <b>finissais</b> toujours le premier.'],['Je mange','simple','présent','Je <b>mange</b> une pomme.'],['Vous irez','simple','futur simple','Vous <b>irez</b> à la piscine.'],['Ils prenaient','simple','imparfait','Ils <b>prenaient</b> le bus.'],['Il pleuvait','simple','imparfait','Il <b>pleuvait</b> beaucoup.'],['Tu partiras','simple','futur simple','Tu <b>partiras</b> en vacances.'],
+ ['Nous avons joué','composé','passé composé','Nous <b>avons joué</b> dans la cour.'],['Il a mangé','composé','passé composé','Il <b>a mangé</b> une pomme.'],['Je suis allé','composé','passé composé','Je <b>suis allé</b> à l’école.'],['Elles sont parties','composé','passé composé','Elles <b>sont parties</b> hier.'],['Tu as fini','composé','passé composé','Tu <b>as fini</b> tes devoirs.'],['Ce magasin a fermé','composé','passé composé','Ce magasin <b>a fermé</b> ses portes l’an passé.'],['Nous avions parlé','composé','plus-que-parfait','Nous <b>avions parlé</b> avec le directeur.'],['Ils étaient arrivés','composé','plus-que-parfait','Ils <b>étaient arrivés</b> avant nous.']
+];
+const PH_S=[['Mon frère','regarde un film','ce soir'],['Pierre','skie','aujourd’hui'],['Mes chers cousins','jouent au football','le dimanche'],['Le chat','mange sa pâtée','après le repas'],['Léa','mange une pomme','à la récréation'],['Les élèves','écoutent la maîtresse','le matin'],['Maman','prépare un gâteau','pour l’anniversaire'],['Le facteur','distribue le courrier','chaque jour'],['Nous','prenons le bus','demain'],['Ma sœur','lit un livre','dans sa chambre'],['Les oiseaux','chantent','au printemps'],['Julien','range ses jouets','avant le dîner'],['Le petit chien','poursuit une balle','tous les matins'],['Mamie','raconte une histoire','le soir'],['Les enfants','construisent un château de sable','sur la plage'],['Papa','répare le vélo','dans le garage']];
+const PH_4=PH_S.filter(x=>x[0].split(' ').length+x[1].split(' ').length<=6);
+
+function gmNatQ(g){
+  const allow=g==='6H'?NAT_6:NAT_4; let toks,idx,t=0;
+  do{ toks=gmP(pick(NAT_S)); const c=toks.map((x,i)=>i).filter(i=>allow.includes(toks[i].c)); idx=c.length?pick(c):-1; t++; }while(idx<0&&t<40);
+  const code=toks[idx].c, w=toks[idx].w; const op=allow.slice(); const oc=shuffle([code].concat(shuffle(op.filter(x=>x!==code)).slice(0,3)));
+  const nm=NATN[code];
+  return {kind:'mcq',vis:`<div class="gm-s">${gmJoin(toks,(_,i)=>i===idx)}</div>`,prompt:`Quelle est la <b>nature</b> du mot souligné : « <b>${esc(w)}</b> » ?`,say:gmPlain(toks),lang:'fr',options:oc.map(x=>NATN[x][0]),correct:oc.indexOf(code),explain:`« <b>${esc(w)}</b> » est ${nm[1]}. ${nm[2]}`,after:`${w} est ${nm[1]}.`};
+}
+function gmVarQ(){
+  const toks=gmP(pick(NAT_S)); const c=toks.map((x,i)=>i).filter(i=>NAT_6.includes(toks[i].c)); const idx=pick(c), code=toks[idx].c, inv=['Av','Pr','C'].includes(code), w=toks[idx].w, nm=NATN[code];
+  const o=['Variable (il peut s’accorder)','Invariable (il ne change jamais)'];
+  return {kind:'mcq',vis:`<div class="gm-s">${gmJoin(toks,(_,i)=>i===idx)}</div>`,prompt:`Le mot « <b>${esc(w)}</b> » est-il <b>variable</b> ou <b>invariable</b> ?`,say:gmPlain(toks),lang:'fr',options:o,correct:inv?1:0,explain:`« <b>${esc(w)}</b> » est ${nm[1]} : ${inv?'les adverbes, prépositions et conjonctions sont <b>invariables</b> (jamais de s).':'les déterminants, noms, adjectifs, pronoms et verbes sont <b>variables</b>.'}`,after:`${w} est ${nm[1]}, ${inv?'invariable':'variable'}.`};
+}
+function gmFind(bank,code,label,g){
+  const toks=gmP(pick(bank)); const ti=toks.findIndex(x=>x.c===code); const tw=toks[ti].w;
+  const others=shuffle([...new Set(toks.filter((x,i)=>i!==ti&&x.c!==code&&x.w.replace(/’$/,'').length>=3).map(x=>x.w))].filter(w=>w!==tw)).slice(0,3);
+  const o=shuffle([tw].concat(others)), nm=NATN[code];
+  return {kind:'mcq',vis:`<div class="gm-s">${gmJoin(toks)}</div>`,prompt:`Trouve ${/^[aeiouy]/i.test(label)?'l’':'la '}<b>${label}</b> dans la phrase.`,say:gmPlain(toks),lang:'fr',options:o,correct:o.indexOf(tw),explain:`« <b>${esc(tw)}</b> » est ${nm[1]}. ${nm[2]}`,after:`${tw} est ${nm[1]}.`};
+}
+function gmAdvType(){
+  const k=pick(Object.keys(ADV_T)), w=pick(ADV_T[k]); const keys=Object.keys(ADV_N);
+  return {kind:'mcq',prompt:`L’adverbe « <b>${esc(w)}</b> » répond à quelle question ?`,say:w,lang:'fr',options:keys.map(x=>`${ADV_N[x][0]} · ${ADV_N[x][1]}`),correct:keys.indexOf(k),explain:`« <b>${esc(w)}</b> » est un adverbe de <b>${ADV_N[k][0].toLowerCase()}</b> (${ADV_N[k][1]})`,after:`${w} : adverbe de ${ADV_N[k][0].toLowerCase()}`};
+}
+function gmPrepFill(){
+  const [s,a,w]=pick(PREP_FILL); const o=shuffle([a].concat(w));
+  return {kind:'mcq',prompt:`Complète avec la bonne <b>préposition</b> :<div class="gm-s">${esc(s).replace('___','<span class="gm-bl">___</span>')}</div>`,say:s.replace('___','…'),lang:'fr',options:o,correct:o.indexOf(a),explain:`${esc(s).replace('___','<b>'+esc(a)+'</b>')}`,after:s.replace('___',a)};
+}
+function gmPrepFam(){
+  const f=pick(Object.keys(PREP_W)), w=pick(PREP_W[f]), keys=Object.keys(PREP_FAM);
+  return {kind:'mcq',prompt:`Dans quelle famille de prépositions est « <b>${esc(w)}</b> » ?`,say:w,lang:'fr',options:keys.map(k=>PREP_FAM[k][0]),correct:keys.indexOf(f),explain:`« <b>${esc(w)}</b> » : ${PREP_FAM[f][0]} (${PREP_FAM[f][1]})`,after:`${w} : ${PREP_FAM[f][0].replace(/^\S+\s/,'')}`};
+}
+function gmConjFill(g){
+  const [s,a,w]=pick(CONJ_FILL.filter(x=>g==='6H'||CONJ4.includes(x[1]))); let o=shuffle([a].concat(w));
+  if(g!=='6H') o=shuffle(CONJ4.slice());
+  return {kind:'mcq',prompt:`Complète avec le bon mot de liaison :<div class="gm-s">${esc(s).replace('___','<span class="gm-bl">___</span>')}</div>`,say:s.replace('___','…'),lang:'fr',options:o,correct:o.indexOf(a),explain:`${esc(s).replace('___','<b>'+esc(a)+'</b>')}`,after:s.replace('___',a)};
+}
+function gmFn(){
+  const [s,L]=pick(FN_S), [t,f]=pick(L); const keys=Object.keys(FN_N);
+  const conf={COD:['COI','S'],COI:['COD','CC'],AT:['COD','EP'],CC:['COI','COD'],CDN:['EP','COI'],EP:['AT','CDN'],S:['COD','CC']}[f];
+  const rest=shuffle(keys.filter(k=>k!==f&&!conf.includes(k))); const oc=shuffle([f].concat(conf).concat(rest.slice(0,1)));
+  const i=s.indexOf(t); const html=esc(s.slice(0,i))+`<u class="gm-t">${esc(t)}</u>`+esc(s.slice(i+t.length));
+  return {kind:'mcq',vis:`<div class="gm-s">${html}</div>`,prompt:`Quelle est la <b>fonction</b> du groupe souligné ?`,say:s,lang:'fr',options:oc.map(k=>FN_N[k]),correct:oc.indexOf(f),explain:FN_E[f],after:`${t} : ${FN_SAY[f]}`};
+}
+function gmPc(g){
+  const [s,n,vs,x1,x2]=pick(PC_S); const kind=rnd(n===2?4:2);
+  if(kind===0){ return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'<b>Phrase simple</b> ou <b>phrase complexe</b> ?',say:s,lang:'fr',options:['Phrase simple (1 verbe conjugué)','Phrase complexe (plusieurs verbes conjugués)'],correct:n===1?0:1,explain:`${n} verbe${n>1?'s':''} conjugué${n>1?'s':''} (${vs.map(esc).join(' · ')}) : phrase <b>${n===1?'simple':'complexe'}</b>.${n===1&&x1&&x1.length>6?' '+x1:''}`,after:n===1?'Phrase simple : un seul verbe conjugué.':`Phrase complexe : ${n} verbes conjugués.`}; }
+  if(kind===1){ const o=['1','2','3']; return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Combien y a-t-il de <b>verbes conjugués</b> (donc de propositions) ?',say:s,lang:'fr',options:o,correct:n-1,explain:`${vs.map(esc).join(' · ')} : <b>${n}</b> verbe${n>1?'s':''} conjugué${n>1?'s':''}.${n===1&&x1&&x1.length>6?' '+x1:''}`,after:`${n} verbe${n>1?'s':''} conjugué${n>1?'s':''}.`}; }
+  if(kind===2){ return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Les propositions sont reliées par une <b>ponctuation</b> (juxtaposées) ou par une <b>conjonction</b> (coordonnées) ?',say:s,lang:'fr',options:['Juxtaposées (ponctuation)','Coordonnées (conjonction)'],correct:x1==='j'?0:1,explain:x1==='j'?'Elles sont reliées par une <b>ponctuation</b> (, ; :) : <b>juxtaposées</b>.':`Elles sont reliées par la conjonction « <b>${x2}</b> » : <b>coordonnées</b>.`,after:x1==='j'?'Propositions juxtaposées.':`Propositions coordonnées par ${x2}.`}; }
+  if(x1!=='c') return gmPc(g);
+  const cs=['mais','ou','et','or','ni','car','donc']; const o=shuffle([x2].concat(shuffle(cs.filter(c=>c!==x2)).slice(0,3)));
+  return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Quelle <b>conjonction de coordination</b> relie les deux propositions ?',say:s,lang:'fr',options:o,correct:o.indexOf(x2),explain:`Les deux propositions sont reliées par « <b>${x2}</b> ».`,after:`La conjonction est ${x2}.`};
+}
+function gmGroupe(){
+  if(Math.random()<.22){ const g=pick([2,3]), [v,ing]=pick(GV_ING[g]); const o=['1er groupe','2ᵉ groupe','3ᵉ groupe']; return {kind:'mcq',prompt:`Le verbe fait « en <b>${ing}</b> » au gérondif. Il est de quel groupe ?`,say:'en '+ing,lang:'fr',options:o,correct:g-1,explain:`« en ${ing} » → <b>${v}</b> : ${g===2?'<b>-issant</b> au gérondif = 2ᵉ groupe':'<b>-ant</b> tout simple = 3ᵉ groupe'}.`,after:`${v} : ${GV_G[g][0]}`}; }
+  const g=pick([1,1,2,2,3,3,3]), v=pick(GV_L[g]); const o=['1er groupe','2ᵉ groupe','3ᵉ groupe'];
+  const ex=v==='aller'?'<b>aller</b> est une exception : il finit par -er mais il est du 3ᵉ groupe.':g===1?`<b>${v}</b> finit par -er : 1er groupe.`:g===2?`<b>${v}</b> finit par -ir et fait <b>-issant</b> (en ${v.slice(0,-1)}ssant) : 2ᵉ groupe.`:`<b>${v}</b> : ${/ir$/.test(v)?'-ir sans -issant (en '+({partir:'partant',mentir:'mentant',sortir:'sortant',venir:'venant',courir:'courant',ouvrir:'ouvrant',offrir:'offrant',dormir:'dormant',servir:'servant'}[v]||v.slice(0,-2)+'ant')+')':/re$/.test(v)?'verbe en -re':'verbe en -oir'} → 3ᵉ groupe.`;
+  return {kind:'mcq',prompt:`Dans quel groupe est le verbe « <b>${v}</b> » ?`,say:v,lang:'fr',options:o,correct:g-1,explain:ex,after:`${v} : ${GV_G[g][0]}`};
+}
+function gmTemps(){
+  const [f,k,tp,s]=pick(TS_S);
+  if(Math.random()<.55){ return {kind:'mcq',vis:`<div class="gm-s">${s}</div>`,prompt:'Le verbe est conjugué à un <b>temps simple</b> (1 mot) ou à un <b>temps composé</b> (2 mots) ?',say:s.replace(/<[^>]+>/g,''),lang:'fr',options:['Temps simple (1 mot)','Temps composé (2 mots)'],correct:k==='simple'?0:1,explain:k==='simple'?`« ${esc(f)} » : <b>1 mot</b> (le verbe seul) → temps simple.`:`« ${esc(f)} » : <b>2 mots</b> (auxiliaire + participe passé) → temps composé.`,after:`${f} : temps ${k}.`}; }
+  const L=['présent','imparfait','futur simple','passé composé']; const t4=TS_S.filter(x=>L.includes(x[2])); const [f2,k2,tp2,s2]=pick(t4); const o=L.map(x=>x[0].toUpperCase()+x.slice(1));
+  return {kind:'mcq',vis:`<div class="gm-s">${s2}</div>`,prompt:'Quel est le <b>temps</b> du verbe en gras ?',say:s2.replace(/<[^>]+>/g,''),lang:'fr',options:o,correct:L.indexOf(tp2),explain:`« ${esc(f2)} » est au <b>${tp2}</b> (${k2==='simple'?'temps simple, 1 mot':'temps composé, 2 mots'}).`,after:`${f2} : ${tp2}.`};
+}
+function gmPhrase(g){
+  const L=g==='6H'?PH_S:PH_4; const [a,b,c]=pick(L); const s0=a+' '+b; const full=g==='6H'?s0+' '+c:s0; const cap=x=>x[0].toUpperCase()+x.slice(1);
+  const S=cap(s0)+'.';
+  const t=rnd(g==='6H'?5:4);
+  if(t===0){ // phrase correcte
+    const w=s0.split(' '); const bad=[]; bad.push(S.charAt(0).toLowerCase()+S.slice(1)); bad.push(S.slice(0,-1)); let sh=w.slice(); let n=0; do{ sh=shuffle(w); n++; }while(sh.join(' ')===w.join(' ')&&n<9); bad.push(cap(sh.join(' '))+'.');
+    const sh2=w.slice().reverse(); bad.push(cap(sh2.join(' '))+'.');
+    const o=shuffle([S].concat(shuffle([...new Set(bad)].filter(x=>x!==S)).slice(0,3)));
+    return {kind:'mcq',prompt:'Quelle est la phrase <b>correcte</b> ? (majuscule, point, mots dans le bon ordre)',say:S,lang:'fr',options:o,correct:o.indexOf(S),explain:`« ${esc(S)} » : une majuscule au début, un point à la fin, les mots dans le bon ordre.`,after:S};
+  }
+  if(t===1){ // qu'est-ce qui manque
+    const v=rnd(4); const text=[S,S.charAt(0).toLowerCase()+S.slice(1),S.slice(0,-1),S.charAt(0).toLowerCase()+S.slice(1,-1)][v]; const o=['Rien, elle est correcte','La majuscule','Le point','La majuscule et le point']; const corr=[0,1,2,3][v];
+    return {kind:'mcq',vis:`<div class="gm-s">${esc(text)}</div>`,prompt:'Qu’est-ce qui <b>manque</b> à cette phrase ?',say:text,lang:'fr',options:o,correct:corr,explain:corr===0?'Tout est bon : majuscule au début et point à la fin.':`Une phrase commence par une <b>majuscule</b> et finit par un <b>point</b>.`,after:corr===0?'La phrase est correcte.':'Il faut une majuscule et un point.'};
+  }
+  if(t===2){ // groupe sujet / qui
+    const other=pick(PH_S.filter(x=>x[0]!==a&&x[1]!==b)); const o=shuffle([a,b,other[0],other[1]]); const ans=a;
+    return {kind:'mcq',vis:`<div class="gm-s">${esc(g==='6H'?cap(full)+'.':S)}</div>`,prompt:g==='6H'?'Quel est le <b>groupe sujet</b> (GN) de cette phrase ?':'<b>Qui</b> fait l’action ? Trouve le groupe sujet.',say:g==='6H'?cap(full)+'.':S,lang:'fr',options:o,correct:o.indexOf(ans),explain:`Le <b>groupe sujet</b> dit <b>qui</b> fait l’action : « <b>${esc(a)}</b> ».`,after:`Le groupe sujet est : ${a}`};
+  }
+  if(t===3){ // groupe verbal
+    const other=pick(PH_S.filter(x=>x[1]!==b)); const o=shuffle([b,a,other[1],other[0]].filter((x,i,arr)=>arr.indexOf(x)===i));
+    return {kind:'mcq',vis:`<div class="gm-s">${esc(g==='6H'?cap(full)+'.':S)}</div>`,prompt:'Quel est le <b>groupe verbal</b> (GV) ? C’est ce que fait ou ce qu’est le sujet.',say:g==='6H'?cap(full)+'.':S,lang:'fr',options:o,correct:o.indexOf(b),explain:`Le <b>groupe verbal</b> contient le verbe : « <b>${esc(b)}</b> ».`,after:`Le groupe verbal est : ${b}`};
+  }
+  // facultatif (6H)
+  const o=shuffle([c,a,b,pick(PH_S.filter(x=>x[2]!==c))[2]]); const ok=c;
+  return {kind:'mcq',vis:`<div class="gm-s">${esc(cap(full))}.</div>`,prompt:'Quel groupe est <b>facultatif</b> ? On peut le supprimer, la phrase reste correcte.',say:cap(full)+'.',lang:'fr',options:o,correct:o.indexOf(ok),explain:`« <b>${esc(c)}</b> » est un <b>complément de phrase</b> : on peut le supprimer (« ${esc(S)} »).`,after:`Le complément de phrase est : ${c}`};
+}
+function gmOrder(g){
+  const L=g==='6H'?PH_S:PH_4; const [a,b]=pick(L); const s=a+' '+b; const parts=g==='6H'?s.split(' '):[a,b.split(' ')[0],b.split(' ').slice(1).join(' ')].filter(Boolean);
+  const cap=x=>x[0].toUpperCase()+x.slice(1); const P=parts.slice(); P[0]=cap(P[0]); P[P.length-1]+='.';
+  return {kind:'tiles',parts:P,answer:P.join(' '),prompt:`Remets les mots dans le bon ordre pour faire une phrase.${g==='6H'?'':' <small>(Qui ? Que se passe-t-il ?)</small>'}`,vis:'',explain:`« <b>${esc(P.join(' '))}</b> » Qui ? <b>${esc(a)}</b>. Que se passe-t-il ? <b>${esc(b)}</b>.`,after:P.join(' ')};
+}
+const GM_GEN={
+ phrase:g=>Math.random()<.28?gmOrder(g):gmPhrase(g),
+ nature:g=>g==='6H'&&Math.random()<.2?gmVarQ():gmNatQ(g),
+ conj:g=>g==='6H'&&Math.random()<.25?gmFind(CONJ_F,'C','conjonction',g):gmConjFill(g),
+ pcomplexe:g=>gmPc(g),
+ fonction:()=>gmFn(),
+ adverbe:g=>Math.random()<.5?gmFind(ADV_F,'Av','adverbe',g):gmAdvType(),
+ prep:g=>{ const r=Math.random(); return r<.4?gmPrepFill():r<.7?gmFind(PREP_F,'Pr','préposition',g):gmPrepFam(); },
+ groupes:()=>gmGroupe(),
+ temps:()=>gmTemps()
+};
+
+const GM_ACTS=[['phrase','📝 La phrase',['4H','6H']],['nature','🏷️ La nature des mots',['4H','6H']],['conj','🔗 Les mots qui relient',['4H','6H']],['pcomplexe','🌳 Phrase simple · complexe',['6H']],['fonction','🚂 La fonction des mots',['6H']],['adverbe','🐙 L’adverbe',['6H']],['prep','🐛 La préposition',['6H']],['groupes','🏖️ Les groupes de verbes',['6H']],['temps','⏱️ Temps simples · composés',['6H']]];
+const ch=(t,c)=>`<span class="gm-ch" style="--c:${c}">${t}</span>`;
+const exs=h=>`<div class="gm-ex">${h}</div>`;
+const blk=(t,b,c)=>`<div class="gm-b" style="--c:${c||'#fff8dc'}"><b>${t}</b>${b}</div>`;
+function gmCard(act,g){
+  const h6=g==='6H';
+  const wrap=(ic,tt,body)=>`<details class="gm-card" open><summary><span class="gm-mic">${ic}</span><span class="gm-ti">${tt}<small>Je retiens</small></span></summary><div class="gm-body">${body}</div></details>`;
+  if(act==='phrase') return wrap('📝','La phrase',h6
+   ?blk('Une phrase, c’est…','des mots <b>dans le bon ordre</b>, qui ont un <b>sens</b>, avec une <b>majuscule</b> au début et un <b>point</b> à la fin.','#fff8dc')+blk('2 groupes obligatoires',`${ch('groupe sujet (GN)','#ffe58a')} ${ch('groupe verbal (GV)','#cfd6e4')}`+exs('<span class="gm-y">Mon frère</span> <span class="gm-g">regarde un film</span>.'),'#e9f2ff')+blk('1 groupe facultatif',`Le <b>complément de phrase</b> (groupe vert). On peut le supprimer ou le déplacer.`+exs('Pierre skie <span class="gm-v">aujourd’hui</span>.'),'#e4f8e4')
+   :blk('Une phrase, c’est…','des mots <b>dans le bon ordre</b> qui ont du <b>sens</b>.<br>Elle commence par une <b>majuscule</b> et finit par un <b>point</b>.','#fff8dc')+blk('Qui ? Que se passe-t-il ?',exs('<span class="gm-y">Mon frère</span> <span class="gm-g">regarde un film</span>.')+'<small>« Mon frère » dit <b>qui</b>. « regarde un film » dit <b>ce qui se passe</b>.</small>','#e9f2ff'));
+  if(act==='nature') return wrap('🏷️','La nature des mots',h6
+   ?blk('La nature, c’est l’identité du mot','Elle <b>ne change pas</b>. Les mots sont <b>variables</b> (ils s’accordent) ou <b>invariables</b> (jamais de s).','#fff8dc')+blk('Variables',`${ch('déterminant · le, un, mes','#cfe8ff')} ${ch('nom · chat, amour','#ffd6e5')} ${ch('adjectif · grand, rapide','#ffe58a')} ${ch('pronom · il, nous','#d9f2d1')} ${ch('verbe · jouer, finir','#e4d6fb')}`,'#fff')+blk('Invariables 🛑',`${ch('adverbe · vite, ici','#ffd9b3')} ${ch('préposition · à, dans, pour','#cfe8ff')} ${ch('conjonction · mais, ou, et','#d9f2d1')}`,'#fff')
+   :blk('Chaque mot a une nature (son identité)','Elle ne change pas dans la phrase.','#fff8dc')+blk('Les natures à retenir',`${ch('déterminant · le, la, un, une','#cfe8ff')} ${ch('nom · chat, école','#ffd6e5')} ${ch('adjectif · petit, noir','#ffe58a')} ${ch('verbe · dort, mange','#e4d6fb')}`+exs('<span class="n-d">Le</span> <span class="n-n">chat</span> <span class="n-a">noir</span> <span class="n-v">dort</span>.'),'#fff')+blk('Astuces','Le <b>nom</b> : on peut mettre <b>un / une</b> devant.<br>Le <b>verbe</b> change : je dors, tu dors, il dort.<br>L’<b>adjectif</b> dit comment est le nom.','#e9f2ff'));
+  if(act==='conj') return wrap('🐸',h6?'La conjonction (et les mots qui relient)':'Les mots qui relient',h6
+   ?blk('Elle relie deux mots ou deux phrases','Elle est <b>invariable</b>.'+exs('Sucré <span class="gm-c">ou</span> salé ? · Il sort <span class="gm-c">car</span> il a peur.'),'#fff8dc')+blk('Conjonctions de coordination',`${ch('mais','#ffd6e5')} ${ch('ou','#cfe8ff')} ${ch('et','#d9f2d1')} ${ch('or','#ffe58a')} ${ch('ni','#e4d6fb')} ${ch('car','#ffd9b3')} ${ch('donc','#cfe8ff')}`+'<br><small>Astuce : <b>« Mais où est donc Ornicar ? »</b> (mais, ou, et, donc, or, ni, car)</small>','#e9f2ff')
+   :blk('Ces petits mots relient des mots ou des phrases',`${ch('et · ajoute','#d9f2d1')} ${ch('ou · choisit','#cfe8ff')} ${ch('mais · s’oppose','#ffd6e5')} ${ch('car · explique','#ffd9b3')}`+exs('Je mange une pomme <span class="gm-c">et</span> une banane.<br>Il sort <span class="gm-c">car</span> il a peur.'),'#fff8dc'));
+  if(act==='pcomplexe') return wrap('🌳','Phrase simple · phrase complexe',
+   blk('Compte les verbes conjugués','Chaque verbe conjugué fait une <b>proposition</b>.','#fff8dc')+`<div class="gm-two"><div class="gm-b" style="--c:#e4f8e4"><b>Phrase simple</b><span class="gm-big">1</span> verbe conjugué${exs('J’adore la glace.')}</div><div class="gm-b" style="--c:#ffe3ee"><b>Phrase complexe</b><span class="gm-big">2 3 4…</span> verbes conjugués${exs('Je prends une douche et je me lave les dents.')}</div></div>`+blk('Relier les propositions',`<b>Juxtaposition</b> : par une ponctuation ${ch(',','#ffe58a')} ${ch(';','#ffe58a')} ${ch(':','#ffe58a')}${exs('Je prends ma douche<span class="gm-c">,</span> je me lave les dents.')}<b>Coordination</b> : par une conjonction ${ch('mais','#ffd6e5')} ${ch('ou','#cfe8ff')} ${ch('et','#d9f2d1')} ${ch('or','#ffe58a')} ${ch('ni','#e4d6fb')} ${ch('car','#ffd9b3')} ${ch('donc','#cfe8ff')}${exs('Je prends ma douche <span class="gm-c">et</span> je me lave les dents.')}`,'#e9f2ff')+'<small>⚠️ Un verbe à l’infinitif ne compte pas : « Elle veut <i>partir</i> » = 1 seul verbe conjugué.</small>');
+  if(act==='fonction') return wrap('🚂','La fonction des mots',
+   blk('La fonction = le rôle du mot dans la phrase','Elle <b>change</b> selon la phrase (la nature, jamais). Comme les wagons d’un train !','#fff8dc')+`<div class="gm-train"><div class="gm-w loco"><b>Sujet</b><small>qui ?</small></div><div class="gm-w"><b>Verbe</b><small>l’action</small></div><div class="gm-w cargo"><b>COD · COI</b><small>Attribut</small></div><div class="gm-w cc"><b>CC</b><small>où ? quand ?</small></div></div><div class="gm-trl"><span>groupe sujet</span><span>groupe verbal</span><span>circonstanciel</span></div>`+
+   blk('Les wagons',`${ch('Sujet · qui fait l’action','#ffe58a')} ${ch('COD · quoi ? qui ? (sans préposition)','#ffd6e5')} ${ch('COI · à / de + qui ? quoi ?','#cfe8ff')} ${ch('Attribut · après être, devenir, sembler','#d9f2d1')} ${ch('CC · où ? quand ? comment ? pourquoi ?','#ffd9b3')}`,'#fff')+blk('Dans le groupe du nom',`${ch('Complément du nom · le chien <u>de mon voisin</u>','#e4d6fb')} ${ch('Adjectif épithète · une <u>grosse</u> araignée','#e4d6fb')}`,'#fff'));
+  if(act==='adverbe') return wrap('🐙','L’adverbe',
+   blk('Il précise le sens d’un verbe, d’un adjectif ou d’une phrase','Il est <b>invariable</b> : jamais de s !'+exs('Il mange <span class="gm-c">salement</span>.'),'#fff8dc')+blk('Les 4 grands types',`<div class="gm-4"><div style="--c:#ffd6e5"><b>📍 Lieu</b><small>où ?</small>ici, partout, là-bas</div><div style="--c:#cfe8ff"><b>🕐 Temps</b><small>quand ?</small>demain, maintenant, hier</div><div style="--c:#e4d6fb"><b>❓ Manière</b><small>comment ?</small>doucement, vite, mal</div><div style="--c:#d9f2d1"><b>🍎 Quantité</b><small>combien ?</small>trop, peu, beaucoup, assez</div></div>`,'#fff'));
+  if(act==='prep') return wrap('🐛','La préposition',
+   blk('Elle relie deux éléments','Elle est <b>invariable</b> et on ne peut pas la supprimer.'+exs('Une machine <span class="gm-c">à</span> laver · Tu cours <span class="gm-c">dans</span> la forêt.'),'#fff8dc')+blk('Pour les retenir : 3 familles',`<div class="gm-3"><div style="--c:#cfe8ff"><b>🧳 Le voyage d’Adam</b>à, dans, par, pour, en, vers, avec, de, sans, sous</div><div style="--c:#ffe58a"><b>🏖️ Chacun sa place</b>devant, derrière, sur, près de, au-dessus de</div><div style="--c:#d9f2d1"><b>⌚ La montre du temps</b>avant, après, depuis, pendant, jusqu’à</div></div>`,'#fff'));
+  if(act==='groupes') return wrap('🏖️','Les groupes de verbes',
+   blk('Avec l’infinitif, on trouve le groupe','Il y a <b>3 groupes</b>.','#fff8dc')+`<div class="gm-3"><div style="--c:#dff4dc"><b>1er groupe</b>verbes en <b>-er</b><br>parler, chanter, jouer…<br><small>⚠️ sauf <b>aller</b> !</small></div><div style="--c:#dbeafb"><b>2ᵉ groupe</b>verbes en <b>-ir</b> qui font <b>-issant</b><br>finir, grandir, grossir…<br><small>en finiss<b>ant</b></small></div><div style="--c:#ffe8cc"><b>3ᵉ groupe</b>tous les autres<br><b>-ir</b> : partir, sortir, venir<br><b>-re</b> : prendre, dire, faire<br><b>-oir</b> : vouloir, pouvoir<br><small>en part<b>ant</b></small></div></div>`);
+  if(act==='temps') return wrap('⏱️','Temps simples · temps composés',
+   `<div class="gm-two"><div class="gm-b" style="--c:#e4f8e4"><b>Temps simple</b><span class="gm-big">1 mot</span>le verbe conjugué est seul${exs('nous <b>jouons</b><br>nous <b>jouerons</b><br>nous <b>jouions</b>')}</div><div class="gm-b" style="--c:#ffe3ee"><b>Temps composé</b><span class="gm-big">2 mots</span>auxiliaire + participe passé${exs('nous <b>avons joué</b><br>nous <b>aurons joué</b><br>nous <b>avions joué</b>')}</div></div>`+blk('Les temps que tu connais',`${ch('présent','#d9f2d1')} ${ch('imparfait','#ffd9b3')} ${ch('futur simple','#cfe8ff')} = <b>simples</b><br>${ch('passé composé','#e4d6fb')} = <b>composé</b>`,'#fff'));
+  return '';
+}
+function genGram(g,act){ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].includes(gg)).map(a=>a[0]); const a=act&&ok.includes(act)?act:pick(ok); const q=GM_GEN[a](gg); if(q.options&&q.options.some(o=>o.length>12)) q.wide=true; return q; }
+MkSeries('p-gram',{title:'📐 La grammaire',intro:'Lis la fiche, puis joue avec les mots : nature, fonction, phrases…',
+  acts:GM_ACTS.map(a=>[a[0],a[1],a[2]]),grades:[['4H','4H · les bases'],['6H','6H · toutes les notions']],card:gmCard,
+  hints:{'4H':'La phrase, les natures (nom, verbe, adjectif, déterminant) et les petits mots qui relient.','6H':'Phrase simple ou complexe, nature et fonction des mots, adverbe, préposition, conjonction, groupes de verbes, temps simples et composés.'},gen:genGram});
+G.gram=g=>{ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].includes(gg)).map(a=>a[0]); const a=pick(ok); let q,t=0; do{ q=GM_GEN[a](gg); t++; }while(q.kind!=='mcq'&&t<20); return q; };
+
 
 /* ================= WORTSCHATZ (allemand) ================= */
 const P2=a=>a.map(([fr,de])=>({fr,de}));
