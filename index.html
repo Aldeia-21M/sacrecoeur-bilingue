@@ -519,7 +519,12 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
       <div class="vh-os" id="vhOs"><button data-o="ios">🍎 iPhone / iPad</button><button data-o="and">🤖 Android</button><button data-o="pc">💻 Ordinateur</button></div>
       <div class="vh-tx" id="vhTx" hidden></div>
     </details>
-    <details class="avis" id="avis"><summary>💬 Un avis ? Une idée ?</summary>
+    <p class="about">💙 C’est avec bienveillance que le papa de Leonardo, Guilherme et Milena a mis en place ce petit jeu éducatif. Il est à disposition de tous les parents d’élèves qui souhaitent rendre l’apprentissage scolaire et la révision plus ludiques.</p>
+    <div class="setgrab" id="setgrab" aria-label="Fermer"><i></i></div>
+  </div>
+  <div class="vox avis" id="avpanel" hidden>
+    <h3 class="av-t">💬 Un avis ? Une idée ?</h3>
+    
       <form name="avis" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="avisF">
         <input type="hidden" name="form-name" value="avis"><p hidden><label>Ne pas remplir <input name="bot-field"></label></p>
         <input type="hidden" name="like" id="avisL" value="">
@@ -529,9 +534,8 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
         <textarea name="message" maxlength="300" rows="3" placeholder="Un petit mot, une suggestion… (facultatif)"></textarea>
         <button class="pill big" id="avisS" type="submit">Envoyer</button><span class="av-ok" id="avisM" aria-live="polite"></span>
       </form>
-    </details>
-    <p class="about">💙 C’est avec bienveillance que le papa de Leonardo, Guilherme et Milena a mis en place ce petit jeu éducatif. Il est à disposition de tous les parents d’élèves qui souhaitent rendre l’apprentissage scolaire et la révision plus ludiques.</p>
-    <div class="setgrab" id="setgrab" aria-label="Fermer"><i></i></div>
+    
+    <div class="setgrab" id="avgrab" aria-label="Fermer"><i></i></div>
   </div>
   <div class="legend" id="legend">Rouge = mot allemand 🇩🇪 · Bleu = mot français / chiffre 🇫🇷</div>
 </header>
@@ -695,7 +699,6 @@ document.getElementById('zones').addEventListener('click', e=>{
   function close(){ if(P.hidden||busy) return; busy=true; P.style.transition=ease; P.style.transform='translateY(-105%)'; K.style.opacity=0; state(false);
     setTimeout(()=>{ P.hidden=true; K.hidden=true; P.style.transition=''; P.style.transform=''; busy=false; },330); }
   window.setPanel=o=>o?open():close();
-  document.getElementById('avisbtn').addEventListener('click',()=>{ const D=document.getElementById('avis'); const wait=P.hidden?340:0; if(P.hidden) open(); D.open=true; setTimeout(()=>D.scrollIntoView({block:'center',behavior:'smooth'}),wait); });
   B.addEventListener('click',()=>P.hidden?open():close());
   K.addEventListener('click',close);
   let y0=null,dy=0,t0=0,drag=false,fromGrab=false;
@@ -708,6 +711,12 @@ document.getElementById('zones').addEventListener('click', e=>{
     if(!drag) return; drag=false;
     if(dy<-70||v<-0.5){ busy=false; close(); } else { P.style.transition=ease; P.style.transform='translateY(0)'; K.style.opacity=1; setTimeout(()=>{ P.style.transition=''; },330); } });
   GR.addEventListener('click',close);
+})();
+(function(){ const P=document.getElementById('avpanel'), B=document.getElementById('avisbtn'), K=document.getElementById('setbk'), SB=document.getElementById('setbtn'); let busy=false; const ease='transform .32s cubic-bezier(.22,1,.36,1)';
+  function open(){ if(busy||!P.hidden) return; window.setPanel(false); busy=true; P.hidden=false; K.hidden=false; P.style.transition='none'; P.style.transform='translateY(-105%)'; K.style.opacity=0; P.scrollTop=0; void P.offsetWidth; P.style.transition=ease; P.style.transform='translateY(0)'; K.style.opacity=1; B.setAttribute('aria-selected',true); setTimeout(()=>{ P.style.transition=''; busy=false; },330); setTimeout(()=>{ if(!P.hidden){ K.hidden=false; K.style.opacity=1; } },345); window.dispatchEvent(new Event('avisopen')); }
+  function close(){ if(P.hidden||busy) return; busy=true; P.style.transition=ease; P.style.transform='translateY(-105%)'; K.style.opacity=0; B.setAttribute('aria-selected',false); setTimeout(()=>{ P.hidden=true; if(document.getElementById('setpanel').hidden) K.hidden=true; P.style.transition=''; P.style.transform=''; busy=false; },330); }
+  B.addEventListener('click',()=>P.hidden?open():close()); K.addEventListener('click',close); document.getElementById('avgrab').addEventListener('click',close);
+  SB.addEventListener('click',()=>{ if(!P.hidden){ busy=false; P.hidden=true; P.style.transform=''; B.setAttribute('aria-selected',false); } });
 })();
 (function(){ const T={
  ios:'<b>iPhone / iPad</b><ol><li>Ouvre l’app <b>Réglages</b> de l’appareil.</li><li><b>Accessibilité</b> → <b>Contenu énoncé</b> → <b>Voix</b>.</li><li>Choisis <b>Allemand</b> (puis <b>Français</b>) et touche une voix « Améliorée » ou « Premium », par exemple <b>Anna</b>, pour la télécharger.</li><li>Reviens ici et choisis-la dans la liste ci-dessus.</li></ol>',
@@ -3737,7 +3746,7 @@ const css=document.createElement('style'); css.textContent=`
 #pcP .pc-btns button{min-height:48px;border-radius:14px;border:2px solid #d8cfae;background:#fff;font:700 14px/1.15 system-ui,sans-serif;color:#1d2433;cursor:pointer;padding:6px}
 #pcP .pc-btns #pcBy{grid-column:1/-1}
 i>.mx,i .mx{background:var(--mx) center/cover no-repeat!important;width:100%!important;height:100%!important;display:block!important;border:0!important;box-shadow:none!important;border-radius:50%!important;vertical-align:baseline!important}
-.avis{margin:10px 0}.avis summary{cursor:pointer;font-weight:700}.avis form{display:grid;gap:8px;margin-top:8px}.avis input[name=nom],.avis textarea{font:inherit;padding:8px 10px;border:2px solid #ced4da;border-radius:12px;width:100%;box-sizing:border-box}.avis .av-r{display:flex}.avis #avisB[aria-pressed=true]{background:#d3f0d3;border-color:#2f9e44}.avis .av-cnt{font-size:.95em;color:#495057;min-height:1.2em}.avis .av-ok{font-weight:700;color:#2b8a3e}
+.avis .av-t{margin:0 0 4px;font-size:1.1rem}.avis form{display:grid;gap:8px;margin-top:8px}.avis input[name=nom],.avis textarea{font:inherit;padding:8px 10px;border:2px solid #ced4da;border-radius:12px;width:100%;box-sizing:border-box}.avis .av-r{display:flex}.avis #avisB[aria-pressed=true]{background:#d3f0d3;border-color:#2f9e44}.avis .av-cnt{font-size:.95em;color:#495057;min-height:1.2em}.avis .av-ok{font-weight:700;color:#2b8a3e}
 .mx{display:inline-block;width:1.2em;height:1.2em;border-radius:50%;background:var(--mx) center/cover no-repeat;vertical-align:-.25em;font-style:normal;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.g-npc .mx{width:44px;height:44px}.g-npc{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;width:100%;text-align:left;padding:10px 14px;border-radius:16px;border:3px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;font-family:inherit;color:#1d2433;font-size:16px}.g-npc span{grid-row:1/3;font-size:34px}.g-npc small{opacity:.75;font-weight:600}.g-npc[aria-pressed=true]{background:#bfeebf;border-color:#2f9e44}
 #pcG{position:fixed;inset:0;z-index:100001;background:linear-gradient(#cfe8ff,#e9defa);overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 #pcG .gb{position:absolute;bottom:-130px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 30% 28%,#fff 0,rgba(255,255,255,.55) 14%,var(--bc) 62%,rgba(255,255,255,.35) 100%);box-shadow:inset 0 0 12px rgba(255,255,255,.8),0 4px 10px rgba(29,36,51,.12);transition:transform var(--t) linear;-webkit-tap-highlight-color:transparent}
@@ -3835,13 +3844,13 @@ P.querySelector('#pcGa').onclick=bubbles;
 window.__pc={show,music,suggestPause,P,bubbles};
 })();
 
-(function(){ const F=document.getElementById('avisF'); if(!F) return; const B=document.getElementById('avisB'), L=document.getElementById('avisL'), M=document.getElementById('avisM'), S=document.getElementById('avisS'), C=document.getElementById('avisC'), D=document.getElementById('avis');
+(function(){ const F=document.getElementById('avisF'); if(!F) return; const B=document.getElementById('avisB'), L=document.getElementById('avisL'), M=document.getElementById('avisM'), S=document.getElementById('avisS'), C=document.getElementById('avisC');
   const API='/.netlify/functions/avis'; let counts=null;
   const pl=(n,w)=>n+' '+w+(n>1?'s':'');
   function paint(){ const bd=document.getElementById('avisBadge'); if(bd&&counts){ bd.textContent='👍'+counts.likes+' 💬'+counts.comments; bd.hidden=false; } if(!counts){ C.textContent=''; return; } const l=counts.likes, c=counts.comments;
     C.textContent=(l?'👍 '+pl(l,'like'):'Sois le premier à liker 👍')+'  ·  '+(c?'💬 '+pl(c,'commentaire'):'Sois le premier à laisser un commentaire 💬'); }
   async function load(){ try{ const r=await fetch(API,{cache:'no-store'}); if(r.ok){ counts=await r.json(); paint(); } }catch(_){} }
-  D.addEventListener('toggle',()=>{ if(D.open) load(); }); load();
+  window.addEventListener('avisopen',load); load();
   let liked=false; try{ liked=localStorage.getItem('avisLiked')==='1'; }catch(_){}
   if(liked){ B.setAttribute('aria-pressed','true'); B.textContent='👍 Merci pour ton like !'; B.disabled=true; }
   B.onclick=()=>{ const on=B.getAttribute('aria-pressed')!=='true'; B.setAttribute('aria-pressed',on); L.value=on?'oui':''; };
