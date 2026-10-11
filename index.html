@@ -116,7 +116,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .g-pc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .g-pc-tok{flex:none;width:46px;height:46px;border-radius:50%;background:var(--pc);display:grid;place-items:center;font-size:26px;border:3px solid #fff;box-shadow:0 0 0 2px var(--pc)}
 .g-pc input{flex:1;min-width:0;min-height:46px;border-radius:12px;border:2px solid rgba(29,36,51,.18);padding:4px 10px;font:inherit;font-size:18px;background:#fff}
-.gc-row{display:grid;gap:6px;margin:8px 0}.gc-nm{font-weight:800;text-align:left}.g-chars{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:8px;max-height:210px;overflow-y:auto}
+.g-leg{margin:6px 0;font-size:.9rem;color:#4a5368}.g-leg summary{cursor:pointer;font-weight:700}.g-leg ul{margin:6px 0 0;padding-left:18px;display:grid;gap:4px}.gc-row{display:grid;gap:6px;margin:8px 0}.gc-nm{font-weight:800;text-align:left}.g-chars{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:8px;max-height:210px;overflow-y:auto}
 .g-chars button{aspect-ratio:1;border-radius:12px;border:2px solid rgba(29,36,51,.14);background:#f6f7fb;font-size:clamp(20px,6vw,28px);padding:0}
 .g-chars button[aria-pressed="true"]{background:#fff;border-color:var(--pc);box-shadow:0 0 0 3px var(--pc)}
 .g-chars button:disabled,.g-cols button:disabled{opacity:.25;cursor:not-allowed}
@@ -640,6 +640,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "3.5", desc: "Plateau : pièges de fin et nouvelles cases" },
     { v: "3.4", desc: "Bouton Voix plus clair, texte explicatif" },
     { v: "3.3", desc: "Classe par joueur, plus d’avatars et couleurs" },
     { v: "3.2", desc: "Famille : joueurs et progrès partagés" },
@@ -1187,9 +1188,16 @@ function makeQuestion0(topics,grade){
 /* ---- plateau ---- */
 const COLS=6, EXTRA=0.62; let ROWS=10, HT=ROWS+EXTRA, SIZE=60;
 const L0={3:15,9:22,21:33,29:41,38:50}, S0={19:7,26:13,35:24,44:31,52:39,59:46}, ST0=[8,17,30,43,54], SN0=[12,25,36,48,55];
-let LADDERS=L0, SLIDES=S0, STARS=ST0, SNAILS=SN0;
-function applySize(n){ SIZE=n; ROWS=n/COLS; HT=ROWS+EXTRA; const ok=x=>x<SIZE-2, f=o=>Object.fromEntries(Object.entries(o).filter(([a,b])=>ok(+a)&&ok(+b)));
-  LADDERS=f(L0); SLIDES=f(S0); STARS=ST0.filter(ok); SNAILS=SN0.filter(ok); }
+/* cases pièges (surtout en fin de parcours) : 🌀 tourbillon (recule de 5), 🔄 échange (premier et dernier), ❓ question piège (+2 si juste, −4 sinon) */
+const TW0=[40,56], SW0=[34,53], QT0=[49,58];
+let LADDERS=L0, SLIDES=S0, STARS=ST0, SNAILS=SN0, TWIRLS=TW0, SWAPS=SW0, QTRAPS=QT0;
+function applySize(n){ SIZE=n; ROWS=n/COLS; HT=ROWS+EXTRA;
+  const k=n/60, sc=x=>Math.max(2,Math.min(n-1,Math.round(x*k))), used=new Set();
+  const free=x=>{ for(let d=0;d<n;d++){ for(const c of [x+d,x-d]){ if(c>=2&&c<=n-1&&!used.has(c)){ used.add(c); return c; } } } return x; };
+  const thin=a=>a.filter((_,i)=>Math.floor((i+1)*k)>Math.floor(i*k));
+  const pairs=(o,up)=>{ const r={}; thin(Object.entries(o)).forEach(([a,b])=>{ const A=free(sc(+a)); let B=sc(b); if(up&&B<=A) B=Math.min(n-1,A+2); if(!up&&B>=A) B=Math.max(2,A-2); r[A]=B; }); return r; };
+  const list=a=>thin(a).map(x=>free(sc(x)));
+  LADDERS=pairs(L0,true); SLIDES=pairs(S0,false); STARS=list(ST0); SNAILS=list(SN0); const one=(a,i)=>k<1?[a[i]]:a; QTRAPS=one(QT0,1).map(x=>free(sc(x))); TWIRLS=one(TW0,0).map(x=>free(sc(x))); SWAPS=one(SW0,1).map(x=>free(sc(x))); }
 const CHARS=[['🦊','Renard'],['🐻','Ours'],['🐼','Panda'],['🐸','Grenouille'],['🦁','Lion'],['🐯','Tigre'],['🐰','Lapin'],['🐵','Singe'],['🦄','Licorne'],['🐧','Pingouin'],['🐱','Chat'],['🐶','Chien'],['🐨','Koala'],['🐮','Vache'],['🐷','Cochon'],['🐹','Hamster'],['🐭','Souris'],['🦉','Hibou'],['🦋','Papillon'],['🐢','Tortue'],['🐙','Pieuvre'],['🐬','Dauphin'],['🦖','Dinosaure'],['🐲','Dragon'],['🦅','Aigle'],['🐺','Loup'],['🦒','Girafe'],['🐘','Éléphant'],['🦓','Zèbre'],['🐝','Abeille'],['🐞','Coccinelle'],['🦈','Requin'],['🚀','Fusée'],['⚽','Ballon'],['🎨','Palette'],['🌈','Arc-en-ciel']];
 const COLORS=[['#e5383b','Rouge'],['#1f5fd6','Bleu'],['#2f9e44','Vert'],['#f08c00','Orange'],['#8f6fd6','Violet'],['#e64980','Rose'],['#0ca678','Turquoise'],['#1098ad','Cyan'],['#a0522d','Marron'],['#82b21b','Citron vert'],['#c2255c','Framboise'],['#364fc7','Indigo']];
 const CELLC=['#d9ecfb','#dff4dc','#fff0b8','#fde0ec','#e9defa'];
@@ -1213,6 +1221,7 @@ function renderSetup(){
   if(window.DLU) DLU.pre(setup,CHARS,true,COLORS);
   root.innerHTML=`<h2 class="g-h">🎲 Jeu de plateau</h2>
   <p class="g-p">Lance les deux dés et réponds à la question : <b>bonne réponse = tu avances du total des dés</b>, sinon d’une case de moins ! Échelles, toboggans et cases spéciales t’attendent. Le premier arrivé à la case ${setup.len} gagne.</p>
+  <details class="g-leg"><summary>ℹ️ Les cases spéciales</summary><ul><li>🪜 <b>Échelle</b> : tu montes · 🛝 <b>Toboggan</b> : tu descends</li><li>⭐ <b>Étoile</b> : tu rejoues · 🐌 <b>Escargot</b> : tu recules de 2</li><li>🌀 <b>Tourbillon</b> : tu recules de 5</li><li>🔄 <b>Échange</b> : le dernier prend ta place si tu es en tête, et si tu es derrière tu prends la place du premier !</li><li>❓ <b>Question piège</b> : juste, tu avances de 2 ; faux, tu recules de 4. Attention près de l’arrivée !</li></ul></details>
   <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="gN"></div></div>
   <div id="gPl"></div>
   ${setup.n<6?`<div class="g-sec"><button class="g-npc" id="gNpc" aria-pressed="${setup.npc}"><span><i class="mx"></i></span><b>Jouer avec PoutchouPoutchou</b><small>${setup.npc?'Il joue avec toi : c’est lui qui répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
@@ -1280,7 +1289,7 @@ function buildBoard(){
   const b=root.querySelector('#gBoard'); b.style.aspectRatio=COLS+'/'+HT; let h='';
   for(let n=1;n<=SIZE;n++){
     const {c,r}=cellXY(n);
-    let ic=''; if(STARS.includes(n)) ic='⭐'; else if(SNAILS.includes(n)) ic='🐌'; else if(n===SIZE) ic='🏆';
+    let ic=''; if(STARS.includes(n)) ic='⭐'; else if(SNAILS.includes(n)) ic='🐌'; else if(TWIRLS.includes(n)) ic='🌀'; else if(SWAPS.includes(n)) ic='🔄'; else if(QTRAPS.includes(n)) ic='❓'; else if(n===SIZE) ic='🏆';
     h+=`<div class="g-cell${n===SIZE?' fin':''}" style="left:${c*100/COLS}%;top:${(ROWS-1-r)*100/HT}%;width:${100/COLS}%;height:${100/HT}%;background:${CELLC[(n+r)%5]}"><span class="n">${n}</span>${ic}</div>`;
   }
   h+=`<div class="g-start" style="height:${EXTRA*100/HT}%">DÉPART</div>`;
@@ -1357,6 +1366,16 @@ async function glide(p,i,to){
 }
 
 /* ---- tour ---- */
+async function swapCell(p,i){
+  const others=G.players.map((q,k)=>({q,k})).filter(x=>x.k!==i);
+  if(!others.length){ msg('🔄 <b>Case échange…</b> mais personne avec qui échanger !'); await sleep(700); return; }
+  const lead=others.reduce((a,b)=>b.q.pos>a.q.pos?b:a), last=others.reduce((a,b)=>b.q.pos<a.q.pos?b:a);
+  const behind=lead.q.pos>p.pos, tgt=behind?lead:last;
+  if(!behind&&tgt.q.pos>=p.pos){ msg('🔄 <b>Case échange…</b> mais tout le monde est à la même case : rien ne change.'); await sleep(900); return; }
+  msg(behind?`🔄 <b>Échange !</b> ${p.emoji} prend la place du premier : ${tgt.q.emoji} ${esc(tgt.q.name)} (case ${tgt.q.pos}).`:`🔄 <b>Échange !</b> ${p.emoji} est en tête… et doit changer de place avec le dernier : ${tgt.q.emoji} ${esc(tgt.q.name)} (case ${tgt.q.pos}) !`); await sleep(1100);
+  const a=p.pos, b=tgt.q.pos; await Promise.all([glide(p,i,b),glide(tgt.q,tgt.k,a)]); await sleep(300); }
+async function advance(p,i,steps){ let dir=1,bounced=0; while(steps>0){ if(dir===1&&p.pos>=SIZE){ if(!G.exact) break; dir=-1; } await hop(p,i,dir); if(dir===-1) bounced++; steps--; } return bounced; }
+async function retreat(p,i,steps){ while(steps>0&&p.pos>0){ await hop(p,i,-1); steps--; } }
 async function takeTurn(auto){
   if(!G||G.over||(G.busy&&auto!==true)) return;
   G.busy=true; const btn=root.querySelector('#gRoll'); btn.disabled=true;
@@ -1367,7 +1386,7 @@ async function takeTurn(auto){
   await sleep(700);
   const ok=p.npc?await npcAnswer(p,d):await askQuestion(p,d);
   msg(ok?`✅ Bonne réponse ! ${p.npc?esc(p.name)+' avance':'Tu avances'} de <b>${d}</b>.`:`❌ Raté… ${p.npc?esc(p.name)+' avance':'tu avances'} de <b>${d-1}</b> (le total moins un).`);
-  { let dir=1, steps=d, bounced=0; while(steps>0){ if(dir===1&&p.pos>=SIZE){ if(!G.exact) break; dir=-1; } await hop(p,i,dir); if(dir===-1) bounced++; steps--; }
+  { const bounced=await advance(p,i,d);
     if(bounced){ msg(`↩️ <b>Trop loin !</b> Il faut tomber pile sur la case ${SIZE} : ${p.npc?esc(p.name)+' recule':'tu recules'} de <b>${bounced}</b>.`); await sleep(700); } }
   if(!ok){ await sleep(250); p.pos>0&&await hop(p,i,-1); }
   if(p.pos>=SIZE){ return win(p,i); }
@@ -1375,7 +1394,13 @@ async function takeTurn(auto){
   if(LADDERS[n]){ msg(`🪜 <b>Échelle !</b> ${p.emoji} monte à la case ${LADDERS[n]} !`); await sleep(500); await glide(p,i,LADDERS[n]); }
   else if(SLIDES[n]){ msg(`🛝 <b>Toboggan !</b> ${p.emoji} glisse à la case ${SLIDES[n]}…`); await sleep(500); await glide(p,i,SLIDES[n]); }
   else if(STARS.includes(n)){ msg(`⭐ <b>Case étoile !</b> ${esc(p.name)} rejoue !`); extra=true; await sleep(900); }
-  else if(SNAILS.includes(n)){ msg(`🐌 <b>L’escargot…</b> ${p.emoji} recule de 2 cases.`); await sleep(500); await hop(p,i,-1); await hop(p,i,-1); }
+  else if(SNAILS.includes(n)){ msg(`🐌 <b>L’escargot…</b> ${p.emoji} recule de 2 cases.`); await sleep(500); await retreat(p,i,2); }
+  else if(TWIRLS.includes(n)){ msg(`🌀 <b>Tourbillon !</b> ${p.emoji} est aspiré : recule de 5 cases.`); await sleep(600); await retreat(p,i,5); }
+  else if(SWAPS.includes(n)){ await swapCell(p,i); }
+  else if(QTRAPS.includes(n)){ msg(`❓ <b>Question piège !</b> Juste : +2 cases. Faux : −4 cases.`); await sleep(900);
+    const ok2=p.npc?await npcAnswer(p,'❓'):await askQuestion(p,'❓');
+    if(ok2){ msg(`✅ <b>Piège évité !</b> ${p.npc?esc(p.name)+' avance':'Tu avances'} de 2 cases.`); const bo=await advance(p,i,2); if(bo){ msg(`↩️ <b>Trop loin !</b> Il faut tomber pile sur la case ${SIZE}.`); await sleep(700); } if(p.pos>=SIZE) return win(p,i); }
+    else { msg(`💥 <b>Raté !</b> ${p.npc?esc(p.name)+' recule':'Tu recules'} de 4 cases.`); await retreat(p,i,4); } }
   await sleep(500); followPlayers();
   if(!extra) G.cur=(G.cur+1)%G.players.length;
   const nx=G.players[G.cur]; updateTurn(); layoutTokens();
@@ -1391,7 +1416,7 @@ async function npcAnswer(p,d){
   return new Promise(async res=>{
     const ov=document.createElement('div'); ov.className='g-ov';
     ov.innerHTML=`<div class="g-sheet" style="--pc:${p.color}">
-      <div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} 🎲 ${d}</span></div>
+      <div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${d==='❓'?'❓ piège':'🎲 '+d}</span></div>
       <div class="g-npcsay">${p.emoji} <b>${esc(p.name)}</b> réfléchit…</div>
       <div class="g-q">${q.prompt}</div>
       ${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
@@ -1417,7 +1442,7 @@ function askQuestion(p,d){
     const q=makeQuestion(G.topics,p.gr); curQ=q; window.DLwho={name:p.name,multi:G.players.filter(x=>!x.npc).length>1};
     const ov=document.createElement('div'); ov.className='g-ov';
     ov.innerHTML=`<div class="g-sheet" style="--pc:${p.color}">
-      <div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} 🎲 ${d}</span></div>
+      <div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${d==='❓'?'❓ piège':'🎲 '+d}</span></div>
       <div class="g-q">${q.prompt}</div>
       ${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div>
