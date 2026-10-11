@@ -362,6 +362,10 @@ body[data-sec="pt"] .bar nav{justify-content:flex-start}body[data-sec="pt"] .tab
 body[data-sec="fa"] .bar nav{justify-content:flex-start}body[data-sec="fa"] .tab:not(.gear){flex:0 1 auto;min-width:120px;padding:5px 14px}
 .pt-gt{margin:14px 2px 6px;font-size:18px}.pt-menu+.pt-gt{margin-top:14px}.pt-things.sm{font-size:clamp(26px,7.5vw,34px)}.pt-opts button{overflow:hidden}
 #gameRoot .clk,#gameRoot .pie{width:min(42vw,160px)}#gameRoot .sr-vis{margin:2px 0 4px}
+.cl-w{display:flex;justify-content:center;margin:8px 0 12px}.cl{display:block;font-size:clamp(34px,10vw,48px);font-weight:800;font-variant-numeric:tabular-nums;padding-left:1.1em;min-width:3.2em}
+.cl-r{display:block;text-align:right;line-height:1.2;position:relative}.cl-r i{font-style:normal;position:absolute;left:-1.05em;color:#d6336c}
+.cl-line{display:block;height:5px;border-radius:3px;background:#1d2433;margin:4px 0}.cl .mx-in{display:inline-block;min-width:2.4em}
+#gameRoot .cl{font-size:clamp(26px,8vw,36px)}#gameRoot .cl-r:last-child{color:#1f5fd6}
 </style>
 </head>
 <body>
@@ -781,7 +785,7 @@ function qCalc(grade){
   const c=calcGen(grade), near=new Set(); [1,-1,2,-2,10,-10,5].forEach(d=>{ if(c.res+d>=0&&c.res+d!==c.res) near.add(c.res+d); });
   const opts=shuffle([c.res].concat(shuffle([...near]).slice(0,3)));
   const spoken={'+':'plus','−':'moins','×':'fois','÷':'divisé par'}[c.op];
-  return {cat:'calc',prompt:'<span class="big">'+c.a+' '+c.op+' '+c.b+' = ?</span>',audio:null,options:opts.map(String),correct:opts.indexOf(c.res),reveal:{t:c.a+' '+spoken+' '+c.b+' égale '+c.res,l:'fr'},shown:c.a+' '+c.op+' '+c.b+' = '+c.res};
+  const colm=(c.op==='+'||c.op==='−')&&Math.random()<.5; return {cat:'calc',prompt:colm?'<span class="cl-w"><span class="cl"><span class="cl-r">'+c.a+'</span><span class="cl-r"><i>'+c.op+'</i>'+c.b+'</span><span class="cl-line"></span><span class="cl-r">?</span></span></span>':'<span class="big">'+c.a+' '+c.op+' '+c.b+' = ?</span>',audio:null,options:opts.map(String),correct:opts.indexOf(c.res),reveal:{t:c.a+' '+spoken+' '+c.b+' égale '+c.res,l:'fr'},shown:c.a+' '+c.op+' '+c.b+' = '+c.res};
 }
 function qConj(){
   const C=window.CONJ, vb=C.verbs[rnd(C.verbs.length)], t=C.TENSES[rnd(4)], i=rnd(6), F=C.forms(vb,t.k)[i];
@@ -1720,8 +1724,8 @@ function dots(){ return `<div class="mx-dots">${Array.from({length:run.total},(_
 function next(){
   if(!run.res) run.res=[];
   if(run.i>=run.total) return finish();
-  Q=gen(); run.typed=''; run.locked=false;
-  P.innerHTML=`<div class="mx-play">${dots()}<div class="mx-eq"><span>${Q.a} ${Q.op} ${Q.b} =</span><span class="mx-in" id="mxIn">?</span></div>
+  Q=gen(); Q.col=(Q.op==='+'||Q.op==='−')&&Math.random()<.5; run.typed=''; run.locked=false;
+  P.innerHTML=`<div class="mx-play">${dots()}${Q.col?`<div class="cl-w"><div class="cl"><div class="cl-r">${Q.a}</div><div class="cl-r"><i>${Q.op}</i>${Q.b}</div><div class="cl-line"></div><div class="cl-r"><span class="mx-in" id="mxIn">?</span></div></div></div>`:`<div class="mx-eq"><span>${Q.a} ${Q.op} ${Q.b} =</span><span class="mx-in" id="mxIn">?</span></div>`}
     <div class="mx-fb" id="mxFb" hidden></div>
     <div class="mx-pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join('')}<button data-k="del" class="d">⌫</button><button data-k="0">0</button><button data-k="ok" class="v">✓</button></div>
     <button class="mx-hear" id="mxH">🔊 Écouter le calcul</button></div>`;
