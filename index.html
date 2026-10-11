@@ -28,8 +28,7 @@ nav button.pill,.pill{flex:none;border:2px solid var(--line);background:#fff;bor
 nav button[aria-selected="true"]{background:var(--blue);border-color:var(--accent)}
 .pill[aria-pressed="true"],.pill[aria-expanded="true"]{background:var(--yellow);border-color:#d9a400}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}.hs:focus-visible{outline-width:1px;outline-offset:0}
-.vox{transition:transform .22s,opacity .22s}.vox.out{transform:translateY(-40px);opacity:0}.setclose{min-height:48px;border-radius:12px;border:2px dashed #b9c4e0;background:#f3f6fd;color:#1f3a7a;font-weight:700;font-size:.95rem}
-.vox{max-width:1100px;margin:8px auto 0;background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 14px;display:grid;gap:8px;font-size:16px}
+.vox{position:fixed;left:0;right:0;top:0;z-index:60;max-height:88vh;overflow-y:auto;overscroll-behavior:contain;max-width:640px;margin:0 auto;background:#fff;border:2px solid var(--line);border-top:0;border-radius:0 0 24px 24px;box-shadow:0 12px 40px rgba(20,26,40,.35);padding:calc(12px + env(safe-area-inset-top,0px)) 14px 6px;display:grid;gap:8px;font-size:16px;will-change:transform}
 .vox[hidden]{display:none}.vox p{margin:0;color:#5b6478}
 .vox label{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
 .vox select{max-width:100%;padding:8px;border-radius:10px;border:2px solid var(--line);background:#fff;min-height:44px}
@@ -401,6 +400,8 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .vox .about{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eef6ff;border:1px solid rgba(31,95,214,.25);font-size:.85rem;line-height:1.35}
 .pt-fb{margin:10px 0 0;padding:8px 12px;border-radius:12px;background:#fff0e0;font-weight:700;text-align:center}
 .pt-opts button.hint{animation:dmh .6s ease-in-out 4;outline:4px solid #fcc419}
+.vox[hidden]{display:none}#setbk{position:fixed;inset:0;z-index:59;background:rgba(20,26,40,.45);opacity:0;transition:opacity .25s}#setbk[hidden]{display:none}
+.setgrab{display:flex;justify-content:center;padding:10px 0 6px;margin:0 -14px -4px;cursor:grab;touch-action:none}.setgrab i{width:44px;height:5px;border-radius:3px;background:#c4cadb}
 </style>
 </head>
 <body>
@@ -410,6 +411,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
     <nav id="tabs" role="tablist"></nav>
     <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel"><span class="ic">⚙️</span><span class="lb">Réglages</span></button>
   </div>
+  <div id="setbk" hidden></div>
   <div class="vox" id="setpanel" hidden>
     <div class="row">
       <button class="pill" id="slow" aria-pressed="false">🐢 Lent</button>
@@ -420,7 +422,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
     <label>🇫🇷 Français <select id="vfr"></select></label> <button class="pill" id="tfr">▶ Tester</button>
     <p>Pas de belle voix allemande ? iPhone/iPad : Réglages → Accessibilité → Contenu énoncé → Voix → Allemand → « Anna (Premium) ». Android : Réglages → Synthèse vocale → Google → Installer les données vocales → Allemand. Ordinateur : Chrome ou Edge.</p>
     <p class="about">💙 C’est avec bienveillance que le papa de Leonardo, Guilherme et Milena a mis en place ce petit jeu éducatif. Il est à disposition de tous les parents d’élèves qui souhaitent rendre l’apprentissage scolaire et la révision plus ludiques.</p>
-    <button class="setclose" id="setclose" type="button">︿ Glisse vers le haut ou touche ici pour fermer</button>
+    <div class="setgrab" id="setgrab" aria-label="Fermer"><i></i></div>
   </div>
   <div class="legend" id="legend">Rouge = mot allemand 🇩🇪 · Bleu = mot français / chiffre 🇫🇷</div>
 </header>
@@ -565,17 +567,28 @@ document.getElementById('zones').addEventListener('click', e=>{
   document.getElementById('main').classList.toggle('show', on);
   document.body.classList.toggle('show-on', on);
 });
-function setPanel(open){
-  const p=document.getElementById('setpanel'), b=document.getElementById('setbtn'); p.hidden=!open;
-  b.setAttribute('aria-expanded', open); b.setAttribute('aria-selected', open);
-  if(open){ p.classList.remove('out'); }
-}
-document.getElementById('setbtn').addEventListener('click', ()=>setPanel(document.getElementById('setpanel').hidden));
-(function(){ const p=document.getElementById('setpanel'); let y0=null,x0=0;
-  p.addEventListener('touchstart',e=>{ y0=e.touches[0].clientY; x0=e.touches[0].clientX; },{passive:true});
-  p.addEventListener('touchend',e=>{ if(y0===null) return; const t=e.changedTouches[0], dy=t.clientY-y0, dx=Math.abs(t.clientX-x0); y0=null;
-    if(dy<-45&&Math.abs(dy)>dx*1.2){ p.classList.add('out'); setTimeout(()=>setPanel(false),220); } },{passive:true});
-  document.getElementById('setclose').addEventListener('click',()=>setPanel(false));
+(function(){
+  const P=document.getElementById('setpanel'), B=document.getElementById('setbtn'), K=document.getElementById('setbk'), GR=document.getElementById('setgrab');
+  let busy=false;
+  const ease='transform .32s cubic-bezier(.22,1,.36,1)';
+  function state(o){ B.setAttribute('aria-expanded',o); B.setAttribute('aria-selected',o); }
+  function open(){ if(busy||!P.hidden) return; busy=true; P.hidden=false; K.hidden=false; P.style.transition='none'; P.style.transform='translateY(-105%)'; K.style.opacity=0; P.scrollTop=0;
+    void P.offsetWidth; P.style.transition=ease; P.style.transform='translateY(0)'; K.style.opacity=1; state(true); setTimeout(()=>{ P.style.transition=''; busy=false; },330); }
+  function close(){ if(P.hidden||busy) return; busy=true; P.style.transition=ease; P.style.transform='translateY(-105%)'; K.style.opacity=0; state(false);
+    setTimeout(()=>{ P.hidden=true; K.hidden=true; P.style.transition=''; P.style.transform=''; busy=false; },330); }
+  window.setPanel=o=>o?open():close();
+  B.addEventListener('click',()=>P.hidden?open():close());
+  K.addEventListener('click',close);
+  let y0=null,dy=0,t0=0,drag=false,fromGrab=false;
+  P.addEventListener('touchstart',e=>{ if(busy) return; y0=e.touches[0].clientY; dy=0; t0=Date.now(); drag=false; fromGrab=!!e.target.closest('#setgrab'); },{passive:true});
+  P.addEventListener('touchmove',e=>{ if(y0===null) return; const d=e.touches[0].clientY-y0;
+    const atEnd=P.scrollTop+P.clientHeight>=P.scrollHeight-2;
+    if(!drag){ if(d<-8&&(fromGrab||atEnd)) { drag=true; P.style.transition='none'; } else return; }
+    dy=Math.min(0,d); e.preventDefault(); P.style.transform='translateY('+dy+'px)'; K.style.opacity=Math.max(0,1+dy/(P.offsetHeight||400)); },{passive:false});
+  P.addEventListener('touchend',()=>{ if(y0===null) return; const v=dy/Math.max(1,Date.now()-t0); y0=null;
+    if(!drag) return; drag=false;
+    if(dy<-70||v<-0.5){ busy=false; close(); } else { P.style.transition=ease; P.style.transform='translateY(0)'; K.style.opacity=1; setTimeout(()=>{ P.style.transition=''; },330); } });
+  GR.addEventListener('click',close);
 })();
 ['vde','vfr'].forEach(id=>document.getElementById(id).addEventListener('change',e=>{ try{ localStorage.setItem('dl-'+id, e.target.value); }catch(x){} }));
 document.getElementById('tde').addEventListener('click',()=>speak('Guten Tag! Heute lernen wir die Zahlen: einundzwanzig, vierunddreissig.','de'));
