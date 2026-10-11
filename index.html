@@ -256,7 +256,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .g-opts.long button{font-size:clamp(12px,3.4vw,17px)}.g-opts.xlong{grid-template-columns:1fr}.g-opts.xlong button{min-height:52px}
 
 .tab.game{margin-left:8px;background:#efe6ff;border-color:#8f6fd6}.tab.game[aria-selected="true"]{background:#8f6fd6;color:#fff;border-color:#6f4fc0}
-.gear{margin-left:8px}.tab .lb{letter-spacing:-.5px}nav{gap:4px}
+.gear{margin-left:8px}#avisbtn{margin-left:0;min-width:46px}.tab .lb{letter-spacing:-.5px}nav{gap:4px}
 #p-game{background:linear-gradient(#f4eeff,#fffdf8);border:3px dashed #8f6fd6;border-radius:22px;padding:8px 6px;margin-top:6px}
 /* ---- sections Allemand / Français ---- */
 .secs{display:flex;gap:8px;max-width:1100px;margin:0 auto 8px}
@@ -503,6 +503,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
     <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel"><span class="ic">⚙️</span><span class="lb">Réglages</span></button>
+    <button class="tab gear" id="avisbtn" aria-controls="setpanel"><span class="ic">💬</span><span class="lb">Avis</span></button>
   </div>
   <div id="setbk" hidden></div>
   <div class="vox" id="setpanel" hidden>
@@ -694,6 +695,7 @@ document.getElementById('zones').addEventListener('click', e=>{
   function close(){ if(P.hidden||busy) return; busy=true; P.style.transition=ease; P.style.transform='translateY(-105%)'; K.style.opacity=0; state(false);
     setTimeout(()=>{ P.hidden=true; K.hidden=true; P.style.transition=''; P.style.transform=''; busy=false; },330); }
   window.setPanel=o=>o?open():close();
+  document.getElementById('avisbtn').addEventListener('click',()=>{ const D=document.getElementById('avis'); const wait=P.hidden?340:0; if(P.hidden) open(); D.open=true; setTimeout(()=>D.scrollIntoView({block:'center',behavior:'smooth'}),wait); });
   B.addEventListener('click',()=>P.hidden?open():close());
   K.addEventListener('click',close);
   let y0=null,dy=0,t0=0,drag=false,fromGrab=false;
