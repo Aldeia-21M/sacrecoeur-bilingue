@@ -159,7 +159,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 @keyframes groll{0%{transform:rotate(0)}50%{transform:rotate(180deg) scale(1.12)}100%{transform:rotate(360deg)}}
 
 /* question */
-.g-ov{position:fixed;inset:0;z-index:50;background:rgba(20,26,40,.5);display:flex;align-items:flex-end;justify-content:center;padding:0 0 env(safe-area-inset-bottom,0)}
+.g-ov{position:fixed;inset:0;z-index:50;overflow-y:auto;background:rgba(20,26,40,.5);display:flex;align-items:flex-end;justify-content:center;padding:0 0 env(safe-area-inset-bottom,0)}
 .g-sheet{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:#fffdf3;border-radius:24px 24px 0 0;border-top:6px solid var(--pc);padding:14px 14px 18px}
 .g-qtop{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .g-badge{padding:3px 12px;border-radius:999px;font-weight:700;font-size:15px;background:var(--bc,#d6ebfb);border:2px solid rgba(29,36,51,.18)}
@@ -305,6 +305,8 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .mx-seg button,.mx-tabs button{min-height:48px;border-radius:14px;border:2px solid rgba(29,36,51,.16);background:#fff;font-weight:700;font-size:clamp(14px,3.9vw,18px);padding:2px 4px}
 .mx-seg button[aria-pressed="true"],.mx-tabs button[aria-pressed="true"]{background:#bfeebf;border-color:#2f9e44}
 .mx-tabs{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.mx-quick{display:flex;gap:6px;margin-top:8px}.mx-quick button{flex:1;min-height:38px;border-radius:12px;border:2px solid rgba(29,36,51,.16);background:#fff;font-weight:700;font-size:15px}.mx-tabs button{min-height:44px;padding:0}
+.nx-gap{height:30px}.nx-lab{text-align:center;font-weight:800;color:#555;margin:0 0 10px;font-size:1.02rem}.nx-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.nx-b{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:6px 14px;border-radius:999px;border:2px solid #c9d3ea;background:#fff;color:#1f3a7a;font-weight:700;font-size:.95rem;cursor:pointer}.nx-b:active{transform:translateY(2px)}.nx-b .i{font-size:1.25rem}
+.mx-go.big,.g-big.replay{min-height:72px;background:#2f9e44;border-color:#1f7a32;box-shadow:0 5px 0 #1f7a32;font-size:clamp(22px,6vw,28px);font-weight:900;color:#fff}.mx-go.big:active,.g-big.replay:active{transform:translateY(3px);box-shadow:0 2px 0 #1f7a32}
 .mx-go{display:block;width:100%;min-height:58px;margin-top:12px;border-radius:999px;border:2px solid #174aa8;background:#1f5fd6;color:#fff;font-weight:800;font-size:clamp(18px,4.8vw,22px);box-shadow:0 4px 0 #174aa8}
 .mx-go:active{transform:translateY(3px);box-shadow:0 1px 0 #174aa8}.mx-go.alt{background:#fff;color:#1f5fd6}
 .mx-dots{display:flex;gap:6px;justify-content:center;margin-bottom:8px}.mx-dots i{width:16px;height:16px;border-radius:50%;background:#e2e7ef;border:2px solid #cdd4e0}
@@ -1137,14 +1139,13 @@ function win(p,i){
   ov.innerHTML=`<div class="g-win" style="--pc:${p.color}"><div class="cup">🏆</div>
     <h2 class="g-h">Bravo ${esc(p.name)} ! ${p.emoji}</h2>
     <p class="g-p">Tu as atteint la case 60 !</p>
-    <button class="g-big" data-a="again">🔁 Rejouer (mêmes joueurs)</button>
-    <button class="g-big" data-a="new" style="background:#fff;color:#1f5fd6;box-shadow:0 4px 0 #174aa8">⚙️ Nouvelle partie</button></div>`;
-  document.body.appendChild(ov);
+    <button class="g-big replay" data-a="again">▶ Rejouer</button></div>`;
+  document.body.appendChild(ov); DLmore(ov.querySelector('.g-win'),window.DLH.hubItems('plateau').map(it=>({ic:it.ic,t:it.t,go:()=>{ ov.remove(); conf.forEach(c=>c.remove()); it.go(); }})),'Ou joue à un autre jeu :');
   const conf=[]; for(let k=0;k<36;k++){ const c=document.createElement('span'); c.className='g-conf'; c.textContent=['🎉','⭐','🎊','✨'][k%4];
     c.style.left=rnd(96)+'%'; c.style.animationDuration=(2.2+Math.random()*2)+'s'; c.style.animationDelay=(Math.random()*1.2)+'s'; document.body.appendChild(c); conf.push(c); }
   setTimeout(()=>conf.forEach(c=>c.remove()),6000);
   say('Bravo !','fr');
-  ov.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ov.remove(); conf.forEach(c=>c.remove());
+  ov.onclick=e=>{ const b=e.target.closest('button[data-a]'); if(!b) return; ov.remove(); conf.forEach(c=>c.remove());
     if(b.dataset.a==='again'){ G.players.forEach(x=>x.pos=0); G.cur=0; G.over=false; G.busy=false; renderGame(); } else renderSetup(); };
 }
 
@@ -1196,8 +1197,13 @@ function renderHub(){
   hub.onclick=e=>{ const b=e.target.closest('.h-gc'); if(b) openGame(b.dataset.g); };
 }
 function showHub(){ try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
+let curGame=null;
+function hubItems(ex){
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille'];
+  const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
+}
 function openGame(id){
-  hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
+  curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
   if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
@@ -1217,10 +1223,10 @@ function endScreen(o,again){
   const ov=document.createElement('div'); ov.className='g-ov'; ov.style.alignItems='center';
   ov.innerHTML=`<div class="g-win" style="--pc:${o.color||'#1f5fd6'}"><div class="cup">${o.icon||'🏆'}</div>
     <h2 class="g-h">${o.title}</h2><p class="g-p">${o.sub||''}</p>
-    <button class="g-big" data-a="again">🔁 Rejouer</button>
-    <button class="g-big" data-a="menu" style="background:#fff;color:#1f5fd6">🎲 Autres jeux</button></div>`;
+    <button class="g-big replay" data-a="again">▶ Rejouer</button></div>`;
   document.body.appendChild(ov); confetti();
-  ov.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ov.remove(); if(b.dataset.a==='again') again(); else showHub(); };
+  const gid=curGame; DLmore(ov.querySelector('.g-win'),hubItems(gid).map(it=>({ic:it.ic,t:it.t,go:()=>{ ov.remove(); it.go(); }})),'Ou joue à un autre jeu :');
+  ov.onclick=e=>{ const b=e.target.closest('button[data-a]'); if(!b) return; ov.remove(); again(); };
 }
 function numItem(grade){
   const r=Math.random(); let lo,hi;
@@ -1429,7 +1435,7 @@ function startRace(cfg){
     endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Tu franchis la ligne d’arrivée en premier !',color:p.color},()=>startRace(cfg)); }
   ask();
 }
-window.DLH={refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
+window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
 
 </script>
@@ -2016,8 +2022,8 @@ function check(){
 function finish(){
   const sc=run.ok, stars=sc>=9?3:sc>=6?2:sc>=3?1:0;
   P.innerHTML=`<div class="mx-play mx-end"><div class="st">${'⭐'.repeat(stars)||'💪'}</div><h3>${sc} / ${run.total}</h3><p>${sc>=9?'Fantastique !':sc>=6?'Très bien !':'Continue, tu progresses !'}</p>
-    <button class="mx-go" id="mxAgain">🔁 Une autre série</button><button class="mx-go alt" id="mxChg">⚙️ Changer les réglages</button></div>`;
-  P.querySelector('#mxAgain').onclick=start; P.querySelector('#mxChg').onclick=()=>{ P.innerHTML=''; run=null; window.scrollTo(0,0); };
+    <button class="mx-go big" id="mxAgain">▶ Une autre série</button></div>`;
+  P.querySelector('#mxAgain').onclick=start; DLmore(P.querySelector('.mx-end'),[{ic:'⚙️',t:'Réglages',go:()=>{ P.innerHTML=''; run=null; window.scrollTo(0,0); }}].concat(DLtabItems(7)),'Ou continue avec :');
 }
 
 /* ---- tables de multiplication (6H) ---- */
@@ -2119,9 +2125,9 @@ function MkSeries(rootId,cfg){
     const wr=run.wrong.slice();
     P.innerHTML=`<div class="mx-play mx-end"><div class="st">${'⭐'.repeat(stars)||'💪'}</div><h3>${sc} / ${run.total}</h3><p>${sc>=run.total*.9?'Fantastique !':sc>=run.total*.6?'Très bien !':'Continue, tu progresses !'}</p>
       ${wr.length?`<button class="mx-go" id="${rootId}Rev">🔁 Refaire mes ${wr.length} erreur${wr.length>1?'s':''}</button>`:''}
-      <button class="mx-go${wr.length?' alt':''}" id="${rootId}Again">▶ Une autre série</button><button class="mx-go alt" id="${rootId}Chg">⚙️ Changer les réglages</button></div>`;
+      <button class="mx-go big" id="${rootId}Again">▶ Une autre série</button></div>`;
     const rv=P.querySelector('#'+rootId+'Rev'); if(rv) rv.onclick=()=>start(wr);
-    P.querySelector('#'+rootId+'Again').onclick=()=>start(); P.querySelector('#'+rootId+'Chg').onclick=()=>{ paintO(); window.scrollTo(0,0); };
+    P.querySelector('#'+rootId+'Again').onclick=()=>start(); DLmore(P.querySelector('.mx-end'),[{ic:'⚙️',t:'Réglages',go:()=>{ paintO(); window.scrollTo(0,0); }}].concat(DLtabItems(7)),'Ou continue avec :');
   }
 }
 window.MkSeries=MkSeries;
@@ -2580,8 +2586,8 @@ function finish(){
   run.done=true; clearInterval(tm); const b=getBest(), rec=run.ok>b; if(rec) setBest(run.ok);
   P.innerHTML=`<div class="mx-play mx-end"><div class="st">${run.ok>=25?'🏆':run.ok>=12?'⭐':'💪'}</div><h3>${run.ok} bonne${run.ok>1?'s':''} réponse${run.ok>1?'s':''}</h3>
   <p>${rec?'🎉 Nouveau record !':'Record : '+b}${run.ko?` · ${run.ko} erreur${run.ko>1?'s':''}`:''}</p>
-  <button class="mx-go" id="dfAgain">🔁 Rejouer</button><button class="mx-go alt" id="dfChg">⚙️ Changer les tables</button></div>`;
-  P.querySelector('#dfAgain').onclick=start; P.querySelector('#dfChg').onclick=paintO;
+  <button class="mx-go big" id="dfAgain">▶ Rejouer</button></div>`;
+  P.querySelector('#dfAgain').onclick=start; DLmore(P.querySelector('.mx-end'),[{ic:'⚙️',t:'Réglages',go:paintO}].concat(DLtabItems(7)),'Ou continue avec :');
 }
 paintO();
 })();
@@ -2712,6 +2718,7 @@ function frame(inner){
   root.innerHTML=`<button class="g-ghost pt-back" id="ptB">← Menu</button><div class="pt-card">${inner}</div>`;
   root.querySelector('#ptB').onclick=menu; window.scrollTo(0,0);
 }
+function ptMore(id){ const all=[]; MENU.forEach(([t,l])=>l.forEach(([i,ic,tx])=>{ if(i!==id) all.push({ic,t:tx,go:()=>play(i)}); })); return shuffle(all).slice(0,8); }
 function play(id){ if(id==='memory') return memory(); rounds(id); }
 function rounds(id){
   const S={i:0,ok:0,first:true,total:8}; T.S=S;
@@ -2736,9 +2743,9 @@ function rounds(id){
   function end(){
     const st=S.ok>=7?3:S.ok>=4?2:1; const L=pickL(); addStars(st);
     frame(`<div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${LANG==='de'?'Super gemacht!':'Bravo !'}</h3>
-     <button class="mx-go" id="ptAg">🔁 Encore !</button><button class="mx-go alt" id="ptMn">🏠 Menu</button></div>`);
+     <button class="mx-go big" id="ptAg">▶ ${LANG==='de'?'Nochmal!':'Encore !'}</button></div>`);
     sp(L==='de'?'Super gemacht!':'Bravo, tu as gagné des étoiles !',L);
-    root.querySelector('#ptAg').onclick=()=>rounds(id); root.querySelector('#ptMn').onclick=menu;
+    root.querySelector('#ptAg').onclick=()=>rounds(id); DLmore(root.querySelector('.pt-end'),ptMore(id),LANG==='de'?'Oder spiel weiter:':'Ou joue à autre chose :');
   }
   next();
 }
@@ -2754,14 +2761,32 @@ function memory(){
     const f=cards[first]; tries++; busy=true;
     if(f.a===c.a){ f.done=c.done=true; found++; G.children[first].classList.add('done'); b.classList.add('done'); first=null; busy=false;
       if(found===6){ addStars(1); await sleep(900); sp(LANG==='de'?'Super gemacht!':'Bravo !',LANG==='de'?'de':'fr'); const st=tries<=8?3:tries<=12?2:1;
-        frame(`<div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${LANG==='de'?'Super!':'Bravo !'}</h3><button class="mx-go" id="ptAg">🔁 Encore !</button><button class="mx-go alt" id="ptMn">🏠 Menu</button></div>`);
-        root.querySelector('#ptAg').onclick=memory; root.querySelector('#ptMn').onclick=menu; } }
+        frame(`<div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${LANG==='de'?'Super!':'Bravo !'}</h3><button class="mx-go big" id="ptAg">▶ ${LANG==='de'?'Nochmal!':'Encore !'}</button></div>`);
+        root.querySelector('#ptAg').onclick=memory; DLmore(root.querySelector('.pt-end'),ptMore('memory'),LANG==='de'?'Oder spiel weiter:':'Ou joue à autre chose :'); } }
     else { await sleep(1100); f.open=c.open=false; G.children[first].classList.remove('open'); b.classList.remove('open'); first=null; busy=false; } };
   T.memSolve=async()=>{ const g={}; cards.forEach((c,k)=>{ (g[c.a[0]]=g[c.a[0]]||[]).push(k); }); for(const v of Object.values(g)){ G.children[v[0]].click(); await sleep(0); G.children[v[1]].click(); await sleep(10); } };
 }
 menu();
 })();
 
+</script>
+<script>
+/* Fin d'exercice : gros bouton Rejouer, puis liste d'autres activités */
+(function(){
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  window.DLmore=function(host,items,label){
+    if(!host||!items||!items.length) return;
+    const w=document.createElement('div'); w.className='nx-wrap';
+    w.innerHTML='<div class="nx-gap"></div><p class="nx-lab">'+esc(label||'Ou continue avec :')+'</p><div class="nx-list">'+items.map((it,i)=>'<button class="nx-b" data-i="'+i+'"><span class="i">'+it.ic+'</span><span>'+esc(it.t)+'</span></button>').join('')+'</div>';
+    w.onclick=e=>{ const b=e.target.closest('.nx-b'); if(b) items[+b.dataset.i].go(); };
+    host.appendChild(w); return w;
+  };
+  window.DLtabItems=function(n){
+    const all=[...document.querySelectorAll('#tabs .tab')].filter(t=>t.getAttribute('aria-selected')!=='true'&&!t.hidden&&t.offsetParent!==null);
+    for(let i=all.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [all[i],all[j]]=[all[j],all[i]]; }
+    return all.slice(0,n||8).map(t=>({ic:(t.querySelector('.ic')||{}).textContent||'🎯',t:(t.querySelector('.lb')||t).textContent.trim(),go:()=>{ t.click(); window.scrollTo(0,0); }}));
+  };
+})();
 </script>
 </body>
 </html>
