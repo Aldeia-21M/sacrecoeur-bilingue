@@ -550,6 +550,24 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .u-toast.on{opacity:1;transform:translate(-50%,0)}.u-toast b{color:#ffe066}.u-toast button{border:0;border-radius:10px;background:#ffd43b;color:#2b3350;font:800 13px inherit;font-family:inherit;padding:7px 12px;cursor:pointer;flex:none}
 .u-ov{position:fixed;inset:0;z-index:150;background:rgba(20,26,40,.5);display:grid;place-items:center;padding:20px}.u-dlg{background:#fff;border-radius:18px;padding:18px;max-width:380px;width:100%;box-shadow:0 12px 40px rgba(20,26,40,.4)}.u-dlg p{margin:0 0 14px;color:#2b3350;line-height:1.4}.u-dr{display:flex;gap:8px;justify-content:flex-end}
 @media (max-width:520px){.u-kpis{grid-template-columns:repeat(2,1fr)}.u-sr{grid-template-columns:92px 1fr 42px 26px}}
+/* ===== salon à distance ===== */
+.sl-beta{display:inline-block;vertical-align:middle;margin-left:6px;font:800 11px/1 inherit;font-family:inherit;letter-spacing:.8px;color:#fff;background:#f08c00;border-radius:999px;padding:4px 8px}
+.sl{display:grid;gap:10px}.sl .g-big{margin:0}
+.sl-msg{margin:0;padding:8px 12px;border-radius:12px;background:#fff4e6;border:1px solid #ffd8a8;font-weight:700;color:#7a4a00}
+.sl-me{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;background:#eef6ff}.sl-me small{color:#5b6478;margin-left:auto}
+.sl-av{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;border:3px solid var(--pc,#cfd6e6);background:#fff;font-size:24px}.sl-av .mx{width:100%;height:100%;border:0;box-shadow:none}
+.sl-form{display:grid;gap:8px}.sl-avs{display:flex;gap:6px;flex-wrap:wrap}.sl-avs button{width:46px;height:46px;border-radius:12px;border:3px solid #e2e7f3;background:#fff;font-size:24px;padding:0}.sl-avs button[aria-pressed=true]{border-color:#1f5fd6;background:#eaf1ff}
+.sl-join{display:flex;gap:8px;align-items:stretch}.sl-join input{flex:0 0 120px;font:800 22px/1 inherit;font-family:ui-monospace,monospace;letter-spacing:3px;text-transform:uppercase;text-align:center;border:2px solid var(--line);border-radius:14px;min-height:52px;width:120px;box-sizing:border-box}.sl-join .g-big{flex:1}
+.sl-code{display:grid;gap:6px;justify-items:center;padding:12px;border-radius:16px;background:#fff8e1;border:2px dashed #fcc419}.sl-code small{color:#7a6a3a}.sl-code code{font:800 38px/1 ui-monospace,monospace;letter-spacing:6px;user-select:all}
+.g-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.sl-pl{display:flex;gap:6px;flex-wrap:wrap}.sl-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px 2px 3px;border-radius:999px;background:#fff;border:2px solid var(--pc);font-weight:700;font-size:14px}.sl-chip i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:16px}.sl-chip i .mx{width:100%;height:100%;border:0;box-shadow:none}.sl-chip.act{box-shadow:0 0 0 3px var(--pc);background:#fffbe0}.sl-chip.away{opacity:.5}.sl-chip small{font-weight:600;color:#6b7385}
+.sl-th{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sl-t{display:grid;gap:3px;justify-items:center;text-align:center;padding:12px 6px;border-radius:16px;border:3px solid #e2e7f3;background:#fff;font-family:inherit;cursor:pointer;min-height:96px}.sl-t .e{font-size:28px}.sl-t.on{border-color:#1f5fd6;background:#eaf1ff}.sl-t .vs{display:flex;gap:2px;min-height:22px;justify-content:center}.sl-t .vs i{font-style:normal;width:22px;height:22px;display:grid;place-items:center;font-size:16px}.sl-t .vs i .mx{width:100%;height:100%;border:0}.sl-t small{color:#5b6478}
+.sl-cd{display:flex;gap:10px;align-items:center}.sl-cd b{min-width:42px;text-align:right}.sl-bar{flex:1;height:14px;border-radius:8px;background:#e7ebf5;overflow:hidden}.sl-bar i{display:block;height:100%;width:100%;border-radius:8px;background:linear-gradient(90deg,#fcc419,#f08c00);transition:width .25s linear}.sl-cd.sm .sl-bar{height:10px}
+.sl-top{display:flex;justify-content:space-between;font-weight:800;color:#4a5368}
+.sl-wait{padding:24px 12px;text-align:center;border-radius:16px;background:#f4f6fb;font-size:1.05rem}
+.sl-q{display:grid;gap:10px;padding:12px;border-radius:18px;border:3px solid var(--pc);background:#fffdf3}.sl-who{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.sl-opts button:disabled{opacity:1}.sl-opts button:disabled:not(.ok):not(.ko){opacity:.8}
+.sl-rk div{grid-template-columns:34px 40px 1fr auto}
 </style>
 </head>
 <body>
@@ -557,7 +575,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
   <div class="secs" role="tablist" aria-label="Rubrique"><button class="sec-b" data-s="de" aria-pressed="true"><span class="e">🇩🇪</span><span>Allemand</span></button><button class="sec-b" data-s="fr" aria-pressed="false"><span class="e">🇫🇷</span><span>Français</span></button><button class="sec-b" data-s="ma" aria-pressed="false"><span class="e">🧮</span><span>Maths</span></button><button class="sec-b" data-s="pt" aria-pressed="false"><span class="e">🧸</span><span>Petits</span></button><button class="sec-b" data-s="fa" aria-pressed="false"><span class="e">🏆</span><span>Grand Quiz</span></button></div>
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
-    <button class="tab gear" id="usrbtn" aria-controls="upanel" aria-selected="false"><span class="ic">👨‍👩‍👧</span><span class="lb">Famille</span><small class="av-b" id="usrBadge" hidden></small></button>
+    <button class="tab gear" id="usrbtn" aria-controls="upanel" aria-selected="false"><span class="ic">🏠</span><span class="lb">Famille</span><small class="av-b" id="usrBadge" hidden></small></button>
     <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel" aria-label="Voix : choisir et régler les voix"><span class="ic">🔊</span><span class="lb">Voix</span></button>
     <button class="tab gear" id="avisbtn" aria-controls="setpanel"><span class="ic">💬</span><span class="lb">Avis</span><small class="av-b" id="avisBadge" hidden></small></button>
   </div>
@@ -641,6 +659,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "3.7", desc: "Salon à distance en direct (bêta), icône Famille" },
     { v: "3.6", desc: "Fermer la fenêtre de fin de partie" },
     { v: "3.5", desc: "Plateau : pièges de fin et nouvelles cases" },
     { v: "3.4", desc: "Bouton Voix plus clair, texte explicatif" },
@@ -1520,6 +1539,7 @@ if(FAST) window.__g2=T2;
 /* ---------- menu ---------- */
 const GROUPS=[
  ['🎲 Jeux de société',[
+  {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
   {id:'memory',ic:'🃏',t:'Memory',d:'Paires français ↔ allemand · 1–4',c:'#d9ecfb'},
@@ -1540,7 +1560,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1550,7 +1570,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -4121,7 +4141,7 @@ const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n,12);
 const mondayOf=d=>addDays(d,-((d.getDay()+6)%7));
 const norm=s=>String(s||'').trim().toLowerCase();
 const SECN={de:'Allemand',fr:'Français',ma:'Maths',pt:'Petits',fa:'Famille'};
-const SECI={de:'🇩🇪',fr:'🇫🇷',ma:'🧮',pt:'🧸',fa:'👨‍👩‍👧'};
+const SECI={de:'🇩🇪',fr:'🇫🇷',ma:'🧮',pt:'🧸',fa:'🏠'};
 const ANIMALS=['🦊','🐻','🐼','🐸','🦁','🐯','🐰','🐵','🦄','🐧','🐱','🐶','🐨','🐮','🐷','🐹','🐭','🦉','🦋','🐢','🐙','🐬','🦖','🐲','🦅','🐺','🦒','🐘','🦓','🐝','🐞','🦈','🚀','⚽','🎨','🌈'];
 const COLS=['#e5383b','#1f5fd6','#2f9e44','#f08c00','#8f6fd6','#e64980','#0ca678','#1098ad','#a0522d','#82b21b','#c2255c','#364fc7'];
 const LEVELS=[['🌱','Graine'],['🌿','Pousse'],['🍀','Bourgeon'],['🌼','Fleur'],['🧭','Petit explorateur'],['🗺️','Explorateur'],['⛰️','Aventurier'],['📚','Savant'],['🎓','Expert'],['🏅','Champion'],['👑','Maître'],['🌟','Légende']];
@@ -4289,9 +4309,9 @@ async function joinCode(raw){
   try{ const r=await fetch(API+'?c='+encodeURIComponent(code),{cache:'no-store'});
     if(r.status===404){ V.msg='⚠️ Code inconnu. Vérifie-le (lettres et chiffres, sans O ni I).'; render(); return; }
     if(!r.ok) throw 0; const j=await r.json(); const n=mergeIn(j.data||{});
-    D.sync={code,last:Date.now()}; save(); V.join=false; V.form=null; V.tab=D.profiles.length?'def':'pro'; paintBtn(); V.msg=`✅ Code reconnu : ${n} joueur${n>1?'s':''} retrouvé${n>1?'s':''}.`; render(); toast(`👨‍👩‍👧 <b>Famille retrouvée</b> (${D.profiles.map(p=>esc(p.name)).join(', ')})`,{ms:3000}); sync(false);
+    D.sync={code,last:Date.now()}; save(); V.join=false; V.form=null; V.tab=D.profiles.length?'def':'pro'; paintBtn(); V.msg=`✅ Code reconnu : ${n} joueur${n>1?'s':''} retrouvé${n>1?'s':''}.`; render(); toast(`🏠 <b>Famille retrouvée</b> (${D.profiles.map(p=>esc(p.name)).join(', ')})`,{ms:3000}); sync(false);
   }catch(e){ V.msg='⚠️ Pas de connexion pour l’instant. Réessaie dans un moment.'; render(); } }
-const NOTICE=`<div class="u-notice"><b>👨‍👩‍👧 Une famille = un code</b>
+const NOTICE=`<div class="u-notice"><b>🏠 Une famille = un code</b>
 <ul><li>Chaque joueur de la famille a son <b>prénom</b>, son <b>avatar</b>, ses <b>points</b> et sa <b>progression</b>.</li>
 <li>Avec le code, vous retrouvez tous vos joueurs <b>sur un autre appareil</b> (iPad, téléphone, ordinateur) : il suffit de le taper dans « J’ai déjà un code famille ».</li>
 <li>Pas de compte, pas de mot de passe, pas de vrais noms : juste des pseudos et des points.</li>
@@ -4305,11 +4325,11 @@ function welcomeH(){
   <p class="u-note"><button type="button" class="u-lk" data-act="solo">Jouer sans famille, juste sur cet appareil</button></p>`; }
 function famCard(){
   const s=D.sync;
-  if(!s) return `<h4 class="u-h">👨‍👩‍👧 Famille</h4>
+  if(!s) return `<h4 class="u-h">🏠 Famille</h4>
   <p class="u-note">Pour l’instant, les joueurs sont gardés <b>dans cet appareil seulement</b>. Crée un <b>code famille</b> pour les retrouver sur d’autres appareils.</p>
   <div class="u-sv"><button type="button" class="u-b pr" data-act="syon">☁️ Créer le code famille</button><button type="button" class="u-b" data-act="syjoin">🔑 J’ai déjà un code famille</button></div>${joinRow()}`;
   const st=SY.busy?'🔄 Synchronisation…':SY.st==='err'?'⚠️ Hors connexion : on réessaiera':s.last?'✅ Synchronisé à '+new Date(s.last).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'}):'';
-  return `<h4 class="u-h">👨‍👩‍👧 ${V.famEdit?'Nom de la famille':esc(D.fam||'Ma famille')} <small>${V.famEdit?'':'<button type="button" class="u-lk" data-act="famed">✏️ renommer</button>'}</small></h4>
+  return `<h4 class="u-h">🏠 ${V.famEdit?'Nom de la famille':esc(D.fam||'Ma famille')} <small>${V.famEdit?'':'<button type="button" class="u-lk" data-act="famed">✏️ renommer</button>'}</small></h4>
   ${V.famEdit?`<div class="u-sv"><input class="u-in" id="uFamN" maxlength="30" value="${esc(D.fam)}" placeholder="Ex. Les Dupont" style="text-transform:none;font-family:inherit;letter-spacing:0"><button type="button" class="u-b pr" data-act="famok">Enregistrer</button></div>`:''}
   <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier</button></div>
   <p class="u-note">Code famille · ${st} · Sur un autre appareil : <b>Famille → J’ai déjà un code famille</b>.</p>`; }
@@ -4320,7 +4340,7 @@ function famBottom(){ const s=D.sync;
 /* ---------- bouton de l’en-tête ---------- */
 const BTN=$('#usrbtn'), BAD=$('#usrBadge');
 function paintBtn(){ const p=act();
-  BTN.querySelector('.ic').innerHTML=p?avH(p.av):'👨‍👩‍👧';
+  BTN.querySelector('.ic').innerHTML=p?avH(p.av):'🏠';
   BTN.querySelector('.lb').textContent='Famille';
   BAD.hidden=!p; if(p) BAD.textContent=p.name.slice(0,7)+' · '+p.pts;
   const dl=$('#dlProfNames'); if(dl) dl.innerHTML=D.profiles.map(x=>`<option value="${esc(x.name)}">`).join(''); }
@@ -4428,9 +4448,9 @@ function formH(){ const f=V.form, nw=!f.id;
 
 function render(){
   const p=act();
-  const head=p?(()=>{ const l=level(p.pts); return `<div class="u-head" style="--pc:${p.col}"><span class="u-av big">${avH(p.av)}</span><div class="u-hi"><small class="u-fam">👨‍👩‍👧 ${esc(D.fam||'Ma famille')}</small><b>${esc(p.name)}</b><small>${l.e} Niveau ${l.n} · ${esc(l.name)}</small><div class="u-gr" role="group" aria-label="Classe de ${esc(p.name)}">Classe ${['1H','4H','6H'].map(g=>`<button type="button" data-pg="${g}" aria-pressed="${p.gr===g}">${g}</button>`).join('')}</div><div class="u-pb"><i style="width:${l.pct}%"></i></div><small>${p.pts} pts${l.b?` · encore ${l.left} pour le niveau ${l.n+1}`:' · niveau maximum !'}</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`; })()
-    :`<div class="u-head"><span class="u-av big">👨‍👩‍👧</span><div class="u-hi"><b>${D.sync?esc(D.fam||'Ma famille'):'Bienvenue !'}</b><small>${D.sync?'Ajoute les joueurs de la famille.':'Crée ta famille pour garder les points et les progrès de chacun.'}</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`;
-  const tabs=D.profiles.length?`<div class="u-tabs" role="tablist">${[['def','🎯','Défis'],['evo','📈','Évolution'],['pro','👨‍👩‍👧','Famille']].map(t=>`<button type="button" role="tab" data-t="${t[0]}" aria-selected="${V.tab===t[0]}">${t[1]} ${t[2]}</button>`).join('')}</div>`:'';
+  const head=p?(()=>{ const l=level(p.pts); return `<div class="u-head" style="--pc:${p.col}"><span class="u-av big">${avH(p.av)}</span><div class="u-hi"><small class="u-fam">🏠 ${esc(D.fam||'Ma famille')}</small><b>${esc(p.name)}</b><small>${l.e} Niveau ${l.n} · ${esc(l.name)}</small><div class="u-gr" role="group" aria-label="Classe de ${esc(p.name)}">Classe ${['1H','4H','6H'].map(g=>`<button type="button" data-pg="${g}" aria-pressed="${p.gr===g}">${g}</button>`).join('')}</div><div class="u-pb"><i style="width:${l.pct}%"></i></div><small>${p.pts} pts${l.b?` · encore ${l.left} pour le niveau ${l.n+1}`:' · niveau maximum !'}</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`; })()
+    :`<div class="u-head"><span class="u-av big">🏠</span><div class="u-hi"><b>${D.sync?esc(D.fam||'Ma famille'):'Bienvenue !'}</b><small>${D.sync?'Ajoute les joueurs de la famille.':'Crée ta famille pour garder les points et les progrès de chacun.'}</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`;
+  const tabs=D.profiles.length?`<div class="u-tabs" role="tablist">${[['def','🎯','Défis'],['evo','📈','Évolution'],['pro','🏠','Famille']].map(t=>`<button type="button" role="tab" data-t="${t[0]}" aria-selected="${V.tab===t[0]}">${t[1]} ${t[2]}</button>`).join('')}</div>`:'';
   const body=!D.profiles.length?tabPro():V.tab==='def'?tabDef(p):V.tab==='evo'?tabEvo(p):tabPro();
   const sc=P.scrollTop; P.innerHTML=head+tabs+`<div class="u-body">${body}</div><div class="setgrab" id="ugrab" aria-label="Fermer"><i></i></div>`; P.scrollTop=sc;
 }
@@ -4514,6 +4534,146 @@ window.DLU={
 paintBtn(); hook();
 if(D.sync) setTimeout(()=>sync(false),1500);
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&D.sync) sync(false); });
+})();
+</script>
+<script>
+/* ===== Salon à distance (BÊTA) : Grand Quiz en direct avec d'autres joueurs ===== */
+(function(){
+'use strict';
+const API='/.netlify/functions/salon';
+const D=window.DL, H=window.DLH; if(!D||!H) return;
+const esc=D.esc, body=H.body;
+const THEMES=[['mix','🌍','Tout mélangé'],['de','🇩🇪','Allemand'],['fr','🇫🇷','Français'],['ma','🧮','Maths']];
+const TOP={mix:['zahlen','school','cal','calc','conj','gram','ortho','heure','monnaie','nombres'],de:['zahlen','school','cal','wort','artikel','satz','math'],fr:['conj','ortho','gram'],ma:['calc','histoire','heure','monnaie','nombres','mesures']};
+const GAV=['🦊','🐻','🐼','🐸','🦁','🐯','🐰','🦄'];
+const S={room:null,v:0,off:0,code:null,asked:{},tries:{},sent:{},heard:{},endDone:null,err:0,timer:null,tk:null,prefill:'',msg:'',busy:false,gname:''};
+const nowS=()=>Date.now()+S.off;
+const sg=(k,v)=>{ try{ if(v===undefined) return sessionStorage.getItem(k); if(v===null) sessionStorage.removeItem(k); else sessionStorage.setItem(k,v); }catch(e){} return null; };
+function avH(a){ return a==='mx'?'<i class="mx"></i>':esc(a||'🙂'); }
+/* nettoie le HTML reçu d'un autre appareil (questions) */
+function clean(h){ const t=document.createElement('template'); t.innerHTML=String(h||'');
+  t.content.querySelectorAll('script,iframe,object,embed,link,meta,form,style,base,input,button,textarea,select').forEach(n=>n.remove());
+  t.content.querySelectorAll('*').forEach(n=>{ [...n.attributes].forEach(a=>{ const k=a.name.toLowerCase(), v=a.value.trim().toLowerCase(); if(k.startsWith('on')||((k==='href'||k==='src'||k==='xlink:href')&&(v.startsWith('javascript:')||(v.startsWith('data:')&&!v.startsWith('data:image/'))))) n.removeAttribute(a.name); }); });
+  const d=document.createElement('div'); d.appendChild(t.content); return d.innerHTML; }
+/* qui suis-je ? profil actif, sinon invité */
+function guest(){ try{ return JSON.parse(localStorage.getItem('dl-salon-guest')||'null'); }catch(e){ return null; } }
+function me(){ const p=window.DLU&&DLU.active(); if(p) return {id:'u'+String(p.id).replace(/[^A-Za-z0-9_-]/g,'').slice(0,20),name:p.name,av:p.av,col:p.col,gr:p.gr};
+  const g=guest(); return g&&g.name?{id:g.id,name:g.name,av:g.av,col:g.col||'#1f5fd6',gr:g.gr||'4H'}:null; }
+function saveGuest(name,av,gr){ const old=guest(), g={id:(old&&old.id)||'g'+Math.random().toString(36).slice(2,12),name:name.slice(0,14),av,gr,col:'#1f5fd6'}; try{ localStorage.setItem('dl-salon-guest',JSON.stringify(g)); }catch(e){} return g; }
+
+/* réseau */
+async function api(b){ const m=me(); if(!m) return {error:'profil'}; try{ const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(Object.assign({p:m.id,c:S.code},b))}); const j=await r.json().catch(()=>({error:'json'})); if(j.now) S.off=j.now-Date.now(); if(j.room) setRoom(j.room); S.err=0; return j; }catch(e){ S.err++; return {error:'net'}; } }
+async function poll(){ if(!S.code||!alive()) return; const m=me(); if(!m) return;
+  try{ const r=await fetch(`${API}?c=${S.code}&p=${encodeURIComponent(m.id)}&v=${S.v}`,{cache:'no-store'});
+    if(r.status===404){ S.msg='⚠️ Ce salon n’existe plus (terminé ou expiré).'; leaveLocal(); return; }
+    const j=await r.json(); S.err=0; if(j.now) S.off=j.now-Date.now(); if(j.room) setRoom(j.room); }catch(e){ S.err++; }
+  schedule(); }
+function schedule(){ clearTimeout(S.timer); if(!S.code||!alive()) return; const ph=S.room&&S.room.phase; const d=document.hidden?6000:(ph==='play'||ph==='vote')?1400:2600; S.timer=setTimeout(poll,d); }
+const alive=()=>!!document.getElementById('slRoot');
+function setRoom(r){ if(S.room&&r.v===S.room.v&&r.phase===S.room.phase){ S.room=r; return; } S.room=r; S.v=r.v; paint(); }
+function leaveLocal(){ S.code=null; S.room=null; S.v=0; sg('dl-salon',null); S.asked={}; S.sent={}; S.endDone=null; paint(); }
+
+/* écrans */
+const root=()=>document.getElementById('slRoot');
+function paint(){ const R=root(); if(!R) return; const r=S.room;
+  if(!S.code||!r) R.innerHTML=homeH(); else if(r.phase==='lobby') R.innerHTML=lobbyH(r); else if(r.phase==='vote') R.innerHTML=voteH(r); else if(r.phase==='play') R.innerHTML=playH(r); else R.innerHTML=endH(r);
+  bind(R); tick(); if(r&&r.phase==='end') endExtras(r); }
+const BETA='<span class="sl-beta">BÊTA</span>';
+function homeH(){ const m=me(), g=guest();
+  return `<h2 class="g-h">🌐 Salon à distance ${BETA}</h2>
+  <p class="g-p">Joue <b>en direct</b> avec d’autres joueurs, chacun sur son appareil : on <b>vote</b> pour le thème, puis chacun répond <b>à tour de rôle</b> aux questions. Pas de chat : que des questions et des points !</p>
+  ${S.msg?`<p class="sl-msg">${S.msg}</p>`:''}
+  ${m?`<div class="sl-me"><span class="sl-av" style="--pc:${m.col}">${avH(m.av)}</span><b>${esc(m.name)}</b><small>Classe ${m.gr}</small></div>
+  ${window.DLU&&DLU.active()?'':'<button class="g-ghost" data-s="chg">Changer de pseudo</button>'}`
+  :`<div class="sl-form"><label class="u-f">Ton prénom ou pseudo<input id="slName" maxlength="14" autocomplete="off" placeholder="Ex. Léo" value="${esc(S.gname)}"></label>
+    <div class="sl-avs" id="slAvs">${GAV.map((a,i)=>`<button type="button" data-av="${a}" aria-pressed="${i===0}">${a}</button>`).join('')}</div>
+    <div class="g-gr" id="slGr" style="--pc:#1f5fd6">${['1H','4H','6H'].map(x=>`<button type="button" data-gr="${x}" aria-pressed="${x==='4H'}">Classe ${x}</button>`).join('')}</div>
+    <p class="g-p g-note">Astuce : crée une famille (bouton <b>🏠 Famille</b>) pour garder ton profil et tes points.</p></div>`}
+  <button class="g-big" data-s="create">➕ Créer un salon</button>
+  <div class="sl-join"><input id="slCode" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODE" value="${esc(S.prefill)}"><button class="g-big" data-s="join">Rejoindre</button></div>
+  <p class="g-p g-note">🧪 <b>Version de test (bêta)</b> : si quelque chose ne marche pas, on corrige ! Un salon dure 4 heures au maximum. Seuls le pseudo, l’avatar, la classe et les points de la partie sont partagés.</p>`; }
+function playersH(r){ const t=nowS(); return `<div class="sl-pl">${r.players.map(p=>{ const away=!((r.seen[p.id]||0)>t-35000); return `<span class="sl-chip${away?' away':''}" style="--pc:${p.col}"><i>${avH(p.av)}</i>${esc(p.name)}${p.id===(me()||{}).id?' <small>(toi)</small>':''}${away?' <small>💤</small>':''}</span>`; }).join('')}</div>`; }
+function themeCards(r,voting){ const votes=(r.vote&&r.vote.votes)||{}, mine=votes[(me()||{}).id];
+  return `<div class="sl-th">${THEMES.map(([k,e,l])=>{ const vs=r.players.filter(p=>votes[p.id]===k); return `<button class="sl-t${mine===k?' on':''}" data-th="${k}"><span class="e">${e}</span><b>${l}</b><span class="vs">${vs.map(p=>`<i title="${esc(p.name)}">${avH(p.av)}</i>`).join('')}</span>${voting?`<small>${vs.length} vote${vs.length>1?'s':''}</small>`:''}</button>`; }).join('')}</div>`; }
+function lobbyH(r){ const link=location.origin&&location.origin!=='null'?location.origin+location.pathname+'?salon='+r.code:'';
+  return `<h2 class="g-h">🌐 Salon ${BETA}</h2>
+  <div class="sl-code"><small>Code du salon</small><code>${esc(r.code)}</code><div class="g-row"><button class="g-ghost" data-s="copy">📋 Copier le code</button>${link?'<button class="g-ghost" data-s="share">🔗 Inviter</button>':''}</div></div>
+  <p class="g-p">Envoie le code (ou le lien) aux autres joueurs : ils le tapent dans <b>« Salon à distance → Rejoindre »</b>.</p>
+  <h3 class="g-lab">👥 Dans le salon (${r.players.length})</h3>${playersH(r)}
+  <h3 class="g-lab">🗳️ Choisissez un thème</h3><p class="g-p g-note">Touche un thème : <b>le premier vote lance un chrono de 45 secondes</b>. La majorité gagne (au hasard en cas d’égalité, « Tout mélangé » si personne ne vote).</p>${themeCards(r,false)}
+  ${S.msg?`<p class="sl-msg">${S.msg}</p>`:''}<button class="g-ghost" data-s="leave">👋 Quitter le salon</button>`; }
+function voteH(r){ return `<h2 class="g-h">🗳️ On vote ! ${BETA}</h2>
+  <div class="sl-cd"><div class="sl-bar"><i id="slBar"></i></div><b id="slSec">…</b></div>
+  <p class="g-p">Touche le thème que tu veux. Quand tout le monde a voté, ça part tout de suite !</p>${themeCards(r,true)}${playersH(r)}`; }
+function turnInfo(r){ const u=r.turn, p=r.players.find(x=>x.id===u.pid)||{name:'?',av:'🙂',col:'#999'}; return {u,p,mine:u.pid===(me()||{}).id}; }
+function scoreH(r){ return `<div class="sl-pl">${r.order.map(id=>{ const p=r.players.find(x=>x.id===id); if(!p) return ''; const sc=r.scores[id]||{pts:0}; const act=r.turn&&r.turn.pid===id; return `<span class="sl-chip${act?' act':''}" style="--pc:${p.col}"><i>${avH(p.av)}</i>${esc(p.name)} <b>${sc.pts}</b></span>`; }).join('')}</div>`; }
+function playH(r){ const {u,p,mine}=turnInfo(r), q=u.q, theme=(THEMES.find(t=>t[0]===r.theme)||THEMES[0]);
+  let h=`<div class="sl-top"><span>${theme[1]} ${theme[2]}</span><span>Question ${Math.min(u.n+1,r.total)} / ${r.total}</span></div>${scoreH(r)}`;
+  if(!q){ h+=u.ans?`<div class="sl-wait">😴 <b>${esc(p.name)}</b> n’a pas joué : on passe au suivant…</div>`:`<div class="sl-wait">${mine?'✨ Je prépare ta question…':`✨ <b>${esc(p.name)}</b> prépare sa question…`}</div>`; return h; }
+  const badge=(D.TOPICS[q.cat]||{}).badge||'';
+  h+=`<div class="sl-q" style="--pc:${p.col}"><div class="sl-who"><span class="g-badge" style="--bc:${(D.TOPICS[q.cat]||{}).color||'#eee'}">${badge}</span><b>${mine?'👉 À toi de jouer !':`Tour de ${esc(p.name)} ${avH(p.av)}`}</b></div>
+   <div class="g-q">${clean(q.prompt)}</div>${q.audio?'<button class="g-listen" data-s="listen">🔊 Écouter</button>':''}
+   <div class="g-opts sl-opts">${q.options.map((o,k)=>{ let c=''; if(u.ans){ if(k===q.correct) c='ok'; else if(k===u.ans.k) c='ko'; } return `<button data-k="${k}" class="${c}" ${mine&&!u.ans?'':'disabled'}>${esc(o)}</button>`; }).join('')}</div>
+   ${u.ans?`<div class="g-fb ${u.ans.ok?'ok':'ko'}">${u.ans.timeout?'⏰ <b>Temps écoulé !</b>':u.ans.ok?`✅ <b>Bravo ${esc(p.name)} !</b>`:`❌ <b>Pas tout à fait…</b>`} ${esc(q.shown||'')}</div><div class="sl-cd sm"><div class="sl-bar"><i id="slBar"></i></div><b id="slSec"></b></div>`
+     :`<div class="sl-cd sm"><div class="sl-bar"><i id="slBar"></i></div><b id="slSec"></b></div>`}</div>`;
+  return h; }
+function rankH(r){ const arr=r.order.map(id=>({p:r.players.find(x=>x.id===id),s:r.scores[id]||{pts:0,ok:0,a:0}})).filter(x=>x.p).sort((a,b)=>b.s.pts-a.s.pts||b.s.ok-a.s.ok), med=['🥇','🥈','🥉'];
+  return `<div class="u-rk sl-rk">${arr.map((x,i)=>`<div style="--pc:${x.p.col}"><span>${med[i]||i+1}</span><span class="u-av" style="--pc:${x.p.col}">${avH(x.p.av)}</span><b>${esc(x.p.name)}</b><em>${x.s.pts} pts <small>(${x.s.ok}/${x.s.a})</small></em></div>`).join('')}</div>`; }
+function endH(r){ return `<h2 class="g-h">🏆 Partie terminée ! ${BETA}</h2>${rankH(r)}
+  <button class="g-big" data-s="again">🔁 Rejouer dans ce salon</button><button class="g-ghost" data-s="leave" style="margin-top:8px">👋 Quitter le salon</button><div id="slMore"></div>`; }
+function endExtras(r){ const key=r.code+'|'+r.v; if(S.endDone===r.code+'|'+(r.total)+'|'+r.created+'|'+(r.order||[]).join()) return; S.endDone=r.code+'|'+(r.total)+'|'+r.created+'|'+(r.order||[]).join();
+  try{ if(window.confetti) confetti(); const el=document.getElementById('slMore'); if(el&&window.DLmore) DLmore(el,H.hubItems('salon'),'Ou joue à un autre jeu :'); }catch(e){} }
+
+/* interactions */
+function bind(R){
+  R.onclick=async e=>{ const b=e.target.closest('button'); if(!b) return;
+    if(b.dataset.av){ R.querySelectorAll('#slAvs button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return; }
+    if(b.dataset.gr){ R.querySelectorAll('#slGr button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return; }
+    const s=b.dataset.s;
+    if(s==='chg'){ try{ localStorage.removeItem('dl-salon-guest'); }catch(x){} paint(); return; }
+    if(s==='create'||s==='join'){ ensureMe(R); const m=me(); if(!m){ S.msg='⚠️ Écris ton prénom ou ton pseudo.'; paint(); return; }
+      S.msg=''; if(s==='create'){ S.code=null; const j=await api({a:'create',profile:m}); if(j.room){ S.code=j.room.code; sg('dl-salon',S.code); S.v=0; setRoom(j.room); S.v=j.room.v; paint(); schedule(); } else { S.msg=j.error==='net'?'⚠️ Pas de connexion au serveur.':'⚠️ Impossible de créer le salon ('+esc(j.error||'?')+').'; paint(); } }
+      else { const c=(R.querySelector('#slCode').value||'').toUpperCase().replace(/[^A-Z0-9]/g,''); S.prefill=c; if(c.length!==5){ S.msg='⚠️ Le code a 5 signes (lettres et chiffres).'; paint(); return; } await joinRoom(c,m); }
+      return; }
+    if(s==='copy'){ try{ await navigator.clipboard.writeText(S.code); S.msg='✅ Code copié !'; }catch(x){ S.msg='Code : '+S.code; } paint(); return; }
+    if(s==='share'){ const url=location.origin+location.pathname+'?salon='+S.code, text='Viens jouer au quiz avec moi ! Code du salon : '+S.code; try{ if(navigator.share){ await navigator.share({title:'Quiz à distance',text,url}); return; } await navigator.clipboard.writeText(text+' '+url); S.msg='✅ Lien copié : colle-le dans un message.'; }catch(x){ S.msg='Lien : '+url; } paint(); return; }
+    if(s==='leave'){ await api({a:'leave'}); leaveLocal(); return; }
+    if(s==='again'){ await api({a:'again'}); return; }
+    if(s==='listen'){ const q=S.room&&S.room.turn&&S.room.turn.q; if(q&&q.audio) D.say(q.audio.t,q.audio.l); return; }
+    if(b.dataset.th){ const r=S.room; if(!r) return; if(r.phase==='lobby'||r.phase==='vote') await api({a:'vote',theme:b.dataset.th}); return; }
+    if(b.dataset.k!==undefined&&b.closest('.sl-opts')){ const r=S.room, u=r&&r.turn; if(!u||u.ans||u.pid!==(me()||{}).id||S.sent[u.n]) return; S.sent[u.n]={t:Date.now(),k:+b.dataset.k};
+      const q=u.q, k=+b.dataset.k, ok=k===q.correct; b.classList.add(ok?'ok':'ko'); R.querySelectorAll('.sl-opts button').forEach(x=>x.disabled=true);
+      try{ DLverdict(ok,q.reveal?[{t:q.reveal.t,l:q.reveal.l}]:[],false,{}); }catch(x){}
+      await api({a:'answer',n:u.n,k}); return; } };
+}
+function ensureMe(R){ if(me()) return; const n=(R.querySelector('#slName')||{}).value; if(!n||!n.trim()) return; const av=(R.querySelector('#slAvs button[aria-pressed=true]')||{}).dataset; const gr=(R.querySelector('#slGr button[aria-pressed=true]')||{}).dataset; saveGuest(n.trim(),(av&&av.av)||'🦊',(gr&&gr.gr)||'4H'); }
+async function joinRoom(c,m){ S.code=c; const j=await api({a:'join',profile:m||me()});
+  if(j.room&&!j.error){ sg('dl-salon',c); S.v=0; setRoom(j.room); S.v=j.room.v; paint(); schedule(); return true; }
+  S.code=null; S.msg=j.error==='absent'?'⚠️ Salon introuvable ou expiré : vérifie le code.':j.error==='plein'?'⚠️ Ce salon est complet (8 joueurs).':j.error==='net'?'⚠️ Pas de connexion au serveur.':'⚠️ Impossible de rejoindre ('+esc(j.error||'?')+').'; paint(); return false; }
+
+/* minuteries et actions automatiques (toutes les 250 ms) */
+function tick(){ const R=root(); if(!R){ clearInterval(S.tk); S.tk=null; return; } if(!S.tk) S.tk=setInterval(tick,250);
+  const r=S.room; if(!r) return; const t=nowS(); let end=0, tot=1;
+  if(r.phase==='vote'&&r.vote){ end=r.vote.start+r.vote.dur; tot=r.vote.dur; }
+  else if(r.phase==='play'&&r.turn){ const u=r.turn; if(u.ans){ end=u.revealUntil; tot=5500; } else { end=u.deadline; tot=u.q?30000:12000; } }
+  const bar=R.querySelector('#slBar'), sec=R.querySelector('#slSec'); if(bar&&end){ const left=Math.max(0,end-t); bar.style.width=Math.min(100,100*left/tot)+'%'; if(sec) sec.textContent=Math.ceil(left/1000)+' s'; }
+  if(S.err>=3&&!R.querySelector('.sl-off')) R.insertAdjacentHTML('afterbegin','<p class="sl-msg sl-off">📶 Connexion perdue… on réessaie.</p>'); else if(S.err<3){ const o=R.querySelector('.sl-off'); if(o) o.remove(); }
+  const m=me(); if(!m||r.phase!=='play'||!r.turn) return; const u=r.turn;
+  if(u.pid===m.id&&!u.q&&!u.ans){ const n=u.n; if(!S.asked[n]||(Date.now()-S.asked[n]>4500&&(S.tries[n]||0)<3)){ S.asked[n]=Date.now(); S.tries[n]=(S.tries[n]||0)+1;
+      try{ const me0=r.players.find(x=>x.id===m.id)||m, q=D.makeQuestion(TOP[r.theme]||TOP.mix,me0.gr); api({a:'ask',n,q:{prompt:q.prompt,audio:q.audio||null,options:q.options.map(String),correct:q.correct,reveal:q.reveal||null,shown:q.shown||'',cat:q.cat}}); }catch(e){} } }
+  if(u.pid===m.id&&u.q&&!u.ans&&S.sent[u.n]&&Date.now()-S.sent[u.n].t>3500){ S.sent[u.n].t=Date.now(); api({a:'answer',n:u.n,k:S.sent[u.n].k}); }
+  if(u.q&&!u.ans&&!S.heard[u.n]){ S.heard[u.n]=1; if(u.pid===m.id&&u.q.audio&&u.q.audio.l==='de') setTimeout(()=>D.say(u.q.audio.t,'de'),400); }
+}
+
+/* entrée */
+window.DLG.salon=function(){ body.innerHTML='<div id="slRoot" class="sl"></div>'; S.msg=''; S.gname='';
+  const pend=window.__salonPending; window.__salonPending=null; if(pend) S.prefill=pend;
+  const saved=S.code||sg('dl-salon'); const m=me();
+  if(saved&&m){ S.code=saved; paint(); joinRoom(saved,m).then(ok=>{ if(!ok) paint(); }); }
+  else { paint(); if(pend&&m) joinRoom(pend,m); }
+  tick(); };
+/* lien d'invitation ?salon=CODE */
+try{ const c=(new URLSearchParams(location.search).get('salon')||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5); if(c.length===5){ window.__salonPending=c; setTimeout(()=>{ const b=document.querySelector('.sec-b[data-s="fa"]'); if(b) b.click(); setTimeout(()=>H.openGame('salon'),150); },700); } }catch(e){}
 })();
 </script>
 </body>
