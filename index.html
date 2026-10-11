@@ -1894,14 +1894,14 @@ function speakHalf(h){ const r=h.r; if(r.mute) return; say(r.say||r.t,r.l); }
 G_dom();
 function G_dom(){
 window.DLG.domino=function(){
-  playerSetup({title:'🎴 Dominos',intro:'Vrais dominos ! Pose un domino dont une moitié <b>veut dire la même chose</b> que le bout de la chaîne : l’image 🍎, le mot « pomme » et « Apfel » vont ensemble. Seul : tu joues contre l’ordinateur 🤖. À deux : on passe la tablette.',
+  playerSetup({title:'🎴 Dominos',intro:'Vrais dominos ! Pose un domino dont une moitié <b>veut dire la même chose</b> que le bout de la chaîne : l’image 🍎, le mot « pomme » et « Apfel » vont ensemble. Seul : tu joues contre PoutchouPoutchou <i class="mx"></i>. À deux : on passe la tablette.',
     min:1,max:2,defN:1,extra:{label:'Nombre de dominos',opts:[[6,'Court · 21'],[7,'Long · 28']],def:6}},start);
 };
 }
 function start(cfg){
   const n=cfg.x||6, C=concepts(cfg,n), tiles=makeTiles(C), hs=n>=7?7:5;
   const cpu=cfg.players.length===1;
-  const players=cfg.players.slice(0,2); if(cpu) players.push({name:'Ordi',emoji:'🤖',color:'#868e96',cpu:true});
+  const players=cfg.players.slice(0,2); if(cpu) players.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:'#868e96',cpu:true});
   const S={cfg,C,players,cpu,pile:tiles,hands:players.map(()=>[]),chain:[],turn:0,sel:null,busy:false,over:false,passes:0,msg:'',cover:false};
   T.domino=S;
   players.forEach((p,i)=>{ for(let k=0;k<hs;k++) S.hands[i].push(S.pile.pop()); });
@@ -1918,7 +1918,7 @@ function start(cfg){
       <div class="dm-leg"><span class="e">image</span><span class="fr">français</span><span class="de">allemand</span><small>Pioche : ${S.pile.length}</small></div>
       <div class="dm-chain" id="dChain">${S.chain.map((t,i)=>tileHTML(t,(i===0?'endL ':'')+(i===S.chain.length-1?'endR ':'')+(t.fresh?'fresh':''))).join('')}</div>
       <div class="dm-act"><button id="dL" ${f.L?'':'disabled'}>⬅ ${endHalf('L')}</button><button id="dR" ${f.R?'':'disabled'}>${endHalf('R')} ➡</button></div>
-      <div class="g-msg" id="dMsg"><span>${S.msg||(S.busy?'🤖 L’ordi réfléchit…':'À toi, '+esc(players[view].name)+' ! Touche un domino.')}</span></div>
+      <div class="g-msg" id="dMsg"><span>${S.msg||(S.busy?'<i class="mx"></i> PoutchouPoutchou réfléchit…':'À toi, '+esc(players[view].name)+' ! Touche un domino.')}</span></div>
       <div class="dm-tools"><button class="g-ghost" id="dHint">💡 Indice</button><button class="g-big dm-draw" id="dDraw" ${(!canPlay&&!S.busy)?'':'disabled'}>${canPlay?'Pioche (tu peux jouer !)':S.pile.length?'📥 Pioche un domino':'⏭ Passer'}</button></div>
       <div class="dm-hand" id="dHand">${hand.map((t,i)=>tileHTML(t,(S.sel===i?'sel':''),i)).join('')}</div>`;
     const ch=body.querySelector('#dChain'); if(S.scroll==='L') ch.scrollLeft=0; else if(S.scroll==='R'||sl===null) ch.scrollLeft=ch.scrollWidth; else ch.scrollLeft=sl; S.scroll=null;
@@ -1948,7 +1948,7 @@ function start(cfg){
     if(side==='R') S.chain.push(nt); else S.chain.unshift(nt); S.scroll=side; S.sel=null; S.passes=0; S.nomsg=true;
     const m=side==='R'?h[0]:h[1]; speakHalf(m);
     if(!S.hands[pi].length){ return finish(pi); }
-    S.msg=players[pi].cpu?'🤖 L’ordi a posé un domino.':''; next();
+    S.msg=players[pi].cpu?'<i class="mx"></i> PoutchouPoutchou a posé un domino.':''; next();
   }
   function draw(){
     if(S.busy||S.over) return; const me=S.turn;
@@ -1975,7 +1975,7 @@ function start(cfg){
         if(side==='R') h=t.h[0].c===R?[t.h[0],t.h[1]]:[t.h[1],t.h[0]]; else h=t.h[1].c===L?[t.h[0],t.h[1]]:[t.h[1],t.h[0]];
         S.busy=false; commit(me,idx,side,h); return; }
       if(S.pile.length){ S.hands[me].push(S.pile.pop()); render(); await sleep(FAST?5:600); continue; }
-      S.busy=false; S.passes++; S.msg='🤖 L’ordi passe son tour.'; if(S.passes>=2) return finish(-1); S.turn=(S.turn+1)%players.length; render(); return;
+      S.busy=false; S.passes++; S.msg='<i class="mx"></i> PoutchouPoutchou passe son tour.'; if(S.passes>=2) return finish(-1); S.turn=(S.turn+1)%players.length; render(); return;
     }
     S.busy=false;
   }
@@ -1984,7 +1984,7 @@ function start(cfg){
     if(w<0){ const a=S.hands[0].length,b=S.hands[1].length; w=a<b?0:b<a?1:-1; }
     render();
     if(w<0){ title='Égalité !'; sub='Personne ne peut plus jouer, vous avez autant de dominos.'; icon='🤝'; }
-    else { title=`Bravo ${players[w].name} ! ${players[w].emoji}`; sub=players[w].cpu?'L’ordi gagne cette fois… Rejoue pour prendre ta revanche !':'Tu as posé tous tes dominos !'; icon=players[w].cpu?'🤖':'🏆'; }
+    else { title=`Bravo ${players[w].name} ! ${players[w].emoji}`; sub=players[w].cpu?'PoutchouPoutchou gagne cette fois… Rejoue pour prendre ta revanche !':'Tu as posé tous tes dominos !'; icon=players[w].cpu?'<i class="mx"></i>':'🏆'; }
     setTimeout(()=>endScreen({title,sub,icon,color:w>=0?players[w].color:'#1f5fd6'},()=>start(cfg)),FAST?5:900);
   }
   S.solve=()=>{ if(S.over) return false; const me=S.turn; const ok=playable(me); if(!ok.length){ draw(); return 'draw'; } const t=ok[0], f=fits(t); S.sel=S.hands[me].indexOf(t); place(f.R?'R':'L'); return 'play'; };
@@ -3723,6 +3723,7 @@ const css=document.createElement('style'); css.textContent=`
 #pcP .pc-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 #pcP .pc-btns button{min-height:48px;border-radius:14px;border:2px solid #d8cfae;background:#fff;font:700 14px/1.15 system-ui,sans-serif;color:#1d2433;cursor:pointer;padding:6px}
 #pcP .pc-btns #pcBy{grid-column:1/-1}
+i>.mx,i .mx{background:var(--mx) center/cover no-repeat!important;width:100%!important;height:100%!important;display:block!important;border:0!important;box-shadow:none!important;border-radius:50%!important;vertical-align:baseline!important}
 .mx{display:inline-block;width:1.2em;height:1.2em;border-radius:50%;background:var(--mx) center/cover no-repeat;vertical-align:-.25em;font-style:normal;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.g-npc .mx{width:44px;height:44px}.g-npc{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;width:100%;text-align:left;padding:10px 14px;border-radius:16px;border:3px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;font-family:inherit;color:#1d2433;font-size:16px}.g-npc span{grid-row:1/3;font-size:34px}.g-npc small{opacity:.75;font-weight:600}.g-npc[aria-pressed=true]{background:#bfeebf;border-color:#2f9e44}
 #pcG{position:fixed;inset:0;z-index:100001;background:linear-gradient(#cfe8ff,#e9defa);overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 #pcG .gb{position:absolute;bottom:-130px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 30% 28%,#fff 0,rgba(255,255,255,.55) 14%,var(--bc) 62%,rgba(255,255,255,.35) 100%);box-shadow:inset 0 0 12px rgba(255,255,255,.8),0 4px 10px rgba(29,36,51,.12);transition:transform var(--t) linear;-webkit-tap-highlight-color:transparent}
