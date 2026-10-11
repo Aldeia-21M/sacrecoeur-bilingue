@@ -1097,7 +1097,7 @@ function renderSetup(){
   <p class="g-p">Lance les deux dés et réponds à la question : <b>bonne réponse = tu avances du total des dés</b>, sinon d’une case de moins ! Échelles, toboggans et cases spéciales t’attendent. Le premier arrivé à la case 60 gagne.</p>
   <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="gN"></div></div>
   <div id="gPl"></div>
-  ${setup.n<6?`<div class="g-sec"><button class="g-npc" id="gNpc" aria-pressed="${setup.npc}"><span>🤖</span><b>Jouer avec PoutchouPoutchou</b><small>${setup.npc?'Il joue avec toi : c’est lui qui répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
+  ${setup.n<6?`<div class="g-sec"><button class="g-npc" id="gNpc" aria-pressed="${setup.npc}"><span><i class="mx"></i></span><b>Jouer avec PoutchouPoutchou</b><small>${setup.npc?'Il joue avec toi : c’est lui qui répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
   <div class="g-sec"><div class="g-lab">Sujets des questions</div><div class="g-chips" id="gTp"></div></div>
   <p class="g-p g-note"><b>1H</b> : images, couleurs, formes, animaux, petits nombres (la voix lit tout). <b>4H</b> : nombres jusqu’à 100, fournitures, calendrier. <b>6H</b> : tout ça + nombres jusqu’à 999, vocabulaire de maths et conjugaison (être, avoir, aller). <b>Calcul</b> : additions et soustractions en 4H ; en 6H, les quatre opérations.</p>
   <button class="g-big" id="gGo">▶ Commencer la partie</button>`;
@@ -1134,7 +1134,7 @@ function renderPlayers(){
 /* ================= PARTIE ================= */
 function startGame(){
   const list=setup.pl.slice(0,setup.n).map((p,i)=>({name:(p.name||'').trim()||('Joueur '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[p.co][0],gr:p.gr||'4H',pos:0}));
-  if(setup.npc&&list.length<6){ const used=new Set(list.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; list.push({name:'PoutchouPoutchou',emoji:'🤖',color:col,gr:list[0].gr,pos:0,npc:true}); }
+  if(setup.npc&&list.length<6){ const used=new Set(list.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; list.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:col,gr:list[0].gr,pos:0,npc:true}); }
   G={players:list,cur:0,busy:false,topics:[...setup.topics],level:setup.level,over:false,tokens:[]};
   renderGame();
 }
@@ -1418,7 +1418,7 @@ function playerSetup(o,done){
       <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="hN"></div></div>
       ${o.perGrade?'':'<div class="g-sec"><div class="g-lab">Classe</div><div class="g-seg" id="hG"></div></div>'}
       <div id="hPl"></div>
-      ${o.npc&&st.n<o.max?`<div class="g-sec"><button class="g-npc" id="hNpc" aria-pressed="${st.npc}"><span>🤖</span><b>Jouer avec PoutchouPoutchou</b><small>${st.npc?'Il joue avec toi et répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
+      ${o.npc&&st.n<o.max?`<div class="g-sec"><button class="g-npc" id="hNpc" aria-pressed="${st.npc}"><span><i class="mx"></i></span><b>Jouer avec PoutchouPoutchou</b><small>${st.npc?'Il joue avec toi et répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
       ${o.noTopics?'':'<div class="g-sec"><div class="g-lab">Sujets des questions</div><div class="g-chips" id="hT"></div></div>'}
       ${o.extra?`<div class="g-sec"><div class="g-lab">${o.extra.label}</div><div class="g-seg" id="hX"></div></div>`:''}
       ${o.noNote?'':''}<p class="g-p g-note"><b>1H</b> : images, couleurs, formes, animaux, petits nombres (la voix lit tout). <b>4H</b> : nombres jusqu’à 100, fournitures, calendrier. <b>6H</b> : tout ça + nombres jusqu’à 999, vocabulaire de maths et conjugaison (être, avoir, aller). <b>Calcul</b> : additions et soustractions en 4H ; en 6H, les quatre opérations.</p>
@@ -1446,7 +1446,7 @@ function playerSetup(o,done){
       X.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.x=+b.dataset.x; X.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',+x.dataset.x===st.x)); }; }
     body.querySelector('#hGo').onclick=()=>{
       const players=list.map((p,i)=>({name:(p.name||'').trim()||((o.who||'Joueur')+' '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[i][0],gr:o.perGrade?p.gr:st.grade}));
-      if(o.npc&&st.npc&&players.length<o.max){ const used=new Set(players.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; players.push({name:'PoutchouPoutchou',emoji:'🤖',color:col,gr:o.perGrade?players[0].gr:st.grade,npc:true}); }
+      if(o.npc&&st.npc&&players.length<o.max){ const used=new Set(players.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; players.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:col,gr:o.perGrade?players[0].gr:st.grade,npc:true}); }
       done({players,topics:[...st.topics],grade:st.grade,x:st.x});
     };
   }
@@ -3723,7 +3723,7 @@ const css=document.createElement('style'); css.textContent=`
 #pcP .pc-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 #pcP .pc-btns button{min-height:48px;border-radius:14px;border:2px solid #d8cfae;background:#fff;font:700 14px/1.15 system-ui,sans-serif;color:#1d2433;cursor:pointer;padding:6px}
 #pcP .pc-btns #pcBy{grid-column:1/-1}
-.g-npc{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;width:100%;text-align:left;padding:10px 14px;border-radius:16px;border:3px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;font-family:inherit;color:#1d2433;font-size:16px}.g-npc span{grid-row:1/3;font-size:34px}.g-npc small{opacity:.75;font-weight:600}.g-npc[aria-pressed=true]{background:#bfeebf;border-color:#2f9e44}
+.mx{display:inline-block;width:1.2em;height:1.2em;border-radius:50%;background:var(--mx) center/cover no-repeat;vertical-align:-.25em;font-style:normal;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.g-npc .mx{width:44px;height:44px}.g-npc{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;width:100%;text-align:left;padding:10px 14px;border-radius:16px;border:3px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;font-family:inherit;color:#1d2433;font-size:16px}.g-npc span{grid-row:1/3;font-size:34px}.g-npc small{opacity:.75;font-weight:600}.g-npc[aria-pressed=true]{background:#bfeebf;border-color:#2f9e44}
 #pcG{position:fixed;inset:0;z-index:100001;background:linear-gradient(#cfe8ff,#e9defa);overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 #pcG .gb{position:absolute;bottom:-130px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 30% 28%,#fff 0,rgba(255,255,255,.55) 14%,var(--bc) 62%,rgba(255,255,255,.35) 100%);box-shadow:inset 0 0 12px rgba(255,255,255,.8),0 4px 10px rgba(29,36,51,.12);transition:transform var(--t) linear;-webkit-tap-highlight-color:transparent}
 #pcG .gb.up{transform:translateY(calc(-100vh - 280px))}
@@ -3739,7 +3739,7 @@ const css=document.createElement('style'); css.textContent=`
 #pcP .pc-x{position:absolute;top:4px;right:8px;border:0;background:none;font-size:22px;cursor:pointer;color:#666}
 .pc-elim{opacity:.22!important;pointer-events:none!important;filter:grayscale(1)}
 `; document.head.appendChild(css);
-const fab=document.createElement('button'); fab.id='pcFab'; fab.setAttribute('aria-label','PoutchouPoutchou, mon aide'); fab.style.backgroundImage=`url(${IMG_A})`;
+const fab=document.createElement('button'); fab.id='pcFab'; fab.setAttribute('aria-label','PoutchouPoutchou, mon aide'); fab.style.backgroundImage=`url(${IMG_A})`; document.documentElement.style.setProperty('--mx',`url(${IMG_A})`);
 const nudge=document.createElement('div'); nudge.id='pcNudge'; nudge.hidden=true;
 const P=document.createElement('div'); P.id='pcP'; P.hidden=true;
 P.innerHTML=`<button class="pc-x" aria-label="Fermer">×</button><div class="pc-top"><img src="${IMG_B}" alt=""><div class="pc-say"><div class="pc-nm">PoutchouPoutchou</div><span id="pcT"></span></div></div>
