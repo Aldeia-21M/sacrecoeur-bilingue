@@ -404,6 +404,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .mx-seg.wrap.one{grid-template-columns:1fr}.mx-seg.wrap.one button{text-align:left;padding-left:14px}
 .cx-meth{margin:6px 0 4px;padding:8px 10px 8px 28px;background:#fff;border:2px dashed #e3d9a8;border-radius:12px;font-size:15px;font-weight:500;line-height:1.35}.cx-meth li{margin:2px 0}.cx-why{margin:8px 0 0;padding-left:0;list-style:none;font-size:15px}.cx-why li{margin:6px 0;padding:6px 8px;background:#fff;border-radius:10px}.cx-why small{display:block;color:#4a5370;font-size:14px;margin-top:2px}
 .tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko,.tx-fb.ok{background:none;border:0;padding:4px 2px}.tx-text.ok-box{border-color:#2f9e44;background:#effaf0}.tx-text.ko-box{border-color:#e03131;background:#fff1f1}.cw{position:relative}.cx-x{position:absolute;top:-13px;right:-9px;min-width:22px;height:22px;border-radius:50%;background:#e03131;color:#fff;font:800 13px/22px system-ui,sans-serif;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.35);cursor:pointer;z-index:2}.cx-why li.glow{animation:cxg 1s ease-in-out 3;outline:3px solid #e03131}@keyframes cxg{0%,100%{box-shadow:0 0 0 0 rgba(224,49,49,0)}50%{box-shadow:0 0 14px 5px rgba(224,49,49,.55)}}
+.cx-c{padding:0 4px;border-radius:5px}
 .cx-solh{margin:10px 2px 4px;font-weight:800}.cx-solh small{font-weight:500;color:#555}.tx-text.cx-sol{border-color:#2f9e44;cursor:pointer}.cx-sol .cw{cursor:help}
 .tx-btns{display:flex;gap:8px;margin-top:8px}.tx-btns>*{flex:1}
 /* ---- séries, défi, petits ---- */
@@ -3260,14 +3261,17 @@ function explain(){
    k:r=>`Il n’y a pas de « à » ou « de » devant : ce n’est pas un COI.`,
    t:r=>`Il ne décrit pas le sujet après un verbe d’état.`};
   const role=k=>{ for(const x of ['s','e','o','k','t','q','v']) if(A.includes(x)&&EXP(S.toks[k],x)) return x; for(const x of A) if(EXP(S.toks[k],x)) return x; return null; };
-  const cover=new Set();
+  const cover=new Set(); const wrongs=[], misses=[];
   A.forEach(x=>{
     const miss=[],bad=[]; S.toks.forEach((t,k)=>{ const e=EXP(t,x), h=S.marks[k].includes(x), tol=x==='x'&&t.c.includes('y'); if(e&&!h) miss.push(k); else if(h&&!e&&!tol) bad.push(k); });
-    runs(bad).forEach(r=>{ const rl=role(r[0]); const same=rl&&rl!==x&&r.every(k=>role(k)===rl); r.forEach(k=>cover.add((rl||'')+'|'+k));
-      const no=(NO[x]?NO[x](r,rl):CR[x][2]); const yes=same?(IS[rl]?IS[rl](r):CR[rl][2]):'';
-      msg.push({bad:r,h:`❌ « <b>${esc(txt(r))}</b> » n’est pas ${NAME[x]}${same?` : c’est ${NAME[rl]}`:''}.<small><b>Pourquoi ?</b> ${no}${yes?' <br>'+yes:''}</small>`}); });
-    runs(miss).forEach(r=>{ if(r.every(k=>cover.has(x+'|'+k))) return; msg.push({bad:null,h:`🔎 Tu as oublié « <b>${esc(txt(r))}</b> » : c’est ${NAME[x]}.<small><b>Pourquoi ?</b> ${IS[x]?IS[x](r):CR[x][2]}</small>`}); });
+    runs(bad).forEach(r=>{ let cur=[]; r.forEach(k=>{ if(cur.length&&role(k)!==role(cur[0])){ wrongs.push({x,r:cur}); cur=[]; } cur.push(k); }); if(cur.length) wrongs.push({x,r:cur}); });
+    runs(miss).forEach(r=>misses.push({x,r}));
   });
+  const hl=(x,h)=>x&&CR[x]?`<span class="cx-c" style="background:${CR[x][1]}30;border-bottom:3px solid ${CR[x][1]}">${h}</span>`:h;
+  wrongs.forEach(({x,r})=>{ const rl=role(r[0]); const same=rl&&rl!==x; r.forEach(k=>cover.add(rl+'|'+k));
+    const no=(NO[x]?NO[x](r,rl):CR[x][2]); const yes=same?(IS[rl]?IS[rl](r):CR[rl][2]):'';
+    msg.push({bad:r,h:`❌ « ${hl(same?rl:null,'<b>'+esc(txt(r))+'</b>')} » n’est pas ${NAME[x]}${same?' : c’est '+hl(rl,NAME[rl]):''}.<small><b>Pourquoi ?</b> ${no}${yes?' <br>'+yes:''}</small>`}); });
+  misses.forEach(({x,r})=>{ if(r.every(k=>cover.has(x+'|'+k))) return; msg.push({bad:null,h:`🔎 Tu as oublié « ${hl(x,'<b>'+esc(txt(r))+'</b>')} » : c’est ${hl(x,NAME[x])}.<small><b>Pourquoi ?</b> ${IS[x]?IS[x](r):CR[x][2]}</small>`}); });
   return msg.slice(0,5);
 }
 function check(){
