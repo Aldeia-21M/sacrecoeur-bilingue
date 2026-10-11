@@ -6,6 +6,8 @@
 <title>Sacré-Cœur bilingue – touche et écoute</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#cfe8fb">
+<meta name="description" content="Petit jeu éducatif bilingue (français / allemand) pour réviser en s’amusant : mots, nombres, maths, orthographe, conjugaison et jeux.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8E%92%3C/text%3E%3C/svg%3E">
 <style>
 :root{--ink:#1d2433;--bg:#fffdf8;--line:rgba(29,36,51,.16);--blue:#d6ebfb;--yellow:#fff0b8;--accent:#1f5fd6;
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -393,6 +395,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .dm-hand .dm-t.hint{animation:dmh .6s ease-in-out 3}
 @keyframes dmh{50%{transform:scale(1.08);box-shadow:0 0 0 5px #fcc419}}
 .dm-cover{text-align:center;padding:28px 12px;border-radius:20px;background:#fff;border:4px solid var(--pc,#1f5fd6)}.dm-cover .cup{font-size:4rem}
+.vox .about{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eef6ff;border:1px solid rgba(31,95,214,.25);font-size:.85rem;line-height:1.35}
 </style>
 </head>
 <body>
@@ -411,6 +414,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
     <label>🇩🇪 Allemand <select id="vde"></select></label> <button class="pill" id="tde">▶ Tester</button>
     <label>🇫🇷 Français <select id="vfr"></select></label> <button class="pill" id="tfr">▶ Tester</button>
     <p>Pas de belle voix allemande ? iPhone/iPad : Réglages → Accessibilité → Contenu énoncé → Voix → Allemand → « Anna (Premium) ». Android : Réglages → Synthèse vocale → Google → Installer les données vocales → Allemand. Ordinateur : Chrome ou Edge.</p>
+    <p class="about">💙 C’est avec bienveillance que le papa de Leonardo, Guilherme et Milena a mis en place ce petit jeu éducatif. Il est à disposition de tous les parents d’élèves qui souhaitent rendre l’apprentissage scolaire et la révision plus ludiques.</p>
   </div>
   <div class="legend" id="legend">Rouge = mot allemand 🇩🇪 · Bleu = mot français / chiffre 🇫🇷</div>
 </header>
@@ -2122,8 +2126,8 @@ function genStory(g){
     const t=rnd(4);
     if(t===0){ const a=R(3,9), b=R(3,9), c=R(2,20); res=a*b+c; txt=`${n} a ${c} ${it}. ${P} en reçoit ${a} boîtes de ${b}. Combien en a-t-${p} en tout ?`; explain=`${a} × ${b} + ${c} = ${res}`; vis=em.repeat(Math.min(c,10)); }
     else if(t===1){ const h=R(3,25)*2; res=h/2; txt=`${n} a ${h} ${it}. ${P} en donne la moitié. Combien lui en reste-t-il ?`; explain=`${h} ÷ 2 = ${res}`; vis=em.repeat(Math.min(h,14)); }
-    else if(t===2){ const a=R(12,60), b=R(10,40), c=R(5,30); res=a+b-c; txt=`${n} a ${a} ${it}. ${P} en reçoit ${b}, puis en perd ${c}. Combien en a-t-${p} à la fin ?`; explain=`${a} + ${b} − ${c} = ${res}`; vis=em.repeat(Math.min(a,10)); }
-    else { const a=R(2,9), b=R(3,9), c=R(2,9); res=a*b-c; txt=`${n} prépare ${a} sachets de ${b} ${it}. ${P} en mange ${c}. Combien en reste-t-il ?`; explain=`${a} × ${b} − ${c} = ${res}`; vis='🛍️'.repeat(a); }
+    else if(t===2){ const a=R(12,60), b=R(10,40), c=R(5,Math.min(30,a+b-1)); res=a+b-c; txt=`${n} a ${a} ${it}. ${P} en reçoit ${b}, puis en perd ${c}. Combien en a-t-${p} à la fin ?`; explain=`${a} + ${b} − ${c} = ${res}`; vis=em.repeat(Math.min(a,10)); }
+    else { const a=R(2,9), b=R(3,9), c=R(2,Math.min(9,a*b-1)); res=a*b-c; txt=`${n} prépare ${a} sachets de ${b} ${it}. ${P} en mange ${c}. Combien en reste-t-il ?`; explain=`${a} × ${b} − ${c} = ${res}`; vis='🛍️'.repeat(a); }
     return {kind:'num',vis:`<span class="emo">${vis}</span>`,prompt:esc(txt),say:txt,answer:res,explain};
   }
   let a,b;
@@ -2180,9 +2184,9 @@ function genDuration(g){
   const a=R(7,10), d=R(2,6); return {kind:'num',prompt:`L’école commence à ${a} h et la récréation est à ${a+d} h. Combien d’heures plus tard ?`,answer:d,unit:'h',say:`L’école commence à ${a} heures et la récréation est à ${a+d} heures. Combien d’heures plus tard ?`,explain:`${a+d} − ${a} = ${d}`};
 }
 function gen24(g){
-  const h=R(13,23); const ans=`${h-12} h`; const o=[`${h-11} h`,`${h-13} h`,`${h-10} h`,`${h-14} h`,`${(h+2)%12||12} h`];
+  const h=R(13,23); const ans=`${h-12} h`; const o=[`${h-11} h`,`${h-13} h`,`${h-10} h`,`${h-14} h`,`${(h+2)%12||12} h`].filter(x=>parseInt(x)>=1&&parseInt(x)<=12);
   const options=opts4(ans,o);
-  return {kind:'mcq',prompt:`Dans un horaire de train, il est <b>${h} h</b>. Quelle heure est-ce l’après-midi (ou le soir) ?`,say:`Dans un horaire de train, il est ${h} heures. Quelle heure est-ce l’après-midi ?`,options,correct:options.indexOf(ans),explain:`${h} h = ${ans} du ${h<18?'après-midi':'soir'}.`};
+  return {kind:'mcq',prompt:`Dans un horaire de train, il est <b>${h} h</b>. Quelle heure est-ce l’après-midi (ou le soir) ?`,say:`Dans un horaire de train, il est ${h} heures. Quelle heure est-ce l’après-midi ?`,options,correct:options.indexOf(ans),explain:`${h} h = ${ans} ${h<18?'de l’après-midi':'du soir'}.`};
 }
 const DEH=['','ein','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf'];
 const hwa=n=>{ n=((n-1)%12+12)%12+1; return n===1?'eins':DEH[n]; };
@@ -2248,7 +2252,7 @@ function genMoney(g,a){
     const cnt=g==='6H'?R(2,4):R(2,3); const its=shuffle(SHOP).slice(0,cnt).map(([e,n,pr])=>[e,n,g==='6H'?pick(pr):Math.max(1,Math.round(pick(pr)))]);
     const tot=Math.round(its.reduce((s,x)=>s+x[2],0)*100)/100; const list=its.map(x=>`<span class="shop">${x[0]} ${x[1]} : <b>${fr(x[2])}</b></span>`).join('');
     const txt=`Tu achètes ${its.map(x=>x[1]).join(', ').replace(/, ([^,]*)$/,' et $1')}. Combien dois-tu payer en tout ?`;
-    if(g==='6H'){ const ans=fr(tot); const options=opts4(ans,[fr(tot+0.5),fr(tot-0.5),fr(tot+1),fr(tot+0.1),fr(Math.max(0.1,tot-0.1)),fr(tot+0.05)]); return {kind:'mcq',vis:`<div class="shopl">${list}</div>`,prompt:esc(txt),say:txt,options,correct:options.indexOf(ans),explain:`${its.map(x=>x[2]).join(' + ')} = <b>${ans}</b>`}; }
+    if(g==='6H'){ const ans=fr(tot); const options=opts4(ans,[fr(tot+0.5),fr(Math.max(0.05,tot-0.5)),fr(tot+1),fr(tot+0.1),fr(Math.max(0.1,tot-0.1)),fr(tot+0.05)]); return {kind:'mcq',vis:`<div class="shopl">${list}</div>`,prompt:esc(txt),say:txt,options,correct:options.indexOf(ans),explain:`${its.map(x=>x[2]).join(' + ')} = <b>${ans}</b>`}; }
     return {kind:'num',vis:`<div class="shopl">${list}</div>`,prompt:esc(txt),say:txt,answer:tot,unit:'fr.',explain:`${its.map(x=>x[2]).join(' + ')} = <b>${tot}</b>`};
   }
   if(a==='equiv'){
@@ -2266,7 +2270,7 @@ function genMoney(g,a){
   const pool=g==='6H'?[0.05,0.1,0.2,0.5,1,2,5]:[1,2,5,10,20]; const cnt=g==='6H'?3+rnd(4):3+rnd(3); let items=[],tot=0;
   for(let i=0;i<cnt;i++){ const v=pick(pool); items.push(v); tot+=v; } tot=Math.round(tot*100)/100; items.sort((x,y)=>y-x);
   const vis=items.map(coinHTML).join('');
-  if(g==='6H'){ const ans=fr(tot); const options=opts4(ans,[fr(tot+0.5),fr(tot-0.5),fr(tot+1),fr(tot+0.1),fr(Math.max(0.1,tot-0.1))]);
+  if(g==='6H'){ const ans=fr(tot); const options=opts4(ans,[fr(tot+0.5),fr(Math.max(0.05,tot-0.5)),fr(tot+1),fr(tot+0.1),fr(Math.max(0.1,tot-0.1))]);
     return {kind:'mcq',vis,prompt:'Combien d’argent y a-t-il ?',options,correct:options.indexOf(ans),explain:`Total : <b>${ans}</b>`,after:`Total : ${ans}`}; }
   return {kind:'num',vis,prompt:'Combien de francs y a-t-il ?',answer:tot,unit:'fr.',explain:`${items.join(' + ')} = <b>${tot}</b> fr.`,after:`Total : ${tot} francs`};
 }
@@ -2368,7 +2372,7 @@ const W4='maison école chat livre jardin fleur soleil crayon table chien pomme 
 const W6='cheval château journée bibliothèque réponse bientôt pendant hiver forêt travail exercice rivière difficile voyage merveille chocolat mercredi éléphant montagne camion hôpital pharmacie boulangerie dimanche vendredi septembre février anniversaire histoire question exemple animal écrire lecture langue français allemand matin soirée toujours jamais beaucoup maintenant aujourd’hui demain pourquoi quelqu’un hirondelle papillon coccinelle ordinateur téléphone football gymnastique trottinette parapluie manteau écharpe vacances cuisine salon escalier cheminée tonnerre éclair brouillard'.split(' ');
 const GEN={maison:'f',chat:'m',livre:'m',table:'f',école:'f',arbre:'m',plage:'f',crayon:'m',pomme:'f',jardin:'m',fleur:'f',soleil:'m',porte:'f',cahier:'m',lune:'f',nuage:'m',robe:'f',chien:'m',cartable:'m',lapin:'m',vélo:'m',gâteau:'m',fromage:'m',pain:'m',lait:'m',sable:'m',mer:'f',main:'f',pied:'m',tête:'f',nez:'m',bouche:'f',dent:'f',chaise:'f',lampe:'f',jouet:'m',train:'m',avion:'m',route:'f',rue:'f',ville:'f',fruit:'m',orange:'f',citron:'m',banane:'f',fraise:'f',cerise:'f',gomme:'f',règle:'f',trousse:'f',stylo:'m',vache:'f',poule:'f',canard:'m',mouton:'m',cochon:'m',oiseau:'m',poisson:'m',tortue:'f',singe:'m',lion:'m',fenêtre:'f',musique:'f',cadeau:'m',ballon:'m',bébé:'m',sœur:'f',frère:'m',bateau:'m',nuage:'m',neige:'f',plage:'f'};
 const PL4=[['le','chat','les','chats'],['la','maison','les','maisons'],['un','livre','des','livres'],['le','crayon','les','crayons'],['la','fleur','les','fleurs'],['un','arbre','des','arbres'],['une','pomme','des','pommes'],['le','jardin','les','jardins'],['la','table','les','tables'],['un','chien','des','chiens'],['le','ballon','les','ballons'],['la','porte','les','portes'],['un','lapin','des','lapins'],['une','chaise','des','chaises'],['le','stylo','les','stylos'],['la','règle','les','règles'],['un','oiseau','des','oiseaux','oiseaus'],['le','bateau','les','bateaux','bateaus'],['un','gâteau','des','gâteaux','gâteaus'],['le','cheval','les','chevaux','chevals'],['un','jeu','des','jeux','jeus'],['le','vélo','les','vélos'],['une','école','des','écoles'],['un','train','des','trains'],['la','poule','les','poules'],['un','sac','des','sacs'],['le','cahier','les','cahiers'],['une','voiture','des','voitures'],['le','château','les','châteaux','châteaus'],['la','souris','les','souris','souriss']];
-const PL6=[['le','cheval','les','chevaux','chevals'],['un','animal','des','animaux','animals'],['le','journal','les','journaux','journals'],['le','château','les','châteaux','châteaus'],['le','bateau','les','bateaux','bateaus'],['le','gâteau','les','gâteaux','gâteaus'],['le','jeu','les','jeux','jeus'],['le','feu','les','feux','feus'],['le','bijou','les','bijoux','bijous'],['le','chou','les','choux','chous'],['le','pneu','les','pneus','pneux'],['le','nez','les','nez','nezs'],['la','souris','les','souris','souriss'],['le','travail','les','travaux','travails'],['le','hibou','les','hiboux','hibous'],['le','genou','les','genoux','genous'],['le','caillou','les','cailloux','caillous'],['le','noyau','les','noyaux','noyaus'],['le','tuyau','les','tuyaux','tuyaus'],['un','hôpital','des','hôpitaux','hôpitals'],['le','cheveu','les','cheveux','cheveus'],['le','neveu','les','neveux','neveus'],['la','voix','les','voix','voixs'],['le','bras','les','bras','brass'],['un','pays','des','pays','paysx'],['le','tapis','les','tapis','tapiss'],['le','festival','les','festivals','festivaux'],['le','carnaval','les','carnavals','carnavaux'],['le','détail','les','détails','détaux'],['le','œil','les','yeux','œils'],['le','rail','les','rails','raux']];
+const PL6=[['le','cheval','les','chevaux','chevals'],['un','animal','des','animaux','animals'],['le','journal','les','journaux','journals'],['le','château','les','châteaux','châteaus'],['le','bateau','les','bateaux','bateaus'],['le','gâteau','les','gâteaux','gâteaus'],['le','jeu','les','jeux','jeus'],['le','feu','les','feux','feus'],['le','bijou','les','bijoux','bijous'],['le','chou','les','choux','chous'],['le','pneu','les','pneus','pneux'],['le','nez','les','nez','nezs'],['la','souris','les','souris','souriss'],['le','travail','les','travaux','travails'],['le','hibou','les','hiboux','hibous'],['le','genou','les','genoux','genous'],['le','caillou','les','cailloux','caillous'],['le','noyau','les','noyaux','noyaus'],['le','tuyau','les','tuyaux','tuyaus'],['un','hôpital','des','hôpitaux','hôpitals'],['le','cheveu','les','cheveux','cheveus'],['le','neveu','les','neveux','neveus'],['la','voix','les','voix','voixs'],['le','bras','les','bras','brass'],['un','pays','des','pays','paysx'],['le','tapis','les','tapis','tapiss'],['le','festival','les','festivals','festivaux'],['le','carnaval','les','carnavals','carnavaux'],['le','détail','les','détails','détaux'],['le','rail','les','rails','raux']];
 const HOMO_B=[
  ['Léa ___ un chat.',['a','à'],0],['Je vais ___ l’école.',['a','à'],1],['Il ___ mal à la tête.',['a','à'],0],['Nous parlons ___ la maîtresse.',['a','à'],1],['Tom ___ faim.',['a','à'],0],['Elle joue ___ la balle.',['a','à'],1],['Maman ___ acheté du pain.',['a','à'],0],['Le livre est ___ Paul.',['a','à'],1],['Marie ___ une jolie robe.',['a','à'],0],['Il pense ___ ses vacances.',['a','à'],1],['Ce soir, nous allons ___ la piscine.',['a','à'],1],['Papa ___ garé la voiture.',['a','à'],0],
  ['Le ciel ___ bleu.',['est','et'],0],['Pierre ___ Marie jouent.',['est','et'],1],['Mon chat ___ très doux.',['est','et'],0],['J’aime les pommes ___ les poires.',['est','et'],1],['La soupe ___ chaude.',['est','et'],0],['Ma sœur ___ en classe.',['est','et'],0],['Nous mangeons du pain ___ du fromage.',['est','et'],1],['Il ___ tard.',['est','et'],0],['Elle chante ___ elle danse.',['est','et'],1],['Le chien ___ le chat dorment.',['est','et'],1],
@@ -2555,15 +2559,15 @@ const LET='ABCDEFGHILMOPRSTU'.split('');
 const FL=[['🍎','pomme','P','Apfel','A'],['🐱','chat','C','Katze','K'],['🏠','maison','M','Haus','H'],['🌙','lune','L','Mond','M'],['🐟','poisson','P','Fisch','F'],['🌞','soleil','S','Sonne','S'],['🚗','voiture','V','Auto','A'],['🍌','banane','B','Banane','B'],['🐸','grenouille','G','Frosch','F'],['🦁','lion','L','Löwe','L'],['🌸','fleur','F','Blume','B'],['🎈','ballon','B','Ballon','B'],['🐶','chien','C','Hund','H'],['🥖','pain','P','Brot','B']];
 const VOC={
  fruits:{ic:'🍎',t:'Les fruits',l:[['🍎','la pomme','der Apfel'],['🍌','la banane','die Banane'],['🍓','la fraise','die Erdbeere'],['🍇','le raisin','die Traube'],['🍊','l’orange','die Orange'],['🍋','le citron','die Zitrone'],['🍒','les cerises','die Kirschen'],['🍉','la pastèque','die Wassermelone'],['🍐','la poire','die Birne'],['🍑','la pêche','der Pfirsich'],['🥝','le kiwi','die Kiwi']]},
- body:{ic:'🖐️',t:'Le corps',l:[['🖐️','la main','die Hand'],['👁️','l’œil','das Auge'],['👂','l’oreille','das Ohr'],['👃','le nez','die Nase'],['👄','la bouche','der Mund'],['🦶','le pied','der Fuß'],['🦵','la jambe','das Bein'],['🦷','la dent','der Zahn'],['👅','la langue','die Zunge'],['💪','le bras','der Arm']]},
+ body:{ic:'🖐️',t:'Le corps',l:[['🖐️','la main','die Hand'],['👁️','l’œil','das Auge'],['👂','l’oreille','das Ohr'],['👃','le nez','die Nase'],['👄','la bouche','der Mund'],['🦶','le pied','der Fuss'],['🦵','la jambe','das Bein'],['🦷','la dent','der Zahn'],['👅','la langue','die Zunge'],['💪','le bras','der Arm']]},
  family:{ic:'👨‍👩‍👧',t:'La famille',l:[['👩','maman','die Mama'],['👨','papa','der Papa'],['👶','le bébé','das Baby'],['👵','mamie','die Oma'],['👴','papi','der Opa'],['👧','la fille','das Mädchen'],['👦','le garçon','der Junge']]},
- clothes:{ic:'👕',t:'Les habits',l:[['👕','le t-shirt','das T-Shirt'],['👖','le pantalon','die Hose'],['🧦','la chaussette','die Socke'],['🧢','la casquette','die Kappe'],['👟','la chaussure','der Schuh'],['🧥','le manteau','die Jacke'],['👗','la robe','das Kleid'],['🧤','les gants','die Handschuhe'],['🧣','l’écharpe','der Schal'],['👒','le chapeau','der Hut']]},
+ clothes:{ic:'👕',t:'Les habits',l:[['👕','le t-shirt','das T-Shirt'],['👖','le pantalon','die Hose'],['🧦','la chaussette','die Socke'],['🧢','la casquette','die Kappe'],['👟','la chaussure','der Schuh'],['🧥','le manteau','der Mantel'],['👗','la robe','das Kleid'],['🧤','les gants','die Handschuhe'],['🧣','l’écharpe','der Schal'],['👒','le chapeau','der Hut']]},
  food:{ic:'🥖',t:'À manger',l:[['🥖','le pain','das Brot'],['🧀','le fromage','der Käse'],['🥛','le lait','die Milch'],['🍫','le chocolat','die Schokolade'],['🥚','l’œuf','das Ei'],['🥕','la carotte','die Karotte'],['🍕','la pizza','die Pizza'],['🍝','les pâtes','die Nudeln'],['🍚','le riz','der Reis'],['🧈','le beurre','die Butter']]},
  transport:{ic:'🚗',t:'Les transports',l:[['🚗','la voiture','das Auto'],['🚌','le bus','der Bus'],['🚲','le vélo','das Fahrrad'],['✈️','l’avion','das Flugzeug'],['🚂','le train','der Zug'],['🚢','le bateau','das Schiff'],['🚜','le tracteur','der Traktor'],['🚁','l’hélicoptère','der Hubschrauber'],['🚀','la fusée','die Rakete']]},
  weather:{ic:'☀️',t:'La météo',l:[['☀️','le soleil','die Sonne'],['🌧️','la pluie','der Regen'],['☁️','le nuage','die Wolke'],['❄️','la neige','der Schnee'],['🌈','l’arc-en-ciel','der Regenbogen'],['💨','le vent','der Wind']]},
  house:{ic:'🏠',t:'La maison',l:[['🏠','la maison','das Haus'],['🛏️','le lit','das Bett'],['🪑','la chaise','der Stuhl'],['🚪','la porte','die Tür'],['🪟','la fenêtre','das Fenster'],['📺','la télévision','der Fernseher'],['🛁','la baignoire','die Badewanne'],['🍳','la cuisine','die Küche'],['🛋️','le canapé','das Sofa'],['🪞','le miroir','der Spiegel']]},
  nature:{ic:'🌳',t:'La nature',l:[['🌳','l’arbre','der Baum'],['🌸','la fleur','die Blume'],['🌊','la mer','das Meer'],['⛰️','la montagne','der Berg'],['🌙','la lune','der Mond'],['⭐','l’étoile','der Stern'],['🔥','le feu','das Feuer'],['💧','l’eau','das Wasser'],['🍄','le champignon','der Pilz'],['🍂','la feuille','das Blatt']]},
- feelings:{ic:'😀',t:'Les émotions',l:[['😀','content','glücklich'],['😢','triste','traurig'],['😠','en colère','wütend'],['😴','fatigué','müde'],['😮','surpris','überrascht'],['😨','effrayé','ängstlich'],['😋','gourmand','hungrig']]},
+ feelings:{ic:'😀',t:'Les émotions',l:[['😀','content','glücklich'],['😢','triste','traurig'],['😠','en colère','wütend'],['😴','fatigué','müde'],['😮','surpris','überrascht'],['😨','effrayé','erschrocken'],['😋','affamé','hungrig']]},
  jobs:{ic:'👩‍🏫',t:'Les métiers',l:[['👩‍🏫','la maîtresse','die Lehrerin'],['👨‍⚕️','le médecin','der Arzt'],['👮','le policier','der Polizist'],['👩‍🍳','la cuisinière','die Köchin'],['👨‍🚒','le pompier','der Feuerwehrmann'],['🧑‍🌾','le paysan','der Bauer'],['👩‍✈️','la pilote','die Pilotin'],['🧑‍🔧','le mécanicien','der Mechaniker']]},
  school:{ic:'🎒',t:'À l’école',l:[['✏️','le crayon','der Bleistift'],['📖','le livre','das Buch'],['🎒','le cartable','die Schultasche'],['✂️','les ciseaux','die Schere'],['📏','la règle','das Lineal'],['🖍️','le feutre','der Filzstift'],['🧽','l’éponge','der Schwamm'],['🏫','l’école','die Schule']]},
  greet:{ic:'👋',t:'Les mots magiques',pf:n=>`Quelle image veut dire « ${n} » ?`,pd:n=>`Welches Bild passt zu „${n}“?`,l:[['👋','bonjour','Hallo'],['🙏','merci','Danke'],['😊','s’il te plaît','Bitte'],['🌙','bonne nuit','Gute Nacht']]}
@@ -2594,7 +2598,7 @@ const GEN={
  add(){ const th=THINGS[rnd(THINGS.length)], a=1+rnd(5), b=1+rnd(5), n=a+b; const o=nums(n,2,10);
   return {vis:`<div class="pt-things">${th[0].repeat(a)} ➕ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} plus ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} plus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
  bigger(){ let a=1+rnd(20), b=1+rnd(20); while(a===b) b=1+rnd(20); const big=Math.random()<.65;
-  return {vis:'',fr:`Touche le nombre le plus ${big?'grand':'petit'} !`,de:`Tippe auf die ${big?'größte':'kleinste'} Zahl!`,cls:'two',opts:[a,b].map(x=>({h:x,ok:big?x===Math.max(a,b):x===Math.min(a,b)}))}; },
+  return {vis:'',fr:`Touche le nombre le plus ${big?'grand':'petit'} !`,de:`Tippe auf die ${big?'grösste':'kleinste'} Zahl!`,cls:'two',opts:[a,b].map(x=>({h:x,ok:big?x===Math.max(a,b):x===Math.min(a,b)}))}; },
  color(){ const o=shuffle(COLS).slice(0,4), c=o[rnd(4)];
   return {vis:'',fr:`Touche la couleur ${c[0]} !`,de:`Tippe auf ${c[1]}!`,opts:o.map(x=>({h:`<i class="pt-dot" style="background:${x[2]}"></i>`,ok:x===c}))}; },
  shape(){ const o=shuffle(SHAPES).slice(0,4), c=o[rnd(4)];
