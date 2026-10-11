@@ -1,5 +1,5 @@
 import { getStore } from '@netlify/blobs';
-// Sauvegarde en ligne des profils : une « valise » par code famille (XXXX-XXXX-XXXX).
+// Sauvegarde en ligne d'une famille (joueurs, pseudos, points) : une « valise » par code famille (XXXX-XXXX-XXXX).
 // Aucune donnée personnelle : pseudos, points et réponses comptées. Qui connaît le code retrouve les données.
 const OK = /^[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/;
 const MAX = 400000; // octets
@@ -21,6 +21,6 @@ export default async (req) => {
   let b; try { b = JSON.parse(raw); } catch (_) { return json({ error: 'json' }, 400); }
   const c = String(b.code || '').toUpperCase();
   if (!OK.test(c) || !valid(b.data)) return json({ error: 'donnees' }, 400);
-  await store.setJSON(c, { v: 1, at: Date.now(), profiles: b.data.profiles, del: b.data.del || {} });
+  await store.setJSON(c, { v: 1, at: Date.now(), profiles: b.data.profiles, del: b.data.del || {}, fam: typeof b.data.fam === 'string' ? b.data.fam.slice(0, 40) : '', fmt: Number(b.data.fmt) || 0 });
   return json({ ok: true });
 };
