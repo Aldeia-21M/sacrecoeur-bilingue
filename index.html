@@ -373,6 +373,26 @@ body[data-sec="fa"] .bar nav{justify-content:flex-start}body[data-sec="fa"] .tab
 .rect{width:min(76vw,290px);height:auto}.pt-stars{margin:0 2px 8px;font-weight:800;color:#a61e4d}
 body[data-sec="de"] .bar nav{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}body[data-sec="de"] .bar nav::-webkit-scrollbar{display:none}
 body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px;font-size:11.5px}
+.dm-leg{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.72rem;margin:6px 0}
+.dm-leg span{padding:2px 8px;border-radius:99px;border:1px solid rgba(29,36,51,.2);font-weight:700}.dm-leg .e{background:#fff}.dm-leg .fr{background:#d9ecfb}.dm-leg .de{background:#fff0b8}.dm-leg small{margin-left:auto;font-weight:700;opacity:.7}
+.dm-chain{display:flex;gap:6px;overflow-x:auto;padding:10px 4px 12px;background:#f1ece0;border-radius:14px;border:2px dashed rgba(29,36,51,.15);min-height:96px;align-items:center}
+.dm-t{flex:0 0 auto;width:160px;height:68px;display:flex;align-items:stretch;border:3px solid #1d2433;border-radius:12px;background:#fff;padding:0;overflow:hidden;box-shadow:0 3px 0 rgba(29,36,51,.25);font-family:inherit;color:#1d2433}
+.dm-t i{width:3px;background:#1d2433;flex:0 0 3px}
+.dm-h{flex:1;display:grid;place-items:center;text-align:center;font-weight:700;line-height:1.1;padding:2px;overflow-wrap:anywhere;min-width:0}
+.dm-h.e{background:#fff}.dm-h.fr{background:#d9ecfb}.dm-h.de{background:#fff0b8}
+.dm-t.dbl{border-color:#9c36b5}.dm-t.fresh{animation:gpop .3s ease-out}
+.dm-t.endL,.dm-t.endR{box-shadow:0 0 0 3px #2f9e44,0 3px 0 rgba(29,36,51,.25)}
+.dm-act{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 4px}
+.dm-act button{display:flex;gap:6px;justify-content:center;align-items:center;min-height:56px;border-radius:14px;border:3px solid #2f9e44;background:#fff;font-weight:700;font-family:inherit;font-size:1rem;padding:4px 8px}
+.dm-act button .dm-h{flex:0 1 auto;padding:2px 8px;border-radius:8px;min-height:40px}
+.dm-act button:disabled{opacity:.35;border-color:rgba(29,36,51,.25)}
+.dm-tools{display:flex;gap:8px;align-items:stretch;margin:6px 0}.dm-tools .g-big{flex:1;margin:0;min-height:48px;font-size:.95rem}.dm-tools .g-big:disabled{opacity:.4}
+.dm-hand{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;justify-items:center;margin-top:10px}
+.dm-hand .dm-t{width:100%;max-width:200px}
+.dm-hand .dm-t.sel{outline:4px solid #1f5fd6;transform:translateY(-4px)}
+.dm-hand .dm-t.hint{animation:dmh .6s ease-in-out 3}
+@keyframes dmh{50%{transform:scale(1.08);box-shadow:0 0 0 5px #fcc419}}
+.dm-cover{text-align:center;padding:28px 12px;border-radius:20px;background:#fff;border:4px solid var(--pc,#1f5fd6)}.dm-cover .cup{font-size:4rem}
 </style>
 </head>
 <body>
@@ -1102,7 +1122,8 @@ const GROUPS=[
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
   {id:'memory',ic:'🃏',t:'Memory',d:'Paires français ↔ allemand · 1–4',c:'#d9ecfb'},
-  {id:'loto',ic:'🎧',t:'Loto',d:'Écoute et touche la bonne case · 1–6',c:'#fff0b8'}]],
+  {id:'loto',ic:'🎧',t:'Loto',d:'Écoute et touche la bonne case · 1–6',c:'#fff0b8'},
+  {id:'domino',ic:'🎴',t:'Dominos',d:'Image, français, allemand · seul ou à deux',c:'#fde0ec'}]],
  ['👂 Écouter et écrire',[
   {id:'dictee',ic:'✍️',t:'Dictée',d:'Écris le mot que tu entends · 1–4',c:'#fde0ec'},
   {id:'chasse',ic:'🔎',t:'Chasse au mot',d:'Touche l’objet demandé · 1–4',c:'#dff4dc'}]],
@@ -1118,7 +1139,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','duel','bataille'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1616,6 +1637,153 @@ function startBataille(cfg){
 })();
 
 </script>
+<script>
+/* ====== Dominos : image / français / allemand ====== */
+(function(){
+'use strict';
+const D=window.DL, H=window.DLH; if(!D||!H||!window.DLG) return;
+const {esc,rnd,shuffle,say,sleep}=D;
+const {body,playerSetup,endScreen,pickItems,chip,showHub}=H;
+const FAST=/#test/.test(location.hash);
+const T=H.T;
+
+function emojiMap(){
+  const m={}, P=window.PETV||{}; const V=P.VOC||{};
+  Object.keys(V).forEach(k=>V[k].l.forEach(([e,f,d])=>{ m[d]=e; }));
+  (P.ANI||[]).forEach(([e,f,d])=>{ m[d]=e; }); (P.COLS||[]).forEach(c=>{ if(c[3]) m[c[1]]=c[3]; });
+  (P.FL||[]).forEach(f=>{ m[f[3]]=f[0]; });
+  Object.assign(m,window.DLEMO||{}); return m;
+}
+function concepts(cfg,n){
+  const em=emojiMap(); let items;
+  if(cfg.grade==='1H'){
+    const P=window.PETV||{}, A=[]; const V=P.VOC||{};
+    Object.keys(V).forEach(k=>V[k].l.forEach(([e,f,d])=>A.push({e,fr:f,de:d})));
+    (P.ANI||[]).forEach(([e,f,d])=>A.push({e,fr:f,de:d})); (P.COLS||[]).forEach(c=>{ if(c[3]) A.push({e:c[3],fr:c[0],de:c[1]}); });
+    const seen=new Set(); items=shuffle(A).filter(x=>{ if(seen.has(x.fr)||seen.has(x.de)) return false; seen.add(x.fr); seen.add(x.de); return true; }).slice(0,n);
+  } else {
+    items=pickItems(new Set(cfg.topics),cfg.grade,n).map(it=>({fr:it.fr,de:it.de,lang:it.lang,mute:it.mute,e:it.mute?'':(em[it.de]||'')}));
+  }
+  return items.map((it,i)=>{ const reps=[]; if(it.e) reps.push({k:'e',t:it.e,l:'fr',say:it.fr});
+    reps.push({k:'fr',t:it.fr,l:'fr',mute:it.mute}); reps.push({k:'de',t:it.de,l:it.lang||'de',mute:it.mute&&it.lang==='fr'?true:false}); return {i,reps}; });
+}
+function makeTiles(C){
+  const tiles=[]; for(let a=0;a<C.length;a++) for(let b=a;b<C.length;b++){
+    let ra=C[a].reps[rnd(C[a].reps.length)], rb=C[b].reps[rnd(C[b].reps.length)];
+    if(a===b){ const o=shuffle(C[a].reps); ra=o[0]; rb=o[1]||o[0]; }
+    tiles.push({h:[{c:a,r:ra},{c:b,r:rb}],dbl:a===b}); }
+  return shuffle(tiles);
+}
+function half(h,cls){
+  const r=h.r, L=r.t.length; const fs=r.k==='e'?'2.1rem':L<=5?'1.05rem':L<=9?'.86rem':L<=13?'.72rem':L<=16?'.6rem':'.54rem';
+  return `<span class="dm-h ${r.k}${cls||''}" style="font-size:${fs}">${esc(r.t)}</span>`;
+}
+function tileHTML(t,extra,idx){ return `<button class="dm-t${t.dbl?' dbl':''} ${extra||''}" ${idx!==undefined?`data-i="${idx}"`:''}>${half(t.h[0])}<i></i>${half(t.h[1])}</button>`; }
+function speakHalf(h){ const r=h.r; if(r.mute) return; say(r.say||r.t,r.l); }
+
+G_dom();
+function G_dom(){
+window.DLG.domino=function(){
+  playerSetup({title:'🎴 Dominos',intro:'Vrais dominos ! Pose un domino dont une moitié <b>veut dire la même chose</b> que le bout de la chaîne : l’image 🍎, le mot « pomme » et « Apfel » vont ensemble. Seul : tu joues contre l’ordinateur 🤖. À deux : on passe la tablette.',
+    min:1,max:2,defN:1,extra:{label:'Nombre de dominos',opts:[[6,'Court · 21'],[7,'Long · 28']],def:6}},start);
+};
+}
+function start(cfg){
+  const n=cfg.x||6, C=concepts(cfg,n), tiles=makeTiles(C), hs=n>=7?7:5;
+  const cpu=cfg.players.length===1;
+  const players=cfg.players.slice(0,2); if(cpu) players.push({name:'Ordi',emoji:'🤖',color:'#868e96',cpu:true});
+  const S={cfg,C,players,cpu,pile:tiles,hands:players.map(()=>[]),chain:[],turn:0,sel:null,busy:false,over:false,passes:0,msg:'',cover:false};
+  T.domino=S;
+  players.forEach((p,i)=>{ for(let k=0;k<hs;k++) S.hands[i].push(S.pile.pop()); });
+  S.chain.push(S.pile.pop()); S.chain[0].start=true;
+  const ends=()=>[S.chain[0].h[0].c,S.chain[S.chain.length-1].h[1].c];
+  const fits=t=>{ const [L,R]=ends(); return {L:t.h.some(x=>x.c===L),R:t.h.some(x=>x.c===R)}; };
+  const playable=i=>S.hands[i].filter(t=>{ const f=fits(t); return f.L||f.R; });
+  const multi=!cpu;
+  function render(){
+    const prev=body.querySelector('#dChain'); const sl=prev?prev.scrollLeft:null; const me=S.turn, view=players[me].cpu?0:me, hand=S.hands[view], [L,R]=ends(), selT=S.sel!=null?hand[S.sel]:null, f=selT?fits(selT):{L:false,R:false};
+    const endHalf=(side)=>{ const t=side==='L'?S.chain[0]:S.chain[S.chain.length-1]; return half(t.h[side==='L'?0:1]); };
+    const canPlay=playable(view).length>0;
+    body.innerHTML=`<div class="h-bar"><div class="h-info">${players.map((p,i)=>chip(p,i===me)+`<b class="h-sc">${S.hands[i].length}</b>`).join('')}</div><button class="g-ghost" id="dQuit">↩ Quitter</button></div>
+      <div class="dm-leg"><span class="e">image</span><span class="fr">français</span><span class="de">allemand</span><small>Pioche : ${S.pile.length}</small></div>
+      <div class="dm-chain" id="dChain">${S.chain.map((t,i)=>tileHTML(t,(i===0?'endL ':'')+(i===S.chain.length-1?'endR ':'')+(t.fresh?'fresh':''))).join('')}</div>
+      <div class="dm-act"><button id="dL" ${f.L?'':'disabled'}>⬅ ${endHalf('L')}</button><button id="dR" ${f.R?'':'disabled'}>${endHalf('R')} ➡</button></div>
+      <div class="g-msg" id="dMsg"><span>${S.msg||(S.busy?'🤖 L’ordi réfléchit…':'À toi, '+esc(players[view].name)+' ! Touche un domino.')}</span></div>
+      <div class="dm-tools"><button class="g-ghost" id="dHint">💡 Indice</button><button class="g-big dm-draw" id="dDraw" ${(!canPlay&&!S.busy)?'':'disabled'}>${canPlay?'Pioche (tu peux jouer !)':S.pile.length?'📥 Pioche un domino':'⏭ Passer'}</button></div>
+      <div class="dm-hand" id="dHand">${hand.map((t,i)=>tileHTML(t,(S.sel===i?'sel':''),i)).join('')}</div>`;
+    const ch=body.querySelector('#dChain'); if(S.scroll==='L') ch.scrollLeft=0; else if(S.scroll==='R'||sl===null) ch.scrollLeft=ch.scrollWidth; else ch.scrollLeft=sl; S.scroll=null;
+    body.querySelector('#dQuit').onclick=()=>window.DLG.domino();
+    body.querySelector('#dHand').onclick=e=>{ const b=e.target.closest('.dm-t'); if(!b||S.busy||S.over) return; selectTile(+b.dataset.i); };
+    body.querySelector('#dL').onclick=()=>place('L'); body.querySelector('#dR').onclick=()=>place('R');
+    body.querySelector('#dDraw').onclick=()=>draw();
+    body.querySelector('#dHint').onclick=()=>{ const ok=playable(me)[0]; if(!ok){ setMsg('Aucun domino ne va : pioche !'); return; } const idx=hand.indexOf(ok); body.querySelectorAll('#dHand .dm-t')[idx].classList.add('hint'); };
+  }
+  function setMsg(t){ S.msg=t; const m=body.querySelector('#dMsg'); if(m) m.innerHTML='<span>'+t+'</span>'; }
+  function selectTile(i){
+    const t=S.hands[S.turn][i]; S.sel=i; const f=fits(t); render();
+    t.h.forEach((h,k)=>setTimeout(()=>speakHalf(h),FAST?0:k*900));
+    if(!f.L&&!f.R) setMsg('Ce domino ne va pas. Regarde bien les deux bouts !');
+    else if(f.L&&f.R) setMsg('Il va des deux côtés : choisis !');
+    else setMsg('Bien ! Touche le bouton à '+(f.L?'gauche ⬅':'droite ➡')+'.');
+  }
+  function place(side){
+    if(S.busy||S.over||S.sel==null) return; const t=S.hands[S.turn][S.sel], [L,R]=ends();
+    let h;
+    if(side==='R'){ h=t.h[0].c===R?[t.h[0],t.h[1]]:[t.h[1],t.h[0]]; }
+    else { h=t.h[1].c===L?[t.h[0],t.h[1]]:[t.h[1],t.h[0]]; }
+    commit(S.turn,S.sel,side,h);
+  }
+  function commit(pi,idx,side,h){
+    const t=S.hands[pi].splice(idx,1)[0]; const nt={h,dbl:t.dbl,fresh:true}; S.chain.forEach(x=>x.fresh=false);
+    if(side==='R') S.chain.push(nt); else S.chain.unshift(nt); S.scroll=side; S.sel=null; S.passes=0; S.nomsg=true;
+    const m=side==='R'?h[0]:h[1]; speakHalf(m);
+    if(!S.hands[pi].length){ return finish(pi); }
+    S.msg=players[pi].cpu?'🤖 L’ordi a posé un domino.':''; next();
+  }
+  function draw(){
+    if(S.busy||S.over) return; const me=S.turn;
+    if(playable(me).length) return;
+    if(S.pile.length){ S.hands[me].push(S.pile.pop()); S.sel=null; S.msg=playable(me).length?'Tu as pioché un domino qui va !':(S.pile.length?'Toujours rien : pioche encore !':'Plus de pioche : passe ton tour.'); render(); return; }
+    S.passes++; S.msg=esc(players[me].name)+' passe son tour.'; S.sel=null;
+    if(S.passes>=2) return finish(-1); next();
+  }
+  async function next(){
+    S.turn=(S.turn+1)%players.length; S.sel=null;
+    if(players[S.turn].cpu){ render(); S.busy=true; await sleep(FAST?5:1200); await cpuMove(); return; }
+    if(multi){ S.cover=true; coverScreen(); } else render();
+  }
+  function coverScreen(){
+    const p=players[S.turn]; body.innerHTML=`<div class="dm-cover" style="--pc:${p.color}"><div class="cup">${p.emoji}</div><h2 class="g-h">Au tour de ${esc(p.name)}</h2><p class="g-p">${esc(S.msg||'')}<br>Passe la tablette, puis touche pour voir tes dominos.</p><button class="g-big" id="dGo">👀 Voir mes dominos</button></div>`;
+    body.querySelector('#dGo').onclick=()=>{ S.cover=false; S.msg=''; render(); };
+  }
+  async function cpuMove(){
+    const me=S.turn; let guard=0;
+    while(guard++<40){
+      const ok=playable(me);
+      if(ok.length){ const t=ok[rnd(ok.length)], f=fits(t), idx=S.hands[me].indexOf(t), [L,R]=ends();
+        const side=f.R&&(!f.L||Math.random()<.5)?'R':'L'; let h;
+        if(side==='R') h=t.h[0].c===R?[t.h[0],t.h[1]]:[t.h[1],t.h[0]]; else h=t.h[1].c===L?[t.h[0],t.h[1]]:[t.h[1],t.h[0]];
+        S.busy=false; commit(me,idx,side,h); return; }
+      if(S.pile.length){ S.hands[me].push(S.pile.pop()); render(); await sleep(FAST?5:600); continue; }
+      S.busy=false; S.passes++; S.msg='🤖 L’ordi passe son tour.'; if(S.passes>=2) return finish(-1); S.turn=(S.turn+1)%players.length; render(); return;
+    }
+    S.busy=false;
+  }
+  function finish(w){
+    S.over=true; S.busy=false; let title,sub,icon='🏆';
+    if(w<0){ const a=S.hands[0].length,b=S.hands[1].length; w=a<b?0:b<a?1:-1; }
+    render();
+    if(w<0){ title='Égalité !'; sub='Personne ne peut plus jouer, vous avez autant de dominos.'; icon='🤝'; }
+    else { title=`Bravo ${players[w].name} ! ${players[w].emoji}`; sub=players[w].cpu?'L’ordi gagne cette fois… Rejoue pour prendre ta revanche !':'Tu as posé tous tes dominos !'; icon=players[w].cpu?'🤖':'🏆'; }
+    setTimeout(()=>endScreen({title,sub,icon,color:w>=0?players[w].color:'#1f5fd6'},()=>start(cfg)),FAST?5:900);
+  }
+  S.solve=()=>{ if(S.over) return false; const me=S.turn; const ok=playable(me); if(!ok.length){ draw(); return 'draw'; } const t=ok[0], f=fits(t); S.sel=S.hands[me].indexOf(t); place(f.R?'R':'L'); return 'play'; };
+  S.cpuWait=()=>S.busy;
+  render();
+}
+})();
+</script>
+
 <script>
 /* ====== Français : conjugaison (être, avoir, aller) ====== */
 (function(){
