@@ -602,9 +602,12 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 #salonBan .bn-i{font-size:28px;line-height:1}#salonBan .bn-i .mx{display:inline-block;width:1.2em;height:1.2em}#salonBan .bn-t{flex:1;line-height:1.2}#salonBan small{display:block;opacity:.85;font-size:12px}
 #salonBan .bn-j{border:0;border-radius:12px;background:#fff;color:#0b7285;font:800 15px inherit;font-family:inherit;padding:10px 12px;min-height:44px;cursor:pointer}#salonBan .bn-x{border:0;background:transparent;color:#fff;font-size:18px;width:36px;height:44px;cursor:pointer}
 
-#onbar{position:fixed;left:10px;bottom:10px;z-index:54;display:flex;align-items:center;gap:6px;max-width:calc(100vw - 100px)}#onbar[hidden]{display:none}body.has-who #onbar{bottom:calc(64px + env(safe-area-inset-bottom,0px))}body.gp-play #onbar{display:none}
-#onbar .ob-b{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #8fd9c3;border-radius:999px;background:rgba(255,255,255,.94);color:#0b5f6e;font-weight:700;font-size:12px;font-family:inherit;padding:4px 10px 4px 8px;min-height:30px;cursor:pointer;box-shadow:0 2px 8px rgba(20,26,40,.15);white-space:nowrap}
-.ob-d{width:8px;height:8px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 2px #c9f2d1;display:inline-block;flex:none}#onbar .ob-b i{font-style:normal;opacity:.85}#onbar .ob-b.hot{background:#0b7285;border-color:#0b7285;color:#fff;animation:obp 1.8s ease-in-out infinite}#onbar .ob-b.hot .ob-d{box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+#onbar{position:fixed;left:10px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:54;max-width:calc(100vw - 100px)}#onbar[hidden]{display:none}body.gp-play #onbar,body.gp-play #onMenu{display:none}
+body.has-on #whoPill{bottom:calc(46px + env(safe-area-inset-bottom,0px))}body.has-on.has-who{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}body.has-on:not(.has-who){padding-bottom:calc(52px + env(safe-area-inset-bottom,0px))}
+#onbar .ob-b{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #8fd9c3;border-radius:999px;background:rgba(255,255,255,.96);color:#0b5f6e;font-weight:600;font-size:12px;font-family:inherit;padding:4px 10px 4px 8px;min-height:30px;cursor:pointer;box-shadow:0 2px 8px rgba(20,26,40,.15);white-space:nowrap}#onbar .ob-b i{font-style:normal;font-weight:800}
+.ob-d{width:8px;height:8px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 2px #c9f2d1;display:inline-block;flex:none}.ob-d.off{background:#adb5bd;box-shadow:0 0 0 2px #e4e7ec}#onbar .ob-b.hot{background:#0b7285;border-color:#0b7285;color:#fff;animation:obp 1.8s ease-in-out infinite}#onbar .ob-b.hot .ob-d{box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+#onMenu{position:fixed;left:10px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:57;width:min(300px,calc(100vw - 20px));display:grid;gap:6px;padding:10px;border-radius:16px;background:#fff;border:2px solid #8fd9c3;box-shadow:0 10px 30px rgba(0,0,0,.25)}#onMenu[hidden]{display:none}#onMenu p{margin:0 0 2px}#onMenu p small{display:block;color:#6b7385}
+#onMenu button{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;border-radius:12px;border:2px solid #cfd6e6;background:#fff;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;min-height:44px;text-align:left}#onMenu button small{font-weight:600;color:#6b7385}#onMenu button.hot{background:#0b7285;border-color:#0b7285;color:#fff}#onMenu button.hot small{color:#d5f2f7}
 @keyframes obp{50%{box-shadow:0 0 0 5px rgba(11,114,133,.25)}}
 
 .g-fam{display:grid;gap:4px;margin:8px 0 2px}.g-fam>small:first-child{font-weight:800;color:#3b4560}.g-fam-l{display:flex;gap:6px;flex-wrap:wrap}
@@ -703,6 +706,7 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "4.1", desc: "Pastille en ligne sous l’avatar, menu salon" },
     { v: "4.0", desc: "Choix rapide des joueurs de la famille" },
     { v: "3.9", desc: "Salon : joueurs en ligne, bouton Rejoindre" },
     { v: "3.8", desc: "Joueur actif visible partout, Famille repensée" },
@@ -4672,11 +4676,18 @@ function lobH(){ const L=S.lob, o=L.open||[]; if(!(L.online>0)&&!o.length) retur
   return `${o.length?`<div class="sl-ask"><b>📣 Des joueurs t’attendent !</b>${o.map(x=>`<button type="button" data-j="${x.c}"><span>${avH(x.av)}</span> <b>${esc(x.nm)}</b> · ${x.n} joueur${x.n>1?'s':''}<em>Rejoindre</em></button>`).join('')}</div>`:''}
   ${L.online>1?`<p class="sl-on">🟢 ${L.online-1} autre${L.online>2?'s':''} joueur${L.online>2?'s':''} en ligne</p>`:''}`; }
 function lobbyRefresh(){ const el=document.getElementById('slLob'); if(el) el.innerHTML=lobH(); onbar(); }
-function onbar(){ const el=document.getElementById('onbar'); if(!el||!S.lob.ok) return; const L=S.lob, o=(L.open||[])[0], oth=Math.max(0,(L.online||1)-1);
-  if(S.code||(!oth&&!o)){ el.hidden=true; return; }
-  el.hidden=false; el.dataset.c=o?o.c:'NEW';
-  el.innerHTML=`<button type="button" class="ob-b${o?' hot':''}" aria-label="${oth} joueur${oth>1?'s':''} en ligne. ${o?'Rejoindre le salon':'Lancer un salon'}"><span class="ob-d"></span>${oth} en ligne${o?' · <i>Rejoindre le salon ›</i>':' · <i>🌐 Lancer un salon</i>'}</button>`; }
-(function(){ const el=document.getElementById('onbar'); if(el) el.onclick=e=>{ if(!e.target.closest('button')) return; if(el.dataset.in){ goJoin(null); return; } goJoin(el.dataset.c||'NEW'); }; })();
+function onbar(){ const el=document.getElementById('onbar'); if(!el||!S.lob.ok) return; const L=S.lob, o=(L.open||[])[0], oth=Math.max(0,(L.online||1)-1), inRoom=!!S.code;
+  el.hidden=false; document.body.classList.add('has-on');
+  const txt=inRoom?'Retour au salon ›':o?'Rejoindre le salon ›':'Jouez ensemble !';
+  el.innerHTML=`<button type="button" class="ob-b${o&&!inRoom?' hot':''}" aria-haspopup="true" aria-label="${oth} joueur${oth>1?'s':''} en ligne. ${txt}"><span class="ob-d${oth?'':' off'}"></span>${oth?`<b>${oth}</b> en ligne · `:'Salon · '}<i>${txt}</i></button>`;
+  const m=document.getElementById('onMenu'); if(m&&!m.hidden) onMenu(true); }
+function onMenu(show){ let m=document.getElementById('onMenu'); if(!show){ if(m) m.hidden=true; return; }
+  if(!m){ m=document.createElement('div'); m.id='onMenu'; document.body.appendChild(m); m.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; m.hidden=true; const a=b.dataset.a; if(a==='back') goJoin(null); else if(a==='new') goJoin('NEW'); else if(a) goJoin(a); }; }
+  const L=S.lob, o=L.open||[], oth=Math.max(0,(L.online||1)-1);
+  m.innerHTML=`<p><b>${oth?`🟢 ${oth} joueur${oth>1?'s':''} en ligne`:'Personne d’autre en ligne pour l’instant'}</b><small>Salon à distance · bêta</small></p>`+
+    (S.code?'<button type="button" data-a="back">🌐 Retour à mon salon</button>':o.map(x=>`<button type="button" class="hot" data-a="${x.c}">🌐 Rejoindre le salon de ${esc(x.nm)} <small>${x.n} joueur${x.n>1?'s':''}</small></button>`).join('')+'<button type="button" data-a="new">➕ Créer un salon</button>');
+  m.hidden=false; }
+(function(){ const el=document.getElementById('onbar'); if(el) el.onclick=e=>{ if(!e.target.closest('button')) return; const m=document.getElementById('onMenu'); onMenu(!(m&&!m.hidden)); }; document.addEventListener('click',e=>{ const m=document.getElementById('onMenu'); if(m&&!m.hidden&&!e.target.closest('#onMenu,#onbar')) m.hidden=true; }); document.addEventListener('keydown',e=>{ if(e.key==='Escape') onMenu(false); }); })();
 function goJoin(c){ window.__salonPending=c||null; const b=document.querySelector('.sec-b[data-s="fa"]'); if(b) b.click(); setTimeout(()=>H.openGame('salon'),150); }
 function banner(){ let el=document.getElementById('salonBan'); if(!el) return; const o=(S.lob.open||[]).find(x=>!S.dis[x.c]);
   if(!o||S.code||(root()&&!S.code)||document.hidden){ if(el) el.remove(); return; }
