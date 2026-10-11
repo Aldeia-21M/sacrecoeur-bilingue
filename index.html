@@ -256,7 +256,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .g-opts.long button{font-size:clamp(12px,3.4vw,17px)}.g-opts.xlong{grid-template-columns:1fr}.g-opts.xlong button{min-height:52px}
 
 .tab.game{margin-left:8px;background:#efe6ff;border-color:#8f6fd6}.tab.game[aria-selected="true"]{background:#8f6fd6;color:#fff;border-color:#6f4fc0}
-.gear{margin-left:8px}#avisbtn{margin-left:0;min-width:46px}.tab .lb{letter-spacing:-.5px}nav{gap:4px}
+.gear{margin-left:8px}#avisbtn{margin-left:0;min-width:46px;position:relative}#avisbtn .av-b{display:block;font-size:9px;font-weight:800;line-height:1;color:#2b8a3e;white-space:nowrap;margin-top:1px}.tab .lb{letter-spacing:-.5px}nav{gap:4px}
 #p-game{background:linear-gradient(#f4eeff,#fffdf8);border:3px dashed #8f6fd6;border-radius:22px;padding:8px 6px;margin-top:6px}
 /* ---- sections Allemand / Français ---- */
 .secs{display:flex;gap:8px;max-width:1100px;margin:0 auto 8px}
@@ -503,7 +503,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
     <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel"><span class="ic">⚙️</span><span class="lb">Réglages</span></button>
-    <button class="tab gear" id="avisbtn" aria-controls="setpanel"><span class="ic">💬</span><span class="lb">Avis</span></button>
+    <button class="tab gear" id="avisbtn" aria-controls="setpanel"><span class="ic">💬</span><span class="lb">Avis</span><small class="av-b" id="avisBadge" hidden></small></button>
   </div>
   <div id="setbk" hidden></div>
   <div class="vox" id="setpanel" hidden>
@@ -3838,10 +3838,10 @@ window.__pc={show,music,suggestPause,P,bubbles};
 (function(){ const F=document.getElementById('avisF'); if(!F) return; const B=document.getElementById('avisB'), L=document.getElementById('avisL'), M=document.getElementById('avisM'), S=document.getElementById('avisS'), C=document.getElementById('avisC'), D=document.getElementById('avis');
   const API='/.netlify/functions/avis'; let counts=null;
   const pl=(n,w)=>n+' '+w+(n>1?'s':'');
-  function paint(){ if(!counts){ C.textContent=''; return; } const l=counts.likes, c=counts.comments;
+  function paint(){ const bd=document.getElementById('avisBadge'); if(bd&&counts){ bd.textContent='👍'+counts.likes+' 💬'+counts.comments; bd.hidden=false; } if(!counts){ C.textContent=''; return; } const l=counts.likes, c=counts.comments;
     C.textContent=(l?'👍 '+pl(l,'like'):'Sois le premier à liker 👍')+'  ·  '+(c?'💬 '+pl(c,'commentaire'):'Sois le premier à laisser un commentaire 💬'); }
   async function load(){ try{ const r=await fetch(API,{cache:'no-store'}); if(r.ok){ counts=await r.json(); paint(); } }catch(_){} }
-  D.addEventListener('toggle',()=>{ if(D.open) load(); });
+  D.addEventListener('toggle',()=>{ if(D.open) load(); }); load();
   let liked=false; try{ liked=localStorage.getItem('avisLiked')==='1'; }catch(_){}
   if(liked){ B.setAttribute('aria-pressed','true'); B.textContent='👍 Merci pour ton like !'; B.disabled=true; }
   B.onclick=()=>{ const on=B.getAttribute('aria-pressed')!=='true'; B.setAttribute('aria-pressed',on); L.value=on?'oui':''; };
