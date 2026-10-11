@@ -29,7 +29,7 @@ nav button[aria-selected="true"]{background:var(--blue);border-color:var(--accen
 .pill[aria-pressed="true"],.pill[aria-expanded="true"]{background:var(--yellow);border-color:#d9a400}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}.hs:focus-visible{outline-width:1px;outline-offset:0}
 .vox{position:fixed;left:0;right:0;top:0;z-index:60;max-height:88vh;overflow-y:auto;overscroll-behavior:contain;max-width:640px;margin:0 auto;background:#fff;border:2px solid var(--line);border-top:0;border-radius:0 0 24px 24px;box-shadow:0 12px 40px rgba(20,26,40,.35);padding:calc(12px + env(safe-area-inset-top,0px)) 14px 6px;display:grid;gap:8px;font-size:16px;will-change:transform}
-.vox[hidden]{display:none}.vox p{margin:0;color:#5b6478}
+.vox[hidden]{display:none}.vox p{margin:0;color:#5b6478}.vox .vx-t{margin:0;font-size:1.15rem;padding-right:110px}.vox .vx-p{background:#fff8e1;border:1px solid #ffe3a3;border-radius:12px;padding:8px 12px;color:#4a4130;font-size:.9rem;line-height:1.35}
 .vox label{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
 .vox select{max-width:100%;padding:8px;border-radius:10px;border:2px solid var(--line);background:#fff;min-height:44px}
 main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
@@ -557,19 +557,20 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
     <button class="tab gear" id="usrbtn" aria-controls="upanel" aria-selected="false"><span class="ic">👨‍👩‍👧</span><span class="lb">Famille</span><small class="av-b" id="usrBadge" hidden></small></button>
-    <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel"><span class="ic">⚙️</span><span class="lb">Réglages</span></button>
+    <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel" aria-label="Voix : choisir et régler les voix"><span class="ic">🔊</span><span class="lb">Voix</span></button>
     <button class="tab gear" id="avisbtn" aria-controls="setpanel"><span class="ic">💬</span><span class="lb">Avis</span><small class="av-b" id="avisBadge" hidden></small></button>
   </div>
   <div id="setbk" hidden></div>
   <div class="vox" id="setpanel" hidden>
     <button class="cl-badge" id="clBtn" type="button" aria-expanded="false" aria-controls="clPop" title="Historique des versions"></button>
+    <h3 class="vx-t">🔊 Les voix</h3>
+    <p class="vx-p"><b>Les voix peuvent être changées !</b> Si une voix est robotique, trop rapide ou pénible à écouter, choisis-en une autre ci-dessous. Les voix « Premium », « Améliorée » ou « Neural » sonnent bien mieux.</p>
+    <label>🇩🇪 Allemand <select id="vde"></select></label> <button class="pill" id="tde">▶ Tester</button>
+    <label>🇫🇷 Français <select id="vfr"></select></label> <button class="pill" id="tfr">▶ Tester</button>
     <div class="row">
       <button class="pill" id="slow" aria-pressed="false">🐢 Lent</button>
       <button class="pill" id="zones" aria-pressed="false">👆 Voir les zones</button>
     </div>
-    <p>Choisis la meilleure voix de ton appareil (les voix « Premium », « Améliorée » ou « Neural » sonnent bien mieux).</p>
-    <label>🇩🇪 Allemand <select id="vde"></select></label> <button class="pill" id="tde">▶ Tester</button>
-    <label>🇫🇷 Français <select id="vfr"></select></label> <button class="pill" id="tfr">▶ Tester</button>
     <details class="vhelp"><summary>ℹ️ D’où viennent les voix ?</summary>
       <p>Les voix ne sont pas dans l’application : c’est ton appareil qui lit les textes à voix haute. Plus la voix installée est belle, plus l’allemand et le français sonnent naturels. Tu peux en choisir une autre (ou télécharger une meilleure) :</p>
       <div class="vh-os" id="vhOs"><button data-o="ios">🍎 iPhone / iPad</button><button data-o="and">🤖 Android</button><button data-o="pc">💻 Ordinateur</button></div>
@@ -639,6 +640,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "3.4", desc: "Bouton Voix plus clair, texte explicatif" },
     { v: "3.3", desc: "Classe par joueur, plus d’avatars et couleurs" },
     { v: "3.2", desc: "Famille : joueurs et progrès partagés" },
     { v: "3.1", desc: "Code famille : données sur tous appareils" },
