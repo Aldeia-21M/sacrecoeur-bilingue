@@ -610,6 +610,12 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 .bar{flex-wrap:wrap}
 @media (max-width:759px){#onbar{order:-1;flex:1 0 100%;margin:0 0 4px}}
 @media (min-width:760px){.bar{flex-wrap:nowrap}#onbar .ob-b{max-width:none;overflow:visible}#onbar{align-self:center;margin:0 4px 0 auto;background:transparent;border:0;padding:0;gap:12px;min-height:0;flex:0 0 auto}}
+
+/* barre en ligne : version discrète */
+#onbar .ob-t{font-size:12px;color:#5b6478;gap:5px}.ob-d{width:8px;height:8px}.ob-d.on{box-shadow:0 0 0 2px #c9f2d1}
+#onbar .ob-b{background:#fff;color:#0b7285;border:1.5px solid #0b7285;font-weight:700;font-size:12px;font-family:inherit;padding:3px 10px;min-height:26px;border-radius:999px}#onbar .ob-b small{font-size:9px;padding:1px 5px}#onbar .ob-b.hot{background:#0b7285;color:#fff}
+@media (max-width:759px){#onbar{min-height:30px;padding:2px 4px 2px 10px;background:#f4fbf8;border-width:1px}}
+@media (min-width:760px){#onbar{gap:8px}}
 </style>
 </head>
 <body>
