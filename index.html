@@ -518,6 +518,16 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
       <div class="vh-os" id="vhOs"><button data-o="ios">🍎 iPhone / iPad</button><button data-o="and">🤖 Android</button><button data-o="pc">💻 Ordinateur</button></div>
       <div class="vh-tx" id="vhTx" hidden></div>
     </details>
+    <details class="avis" id="avis"><summary>💬 Un avis ? Une idée ?</summary>
+      <form name="avis" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="avisF">
+        <input type="hidden" name="form-name" value="avis"><p hidden><label>Ne pas remplir <input name="bot-field"></label></p>
+        <input type="hidden" name="like" id="avisL" value="">
+        <div class="av-r"><button type="button" class="pill big" id="avisB" aria-pressed="false">👍 J’aime bien</button></div>
+        <input name="nom" maxlength="40" placeholder="Prénom ou « parent de … » (facultatif)" autocomplete="off">
+        <textarea name="message" maxlength="300" rows="3" placeholder="Un petit mot, une suggestion… (facultatif)"></textarea>
+        <button class="pill big" id="avisS" type="submit">Envoyer</button><span class="av-ok" id="avisM" aria-live="polite"></span>
+      </form>
+    </details>
     <p class="about">💙 C’est avec bienveillance que le papa de Leonardo, Guilherme et Milena a mis en place ce petit jeu éducatif. Il est à disposition de tous les parents d’élèves qui souhaitent rendre l’apprentissage scolaire et la révision plus ludiques.</p>
     <div class="setgrab" id="setgrab" aria-label="Fermer"><i></i></div>
   </div>
@@ -3724,6 +3734,7 @@ const css=document.createElement('style'); css.textContent=`
 #pcP .pc-btns button{min-height:48px;border-radius:14px;border:2px solid #d8cfae;background:#fff;font:700 14px/1.15 system-ui,sans-serif;color:#1d2433;cursor:pointer;padding:6px}
 #pcP .pc-btns #pcBy{grid-column:1/-1}
 i>.mx,i .mx{background:var(--mx) center/cover no-repeat!important;width:100%!important;height:100%!important;display:block!important;border:0!important;box-shadow:none!important;border-radius:50%!important;vertical-align:baseline!important}
+.avis{margin:10px 0}.avis summary{cursor:pointer;font-weight:700}.avis form{display:grid;gap:8px;margin-top:8px}.avis input[name=nom],.avis textarea{font:inherit;padding:8px 10px;border:2px solid #ced4da;border-radius:12px;width:100%;box-sizing:border-box}.avis .av-r{display:flex}.avis #avisB[aria-pressed=true]{background:#d3f0d3;border-color:#2f9e44}.avis .av-ok{font-weight:700;color:#2b8a3e}
 .mx{display:inline-block;width:1.2em;height:1.2em;border-radius:50%;background:var(--mx) center/cover no-repeat;vertical-align:-.25em;font-style:normal;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.g-npc .mx{width:44px;height:44px}.g-npc{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;width:100%;text-align:left;padding:10px 14px;border-radius:16px;border:3px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;font-family:inherit;color:#1d2433;font-size:16px}.g-npc span{grid-row:1/3;font-size:34px}.g-npc small{opacity:.75;font-weight:600}.g-npc[aria-pressed=true]{background:#bfeebf;border-color:#2f9e44}
 #pcG{position:fixed;inset:0;z-index:100001;background:linear-gradient(#cfe8ff,#e9defa);overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 #pcG .gb{position:absolute;bottom:-130px;border-radius:50%;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 30% 28%,#fff 0,rgba(255,255,255,.55) 14%,var(--bc) 62%,rgba(255,255,255,.35) 100%);box-shadow:inset 0 0 12px rgba(255,255,255,.8),0 4px 10px rgba(29,36,51,.12);transition:transform var(--t) linear;-webkit-tap-highlight-color:transparent}
@@ -3819,6 +3830,15 @@ function bubbles(){
 }
 P.querySelector('#pcGa').onclick=bubbles;
 window.__pc={show,music,suggestPause,P,bubbles};
+})();
+
+(function(){ const F=document.getElementById('avisF'); if(!F) return; const B=document.getElementById('avisB'), L=document.getElementById('avisL'), M=document.getElementById('avisM'), S=document.getElementById('avisS');
+  B.onclick=()=>{ const on=B.getAttribute('aria-pressed')!=='true'; B.setAttribute('aria-pressed',on); L.value=on?'oui':''; };
+  F.onsubmit=async e=>{ e.preventDefault(); if(!L.value&&!F.message.value.trim()){ M.textContent='Touche 👍 ou écris un mot.'; return; }
+    S.disabled=true; M.textContent='…';
+    try{ const r=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(F)).toString()}); if(!r.ok) throw 0; M.textContent='Merci ! 💙'; F.reset(); B.setAttribute('aria-pressed','false'); L.value=''; }
+    catch(_){ M.textContent='Oups, ça n’a pas marché. Réessaie plus tard.'; }
+    S.disabled=false; };
 })();
 </script>
 </body>
