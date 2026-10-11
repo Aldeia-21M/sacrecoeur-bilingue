@@ -606,6 +606,11 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 #onbar .ob-b{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #8fd9c3;border-radius:999px;background:rgba(255,255,255,.94);color:#0b5f6e;font-weight:700;font-size:12px;font-family:inherit;padding:4px 10px 4px 8px;min-height:30px;cursor:pointer;box-shadow:0 2px 8px rgba(20,26,40,.15);white-space:nowrap}
 .ob-d{width:8px;height:8px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 2px #c9f2d1;display:inline-block;flex:none}#onbar .ob-b i{font-style:normal;opacity:.85}#onbar .ob-b.hot{background:#0b7285;border-color:#0b7285;color:#fff;animation:obp 1.8s ease-in-out infinite}#onbar .ob-b.hot .ob-d{box-shadow:0 0 0 2px rgba(255,255,255,.35)}
 @keyframes obp{50%{box-shadow:0 0 0 5px rgba(11,114,133,.25)}}
+
+.g-fam{display:grid;gap:4px;margin:8px 0 2px}.g-fam>small:first-child{font-weight:800;color:#3b4560}.g-fam-l{display:flex;gap:6px;flex-wrap:wrap}
+.g-fam-l button{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 5px;border-radius:999px;border:2px solid #d9deea;background:#fff;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;min-height:40px}.g-fam-l button span{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;border:2px solid var(--pc);background:#fff;font-size:18px}.g-fam-l button span .mx{width:100%;height:100%}
+.g-fam-l button[aria-pressed=true]{border-color:var(--pc);background:var(--pc);color:#fff}.g-fam-l button:disabled{opacity:.4;cursor:default}
+.g-link{font-size:12.5px;color:#6b7385}.g-link.ok{color:#2b8a3e;font-weight:700}.g-link.warn{color:#c2570c;font-weight:700}
 </style>
 </head>
 <body>
@@ -698,6 +703,7 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "4.0", desc: "Choix rapide des joueurs de la famille" },
     { v: "3.9", desc: "Salon : joueurs en ligne, bouton Rejoindre" },
     { v: "3.8", desc: "Joueur actif visible partout, Famille repensée" },
     { v: "3.7", desc: "Salon à distance en direct (bêta), icône Famille" },
@@ -1309,6 +1315,13 @@ function renderSetup(){
     T.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',setup.topics.has(x.dataset.k))); };
   root.querySelector('#gGo').onclick=startGame;
 }
+/* choix rapide d'un joueur de la famille + lien avec son compte */
+function famRow(pl,i,n){ const U=window.DLU; if(!U||!U.list) return ''; const L=U.list(); if(!L.length) return '';
+  const cur=U.norm(pl[i].name), taken=new Set(pl.slice(0,n).map((x,j)=>j!==i?U.norm(x.name):'').filter(Boolean)), known=L.some(p=>U.norm(p.name)===cur);
+  const av=a=>a==='mx'?'<i class="mx"></i>':esc(a);
+  return `<div class="g-fam" role="group" aria-label="Choisir un joueur de la famille"><small>👪 Qui joue ?</small><div class="g-fam-l">${L.map(p=>{ const on=U.norm(p.name)===cur, off=!on&&taken.has(U.norm(p.name)); return `<button type="button" data-fam="${p.id}" aria-pressed="${on}" style="--pc:${p.col}" ${off?'disabled':''}><span>${av(p.av)}</span>${esc(p.name)}</button>`; }).join('')}</div>
+  <small class="g-link${known?' ok':cur?' warn':''}">${known?'✅ Ses points vont sur son compte famille':cur?'⚠️ Pas de compte à ce nom : points non comptés':'Touche un prénom : ses points iront sur son compte'}</small></div>`; }
+window.DLfamRow=famRow;
 function renderPlayers(){
   const box=root.querySelector('#gPl'); const list=setup.pl.slice(0,setup.n);
   box.innerHTML=list.map((p,i)=>{
@@ -1317,6 +1330,7 @@ function renderPlayers(){
     return `<div class="g-pc" style="--pc:${col}" data-i="${i}">
       <div class="g-pc-top"><div class="g-pc-tok">${CHARS[p.ci][0]}</div>
       <input type="text" maxlength="14" list="dlProfNames" placeholder="Joueur ${i+1}" value="${esc(p.name)}" aria-label="Nom du joueur ${i+1}"></div>
+      ${famRow(setup.pl,i,setup.n)}
       <div class="g-gr" role="group" aria-label="Classe du joueur ${i+1}">${['1H','4H','6H'].map(g=>`<button data-gr="${g}" aria-pressed="${p.gr===g}">Classe ${g}</button>`).join('')}</div>
       <div class="g-chars">${CHARS.map((c,k)=>`<button data-ci="${k}" aria-pressed="${p.ci===k}" aria-label="${c[1]}" ${takenC.has(k)?'disabled':''}>${c[0]}</button>`).join('')}</div>
       <div class="g-cols">${COLORS.map((c,k)=>`<button data-co="${k}" style="background:${c[0]}" aria-pressed="${p.co===k}" aria-label="${c[1]}" ${takenK.has(k)?'disabled':''}></button>`).join('')}</div>
@@ -1324,6 +1338,7 @@ function renderPlayers(){
   box.oninput=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT') setup.pl[+c.dataset.i].name=e.target.value; };
   box.onchange=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT'&&window.DLU&&DLU.match(setup.pl,+c.dataset.i,e.target.value,CHARS,true)) renderPlayers(); };
   box.onclick=e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; const c=b.closest('.g-pc'); const i=+c.dataset.i;
+    if(b.dataset.fam){ DLU.pick(setup.pl,i,b.dataset.fam,CHARS,true,COLORS); renderPlayers(); return; }
     if(b.dataset.gr) setup.pl[i].gr=b.dataset.gr; else if(b.dataset.ci!==undefined) setup.pl[i].ci=+b.dataset.ci; else if(b.dataset.co!==undefined) setup.pl[i].co=+b.dataset.co; else return;
     renderPlayers(); };
 }
@@ -1727,11 +1742,13 @@ function playerSetup(o,done){
       const taken=new Set(list.filter((_,j)=>j!==i).map(x=>x.ci));
       return `<div class="g-pc" style="--pc:${COLORS[i][0]}" data-i="${i}"><div class="g-pc-top"><div class="g-pc-tok">${CHARS[p.ci][0]}</div>
         <input type="text" maxlength="14" list="dlProfNames" placeholder="${o.who||'Joueur'} ${i+1}" value="${esc(p.name)}" aria-label="Nom ${i+1}"></div>
+        ${window.DLfamRow?window.DLfamRow(st.pl,i,st.n):''}
         ${o.perGrade?`<div class="g-gr">${['1H','4H','6H'].map(g=>`<button data-gr="${g}" aria-pressed="${p.gr===g}">Classe ${g}</button>`).join('')}</div>`:''}
         <div class="g-chars">${CHARS.map((c,k)=>`<button data-ci="${k}" aria-pressed="${p.ci===k}" aria-label="${c[1]}" ${taken.has(k)?'disabled':''}>${c[0]}</button>`).join('')}</div></div>`; }).join('');
     box.oninput=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT') st.pl[+c.dataset.i].name=e.target.value; };
     box.onchange=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT'&&window.DLU&&DLU.match(st.pl,+c.dataset.i,e.target.value,CHARS,!!o.perGrade)){ if(!o.perGrade&&+c.dataset.i===0) st.grade=st.pl[0].gr; draw(); } };
     box.onclick=e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; const i=+b.closest('.g-pc').dataset.i;
+      if(b.dataset.fam){ DLU.pick(st.pl,i,b.dataset.fam,CHARS,!!o.perGrade); if(!o.perGrade&&i===0) st.grade=st.pl[0].gr; draw(); return; }
       if(b.dataset.gr) st.pl[i].gr=b.dataset.gr; else if(b.dataset.ci!==undefined) st.pl[i].ci=+b.dataset.ci; else return; draw(); };
     const T=body.querySelector('#hT'); if(T){ T.innerHTML=Object.keys(TOPICS).map(k=>`<button class="g-chip" data-k="${k}" aria-pressed="${st.topics.has(k)}">${TOPICS[k].label}</button>`).join('');
     T.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const k=b.dataset.k;
@@ -4580,6 +4597,11 @@ window.DLU={
     if(!(window.DLgrade&&DLgrade()==='1H')){ pl[0].gr=p.gr; if(st.grade!==undefined) st.grade=p.gr; } },
   /* le prénom tapé correspond à un profil : avatar et classe repris */
   match(pl,i,name,chars,gr){ const p=byName(name); if(!p) return false; pl[i].name=p.name; const k=chars.findIndex(c=>c[0]===p.av); if(k>=0) swapCi(pl,i,k); if(gr&&!(window.DLgrade&&DLgrade()==='1H')) pl[i].gr=p.gr; else if(!gr&&i===0) pl[0].gr=p.gr; return true; },
+  /* joueurs de la famille (choix rapide dans les jeux) */
+  list:()=>D.profiles.slice(), norm:n=>norm(n),
+  pick(pl,i,id,chars,gr,colors){ const p=D.profiles.find(x=>x.id===id); if(!p||!pl[i]) return false; pl[i].name=p.name; const k=chars.findIndex(c=>c[0]===p.av); if(k>=0) swapCi(pl,i,k);
+    if(colors&&pl[i].co!==undefined){ const c=colors.findIndex(x=>x[0]===p.col); if(c>=0&&pl[i].co!==c){ const j=pl.findIndex((x,n)=>n!==i&&x.co===c); if(j>=0) pl[j].co=pl[i].co; pl[i].co=c; } }
+    if(gr&&!(window.DLgrade&&DLgrade()==='1H')) pl[i].gr=p.gr; else if(!gr&&i===0) pl[0].gr=p.gr; return true; },
   _d:()=>D, _rec:onAnswer, _end:onEnd, _lv:level, _ch:challenges, _mon:curMonday, _save:save
 };
 /* pastille permanente « qui joue ? » + choix rapide */
