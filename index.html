@@ -1648,6 +1648,15 @@ irr('dire','🗣️',['dis','dis','dit','disons','dites','disent'],'dis','dir','
 irr('voir','👁️',['vois','vois','voit','voyons','voyez','voient'],'voy','verr','vu');
 irr('pouvoir','💪',['peux','peux','peut','pouvons','pouvez','peuvent'],'pouv','pourr','pu');
 irr('vouloir','🙏',['veux','veux','veut','voulons','voulez','veulent'],'voul','voudr','voulu');
+er('donner','🤝'); er('trouver','🔎');
+irr('savoir','🧠',['sais','sais','sait','savons','savez','savent'],'sav','saur','su');
+irr('devoir','📌',['dois','dois','doit','devons','devez','doivent'],'dev','devr','dû');
+irr('mettre','📥',['mets','mets','met','mettons','mettez','mettent'],'mett','mettr','mis');
+irr('partir','🧳',['pars','pars','part','partons','partez','partent'],'part','partir','parti','être');
+irr('sortir','🏃',['sors','sors','sort','sortons','sortez','sortent'],'sort','sortir','sorti','être');
+irr('lire','📖',['lis','lis','lit','lisons','lisez','lisent'],'lis','lir','lu');
+irr('écrire','✍️',['écris','écris','écrit','écrivons','écrivez','écrivent'],'écriv','écrir','écrit');
+irr('répondre','🙋',['réponds','réponds','répond','répondons','répondez','répondent'],'répond','répondr','répondu');
 const AUX={avoir:['ai','as','a','avons','avez','ont'],'être':['suis','es','est','sommes','êtes','sont']};
 const vow=/^[aeiouyhàâéèêëîïôù]/i;
 function pron(i,form){ return i===0&&vow.test(form)?'j’':PR[i]+' '; }
