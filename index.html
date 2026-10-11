@@ -382,8 +382,9 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .tx-sub{margin:18px 4px 0;font-size:clamp(17px,4.6vw,21px);color:#33405f}
 .tx-pal{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
 .tx-pal button{display:flex;align-items:center;gap:6px;min-height:38px;padding:2px 11px;border-radius:999px;border:2px solid rgba(29,36,51,.14);background:#fff;font-weight:700;font-size:14.5px;color:#33405f}
-.tx-pal button[aria-pressed=true]{border-color:var(--cc);box-shadow:0 0 0 2px var(--cc) inset;color:#1d2433}
+.tx-pal button[aria-pressed=true]{border-color:#1d2433;background:#fff4c2;box-shadow:0 3px 0 #1d2433;color:#1d2433}.tx-pal button[aria-pressed=true]::after{content:'✏️'}
 .tx-hint{margin:4px 2px 8px;font-size:13.5px;line-height:1.4;color:#5b6478}
+.gk-top{display:flex;align-items:center;gap:10px;margin:0 0 8px}.gk-top>span{font-weight:800;white-space:nowrap}.gk-top .mx-seg{flex:1}.gk-top .mx-seg button{min-height:40px}.gk-lab{font-weight:800;margin:2px 0 6px}.gk-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.gk-chips button{border:2px solid rgba(29,36,51,.16);background:#fff;border-radius:999px;padding:7px 11px;font:700 14px/1.1 system-ui,sans-serif;min-height:38px}.gk-chips button[aria-pressed="true"]{background:#bfeebf;border-color:#2f9e44}
 .tx-top{display:grid;grid-template-columns:1fr;gap:8px;margin:2px 0 8px}.tx-top .mx-seg button{min-height:44px}
 #txL{min-height:46px;border-radius:14px;border:3px solid var(--line);background:#fff;font:700 15.5px/1.2 inherit;font-family:inherit;padding:2px 10px;color:#1d2433;min-width:0}
 .tx-set{margin:0 0 8px}.tx-set summary{cursor:pointer;list-style:none;font-size:14px;color:#5b6478;padding:4px 2px}.tx-set summary::-webkit-details-marker{display:none}.tx-set summary b{color:#33405f}.tx-set summary span{margin-left:6px;text-decoration:underline}
@@ -392,7 +393,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .tx-goal{margin:2px 2px 8px;font-size:clamp(17px,4.6vw,20px);font-weight:700;line-height:1.35}
 .sw{display:inline-block;width:22px;height:12px;border-radius:4px;background:var(--cc)}
 .cw{cursor:pointer;padding:2px 3px;font-size:inherit;border-radius:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;-webkit-tap-highlight-color:transparent}
-.cw.m-p,.cw.m-v{border-bottom-color:#e03131}.cw.m-i{border-bottom-color:#7048e8}.cw.m-u{border-bottom-color:#e8590c}.cw.m-c{border-bottom-color:#1c7ed6}.cw.m-n{border-bottom-color:#2f9e44}
+.cw.ul{text-decoration:underline;text-decoration-color:var(--uc);text-decoration-thickness:5px;text-underline-offset:6px;text-decoration-skip-ink:none;border-radius:0}
 .cw.m-g{border-top-color:#5f3dc4}.cw.m-x{background:#b2f2bb}
 .cw.m-D{background:#cfe8ff}.cw.m-N{background:#ffd6e5}.cw.m-J{background:#ffe58a}.cw.m-R{background:#d9f2d1}.cw.m-V{background:#e4d6fb}.cw.m-B{background:#ffd9b3}.cw.m-P{background:#c5f6fa}.cw.m-C{background:#f3d9fa}
 .tx-run{border:3px solid var(--rc);border-radius:10px;padding:2px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -2347,6 +2348,9 @@ function MkSeries(rootId,cfg){
   function paintO(){
     run=null; P.innerHTML=''; if(cfg.acts){ const al=actsOf(); if(!al.some(a=>a[0]===S.act)) S.act=al[0][0]; }
     const pr=getProg()[rootId]; const prTxt=pr?`<p class="mx-hint">🏅 Meilleur score : <b>${pr.best}/10</b> · ${pr.runs} série${pr.runs>1?'s':''} faite${pr.runs>1?'s':''}</p>`:'';
+    if(cfg.compact){ const sh=t=>t.split(/\s[:(]/)[0];
+      O.innerHTML=`<div class="gk-top"><span>Ta classe</span><div class="mx-seg" id="${rootId}G">${cfg.grades.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.g}">${v}</button>`).join('')}</div></div><div class="gk-lab">Quelle règle ?</div><div class="gk-chips" id="${rootId}A">${actsOf().map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.act}">${sh(t)}</button>`).join('')}</div>${prTxt}${cfg.card?cfg.card(S.act,S.g):''}<button class="mx-go" id="${rootId}Go">▶ M’entraîner (10 questions)</button>`;
+    } else
     O.innerHTML=(cfg.acts?(actsOf()[0][3]?`<div id="${rootId}A">${[...new Set(actsOf().map(a=>a[3]))].map(gr=>`<div class="mx-sec"><div class="mx-lab">${gr}</div><div class="mx-seg wrap">${actsOf().filter(a=>a[3]===gr).map(([v,t])=>`<button data-v="${v}" aria-pressed="${v===S.act}">${t}</button>`).join('')}</div></div>`).join('')}</div>`:seg(rootId+'A','Quel exercice ?',actsOf(),S.act)):'')+seg(rootId+'G','Ta classe',cfg.grades,S.g)+`<p class="mx-hint">${(cfg.hints&&cfg.hints[S.g])||''}</p>${prTxt}${cfg.card?cfg.card(S.act,S.g):''}<button class="mx-go" id="${rootId}Go">▶ Commencer la série (10 questions)</button>`;
     const a=O.querySelector('#'+rootId+'A'); if(a) a.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.act=b.dataset.v; paintO(); };
     O.querySelector('#'+rootId+'G').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; paintO(); };
@@ -3027,8 +3031,8 @@ function gmCard(act,g){
   return '';
 }
 function genGram(g,act){ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].includes(gg)).map(a=>a[0]); const a=act&&ok.includes(act)?act:pick(ok); const q=GM_GEN[a](gg); if(q.options&&q.options.some(o=>o.length>12)) q.wide=true; return q; }
-MkSeries('p-gramS',{title:'📐 Apprendre la règle',intro:'Lis la fiche, puis joue avec les mots pour t’entraîner.',
-  acts:GM_ACTS.map(a=>[a[0],a[1],a[2],a[3]]),grades:[['4H','4H · les bases'],['6H','6H · toutes les notions']],card:gmCard,
+MkSeries('p-gramS',{title:'📘 Apprendre la règle',intro:'',
+  compact:true,acts:GM_ACTS.map(a=>[a[0],a[1],a[2],a[3]]),grades:[['4H','4H · les bases'],['6H','6H · toutes les notions']],card:gmCard,
   hints:{'4H':'La phrase, les natures (nom, verbe, adjectif, déterminant) et les petits mots qui relient.','6H':'Phrase simple ou complexe, nature et fonction des mots, adverbe, préposition, conjonction, groupes de verbes, temps simples et composés.'},gen:genGram});
 G.gram=g=>{ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].includes(gg)).map(a=>a[0]); const a=pick(ok); let q,t=0; do{ q=GM_GEN[a](gg); t++; }while(q.kind!=='mcq'&&t<20); return q; };
 /* ---- LE TEXTE À COLORIER (exercice de classe) ---- */
@@ -3130,6 +3134,7 @@ const MODES={
   ['La fonction des mots : S, V, COD, COI, CC','Cherche le <b>sujet (S)</b>, le <b>verbe (V)</b>, l’<b>attribut</b> et les <b>compléments</b> : <b>COD</b>, <b>COI</b>, <b>CC</b>.',['s','v','o','k','t','e']],
   ['Tout : GN, S, V et compléments','L’analyse complète : <b>groupes nominaux (GN)</b>, <b>sujet (S)</b>, <b>verbe (V)</b> et <b>compléments</b>.',['g','s','v','o','k','t','e']]]
 };
+const SHORT={'4H':['Les verbes','Sujet · verbe','Sujet · prédicat','Nature des mots'],'6H':['Verbes et temps','Sujet · verbe','Sujet · prédicat · CC','Nature des mots','Accords','Fonctions (COD, COI…)','Tout']};
 const BOX=['s','q','o','k','t','e'], TEN=['p','i','u','c','n','v'], NAT=['D','N','J','R','B','P','C','V'];
 const EXP=(t,x)=>x==='v'?/[piuc]/.test(t.c):t.c.includes(x);
 const PT={}; Object.keys(TXT).forEach(g=>{ PT[g]=[]; TXT[g].forEach(tx=>{ let cur=[]; PARSE(tx).forEach(t=>{ cur.push(t); if(/[.!?]/.test(t.p)){ PT[g].push(cur); cur=[]; } }); if(cur.length) PT[g].push(cur); }); });
@@ -3138,7 +3143,7 @@ const act=()=>MODES[S.g][S.lv][2];
 const cnt=toks=>{ let n=0; toks.forEach(t=>act().forEach(x=>{ if(EXP(t,x)) n++; })); return n; };
 function newText(){ const L=PT[S.g]; const ok=L.map((t,i)=>i).filter(i=>i!==S.ti&&cnt(L[i])>=1); const k=ok.length?ok[rnd(ok.length)]:rnd(L.length); S.ti=k; S.toks=L[k]; S.marks=S.toks.map(()=>[]); S.done=false; }
 root.innerHTML=`<div class="cx"><h2>🖍️ À toi : colorie la phrase</h2>
- <div class="tx-top"><div class="mx-seg" id="txG"></div><select id="txL" aria-label="Je cherche"></select></div>
+ <div class="tx-top"><div class="gk-top"><span>Ta classe</span><div class="mx-seg" id="txG"></div></div><div class="gk-lab">Qu’est-ce que je cherche ?</div><div class="gk-chips" id="txL"></div></div>
  <div class="tx-goal" id="txO"></div>
  <div class="tx-text" id="txT"></div>
  <div class="tx-fb" id="txF" hidden></div>
@@ -3150,35 +3155,39 @@ const segH=(list,cur)=>list.map(([v,t])=>`<button data-v="${v}" aria-pressed="${
 const sp=k=>(k<S.toks.length-1&&!/’$/.test(S.toks[k].w))?' ':'';
 function wordCls(k){
   const t=S.toks[k], m=S.marks[k], A=act(), c=[]; let ms=null;
-  m.forEach(x=>{ if(!BOX.includes(x)) c.push('m-'+x); });
+  m.forEach(x=>{ if(!BOX.includes(x)&&!TEN.includes(x)) c.push('m-'+x); });
   if(S.done) A.forEach(x=>{ const e=EXP(t,x), h=m.includes(x)||(x==='v'&&false), tol=x==='x'&&t.c.includes('y');
     if(h&&!e&&!tol) c.push('bad'); else if(e&&!h&&!ms){ ms=x; c.push('miss'); } });
   return {cls:c.join(' '),ms};
 }
 const boxOf=k=>S.marks[k].find(x=>BOX.includes(x));
+const tenOf=k=>S.marks[k].find(x=>TEN.includes(x));
+const joinUL=k=>{ const u=tenOf(k); return u&&k<S.toks.length-1&&tenOf(k+1)===u&&!S.toks[k].p&&!/’$/.test(S.toks[k].w); };
 function paintT(){
   const n=S.toks.length; let h='';
-  const word=k=>{ const w=wordCls(k); return `<span class="cw ${w.cls}" data-i="${k}"${w.ms?` style="--mc:${CR[w.ms][1]}"`:''}>${esc(S.toks[k].w)}</span>`; };
+  const word=k=>{ const w=wordCls(k), u=tenOf(k); const st=(w.ms?`--mc:${CR[w.ms][1]};`:'')+(u?`--uc:${CR[u][1]};`:'');
+    return `<span class="cw ${w.cls}${u?' ul':''}" data-i="${k}"${st?` style="${st}"`:''}>${esc(S.toks[k].w)}${joinUL(k)?' ':''}</span>`; };
+  const spc=k=>joinUL(k)?'':sp(k);
   for(let i=0;i<n;){
     const b=boxOf(i);
     if(b){ let j=i; while(j+1<n&&boxOf(j+1)===b&&!S.toks[j].p) j++;
-      h+=`<span class="tx-run" style="--rc:${CR[b][1]}">`; for(let k=i;k<=j;k++) h+=word(k)+(k<j?sp(k):''); h+='</span>'+esc(S.toks[j].p)+sp(j); i=j+1; }
-    else { h+=word(i)+esc(S.toks[i].p)+sp(i); i++; }
+      h+=`<span class="tx-run" style="--rc:${CR[b][1]}">`; for(let k=i;k<=j;k++) h+=word(k)+(k<j?spc(k):''); h+='</span>'+esc(S.toks[j].p)+sp(j); i=j+1; }
+    else { h+=word(i)+esc(S.toks[i].p)+spc(i); i++; }
   }
   $('txT').innerHTML=h;
 }
 function paintAll(keep){
   const M=MODES[S.g][S.lv];
   $('txG').innerHTML=segH([['4H','4H'],['6H','6H']],S.g);
-    $('txL').innerHTML=MODES[S.g].map((x,i)=>`<option value="${i}"${i===S.lv?' selected':''}>${x[0]}</option>`).join('');
-  $('txO').innerHTML=M[1];
+    $('txL').innerHTML=MODES[S.g].map((x,i)=>`<button data-i="${i}" aria-pressed="${i===S.lv}">${SHORT[S.g][i]}</button>`).join('');
+  $('txO').innerHTML='🎯 <b>Ton défi :</b> '+M[1];
   const A=act(); if(!A.includes(S.cur)) S.cur=A[0];
   $('txC').innerHTML=A.map(x=>`<button data-c="${x}" aria-pressed="${x===S.cur}" style="--cc:${CR[x][1]}"><i class="sw"></i>${CR[x][0]}</button>`).join('');
   $('txH').innerHTML='💡 '+CR[S.cur][2]; $('txH').style.setProperty('--cc',CR[S.cur][1]);
   if(!keep) $('txF').hidden=true; $('txV').textContent=S.done?'➡️ Phrase suivante':'✅ Vérifier'; paintT();
 }
 $('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; S.ti=-1; newText(); paintAll(); };
-$('txL').onchange=e=>{ S.lv=+e.target.value; S.ti=-1; newText(); paintAll(); };
+$('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.i; S.ti=-1; newText(); paintAll(); };
 $('txC').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.cur=b.dataset.c; paintAll(true); };
 $('txT').onclick=e=>{ const w=e.target.closest('.cw'); if(!w||S.done) return; const k=+w.dataset.i, m=S.marks[k], c=S.cur;
   const grp=BOX.includes(c)?BOX:TEN.includes(c)?TEN:NAT.includes(c)?NAT:[c];
