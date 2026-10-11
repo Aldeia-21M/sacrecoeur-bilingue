@@ -384,7 +384,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .tx-pal button{display:flex;align-items:center;gap:6px;min-height:38px;padding:2px 11px;border-radius:999px;border:2px solid rgba(29,36,51,.14);background:#fff;font-weight:700;font-size:14.5px;color:#33405f}
 .tx-pal button[aria-pressed=true]{border-color:#1d2433;background:#fff4c2;box-shadow:0 3px 0 #1d2433;color:#1d2433}.tx-pal button[aria-pressed=true]::after{content:'✏️'}
 .tx-hint{margin:4px 2px 8px;font-size:13.5px;line-height:1.4;color:#5b6478}
-.gk-open{display:block;width:100%;min-height:52px;margin:0 0 12px;border-radius:16px;border:2px solid #2f6fd6;background:#e8f0ff;font:800 17px/1.2 system-ui,sans-serif;color:#1d3a78}.gk-open[aria-expanded=true]{background:#bfeebf;border-color:#2f9e44;color:#14532d}
+.gk-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}.gk-nav .co{grid-column:1/-1}.gk-nav .co[hidden]{display:none}.gk-open.on{background:#bfeebf;border-color:#2f9e44;color:#14532d}.gk-open.tr{background:#fff0d6;border-color:#e08a1e;color:#6b3a00}.gk-open.co{background:#e4f8e4;border-color:#2f9e44;color:#14532d}.gk-open{display:block;width:100%;min-height:52px;margin:0;border-radius:16px;border:2px solid #2f6fd6;background:#e8f0ff;font:800 17px/1.2 system-ui,sans-serif;color:#1d3a78}
 .cx-rb{display:block;width:100%;min-height:46px;margin:0 0 10px;border-radius:14px;border:2px dashed #b8860b;background:#fff8dc;font:800 16px/1.2 system-ui,sans-serif;color:#5a4300}.cx-rp{margin:0 0 12px}.cx-rp h4{margin:12px 0 6px;font-size:16px}.cx-rc{background:#fff;border:2px solid #eadfb0;border-radius:12px;padding:8px 10px;margin:6px 0;font-size:15px;line-height:1.4}.cx-rc.now{border-color:#2f9e44;background:#f1fbf1}.cx-rc b.n{display:flex;align-items:center;gap:6px;font-size:16px}.cx-rc .sw{display:inline-block;flex:none;width:22px;height:12px;border-radius:6px}.cx-rc .tag{margin-left:auto;font-size:12px;color:#14532d;background:#d8f5dc;border-radius:999px;padding:2px 8px}.cx-ex{display:block;margin-top:3px;color:#33405f}.cx-ex i{font-style:normal;font-weight:800;background:linear-gradient(transparent 55%,var(--c) 55%);padding:0 2px}
 .gk-top{display:flex;align-items:center;gap:10px;margin:0 0 8px}.gk-top>span{font-weight:800;white-space:nowrap}.gk-top .mx-seg{flex:1}.gk-top .mx-seg button{min-height:40px}.gk-lab{font-weight:800;margin:2px 0 6px}.gk-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.gk-chips button{border:2px solid rgba(29,36,51,.16);background:#fff;border-radius:999px;padding:7px 11px;font:700 14px/1.1 system-ui,sans-serif;min-height:38px}.gk-chips button[aria-pressed="true"]{background:#bfeebf;border-color:#2f9e44}
 .tx-top{display:grid;grid-template-columns:1fr;gap:8px;margin:2px 0 8px}.tx-top .mx-seg button{min-height:44px}
@@ -403,7 +403,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cw.bad{background:#ffe3ea}
 .mx-seg.wrap.one{grid-template-columns:1fr}.mx-seg.wrap.one button{text-align:left;padding-left:14px}
 .cx-meth{margin:6px 0 4px;padding:8px 10px 8px 28px;background:#fff;border:2px dashed #e3d9a8;border-radius:12px;font-size:15px;font-weight:500;line-height:1.35}.cx-meth li{margin:2px 0}.cx-why{margin:8px 0 0;padding-left:0;list-style:none;font-size:15px}.cx-why li{margin:6px 0;padding:6px 8px;background:#fff;border-radius:10px}.cx-why small{display:block;color:#4a5370;font-size:14px;margin-top:2px}
-.tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko{background:#fff0e0;border:2px solid #e08a1e}
+.tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko{background:#ffe6e6;border:2px solid #e03131}.cx-solh{margin:10px 0 4px;font-weight:800}.cx-solh small{font-weight:500;color:#555}.cx-sol{background:#fff;font-size:clamp(20px,5.4vw,26px);padding:10px;margin:0 0 6px;cursor:pointer}.cx-sol .cw{cursor:help}
 .tx-btns{display:flex;gap:8px;margin-top:8px}.tx-btns>*{flex:1}
 /* ---- séries, défi, petits ---- */
 #p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
@@ -538,7 +538,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 <section class="page" data-sec="de" id="p-wort" data-label="🗣️ Wortschatz"></section>
 <section class="page" data-sec="fr" id="p-conj" data-label="📘 Conjugaison"></section>
 <section class="page" data-sec="fr" id="p-ortho" data-label="✏️ Orthographe"></section>
-<section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><button class="gk-open" id="gkBtn" aria-expanded="false">📘 Apprendre les règles de grammaire</button><div id="p-gramS" hidden></div><div id="p-gramT"></div></section>
+<section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><div class="gk-nav"><button class="gk-open" id="gkBtn">📘 Apprendre les règles de grammaire</button><button class="gk-open tr" id="gkTr">🏋️ M’entraîner aux règles</button><button class="gk-open co" id="gkCo" hidden>🖍️ Colorie la phrase</button></div><div id="p-gramS" hidden></div><div id="p-gramT"></div></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
 <section class="page" data-sec="ma" id="p-mesures" data-label="📏 Mesures"></section>
@@ -3185,19 +3185,22 @@ function wordCls(k){
 const boxOf=k=>S.marks[k].find(x=>BOX.includes(x));
 const tenOf=k=>S.marks[k].find(x=>TEN.includes(x));
 const joinUL=k=>{ const u=tenOf(k); return u&&k<S.toks.length-1&&tenOf(k+1)===u&&!S.toks[k].p&&!/’$/.test(S.toks[k].w); };
-function paintT(){
+function build(){
   const n=S.toks.length; let h='';
   const word=k=>{ const w=wordCls(k), u=tenOf(k); const st=(w.ms?`--mc:${CR[w.ms][1]};`:'')+(u?`--uc:${CR[u][1]};`:'');
-    return `<span class="cw ${w.cls}${u?' ul':''}" data-i="${k}"${st?` style="${st}"`:''}>${esc(S.toks[k].w)}${joinUL(k)?' ':''}</span>`; };
+    return `<span class="cw ${w.cls}${u?' ul':''}" data-i="${k}" data-xs="${S.marks[k].join(',')}"${st?` style="${st}"`:''}>${esc(S.toks[k].w)}${joinUL(k)?' ':''}</span>`; };
   const spc=k=>joinUL(k)?'':sp(k);
   for(let i=0;i<n;){
     const b=boxOf(i);
     if(b){ let j=i; while(j+1<n&&boxOf(j+1)===b&&!S.toks[j].p) j++;
-      h+=`<span class="tx-run" style="--rc:${CR[b][1]}">`; for(let k=i;k<=j;k++) h+=word(k)+(k<j?spc(k):''); h+='</span>'+esc(S.toks[j].p)+sp(j); i=j+1; }
+      h+=`<span class="tx-run" data-x="${b}" style="--rc:${CR[b][1]}">`; for(let k=i;k<=j;k++) h+=word(k)+(k<j?spc(k):''); h+='</span>'+esc(S.toks[j].p)+sp(j); i=j+1; }
     else { h+=word(i)+esc(S.toks[i].p)+spc(i); i++; }
   }
-  $('txT').innerHTML=h;
+  return h;
 }
+function paintT(){ $('txT').innerHTML=build(); }
+function solution(){ const m=S.marks, d=S.done; S.marks=S.toks.map(t=>act().filter(x=>EXP(t,x))); S.done=false; const h=build(); S.marks=m; S.done=d; return h; }
+const ruleCard=x=>`<div class="cx-rc now"><b class="n"><i class="sw" style="background:${CR[x][1]}"></i>${CR[x][0]}</b>${CR[x][2]}</div>`;
 function paintRules(){ const A=act(); $('txRp').innerHTML=RGRP[S.g].map(([t,l])=>`<h4>${t}</h4>`+l.map(x=>`<div class="cx-rc${A.includes(x)?' now':''}"><b class="n"><i class="sw" style="background:${CR[x][1]}"></i>${CR[x][0]}${A.includes(x)?'<span class="tag">🎯 dans cet exercice</span>':''}</b>${CR[x][2]}<span class="cx-ex" style="--c:${CR[x][1]}55">Ex. : ${EXR[x]}</span></div>`).join('')).join(''); }
 function paintAll(keep){
   const M=MODES[S.g][S.lv];
@@ -3209,6 +3212,7 @@ function paintAll(keep){
   $('txH').innerHTML='💡 '+CR[S.cur][2]; $('txH').style.setProperty('--cc',CR[S.cur][1]);
   paintRules(); if(!keep) $('txF').hidden=true; $('txV').textContent=S.done?'➡️ Phrase suivante':'✅ Vérifier'; paintT();
 }
+$('txF').onclick=e=>{ const sol=e.target.closest('#txSol'); if(!sol) return; const w=e.target.closest('.cw'); if(!w) return; const run=w.closest('.tx-run'); const codes=[]; if(run) codes.push(run.dataset.x); (w.dataset.xs||'').split(',').filter(Boolean).forEach(c=>{ if(!codes.includes(c)) codes.push(c); }); $('txTip').innerHTML=codes.filter(c=>CR[c]).map(ruleCard).join('')||''; };
 $('txRb').onclick=()=>{ const o=$('txRp').hidden; $('txRp').hidden=!o; $('txRb').setAttribute('aria-expanded',o); $('txRb').textContent=o?'✖ Fermer les règles du coloriage':'📘 Apprendre les règles du coloriage'; };
 $('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; S.ti=-1; newText(); paintAll(); };
 $('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.i; S.ti=-1; newText(); paintAll(); };
@@ -3268,12 +3272,14 @@ function check(){
     if(e){ exp++; if(h) hit++; } else if(h&&!tol) bad++; }));
   S.done=true; paintT();
   const ok=hit===exp&&bad===0, f=$('txF'); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
-  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`<b>${hit} / ${exp}</b> bien trouvés. <small>(rose = à corriger · pointillés = oublié)</small><ul class="cx-why">${explain().map(m=>'<li>'+m+'</li>').join('')}</ul>`;
+  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`❌ <b>${hit} / ${exp}</b> bien trouvés. <small>(rose = à corriger · pointillés = oublié)</small><div class="cx-solh">✅ La bonne réponse <small>(touche un bloc pour voir sa règle)</small></div><div class="tx-text cx-sol" id="txSol">${solution()}</div><div id="txTip"></div><ul class="cx-why">${explain().map(m=>'<li>'+m+'</li>').join('')}</ul>`;
   try{ window.PCev&&PCev(ok); }catch(e){}
 }
 $('txV').onclick=()=>{ if(S.done){ newText(); paintAll(); return; } check(); $('txV').textContent='➡️ Phrase suivante'; };
 window.__tx={S,check,MISSING,PT,MODES,EXP};
-{ const gb=document.getElementById('gkBtn'), gs=document.getElementById('p-gramS'); if(gb&&gs) gb.onclick=()=>{ const o=gs.hidden; gs.hidden=!o; gb.setAttribute('aria-expanded',o); gb.textContent=o?'✖ Fermer les règles de grammaire':'📘 Apprendre les règles de grammaire'; if(o) gs.scrollIntoView({block:'nearest'}); }; }
+{ const gb=document.getElementById('gkBtn'), tr=document.getElementById('gkTr'), co=document.getElementById('gkCo'), gs=document.getElementById('p-gramS');
+  const view=v=>{ const r=v==='rules'; gs.hidden=!r; root.hidden=r; co.hidden=!r; gb.classList.toggle('on',r); window.scrollTo({top:0}); };
+  if(gb&&gs&&tr&&co){ gb.onclick=()=>view('rules'); co.onclick=()=>view('color'); tr.onclick=()=>{ view('rules'); const go=document.getElementById('p-gramSGo'); if(go) go.click(); }; } }
 newText(); paintAll();
 })();
 
