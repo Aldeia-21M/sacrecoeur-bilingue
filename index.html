@@ -870,7 +870,7 @@ function qSeries(topic,grade,catName){
   let options,correct;
   if(Q.kind==='num'){ const a=Q.answer, set=new Set(); [1,-1,2,-2,10,-10,5].forEach(d=>{ if(a+d>0) set.add(a+d); }); const o=shuffle([a].concat(shuffle([...set]).slice(0,3))); options=o.map(x=>x+(Q.unit?' '+Q.unit:'')); correct=o.indexOf(a); }
   else { options=Q.options; correct=Q.correct; }
-  return {cat:catName||topic,prompt:(Q.vis?'<div class="sr-vis">'+Q.vis+'</div>':'')+'<div>'+Q.prompt+'</div>',audio:Q.say?{t:Q.say,l:Q.lang||'fr'}:null,options,correct,reveal:{t:strip(Q.after||Q.explain),l:'fr'},shown:strip(Q.explain||options[correct])};
+  return {cat:catName||topic,prompt:(Q.vis?'<div class="sr-vis">'+Q.vis+'</div>':'')+'<div>'+Q.prompt+'</div>',audio:Q.say?{t:Q.say,l:Q.lang||'fr'}:null,options,correct,reveal:{t:strip(Q.after||Q.explain),l:Q.afterLang||(Q.after?(Q.lang||'fr'):'fr')},shown:strip(Q.explain||options[correct])};
 }
 function qPetit(){
   const P=window.PETV, c=(window.DLpet&&window.DLpet())||{kinds:['count','hear','color','shape','animal','vocab','letter','more','add','bigger','firstletter'],lang:null};
@@ -2093,7 +2093,7 @@ function MkSeries(rootId,cfg){
   function resolve(ok){
     if(run.fin) return; run.fin=true; run.res[run.i]=ok; if(ok) run.ok++; else run.wrong.push(Q);
     const fb=P.querySelector('#'+rootId+'Fb'); fb.hidden=false; fb.className='mx-fb '+(ok?'ok':'ko'); fb.innerHTML=ok?`✅ <b>Bravo !</b> ${Q.explain||''}`:`❌ ${Q.explain||'Pas tout à fait.'}`;
-    DLverdict(ok,[{t:Q.after||(Q.explain&&strip(Q.explain))||'',l:Q.lang||'fr'}],true);
+    DLverdict(ok,[{t:Q.after||(Q.explain&&strip(Q.explain))||'',l:Q.afterLang||(Q.after?(Q.lang||'fr'):'fr')}],true);
     run.i++; const nx=document.createElement('button'); nx.className='mx-go'; nx.textContent=run.i>=run.total?'Voir mon score ▶':'Suivant ▶'; nx.onclick=next; fb.after(nx);
     P.querySelector('.mx-dots').outerHTML=dots();
   }
@@ -2477,10 +2477,10 @@ G.pairs=(kind,g)=>{ if(kind==='satz') return (g==='6H'?PHR:PHR_EASY).map(([de,fr
 function genWort(g){
   const A=wordsAll(g), w=pick(A); const same=A.filter(x=>x.cat===w.cat&&x.de!==w.de); const near=(same.length>=3?same:A.filter(x=>x.de!==w.de));
   const k=rnd(3); const sh=shuffle(near).slice(0,6);
-  if(k===0){ const o=opts4(w.de,sh.map(x=>x.de)); return {kind:'mcq',vis:w.e?`<span class="emo">${w.e}</span>`:'',prompt:`Comment dit-on « <b>${esc(w.fr)}</b> » en allemand ?`,say:w.fr,lang:'fr',options:o,correct:o.indexOf(w.de),explain:`${esc(w.fr)} = <b>${esc(w.de)}</b>`,after:w.de.replace(/^(der|die|das) /,m=>m)}; }
+  if(k===0){ const o=opts4(w.de,sh.map(x=>x.de)); return {kind:'mcq',vis:w.e?`<span class="emo">${w.e}</span>`:'',prompt:`Comment dit-on « <b>${esc(w.fr)}</b> » en allemand ?`,say:w.fr,lang:'fr',options:o,correct:o.indexOf(w.de),explain:`${esc(w.fr)} = <b>${esc(w.de)}</b>`,after:w.de,afterLang:'de'}; }
   if(k===1){ const o=opts4(w.fr,sh.map(x=>x.fr)); return {kind:'mcq',prompt:`Que veut dire « <b>${esc(w.de)}</b> » ?`,say:w.de,lang:'de',options:o,correct:o.indexOf(w.fr),explain:`${esc(w.de)} = <b>${esc(w.fr)}</b>`,after:w.de}; }
   if(w.e){ const o=opts4(w.de,sh.map(x=>x.de)); return {kind:'mcq',vis:`<span class="emo big">${w.e}</span>`,prompt:'Quel est le mot allemand pour cette image ?',options:o,correct:o.indexOf(w.de),explain:`${w.e} = <b>${esc(w.de)}</b>`,after:w.de,say:w.de,lang:'de'}; }
-  const o=opts4(w.de,sh.map(x=>x.de)); return {kind:'mcq',prompt:`Comment dit-on « <b>${esc(w.fr)}</b> » en allemand ?`,say:w.fr,lang:'fr',options:o,correct:o.indexOf(w.de),explain:`${esc(w.fr)} = <b>${esc(w.de)}</b>`,after:w.de};
+  const o=opts4(w.de,sh.map(x=>x.de)); return {kind:'mcq',prompt:`Comment dit-on « <b>${esc(w.fr)}</b> » en allemand ?`,say:w.fr,lang:'fr',options:o,correct:o.indexOf(w.de),explain:`${esc(w.fr)} = <b>${esc(w.de)}</b>`,after:w.de,afterLang:'de'};
 }
 G.wort=genWort;
 function genArtikel(g){
@@ -2491,7 +2491,7 @@ G.artikel=genArtikel;
 function genSatz(g){
   const L=g==='6H'?PHR:PHR_EASY; const [de,fr]=pick(L); const others=shuffle(L.filter(x=>x[0]!==de));
   if(Math.random()<.5){ const o=opts4(fr,others.slice(0,6).map(x=>x[1])); return {kind:'mcq',prompt:`Que veut dire : <span class="seq">${esc(de)}</span>`,say:de,lang:'de',options:o,correct:o.indexOf(fr),explain:`${esc(de)} = <b>${esc(fr)}</b>`,after:de}; }
-  const o=opts4(de,others.slice(0,6).map(x=>x[0])); return {kind:'mcq',prompt:`Comment dit-on en allemand : <span class="seq">${esc(fr)}</span>`,say:fr,lang:'fr',options:o,correct:o.indexOf(de),explain:`${esc(fr)} = <b>${esc(de)}</b>`,after:de};
+  const o=opts4(de,others.slice(0,6).map(x=>x[0])); return {kind:'mcq',prompt:`Comment dit-on en allemand : <span class="seq">${esc(fr)}</span>`,say:fr,lang:'fr',options:o,correct:o.indexOf(de),explain:`${esc(fr)} = <b>${esc(de)}</b>`,after:de,afterLang:'de'};
 }
 G.satz=genSatz;
 const DAYS_DE=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'], DAYS_FR=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
@@ -2503,8 +2503,8 @@ function genCalSeq(g){
   if(t===0||t===1){ const i=rnd(7), after=t===0; const j=(i+(after?1:6))%7; const o=opts4(DAYS_DE[j],shuffle(DAYS_DE).slice(0,6)); return {kind:'mcq',prompt:`Quel jour vient <b>${after?'après':'avant'}</b> « ${DAYS_DE[i]} » ? (en allemand)`,say:DAYS_DE[i],lang:'de',options:o,correct:o.indexOf(DAYS_DE[j]),explain:`${after?'Après':'Avant'} ${DAYS_DE[i]} : <b>${DAYS_DE[j]}</b>`,after:DAYS_DE[j]}; }
   if(t===2||t===3){ const i=rnd(12), after=t===2; const j=(i+(after?1:11))%12; const o=opts4(MON_DE[j],shuffle(MON_DE).slice(0,6)); return {kind:'mcq',prompt:`Quel mois vient <b>${after?'après':'avant'}</b> « ${MON_DE[i]} » ? (en allemand)`,say:MON_DE[i],lang:'de',options:o,correct:o.indexOf(MON_DE[j]),explain:`${after?'Après':'Avant'} ${MON_DE[i]} : <b>${MON_DE[j]}</b>`,after:MON_DE[j]}; }
   if(t===4){ const i=rnd(12); const sea=[3,3,0,0,0,1,1,1,2,2,2,3][i]; const s=[0,1,2,3][sea===3?3:sea]; const map=[3,3,0,0,0,1,1,1,2,2,2,3]; const ans=SEAS_DE[map[i]]; const o=SEAS_DE.slice(); const oo=shuffle(o); return {kind:'mcq',prompt:`En quelle saison est <b>${MON_DE[i]}</b> ?`,say:MON_DE[i],lang:'de',options:oo,correct:oo.indexOf(ans),explain:`${MON_DE[i]} : <b>${ans}</b>`,after:ans}; }
-  if(t===5){ const i=rnd(12); const o=opts4(MON_DE[i],shuffle(MON_DE).slice(0,6)); return {kind:'mcq',prompt:`Quel est le <b>${i+1}${i?'e':'er'} mois</b> de l’année ? (en allemand)`,options:o,correct:o.indexOf(MON_DE[i]),explain:`Le ${ORD_FR[i]} mois : <b>${MON_DE[i]}</b>`,after:MON_DE[i]}; }
-  const i=rnd(7); const o=opts4(DAYS_DE[i],shuffle(DAYS_DE).slice(0,6)); return {kind:'mcq',prompt:`Quel est le <b>${i+1}${i?'e':'er'} jour</b> de la semaine ? (en allemand)`,options:o,correct:o.indexOf(DAYS_DE[i]),explain:`Le ${ORD_FR[i]} jour : <b>${DAYS_DE[i]}</b> (${DAYS_FR[i]})`,after:DAYS_DE[i]};
+  if(t===5){ const i=rnd(12); const o=opts4(MON_DE[i],shuffle(MON_DE).slice(0,6)); return {kind:'mcq',prompt:`Quel est le <b>${i+1}${i?'e':'er'} mois</b> de l’année ? (en allemand)`,options:o,correct:o.indexOf(MON_DE[i]),explain:`Le ${ORD_FR[i]} mois : <b>${MON_DE[i]}</b>`,after:MON_DE[i],afterLang:'de'}; }
+  const i=rnd(7); const o=opts4(DAYS_DE[i],shuffle(DAYS_DE).slice(0,6)); return {kind:'mcq',prompt:`Quel est le <b>${i+1}${i?'e':'er'} jour</b> de la semaine ? (en allemand)`,options:o,correct:o.indexOf(DAYS_DE[i]),explain:`Le ${ORD_FR[i]} jour : <b>${DAYS_DE[i]}</b> (${DAYS_FR[i]})`,after:DAYS_DE[i],afterLang:'de'};
 }
 G.calseq=genCalSeq;
 MkSeries('p-wort',{title:'🗣️ Wortschatz · le vocabulaire',intro:'Mots, articles der / die / das, phrases utiles, calendrier et heure en allemand.',
