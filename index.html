@@ -3453,11 +3453,11 @@ function rounds(id){
       <div class="pt-opts ${q.cls||''} n${q.opts.length}" id="ptO">${q.opts.map((o,k)=>`<button data-k="${k}">${o.h}</button>`).join('')}</div><div class="pt-fb" id="ptFb" hidden></div>`);
     S.w=0; const say=()=>sayKey(q[L],L,q); root.querySelector('#ptS').onclick=say; setTimeout(say,FAST?0:250);
     root.querySelector('#ptO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const o=q.opts[+b.dataset.k];
-      if(o.ok){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.i++; { const nmR=(o.n&&o.n[L])||'', pr=L==='de'?['Richtig!','Gut!','Sehr gut!','Super!','Genau!','Toll!']:['Bravo !','Très bien !','Super !','Exact !','Génial !']; const sq=[], dW=(o.n&&o.n.de)||''; if(nmR) sq.push({t:nmR,l:L,pause:500});
-        if(L==='fr'&&dW&&dW!==nmR){ sq.push({t:'En allemand :',l:'fr',pause:350},{t:dW,l:'de',pause:600},{t:pick(['Richtig!','Gut!','Sehr gut!','Super!','Genau!']),l:'de'});
+      if(o.ok){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.i++; { const nmR=(o.n&&o.n[L])||'', pr=L==='de'?['Richtig!','Gut!','Sehr gut!','Super!','Genau!','Toll!']:['Bravo !','Très bien !','Super !','Exact !','Génial !']; const sq=[], dW=(o.n&&o.n.de)||'';
+        if(L==='fr'&&dW&&dW!==nmR){ sq.push({t:dW,l:'de',pause:400},{t:pick(['Richtig!','Gut!','Sehr gut!','Super!','Genau!']),l:'de'});
           const fb=root.querySelector('#ptFb'); fb.hidden=false; fb.className='pt-fb good'; fb.innerHTML='✅ 🇩🇪 <b>'+dW+'</b>'; }
-        else sq.push({t:pick(pr),l:L});
-        if(window.DLspeakSeq) DLspeakSeq(sq); else sp(pick(pr),L); } await sleep(L==='fr'?3600:2200); next(); }
+        else { if(nmR) sq.push({t:nmR,l:L,pause:400}); sq.push({t:pick(pr),l:L}); }
+        if(window.DLspeakSeq) DLspeakSeq(sq); else sp(pick(pr),L); } await sleep(1900); next(); }
       else { S.first=false; S.w++; b.classList.add('ko'); b.disabled=true; const nm=(o.n&&o.n[L])||''; const key=keyOf(q[L],L), de=L==='de';
         const fb=root.querySelector('#ptFb'); fb.hidden=false; fb.textContent=nm?(de?'❌ Nein, das ist nicht: ':'❌ Non, ce n’est pas : ')+nm:(de?'❌ Nicht ganz. Versuch’s nochmal!':'❌ Pas tout à fait. Essaie encore !');
         if(S.w>=2){ const c=root.querySelectorAll('#ptO button')[q.opts.findIndex(x=>x.ok)]; if(c) c.classList.add('hint'); }
