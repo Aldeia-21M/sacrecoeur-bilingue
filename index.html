@@ -568,6 +568,31 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .sl-q{display:grid;gap:10px;padding:12px;border-radius:18px;border:3px solid var(--pc);background:#fffdf3}.sl-who{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .sl-opts button:disabled{opacity:1}.sl-opts button:disabled:not(.ok):not(.ko){opacity:.8}
 .sl-rk div{grid-template-columns:34px 40px 1fr auto}
+
+/* joueur actif : bouton, pastille, choix */
+#usrbtn.has .ic{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:3px solid var(--pc,#cfd6e6);background:#fff;font-size:17px;line-height:1;overflow:hidden}#usrbtn.has .ic .mx{width:100%;height:100%;border:0;box-shadow:none;vertical-align:0}
+#usrbtn .lb{font-weight:800;max-width:56px;text-overflow:ellipsis;letter-spacing:0}
+#whoPill{position:fixed;left:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:55;display:flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:999px;border:3px solid var(--pc,#1f5fd6);background:#fff;box-shadow:0 4px 14px rgba(20,26,40,.22);font-family:inherit;cursor:pointer;color:#1d2433}
+#whoPill[hidden]{display:none}#whoPill .u-av{width:34px;height:34px;font-size:20px;border-width:2px}#whoPill .wl{display:grid;line-height:1.05;text-align:left}#whoPill small{font-size:10px;color:#6b7385;font-weight:700}#whoPill b{font-size:15px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#whoPill i{font-style:normal;color:#6b7385;font-weight:800}
+#whoModal{position:fixed;inset:0;z-index:130;background:rgba(20,26,40,.5);display:grid;place-items:center;padding:16px}
+.wm-box{position:relative;width:min(92vw,420px);max-height:86vh;overflow:auto;background:#fff;border-radius:22px;padding:18px 16px 14px;box-shadow:0 16px 48px rgba(0,0,0,.3)}.wm-box h3{margin:0 40px 2px 0;font-size:1.3rem}.wm-box p{margin:0 0 10px;color:#5b6478}.wm-box .u-x{position:absolute;right:10px;top:10px}
+.wm-l{display:grid;gap:8px;margin-bottom:8px}.wm-l button{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"a n e" "a s e";gap:0 12px;align-items:center;text-align:left;padding:8px 12px;border-radius:16px;border:3px solid #e2e7f3;background:#fff;font-family:inherit;cursor:pointer;min-height:64px}.wm-l .u-av{grid-area:a;width:48px;height:48px;font-size:28px}.wm-l b{grid-area:n;font-size:1.15rem}.wm-l small{grid-area:s;color:#5b6478}.wm-l em{grid-area:e;font-style:normal;font-weight:800;color:var(--pc)}.wm-l button.on{border-color:var(--pc);background:#f7faff}
+.wm-box .u-lk{display:block;margin:6px auto 0}
+/* onglet Famille */
+.u-pg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.u-pt{position:relative}.u-pt-b,.u-pt.add{width:100%;height:100%;display:grid;justify-items:center;gap:2px;padding:12px 6px 10px;border-radius:18px;border:3px solid #e2e7f3;background:#fff;font-family:inherit;color:inherit;cursor:pointer;text-align:center}
+.u-pt-b b,.u-pt.add b{font-size:1.1rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.u-pt-b small,.u-pt.add small{color:#5b6478;font-size:12.5px}.u-pt-b em{font-style:normal;font-weight:800;font-size:13px;margin-top:4px;padding:3px 10px;border-radius:999px;background:#eef1f8;color:#3b4560}
+.u-pt.on .u-pt-b{border-color:var(--pc);background:#f7faff;box-shadow:0 0 0 2px var(--pc) inset}.u-pt.on .u-pt-b em{background:var(--pc);color:#fff}
+.u-pt .u-av.big{border-color:var(--pc)}.u-pt-e{position:absolute;right:6px;top:6px;width:34px;height:34px;border-radius:50%;border:2px solid #e2e7f3;background:#fff;font-size:15px;cursor:pointer;padding:0}
+.u-pt.add{border-style:dashed;color:#1f5fd6}.u-pt.add .u-av.big{border-style:dashed;border-color:#9bb6ea;color:#1f5fd6;font-size:32px}
+.u-card{margin-top:14px;padding:12px;border-radius:16px;background:#f4f7ff;border:2px solid #dbe5fb}
+.u-more{margin-top:14px;border-top:2px solid #e8ebf3;padding-top:8px}.u-more>summary{cursor:pointer;font-weight:800;padding:8px 0;list-style:none;min-height:40px}.u-more>summary::-webkit-details-marker{display:none}.u-more>summary::after{content:' ▾';color:#6b7385}.u-warn{font-style:normal}
+/* formulaire joueur */
+.u-pv{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:18px;background:#f7faff;border:3px solid var(--pc);margin-bottom:6px}.u-pv .u-av{border-color:var(--pc)}.u-pv b{font-size:1.3rem;display:block}.u-pv small{color:#5b6478}
+.u-st{display:flex;align-items:center;gap:8px;margin:14px 0 6px;font-weight:800}.u-st span{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#1f5fd6;color:#fff;font-size:13px}
+.u-in2{width:100%;box-sizing:border-box;font:700 1.1rem inherit;font-family:inherit;border:2px solid var(--line);border-radius:14px;padding:10px 12px;min-height:48px}
+.u-ag{margin-bottom:6px}.u-ag>small{display:block;color:#6b7385;font-weight:700;margin:2px 0 4px}
+.u-col-g{gap:12px}.u-sticky{position:sticky;bottom:-1px;display:flex;gap:8px;flex-wrap:wrap;padding:10px 0 6px;margin-top:10px;background:linear-gradient(rgba(255,255,255,0),#fff 28%)}.u-sticky .u-b{flex:1}
+body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 </style>
 </head>
 <body>
@@ -659,6 +684,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "3.8", desc: "Joueur actif visible partout, Famille repensée" },
     { v: "3.7", desc: "Salon à distance en direct (bêta), icône Famille" },
     { v: "3.6", desc: "Fermer la fenêtre de fin de partie" },
     { v: "3.5", desc: "Plateau : pièges de fin et nouvelles cases" },
@@ -4325,11 +4351,11 @@ function welcomeH(){
   <p class="u-note"><button type="button" class="u-lk" data-act="solo">Jouer sans famille, juste sur cet appareil</button></p>`; }
 function famCard(){
   const s=D.sync;
-  if(!s) return `<h4 class="u-h">🏠 Famille</h4>
+  if(!s) return `<h4 class="u-h" style="margin-top:0">☁️ Retrouver les joueurs ailleurs</h4>
   <p class="u-note">Pour l’instant, les joueurs sont gardés <b>dans cet appareil seulement</b>. Crée un <b>code famille</b> pour les retrouver sur d’autres appareils.</p>
   <div class="u-sv"><button type="button" class="u-b pr" data-act="syon">☁️ Créer le code famille</button><button type="button" class="u-b" data-act="syjoin">🔑 J’ai déjà un code famille</button></div>${joinRow()}`;
   const st=SY.busy?'🔄 Synchronisation…':SY.st==='err'?'⚠️ Hors connexion : on réessaiera':s.last?'✅ Synchronisé à '+new Date(s.last).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'}):'';
-  return `<h4 class="u-h">🏠 ${V.famEdit?'Nom de la famille':esc(D.fam||'Ma famille')} <small>${V.famEdit?'':'<button type="button" class="u-lk" data-act="famed">✏️ renommer</button>'}</small></h4>
+  return `<h4 class="u-h" style="margin-top:0">🔑 Code de ${V.famEdit?'la famille':esc(D.fam||'ma famille')} <small>${V.famEdit?'':'<button type="button" class="u-lk" data-act="famed">✏️ renommer</button>'}</small></h4>
   ${V.famEdit?`<div class="u-sv"><input class="u-in" id="uFamN" maxlength="30" value="${esc(D.fam)}" placeholder="Ex. Les Dupont" style="text-transform:none;font-family:inherit;letter-spacing:0"><button type="button" class="u-b pr" data-act="famok">Enregistrer</button></div>`:''}
   <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier</button></div>
   <p class="u-note">Code famille · ${st} · Sur un autre appareil : <b>Famille → J’ai déjà un code famille</b>.</p>`; }
@@ -4341,8 +4367,8 @@ function famBottom(){ const s=D.sync;
 const BTN=$('#usrbtn'), BAD=$('#usrBadge');
 function paintBtn(){ const p=act();
   BTN.querySelector('.ic').innerHTML=p?avH(p.av):'🏠';
-  BTN.querySelector('.lb').textContent='Famille';
-  BAD.hidden=!p; if(p) BAD.textContent=p.name.slice(0,7)+' · '+p.pts;
+  BTN.querySelector('.lb').textContent=p?p.name:'Famille'; BTN.classList.toggle('has',!!p); if(p) BTN.style.setProperty('--pc',p.col); else BTN.style.removeProperty('--pc');
+  BTN.setAttribute('aria-label',p?'Joueur actif : '+p.name+'. Ouvrir la famille':'Famille'); BAD.hidden=true; whoPaint();
   const dl=$('#dlProfNames'); if(dl) dl.innerHTML=D.profiles.map(x=>`<option value="${esc(x.name)}">`).join(''); }
 
 /* ---------- panneau ---------- */
@@ -4422,45 +4448,55 @@ function tabPro(){
   if(!D.sync&&!D.profiles.length) return welcomeH();
   const ranks=D.profiles.slice().sort((a,b)=>weekPts(b)-weekPts(a)), med=['🥇','🥈','🥉'];
   const last=D.lastBackup?Math.floor((Date.now()-D.lastBackup)/864e5):null, anyPts=D.profiles.some(p=>p.pts>0);
-  return `${famCard()}
+  const warn=!D.sync&&anyPts&&(last===null||last>14);
+  return `<h4 class="u-h">👥 Qui joue ? <small>Le joueur choisi gagne les points</small></h4>
+  <div class="u-pg">${D.profiles.map(p=>{ const l=level(p.pts), on=p.id===D.active; return `<div class="u-pt${on?' on':''}" style="--pc:${p.col}"><button type="button" class="u-pt-b" data-pick="${p.id}" aria-pressed="${on}"><span class="u-av big">${avH(p.av)}</span><b>${esc(p.name)}</b><small>${l.e} Niv. ${l.n} · ${p.pts} pts</small><small>Classe ${p.gr}</small><em>${on?'✔ Il joue':'Choisir'}</em></button><button type="button" class="u-pt-e" data-edit="${p.id}" aria-label="Modifier ${esc(p.name)}">✏️</button></div>`; }).join('')}
+  ${D.profiles.length<8?'<button type="button" class="u-pt add" data-new="1"><span class="u-av big">＋</span><b>Ajouter</b><small>un joueur</small></button>':''}</div>
   ${D.profiles.length>1?`<h4 class="u-h">🏁 Classement de la semaine</h4><div class="u-rk">${ranks.map((p,i)=>`<div><span>${med[i]||i+1}</span><span class="u-av" style="--pc:${p.col}">${avH(p.av)}</span><b>${esc(p.name)}</b><em>${weekPts(p)} pts</em></div>`).join('')}</div>`:''}
-  <h4 class="u-h">👥 Les joueurs <small>touche un joueur pour jouer avec</small></h4>
-  <div class="u-pl">${D.profiles.map(p=>{ const l=level(p.pts), on=p.id===D.active; return `<div class="u-pc${on?' on':''}" style="--pc:${p.col}"><button type="button" class="u-pick" data-pick="${p.id}" aria-pressed="${on}"><span class="u-av">${avH(p.av)}</span><span class="u-pi"><b>${esc(p.name)}</b><small>${l.e} Niv. ${l.n} · ${p.pts} pts · Classe ${p.gr}</small></span><span class="u-act">${on?'✔ Actif':'Choisir'}</span></button><button type="button" class="u-b" data-edit="${p.id}" aria-label="Modifier ${esc(p.name)}">✏️</button></div>`; }).join('')||'<p class="u-empty">Aucun joueur pour l’instant : ajoute le premier !</p>'}</div>
-  ${D.profiles.length<8?'<button type="button" class="u-b pr u-new" data-new="1">＋ Ajouter un joueur</button>':''}
-  ${famBottom()}
+  <div class="u-card">${famCard()}</div>
+  <details class="u-more"${warn||V.code||V.msg?' open':''}><summary>⚙️ Sauvegarde et aide${warn?' <i class="u-warn">⚠️</i>':''}</summary>
   <h4 class="u-h">💾 Sauvegarde dans un fichier <small>facultatif</small></h4>
   <p class="u-note">${D.sync?'En plus du code famille, tu peux garder un fichier de secours.':'Sans code famille, les joueurs sont gardés <b>dans cet appareil</b> seulement.'} ${storeOk?'':'<b style="color:#c92a2a">⚠️ La mémoire du navigateur est désactivée (navigation privée ?) : rien ne sera conservé.</b> '}</p>
   <div class="u-sv"><button type="button" class="u-b" data-act="dl">⬇️ Télécharger</button><button type="button" class="u-b" data-act="cp">📋 Copier</button><button type="button" class="u-b" data-act="im">⬆️ Restaurer</button></div>
-  <p class="u-note ${!D.sync&&anyPts&&(last===null||last>14)?'warn':''}">${last===null?'Aucune sauvegarde fichier pour l’instant.':last===0?'Dernière sauvegarde : aujourd’hui.':'Dernière sauvegarde : il y a '+last+' jour'+(last>1?'s':'')+'.'}</p>
+  <p class="u-note ${warn?'warn':''}">${last===null?'Aucune sauvegarde fichier pour l’instant.':last===0?'Dernière sauvegarde : aujourd’hui.':'Dernière sauvegarde : il y a '+last+' jour'+(last>1?'s':'')+'.'}</p>
   ${V.code?`<textarea class="u-ta" id="uTa" rows="4" placeholder="Colle ici le code de sauvegarde, ou choisis un fichier ci-dessous"></textarea><div class="u-sv"><input type="file" id="uFile" accept=".json,application/json,text/plain"><button type="button" class="u-b pr" data-act="go">Restaurer maintenant</button></div>`:''}
+  ${famBottom()}</details>
   ${V.msg?`<p class="u-msg" role="status">${V.msg}</p>`:''}`; }
 function startForm(id){ const p=id?D.profiles.find(x=>x.id===id):null, used=new Set(D.profiles.map(x=>x.av));
   V.form={id:id||null,name:p?p.name:'',av:p?p.av:(ANIMALS.find(a=>!used.has(a))||ANIMALS[0]),col:p?p.col:COLS[D.profiles.length%COLS.length],gr:p?p.gr:((window.DLgrade&&DLgrade())||'4H')}; }
 function formH(){ const f=V.form, nw=!f.id;
+  const grp=(t,l)=>`<div class="u-ag"><small>${t}</small><div class="u-av-g">${l.map(a=>`<button type="button" data-av="${a}" aria-pressed="${f.av===a}" aria-label="avatar ${a==='mx'?'mascotte':a}">${avH(a)}</button>`).join('')}</div></div>`;
   return `<h4 class="u-h">${nw?'✨ Nouveau joueur':'✏️ Modifier le joueur'}</h4>
-  <label class="u-f">Prénom ou pseudo du joueur<input id="fName" maxlength="14" autocomplete="off" value="${esc(f.name)}" placeholder="Ex. Léo"></label>
-  <div class="u-f">Mon avatar<div class="u-av-g" id="fAv">${ANIMALS.concat(['mx']).map(a=>`<button type="button" data-av="${a}" aria-pressed="${f.av===a}" aria-label="avatar ${a==='mx'?'mascotte':a}">${avH(a)}</button>`).join('')}</div></div>
-  <div class="u-f">Ma couleur<div class="u-col-g" id="fCol">${COLS.map(c=>`<button type="button" data-col="${c}" style="--c:${c}" aria-pressed="${f.col===c}" aria-label="couleur"></button>`).join('')}</div></div>
-  <div class="u-f">Ma classe<div class="u-seg" id="fGr">${['1H','4H','6H'].map(g=>`<button type="button" data-gr="${g}" aria-pressed="${f.gr===g}">${g}</button>`).join('')}</div></div>
+  <div class="u-pv" style="--pc:${f.col}"><span class="u-av big">${avH(f.av)}</span><div><b id="pvN">${esc(f.name)||'Ton prénom'}</b><small>Classe ${f.gr}</small></div></div>
+  <div class="u-st"><span>1</span> Ton prénom ou pseudo</div>
+  <input class="u-in2" id="fName" maxlength="14" autocomplete="off" value="${esc(f.name)}" placeholder="Ex. Léo" aria-label="Prénom ou pseudo du joueur">
+  <div class="u-st"><span>2</span> Ton avatar</div>
+  <div id="fAv">${grp('Animaux',ANIMALS.slice(0,32))}${grp('Objets et mascotte',ANIMALS.slice(32).concat(['mx']))}</div>
+  <div class="u-st"><span>3</span> Ta couleur</div>
+  <div class="u-col-g" id="fCol">${COLS.map(c=>`<button type="button" data-col="${c}" style="--c:${c}" aria-pressed="${f.col===c}" aria-label="couleur"></button>`).join('')}</div>
+  <div class="u-st"><span>4</span> Ta classe</div>
+  <div class="u-seg" id="fGr">${['1H','4H','6H'].map(g=>`<button type="button" data-gr="${g}" aria-pressed="${f.gr===g}">${g}</button>`).join('')}</div>
+  <p class="u-note">Tu pourras changer la classe à tout moment, même pendant un jeu.</p>
   ${V.msg?`<p class="u-msg" role="status">${V.msg}</p>`:''}
-  <div class="u-sv"><button type="button" class="u-b pr" data-act="fsave">${nw?'Ajouter le joueur':'Enregistrer'}</button><button type="button" class="u-b" data-act="fcancel">Annuler</button></div>
+  <div class="u-sticky"><button type="button" class="u-b pr" data-act="fsave">${nw?'✔ Ajouter le joueur':'✔ Enregistrer'}</button><button type="button" class="u-b" data-act="fcancel">Annuler</button></div>
   ${!nw?'<div class="u-sv"><button type="button" class="u-b" data-act="freset">↺ Remettre à zéro</button><button type="button" class="u-b dg" data-act="fdel">🗑 Supprimer</button></div>':''}`; }
 
 function render(){
   const p=act();
   const head=p?(()=>{ const l=level(p.pts); return `<div class="u-head" style="--pc:${p.col}"><span class="u-av big">${avH(p.av)}</span><div class="u-hi"><small class="u-fam">🏠 ${esc(D.fam||'Ma famille')}</small><b>${esc(p.name)}</b><small>${l.e} Niveau ${l.n} · ${esc(l.name)}</small><div class="u-gr" role="group" aria-label="Classe de ${esc(p.name)}">Classe ${['1H','4H','6H'].map(g=>`<button type="button" data-pg="${g}" aria-pressed="${p.gr===g}">${g}</button>`).join('')}</div><div class="u-pb"><i style="width:${l.pct}%"></i></div><small>${p.pts} pts${l.b?` · encore ${l.left} pour le niveau ${l.n+1}`:' · niveau maximum !'}</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`; })()
     :`<div class="u-head"><span class="u-av big">🏠</span><div class="u-hi"><b>${D.sync?esc(D.fam||'Ma famille'):'Bienvenue !'}</b><small>${D.sync?'Ajoute les joueurs de la famille.':'Crée ta famille pour garder les points et les progrès de chacun.'}</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`;
-  const tabs=D.profiles.length?`<div class="u-tabs" role="tablist">${[['def','🎯','Défis'],['evo','📈','Évolution'],['pro','🏠','Famille']].map(t=>`<button type="button" role="tab" data-t="${t[0]}" aria-selected="${V.tab===t[0]}">${t[1]} ${t[2]}</button>`).join('')}</div>`:'';
+  const tabs=D.profiles.length?`<div class="u-tabs" role="tablist">${[['def','🎯','Défis'],['evo','📈','Évolution'],['pro','👥','Famille']].map(t=>`<button type="button" role="tab" data-t="${t[0]}" aria-selected="${V.tab===t[0]}">${t[1]} ${t[2]}</button>`).join('')}</div>`:'';
   const body=!D.profiles.length?tabPro():V.tab==='def'?tabDef(p):V.tab==='evo'?tabEvo(p):tabPro();
   const sc=P.scrollTop; P.innerHTML=head+tabs+`<div class="u-body">${body}</div><div class="setgrab" id="ugrab" aria-label="Fermer"><i></i></div>`; P.scrollTop=sc;
 }
+P.addEventListener('input',e=>{ if(e.target.id==='fName'&&V.form){ V.form.name=e.target.value; const n=$('#pvN'); if(n) n.textContent=e.target.value.trim()||'Ton prénom'; } });
 P.addEventListener('click',async e=>{
   const t=e.target.closest('button'); if(!t) return;
   if(t.id==='uX'||t.id==='ugrab'||e.target.closest('#ugrab')){ closeP(); return; }
   if(t.dataset.t){ V.tab=t.dataset.t; V.form=null; V.msg=''; V.code=false; V.join=false; render(); P.scrollTop=0; return; }
   if(t.dataset.pg){ const p=act(); if(p){ p.gr=t.dataset.pg; p.mt=Date.now(); save(); paintBtn(); render(); } return; }
   if(t.dataset.go){ const b=document.querySelector('.sec-b[data-s="'+t.dataset.go+'"]'); closeP(); if(b) setTimeout(()=>b.click(),340); return; }
-  if(t.dataset.pick){ D.active=t.dataset.pick; save(); paintBtn(); V.tab='def'; V.msg=''; render(); toast(`👋 Salut <b>${esc(act().name)}</b> !`,{ms:1500}); return; }
+  if(t.dataset.pick){ D.active=t.dataset.pick; save(); paintBtn(); V.msg=''; render(); toast(`👋 Salut <b>${esc(act().name)}</b> !`,{ms:1500}); return; }
   if(t.dataset.edit){ startForm(t.dataset.edit); V.msg=''; render(); P.scrollTop=0; return; }
   if(t.dataset.new){ startForm(null); V.msg=''; render(); P.scrollTop=0; return; }
   if(t.dataset.av){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.av=t.dataset.av; render(); return; }
@@ -4531,7 +4567,27 @@ window.DLU={
   match(pl,i,name,chars,gr){ const p=byName(name); if(!p) return false; pl[i].name=p.name; const k=chars.findIndex(c=>c[0]===p.av); if(k>=0) swapCi(pl,i,k); if(gr&&!(window.DLgrade&&DLgrade()==='1H')) pl[i].gr=p.gr; else if(!gr&&i===0) pl[0].gr=p.gr; return true; },
   _d:()=>D, _rec:onAnswer, _end:onEnd, _lv:level, _ch:challenges, _mon:curMonday, _save:save
 };
+/* pastille permanente « qui joue ? » + choix rapide */
+const FASTT=/#test/.test(location.hash);
+function whoPaint(){ let el=document.getElementById('whoPill'); const p=act();
+  if(!el){ el=document.createElement('button'); el.type='button'; el.id='whoPill'; el.onclick=()=>showWho(false); document.body.appendChild(el); }
+  if(p){ el.style.setProperty('--pc',p.col); el.innerHTML=`<span class="u-av">${avH(p.av)}</span><span class="wl"><small>Joue</small><b>${esc(p.name)}</b></span><i>⇄</i>`; el.setAttribute('aria-label','Joueur actif : '+p.name+'. Changer de joueur'); }
+  let hide=!p||!P.hidden; try{ if(!hide&&chipNames().length>1) hide=true; }catch(e){} el.hidden=hide; document.body.classList.toggle('has-who',!hide); }
+function showWho(first){ if(!D.profiles.length){ openP('pro'); return; }
+  let o=document.getElementById('whoModal'); if(o) o.remove();
+  o=document.createElement('div'); o.id='whoModal'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true'); o.setAttribute('aria-label','Qui joue ?');
+  o.innerHTML=`<div class="wm-box"><button type="button" class="u-x" data-w="x" aria-label="Fermer">✕</button><h3>👋 ${first?'Qui joue ?':'Changer de joueur'}</h3><p>Les points vont au joueur choisi.</p>
+  <div class="wm-l">${D.profiles.map(p=>`<button type="button" data-w="${p.id}" class="${p.id===D.active?'on':''}" style="--pc:${p.col}"><span class="u-av">${avH(p.av)}</span><b>${esc(p.name)}</b><small>Classe ${p.gr} · ${p.pts} pts</small>${p.id===D.active?'<em>✔</em>':''}</button>`).join('')}</div>
+  <button type="button" class="u-lk" data-w="g">Gérer la famille</button></div>`;
+  const close=()=>{ o.remove(); document.removeEventListener('keydown',kd); };
+  const kd=e=>{ if(e.key==='Escape') close(); }; document.addEventListener('keydown',kd);
+  o.addEventListener('click',e=>{ if(e.target===o){ close(); return; } const b=e.target.closest('button'); if(!b) return; const w=b.dataset.w;
+    if(w==='x') close(); else if(w==='g'){ close(); openP('pro'); }
+    else if(w){ D.active=w; save(); paintBtn(); close(); toast(`👋 Salut <b>${esc(act().name)}</b> !`,{ms:1500}); } });
+  document.body.appendChild(o); const a=o.querySelector('.on')||o.querySelector('.wm-l button'); if(a) a.focus(); }
+setInterval(whoPaint,700);
 paintBtn(); hook();
+if(!FASTT) setTimeout(()=>{ try{ if(D.profiles.length>1&&!sessionStorage.getItem('dl-who')){ sessionStorage.setItem('dl-who','1'); if(P.hidden) showWho(true); } }catch(e){} },900);
 if(D.sync) setTimeout(()=>sync(false),1500);
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&D.sync) sync(false); });
 })();
