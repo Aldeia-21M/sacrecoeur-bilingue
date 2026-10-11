@@ -3097,6 +3097,9 @@ function PARSE(src){
     });
     for(let i=0;i<cl;i++) stack.pop();
   });
+  /* accords : le nom porte la marque du pluriel quand son déterminant est au pluriel */
+  const PLD=/^(les|des|mes|tes|ses|nos|vos|leurs|ces|deux|trois|quatre|cinq|plusieurs)$/i; let plD=false;
+  out.forEach((t,i)=>{ if(/D/.test(t.c)) plD=PLD.test(t.w)||/x/.test(t.c); else if(/N/.test(t.c)&&plD&&/[sx]$/.test(t.w)&&!/x/.test(t.c)){ t.c+='x'; } if(t.p&&/[.!?]/.test(t.p)) plD=false; });
   out.forEach(t=>{ if(!/[se]/.test(t.c)&&!/C/.test(t.c)) t.c+='q'; });   /* prédicat = ce qui n’est ni sujet, ni complément de phrase */
   return out;
 }
@@ -3253,7 +3256,11 @@ function explain(){
    k:r=>`Je demande « ${V} à qui ? / à quoi ? » → « ${txt(r)} » avec à ou de devant : c’est un COI.`,
    t:r=>`Après le verbe d’état « ${V} », « ${txt(r)} » décrit « ${subj} » : c’est un attribut.`,
    g:r=>`« ${txt(r)} » : déterminant + nom (+ adjectif) : c’est un groupe nominal.`,
-   x:r=>`« ${txt(r)} » porte la marque du pluriel ou du féminin (-s, -x, -e).`};
+   x:r=>{ const k=r[0], t=S.toks[k], w=t.w, m=/(aux|x)$/i.test(w)?'-x':/s$/i.test(w)?'-s':/e$/i.test(w)?'-e':'';
+     let d=''; for(let j=k-1;j>=0&&j>=k-3;j--) if(/D/.test(S.toks[j].c)){ d=S.toks[j].w; break; } let n=''; for(let j=k-1;j>=0&&j>=k-3;j--) if(/N/.test(S.toks[j].c)){ n=S.toks[j].w; break; }
+     if(/N/.test(t.c)) return `« ${w} » est un nom au <b>pluriel</b>${d?` : le déterminant « ${d} » est au pluriel`:''}. Il prend la marque <b>${m||'-s'}</b>.`;
+     if(/D/.test(t.c)) return `« ${w} » est un déterminant au <b>pluriel</b> : il porte la marque ${m||'-s'} et annonce un nom pluriel.`;
+     return `« ${w} » est un adjectif : il <b>s’accorde</b> avec le nom${n?` « ${n} »`:''} et prend la marque <b>${m||'-e / -s'}</b>.`; }};
   const NO={
    e:r=>`Je supprime « ${txt(r)} » → « ${without(r)} » La phrase n’est plus complète : ce n’est pas un CC.`,
    s:r=>`« Qui est-ce qui ${V} ? » ne donne pas « ${txt(r)} ».`,
