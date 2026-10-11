@@ -1914,6 +1914,9 @@ function er(inf,ic,o){ o=o||{}; const st=inf.slice(0,-2), ie=o.ie||st, sg=o.sg||
 function irr(inf,ic,pres,imp,fut,pp,aux){ V[inf]={ic,pres,imp:['ais','ais','ait','ions','iez','aient'].map(x=>imp+x),fut:['ai','as','a','ons','ez','ont'].map(x=>fut+x),pp,aux:aux||'avoir'}; if(aux==='être') V[inf].ppd=[pp+'(e)',pp+'(e)',pp+'(e)',pp+'(e)s',pp+'(e)s',pp+'(e)s']; }
 er('chanter','🎤'); er('commencer','🚦',{pn:'commençons',ie:'commenç'}); er('oublier','🫥'); er('employer','🧰',{sg:'emploi',pn:'employons',fs:'emploier'}); er('jouer','⚽'); er('manger','🍽️',{pn:'mangeons',ie:'mange'}); er('parler','💬'); er('regarder','👀'); er('aimer','❤️');
 irr('finir','🏁',['finis','finis','finit','finissons','finissez','finissent'],'finiss','finir','fini');
+const G2=['finir','choisir','grandir','réussir','remplir','grossir','obéir','applaudir','réfléchir','ralentir'];
+function ir2(inf,ic){ const b=inf.slice(0,-1); V[inf]={ic,pres:[b+'s',b+'s',b+'t',b+'ssons',b+'ssez',b+'ssent'],imp:['ais','ais','ait','ions','iez','aient'].map(x=>b+'ss'+x),fut:['ai','as','a','ons','ez','ont'].map(x=>inf+x),pp:b,aux:'avoir'}; }
+['choisir','grandir','réussir','remplir','grossir','obéir','applaudir','réfléchir','ralentir'].forEach(k=>ir2(k,'•'));
 irr('faire','🔨',['fais','fais','fait','faisons','faites','font'],'fais','fer','fait');
 irr('prendre','🤲',['prends','prends','prend','prenons','prenez','prennent'],'pren','prendr','pris');
 irr('venir','🚪',['viens','viens','vient','venons','venez','viennent'],'ven','viendr','venu','être');
@@ -1944,7 +1947,7 @@ function forms(verb,tk){
 }
 window.CONJ={verbs:Object.keys(V),TENSES,PR,forms};
 /* ---- groupes, irréguliers, remarques ---- */
-const grp=k=>k==='être'||k==='avoir'?'aux':k==='aller'?3:k==='finir'?2:/er$/.test(k)?1:3;
+const grp=k=>k==='être'||k==='avoir'?'aux':k==='aller'?3:G2.includes(k)?2:/er$/.test(k)?1:3;
 const GL={aux:['Verbe irrégulier','auxiliaire'],1:['1er groupe','verbe en -er'],2:['2ᵉ groupe','en -ir, -issons'],3:['3ᵉ groupe','verbe irrégulier']};
 const NOTE={
  'être':'C’est un <b>auxiliaire</b> : il sert à former le passé composé de aller, venir, sortir, partir… Il est très irrégulier : on l’apprend par cœur.',
@@ -1974,8 +1977,9 @@ const NOTE={
  'écrire':'Nous écri<b>v</b>ons, ils écri<b>v</b>ent. Participe passé : écri<b>t</b>.',
  'répondre':'Verbe en <b>-dre</b> : il répond. Participe passé : répond<b>u</b>.'
 };
+const REG2='Verbe <b>régulier</b> du 2ᵉ groupe : il finit par <b>-ir</b> et on ajoute <b>-iss-</b> à « nous », « vous », « ils » (nous finissons).';
 const REG1='Verbe <b>régulier</b> du 1er groupe : il finit par <b>-er</b> et suit toujours la même règle (-e, -es, -e, -ons, -ez, -ent).';
-const ORDER=['être','avoir','aller','chanter','aimer','commencer','manger','oublier','employer','finir','dire','faire','entendre','savoir','vouloir','mettre','pouvoir','prendre','sortir','courir','voir','venir','rendre'];
+const ORDER=['être','avoir','aller','chanter','aimer','commencer','manger','oublier','employer','finir','choisir','grandir','réussir','remplir','grossir','obéir','applaudir','réfléchir','ralentir','dire','faire','entendre','savoir','vouloir','mettre','pouvoir','prendre','sortir','courir','voir','venir','rendre'];
 const EXTRA=Object.keys(V).filter(k=>!ORDER.includes(k));
 const ALLV=ORDER.concat(EXTRA);
 const END={pres:{1:['e','es','e','ons','ez','ent'],2:['is','is','it','issons','issez','issent']},imp:['ais','ais','ait','ions','iez','aient'],fut:['ai','as','a','ons','ez','ont']};
@@ -2087,7 +2091,7 @@ function tips(vb){
 function paint(){
   const g=grp(verb), gl=GL[g];
   gh.innerHTML=`<div class="cj-mouse">🐭</div><div class="cj-ban"><small>Verbe</small><b>${esc(verb)}</b></div><div class="cj-sign"><span>${gl[0]}</span><small>${gl[1]}</small></div>`;
-  gn.innerHTML='💡 '+(NOTE[verb]||(g===1?REG1:''));
+  gn.innerHTML='💡 '+(NOTE[verb]||(g===1?REG1:g===2?REG2:''));
   root.querySelector('#cjLg').hidden=!hl;
   gg.innerHTML=TENSES.map(t=>{ const F=forms(verb,t.k), ends=endsOf(verb,t.k);
     return `<section class="cj-card" style="--c:${t.c};--d:${t.d}"><header><b>${t.t}</b><small>${t.sub}</small>
