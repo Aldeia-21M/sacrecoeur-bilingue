@@ -2979,6 +2979,11 @@ function gmTemps(){
   const L=['présent','imparfait','futur simple','passé composé']; const t4=TS_S.filter(x=>L.includes(x[2])); const [f2,k2,tp2,s2]=pick(t4); const o=L.map(x=>x[0].toUpperCase()+x.slice(1));
   return {kind:'mcq',vis:`<div class="gm-s">${s2}</div>`,prompt:'Quel est le <b>temps</b> du verbe en gras ?',say:s2.replace(/<[^>]+>/g,''),lang:'fr',options:o,correct:L.indexOf(tp2),explain:`« ${esc(f2)} » est au <b>${tp2}</b> (${k2==='simple'?'temps simple, 1 mot':'temps composé, 2 mots'}).`,after:`${f2} : ${tp2}.`};
 }
+function gmPieges(g,a,b,c,ans,pool,fb){ const sw=b.split(' '); const verb=sw[0], comp=sw.slice(1).join(' '), h6=g==='6H';
+  const P={a,b,verb,comp,c:h6?c:'',ab:a+' '+b,abc:h6?a+' '+b+' '+c:'',bc:h6&&c?b+' '+c:'',noy:a.split(' ').length>1?a.split(' ').pop():''};
+  const out=[]; pool.forEach(k=>{ const v=P[k]; if(v&&v!==ans&&!out.includes(v)) out.push(v); });
+  let tries=0; while(out.length<2&&tries++<20){ const o=pick(PH_S); const v=pick(fb(o)); if(v&&v!==ans&&!out.includes(v)) out.push(v); }
+  return shuffle([ans].concat(shuffle(out).slice(0,3))); }
 function gmPhrase(g,force){
   const L=g==='6H'?PH_S:PH_4; const [a,b,c]=pick(L); const s0=a+' '+b; const full=g==='6H'?s0+' '+c:s0; const cap=x=>x[0].toUpperCase()+x.slice(1);
   const S=cap(s0)+'.';
@@ -2994,15 +2999,15 @@ function gmPhrase(g,force){
     return {kind:'mcq',vis:`<div class="gm-s">${esc(text)}</div>`,prompt:'Qu’est-ce qui <b>manque</b> à cette phrase ?',say:text,lang:'fr',options:o,correct:corr,explain:corr===0?'Tout est bon : majuscule au début et point à la fin.':`Une phrase commence par une <b>majuscule</b> et finit par un <b>point</b>.`,after:corr===0?'La phrase est correcte.':'Il faut une majuscule et un point.'};
   }
   if(t===2){ // groupe sujet / qui
-    const other=pick(PH_S.filter(x=>x[0]!==a&&x[1]!==b)); const o=shuffle([a,b,other[0],other[1]]); const ans=a;
+    const ans=a; const o=gmPieges(g,a,b,c,ans,['b','verb','noy','comp','c','ab'],x=>[x[0],x[1]]);
     return {kind:'mcq',vis:`<div class="gm-s">${esc(g==='6H'?cap(full)+'.':S)}</div>`,prompt:g==='6H'?'Quel est le <b>groupe sujet</b> (GS) de cette phrase ?':'<b>Qui</b> fait l’action ? Trouve le groupe sujet.',say:g==='6H'?cap(full)+'.':S,lang:'fr',options:o,correct:o.indexOf(ans),explain:`Le <b>groupe sujet</b> dit <b>qui</b> fait l’action : « <b>${esc(a)}</b> ».`,after:`Le groupe sujet est : ${a}`};
   }
   if(t===3){ // groupe verbal
-    const other=pick(PH_S.filter(x=>x[1]!==b)); const o=shuffle([b,a,other[1],other[0]].filter((x,i,arr)=>arr.indexOf(x)===i));
+    const o=gmPieges(g,a,b,c,b,['a','verb','comp','bc','ab','abc'],x=>[x[0],x[1]]);
     return {kind:'mcq',vis:`<div class="gm-s">${esc(g==='6H'?cap(full)+'.':S)}</div>`,prompt:'Quel est le <b>groupe verbal</b> (GV) ? C’est ce que fait ou ce qu’est le sujet.',say:g==='6H'?cap(full)+'.':S,lang:'fr',options:o,correct:o.indexOf(b),explain:`Le <b>groupe verbal</b> contient le verbe : « <b>${esc(b)}</b> ».`,after:`Le groupe verbal est : ${b}`};
   }
   // facultatif (6H)
-  const o=shuffle([c,a,b,pick(PH_S.filter(x=>x[2]!==c))[2]]); const ok=c;
+  const ok=c; const o=gmPieges(g,a,b,c,ok,['a','b','comp','verb','ab'],x=>[x[0],x[1]]);
   return {kind:'mcq',vis:`<div class="gm-s">${esc(cap(full))}.</div>`,prompt:'Quel groupe est <b>facultatif</b> ? On peut le supprimer, la phrase reste correcte.',say:cap(full)+'.',lang:'fr',options:o,correct:o.indexOf(ok),explain:`« <b>${esc(c)}</b> » est un <b>complément de phrase</b> : on peut le supprimer (« ${esc(S)} »).`,after:`Le complément de phrase est : ${c}`};
 }
 function gmOrder(g){
