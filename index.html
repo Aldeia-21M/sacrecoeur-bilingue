@@ -277,8 +277,8 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cj-ban small{display:block;font-size:.8rem;color:#5b6478;line-height:1}.cj-ban b{font-size:clamp(26px,7.5vw,38px);line-height:1.1}
 .cj-sign{flex:none;margin-left:8px;padding:6px 10px;background:#fff;border:3px solid #1d2433;border-radius:12px;text-align:center;line-height:1.15;font-weight:800;font-size:.9rem;max-width:34%}.cj-sign small{display:block;font-weight:600;font-size:.72rem;color:#5b6478}
 .cj-note{margin:0 2px 10px;padding:10px 12px;border-radius:14px;background:#fff8dc;border:2px solid #f0d88a;font-size:clamp(15px,4vw,17px);line-height:1.4}.cj-note:empty{display:none}
-.cj-tools{margin:0 2px 10px}.cj-row .r,.cj-lg .r{background:#ffd3e4;border-radius:6px;padding:0 2px}.cj-row .t,.cj-lg .t{background:#bfdcff;border-radius:6px;padding:0 2px;margin-left:1px}.cj-row .d,.cj-lg .d{color:#d6191c;background:#ffe3e3;border-radius:6px;padding:0 2px;font-weight:900;text-decoration:underline wavy #d6191c;text-underline-offset:3px}
-.cj-lg{display:grid;gap:4px;margin:-2px 2px 10px;font-size:.88rem;color:#5b6478}.cj-lg i{font-style:normal;font-weight:800;color:#1d2433;margin-right:4px}.cj-lg .d{text-decoration:none}
+.cj-tools{margin:0 2px 10px}.cj-row .t,.cj-lg .t{color:#2a62c9}.cj-row .d,.cj-lg .d{color:#d9480f;font-weight:900}
+.cj-lg{display:flex;flex-wrap:wrap;gap:4px 16px;margin:-2px 2px 10px;font-size:.88rem;color:#6b7590}.cj-lg i{font-style:normal;font-weight:800}
 .cj-tips{grid-column:1/-1;margin-top:4px;padding:10px 14px;border-radius:18px;background:#f3f6fd;border:2px solid #c9d3ea}.cj-tips h3{margin:0 0 6px;font-size:1.05rem}.cj-tips ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:clamp(15px,4vw,17px);line-height:1.4}
 .cj-opts.g3{grid-template-columns:1fr}
 .cj-verbs button{flex:1 1 90px;min-height:54px;border-radius:16px;border:3px solid var(--line);background:#fff;font-weight:800;font-size:clamp(18px,5vw,24px);display:flex;align-items:center;justify-content:center;gap:8px}
@@ -1991,8 +1991,8 @@ root.innerHTML=`<div class="cj-head"><h2>📘 La conjugaison <span class="cj-lvl
   <button class="pill cj-chg" id="cjC" aria-expanded="false">🔄 Changer de verbe ▾</button>
   <div class="cj-verbs" id="cjV" hidden></div>
   <div class="cj-note" id="cjN"></div>
-  <div class="cj-tools"><button class="pill" id="cjHl" aria-pressed="false">🎨 Repérer en couleur</button></div>
-  <div class="cj-lg" id="cjLg" hidden><span><i class="r">radical</i> le début qui ne change presque pas</span><span><i class="t">terminaison</i> la fin qui change</span><span><i class="d">difficulté</i> attention, piège !</span></div>
+  <div class="cj-tools"><button class="pill" id="cjHl" aria-pressed="false">🎨 Voir la fin et les pièges</button></div>
+  <div class="cj-lg" id="cjLg" hidden><span><i class="t">bleu</i> la fin du verbe</span><span><i class="d">orange</i> petite attention</span></div>
   <div class="cj-grid" id="cjG"></div>
   <button class="cj-toggle" id="cjT" aria-expanded="false"><span>🎯 Je m’entraîne<small>Choisis la bonne forme du verbe</small></span><span class="ch">▼</span></button>
   <div class="cj-train" id="cjP" hidden></div>`;
@@ -2008,32 +2008,25 @@ const LBL=['Je','Tu','Il, elle, on','Nous','Vous','Ils, elles'];
 function marks(vb,tk,i,f){
   const c=new Array(f.length).fill('');
   const set=(a,b,k)=>{ for(let j=a;j<b&&j<f.length;j++) if(j>=0) c[j]=k; };
-  if(tk==='pc'){ const sp=f.indexOf(' '); set(0,sp,'t'); set(sp+1,f.length,'r'); }
-  else { const ends=endsOf(vb,tk); if(ends){ const e=ends[i]; if(f.endsWith(e)){ set(0,f.length-e.length,'r'); set(f.length-e.length,f.length,'t'); } } }
+  if(tk!=='pc'){ const ends=endsOf(vb,tk); if(ends){ const e=ends[i]; if(f.endsWith(e)) set(f.length-e.length,f.length,'t'); } }
   const m=(re,gi)=>{ const r=new RegExp(re.source,re.flags.replace('g','')+'g'); let x; while((x=r.exec(f))){ const sub=gi?x[gi]:x[0]; const st=x.index+(gi?x[0].indexOf(sub):0); set(st,st+sub.length,'d'); if(x[0].length===0) r.lastIndex++; } };
   const all=(k)=>set(0,f.length,k);
   if(tk==='imp'&&(i===3||i===4)) m(/(i)(?:ons|ez)$/,1);
   if(tk==='fut') m(/(r+)(?:ai|as|a|ons|ez|ont)$/,1);
   if(tk==='pc') m(/\(e\)s?/);
   switch(vb){
-   case 'être': if(tk==='pres') all('d'); if(tk==='imp') m(/^ét/); if(tk==='fut') m(/^se/); if(tk==='pc') m(/été/); if(tk==='pres'&&i===4) {} break;
-   case 'avoir': if(tk==='pres') all('d'); if(tk==='fut') m(/^au/); break;
-   case 'aller': if(tk==='pres'&&![3,4].includes(i)) all('d'); if(tk==='fut') m(/^ir/); break;
    case 'commencer': m(/ç/); break;
    case 'manger': m(/ge(?=[ao])/,0); break;
    case 'employer': m(/y/); m(/emplo(i)/,1); break;
    case 'oublier': m(/ii/); break;
    case 'voir': m(/y/); break;
-   case 'faire': if(tk!=='fut') m(/^f(ai)s(?=ons|ais|ait|ions|iez|aient)/,1); if(tk==='pres'&&(i===4||i===5)) all('d'); if(tk==='fut') m(/^f(e)r/,1); break;
+   case 'faire': if(tk!=='fut') m(/^f(ai)s(?=ons|ais|ait|ions|iez|aient)/,1); break;
    case 'dire': if(tk==='pres'&&i===4) m(/tes$/); break;
    case 'prendre': if(tk==='pres'&&i===5) m(/nn/); if(tk==='pres'&&i===2) m(/d$/); break;
    case 'entendre': case 'rendre': case 'répondre': if(tk==='pres'&&i===2) m(/d$/); break;
-   case 'mettre': m(/tt/); break;
-   case 'pouvoir': case 'vouloir': if(tk==='pres'&&i<2) m(/x$/); if(vb==='vouloir'&&tk==='fut') m(/voud/); break;
-   case 'savoir': if(tk==='fut') m(/au/); break;
-   case 'devoir': if(tk==='pc') m(/û/); break;
-   case 'venir': if(tk==='pres'&&i===5) m(/nn/); if(tk==='fut') m(/viend/); break;
-   case 'écrire': m(/v/); break;
+   case 'mettre': if(tk!=='fut') m(/tt/); break;
+   case 'pouvoir': case 'vouloir': if(tk==='pres'&&i<2) m(/x$/); break;
+   case 'venir': if(tk==='pres'&&i===5) m(/nn/); break;
   }
   return c;
 }
