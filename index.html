@@ -377,6 +377,23 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .gm-bl{display:inline-block;min-width:64px;border-bottom:4px solid #1f5fd6;color:transparent}
 .h-ans.wd b{margin-right:8px}.h-tile.wt{flex:0 0 auto;min-width:0;padding:2px 14px}
 
+.cx{margin:10px 0 8px;padding:12px;border-radius:22px;border:3px solid #e0b100;background:#fffbe6}
+.cx h2{margin:2px 2px 4px;font-size:clamp(22px,6vw,30px)}.tx-in{margin:0 2px 8px;opacity:.85}
+.tx-sub{margin:18px 4px 0;font-size:clamp(17px,4.6vw,21px);color:#33405f}
+.tx-pal{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.tx-pal button{display:flex;align-items:center;gap:8px;min-height:46px;padding:4px 14px;border-radius:999px;border:3px solid rgba(29,36,51,.15);background:#fff;font-weight:800;font-size:16px}
+.tx-pal button[aria-pressed=true]{border-color:var(--cc);box-shadow:0 0 0 3px var(--cc) inset;background:#fff}
+.sw{display:inline-block;width:22px;height:12px;border-radius:4px}.sw-p{border-bottom:5px solid #e03131}.sw-i{border-bottom:5px solid #7048e8}.sw-n{border-bottom:5px solid #2f9e44}.sw-s{border:3px solid #e0a800;border-radius:6px}.sw-a{background:#b2f2bb}
+.tx-hint{margin:0 0 8px;padding:8px 12px;border-radius:14px;background:#fff;border-left:6px solid var(--cc,#e0b100);font-size:clamp(14.5px,3.9vw,16.5px);line-height:1.4}
+.tx-text{margin:8px 0;padding:14px 12px;border-radius:16px;background:#fff;border:3px dashed #1d2433;font-size:clamp(22px,6vw,26px);line-height:2.3;-webkit-user-select:none;user-select:none}
+.tw{cursor:pointer;padding:2px 1px;border-radius:6px;border-bottom:4px solid transparent;-webkit-tap-highlight-color:transparent}
+.tw.m-p{border-bottom-color:#e03131}.tw.m-i{border-bottom-color:#7048e8}.tw.m-n{border-bottom-color:#2f9e44}.tw.m-a{background:#b2f2bb}
+.tx-run{border:3px solid #e0a800;border-radius:10px;padding:2px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.tw.miss-p{border-bottom:4px dashed #e03131}.tw.miss-i{border-bottom:4px dashed #7048e8}.tw.miss-n{border-bottom:4px dashed #2f9e44}
+.tw.miss-s{outline:3px dashed #e0a800;outline-offset:1px}.tw.miss-a{background:repeating-linear-gradient(45deg,#d8f5dc 0 4px,#fff 4px 8px)}
+.tw.bad{background:#ffe3ea}
+.tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko{background:#fff0e0;border:2px solid #e08a1e}
+.tx-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.tx-btns>*{flex:1 1 140px}
 /* ---- séries, défi, petits ---- */
 #p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
 .sec-b[data-s="pt"][aria-pressed="true"]{background:#ffe0ef;border-color:#e64980}
@@ -510,7 +527,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 <section class="page" data-sec="de" id="p-wort" data-label="🗣️ Wortschatz"></section>
 <section class="page" data-sec="fr" id="p-conj" data-label="📘 Conjugaison"></section>
 <section class="page" data-sec="fr" id="p-ortho" data-label="✏️ Orthographe"></section>
-<section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"></section>
+<section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><div id="p-gramT"></div><h3 class="tx-sub">🧰 Pour réussir : les fiches et les jeux</h3><div id="p-gramS"></div></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
 <section class="page" data-sec="ma" id="p-mesures" data-label="📏 Mesures"></section>
@@ -2926,10 +2943,106 @@ function gmCard(act,g){
   return '';
 }
 function genGram(g,act){ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].includes(gg)).map(a=>a[0]); const a=act&&ok.includes(act)?act:pick(ok); const q=GM_GEN[a](gg); if(q.options&&q.options.some(o=>o.length>12)) q.wide=true; return q; }
-MkSeries('p-gram',{title:'📐 La grammaire',intro:'Lis la fiche, puis joue avec les mots : nature, fonction, phrases…',
+MkSeries('p-gramS',{title:'📐 Apprendre la règle',intro:'Lis la fiche, puis joue avec les mots pour t’entraîner.',
   acts:GM_ACTS.map(a=>[a[0],a[1],a[2]]),grades:[['4H','4H · les bases'],['6H','6H · toutes les notions']],card:gmCard,
   hints:{'4H':'La phrase, les natures (nom, verbe, adjectif, déterminant) et les petits mots qui relient.','6H':'Phrase simple ou complexe, nature et fonction des mots, adverbe, préposition, conjonction, groupes de verbes, temps simples et composés.'},gen:genGram});
 G.gram=g=>{ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].includes(gg)).map(a=>a[0]); const a=pick(ok); let q,t=0; do{ q=GM_GEN[a](gg); t++; }while(q.kind!=='mcq'&&t<20); return q; };
+/* ---- LE TEXTE À COLORIER (exercice de classe) ---- */
+(function(){
+const root=document.getElementById('p-gramT'); if(!root) return;
+const TXT={
+ '4H':[
+  'Le/s chat/s dort/p sur le canapé. Les/s enfants/s jouent/p dans le jardin.',
+  'Maman/s prépare/p le repas. Papa/s lit/p le journal. Je/s mange/p une pomme.',
+  'Léa/s aime/p les fleurs. Elle/s cueille/p des roses rouges.',
+  'Nous/s allons/p à l’ école. Mes/s amis/s arrivent/p aussi.',
+  'Les/s oiseaux/s chantent/p le matin. Tu/s écoutes/p leur chanson.',
+  'Le/s boulanger/s fait/p du pain. Il/s ouvre/p son magasin tôt.',
+  'Mon/s frère/s et/s moi/s regardons/p un film. Nous/s aimons/p les histoires drôles.',
+  'Vous/s dessinez/p un château. Les/s enfants/s colorient/p les tours en bleu.'],
+ '6H':[
+  'Hier, il/s pleuvait/i. Aujourd’hui, le/s soleil/s brille/p. Les/sa enfants/s jouent/p dehors avec des/a ballons rouges/a.',
+  'Mon/s frère/s adore/p les/a bonbons sucrés/a. Hier, il/s mangeait/i trois gâteaux. Ma/sf sœur/s préfère/p manger/n des/a fruits mûrs/a.',
+  'Avant, nous/s habitions/i à Genève. Maintenant, nous/s habitons/p dans une/f petite/a ville. Mes/sa parents/s aiment/p travailler/n dans le jardin.',
+  'Dans la/f classe, les/sa élèves/s écoutent/p la/f maîtresse. Hier, elle/s racontait/i une/f histoire drôle/a et les/sa enfants/s riaient/i.',
+  'Le/s petit/s chat/s dormait/i sur le canapé. Maintenant, il/s joue/p avec des/a pelotes rouges/a.',
+  'Je/s me réjouis/p de continuer/n à apprendre/n. Hier, mes/sa amis/s et/s moi/s jouions/i au football.',
+  'Chaque matin, Papa/s prépare/p le café. Autrefois, il/s préparait/i du thé. Mes/sa sœurs/s préfèrent/p dormir/n longtemps.',
+  'Les/sa oiseaux/s chantent/p dans les/a arbres verts/a. Hier, ils/s volaient/i vers le sud.']
+};
+const CR={
+ p:['Présent','#e03131','Un verbe change si on change le temps. Essaie avec « hier… » : si le mot change, c’est un verbe ! Ici, souligne ceux qui disent ce qui se passe <b>maintenant</b>.'],
+ i:['Imparfait','#7048e8','L’imparfait raconte ce qui se passait <b>avant</b>. Il finit par <b>-ais, -ait, -aient, -ions, -iez</b> : il pleuvait, nous habitions.'],
+ n:['Infinitif','#2f9e44','Le verbe qui <b>ne change pas</b> : il finit par <b>-er, -ir, -re</b>. Il suit souvent un autre verbe ou « à », « de » : j’aime <i>manger</i>.'],
+ s:['Sujet','#e0a800','Pour trouver le sujet, demande : « <b>Qui est-ce qui</b> + le verbe ? ». Entoure tous les mots du groupe sujet (les petits mots et le nom).'],
+ a:['Accords','#37b24d','Colorie les <b>déterminants</b> et les <b>adjectifs</b> qui portent la marque du pluriel ou du féminin (<b>-s, -x, -e</b>) : des, mes, neufs, rondes.']
+};
+const LV={'4H':[['1 · Les verbes',['p']],['2 · Verbes et sujets',['p','s']]],'6H':[['1 · Les verbes',['p','i','n']],['2 · + les sujets',['p','i','n','s']],['3 · Tout !',['p','i','n','s','a']]]};
+const PARSE=s=>s.split(' ').map(t=>{ const m=/^(.+?)(?:\/([a-z]+))?([.,!?;:]*)$/.exec(t); return {w:m[1],c:m[2]||'',p:m[3]||''}; });
+const S={g:'6H',lv:0,cur:'p',ti:-1,toks:[],marks:[],done:false};
+function newText(){ const L=TXT[S.g]; let k; do{ k=rnd(L.length); }while(L.length>1&&k===S.ti); S.ti=k; S.toks=PARSE(L[k]); S.marks=S.toks.map(()=>[]); S.done=false; }
+const act=()=>LV[S.g][S.lv][1];
+root.innerHTML=`<div class="cx"><h2>🖍️ Colorie le texte</h2><p class="tx-in">C’est l’exercice de la classe ! Choisis un crayon, touche les mots, puis vérifie. Les fiches plus bas t’aident à réussir.</p>
+ <div class="mx-sec"><div class="mx-lab">Ta classe</div><div class="mx-seg wrap" id="txG"></div></div>
+ <div class="mx-sec"><div class="mx-lab">Je cherche…</div><div class="mx-seg wrap" id="txL"></div></div>
+ <div class="tx-pal" id="txC"></div><div class="tx-hint" id="txH"></div>
+ <div class="tx-text" id="txT"></div>
+ <div class="tx-fb" id="txF" hidden></div>
+ <div class="tx-btns"><button class="mx-hear" id="txS">🔊 Écouter</button><button class="mx-go" id="txV">✅ Vérifier</button></div>
+ <div class="tx-btns"><button class="g-ghost" id="txR">🧽 Tout effacer</button><button class="g-ghost" id="txN">🔄 Autre texte</button></div></div>`;
+const $=id=>root.querySelector('#'+id);
+const segH=(list,cur)=>list.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v==cur}">${t}</button>`).join('');
+const sp=k=>(k<S.toks.length-1&&!/’$/.test(S.toks[k].w))?' ':'';
+function wordCls(k){
+  const t=S.toks[k], m=S.marks[k], A=act(), c=[];
+  m.forEach(x=>c.push('m-'+x));
+  if(S.done) A.forEach(x=>{ const e=t.c.includes(x), h=m.includes(x), tol=x==='a'&&t.c.includes('f');
+    if(h&&!e&&!tol) c.push('bad'); else if(e&&!h) c.push('miss-'+x); });
+  return c.join(' ');
+}
+function paintT(){
+  const n=S.toks.length, has=(k,x)=>S.marks[k].includes(x); let h='';
+  const word=k=>`<span class="tw ${wordCls(k)}" data-i="${k}">${esc(S.toks[k].w)}</span>`;
+  for(let i=0;i<n;){
+    if(has(i,'s')){ let j=i; while(j+1<n&&has(j+1,'s')&&!S.toks[j].p) j++;
+      h+='<span class="tx-run">'; for(let k=i;k<=j;k++) h+=word(k)+(k<j?sp(k):''); h+='</span>'+esc(S.toks[j].p)+sp(j); i=j+1; }
+    else { h+=word(i)+esc(S.toks[i].p)+sp(i); i++; }
+  }
+  $('txT').innerHTML=h;
+}
+function paintAll(){
+  $('txG').innerHTML=segH([['4H','4H'],['6H','6H']],S.g);
+  $('txL').innerHTML=segH(LV[S.g].map((x,i)=>[i,x[0]]),S.lv);
+  const A=act(); if(!A.includes(S.cur)) S.cur=A[0];
+  $('txC').innerHTML=A.map(x=>`<button data-c="${x}" aria-pressed="${x===S.cur}" style="--cc:${CR[x][1]}"><i class="sw sw-${x}"></i>${CR[x][0]}</button>`).join('');
+  $('txH').innerHTML='💡 '+CR[S.cur][2]; $('txH').style.setProperty('--cc',CR[S.cur][1]);
+  $('txF').hidden=true; paintT();
+}
+$('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; newText(); paintAll(); };
+$('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.v; S.marks=S.toks.map(()=>[]); S.done=false; paintAll(); };
+$('txC').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.cur=b.dataset.c; paintAll_keep(); };
+function paintAll_keep(){ const f=$('txF').hidden; paintAll(); if(S.done) check(true); }
+$('txT').onclick=e=>{ const w=e.target.closest('.tw'); if(!w||S.done) return; const k=+w.dataset.i, m=S.marks[k], c=S.cur, V=['p','i','n'];
+  if(m.includes(c)) S.marks[k]=m.filter(x=>x!==c); else { S.marks[k]=(V.includes(c)?m.filter(x=>!V.includes(x)):m).concat(c); }
+  paintT(); };
+$('txR').onclick=()=>{ S.marks=S.toks.map(()=>[]); S.done=false; paintAll(); };
+$('txN').onclick=()=>{ newText(); paintAll(); };
+const plain=()=>S.toks.map((t,k)=>t.w+t.p+sp(k)).join('');
+$('txS').onclick=()=>say(plain(),'fr');
+function check(quiet){
+  const A=act(); let exp=0,hit=0,bad=0;
+  S.toks.forEach((t,k)=>A.forEach(x=>{ const e=t.c.includes(x), h=S.marks[k].includes(x), tol=x==='a'&&t.c.includes('f');
+    if(e){ exp++; if(h) hit++; } else if(h&&!tol) bad++; }));
+  S.done=true; paintT();
+  const ok=hit===exp&&bad===0, f=$('txF'); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
+  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tous les mots sont bien trouvés.':`<b>${hit} / ${exp}</b> mots trouvés${bad?` · <b>${bad}</b> à corriger (en rose)`:''}.<br><small>Les pointillés montrent ce que tu as oublié.</small>`;
+  if(!quiet){ try{ DLverdict(ok,[{t:ok?'Parfait, tout est juste':hit+' sur '+exp+'. Regarde les pointillés.',l:'fr'}]); }catch(e){} }
+}
+$('txV').onclick=()=>{ if(S.done) return; check(); };
+window.__tx={S,check,get exp(){ return S.toks; },mark:(k,c)=>{ S.marks[k]=(S.marks[k]||[]).concat(c); }};
+newText(); paintAll();
+})();
+
 
 
 /* ================= WORTSCHATZ (allemand) ================= */
