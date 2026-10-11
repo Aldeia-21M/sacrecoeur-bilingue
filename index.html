@@ -498,6 +498,56 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .vox[hidden]{display:none}#setbk{position:fixed;inset:0;z-index:59;background:rgba(20,26,40,.45);opacity:0;transition:opacity .25s}#setbk[hidden]{display:none}
 .setgrab{display:flex;justify-content:center;padding:10px 0 6px;margin:0 -14px -4px;cursor:grab;touch-action:none}.setgrab i{width:44px;height:5px;border-radius:3px;background:#c4cadb}
 .vhelp{font-size:.88rem;color:#5b6478}.vhelp summary{cursor:pointer;padding:6px 0;color:#6b7590;font-weight:600;list-style:none}.vhelp summary::-webkit-details-marker{display:none}.vhelp[open] summary{margin-bottom:4px}.vh-os{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.vh-os button{min-height:42px;padding:6px 12px;border-radius:999px;border:2px solid var(--line);background:#fff;font-weight:700;font-size:.85rem;color:#33405f}.vh-os button[aria-pressed=true]{background:#e4ecff;border-color:#8fa8e8}.vh-tx{background:#f6f8fc;border-radius:12px;padding:8px 12px;line-height:1.45}.vh-tx ol{margin:6px 0 4px;padding-left:20px}.vh-tx p{margin:4px 0}.vh-tx small{color:#7a849c}
+/* ===== profils / points / défis ===== */
+#setbtn{margin-left:0}#usrbtn{min-width:46px;position:relative}#usrbtn .av-b{display:block;font-size:9px;font-weight:800;line-height:1;color:#c2570c;white-space:nowrap;margin-top:1px}#usrbtn .ic .mx{width:1.25em;height:1.25em;vertical-align:-.3em}
+.vox.upanel{max-width:720px;font-size:15px;gap:6px}
+.u-head{display:flex;gap:12px;align-items:center;padding:6px 40px 6px 0;position:relative}
+.u-av{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--pc,#e8edf8);font-size:26px;flex:none;border:3px solid var(--pc,#cfd6e6);background-clip:padding-box}.u-av .mx{width:100%;height:100%;border:0;box-shadow:none}.u-av.big{width:60px;height:60px;font-size:34px}
+.u-av{background:#fff}
+.u-hi{display:grid;gap:3px;min-width:0;flex:1}.u-hi b{font-size:1.25rem;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.u-hi small{color:#5b6478;font-size:.82rem}
+.u-pb{height:10px;border-radius:6px;background:#e7ebf5;overflow:hidden}.u-pb i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#4dabf7,#1f5fd6);transition:width .4s}
+.u-pb.g i{background:#2f9e44}.u-pb.o i{background:#f59f00}.u-pb.r i{background:#fa5252}
+.u-x{position:absolute;right:0;top:4px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#f4f6fb;font-size:16px;cursor:pointer;color:#5b6478}
+.u-tabs{display:flex;gap:6px;margin:2px 0 4px;background:#eef1f8;padding:4px;border-radius:14px}
+.u-tabs button{flex:1;border:0;background:transparent;border-radius:11px;padding:9px 4px;font:700 14px inherit;font-family:inherit;color:#4a5368;cursor:pointer;min-height:42px}
+.u-tabs button[aria-selected=true]{background:#fff;color:#1f5fd6;box-shadow:0 1px 4px rgba(20,26,40,.15)}
+.u-body{display:grid;gap:8px;padding-bottom:4px}
+.u-h{margin:8px 0 0;font-size:1rem;display:flex;gap:8px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}.u-h small{font-weight:600;color:#7a8398;font-size:.78rem}
+.u-strip{display:flex;gap:8px;flex-wrap:wrap}.u-strip span{flex:1 1 auto;background:#fff7e6;border:1px solid #ffe3a3;border-radius:12px;padding:8px 10px;text-align:center;font-size:.88rem;white-space:nowrap}
+.u-chs{display:grid;gap:7px}
+.u-ch{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 11px;border-radius:14px;border:2px solid #e2e7f3;background:#fff}
+.u-ch.ok{border-color:#8ce99a;background:#f0fbf1}.u-ch.bonus{background:#fffbe6;border-style:dashed}.u-ch.bonus.ok{background:#fff3bf;border-style:solid;border-color:#fcc419}
+.u-ci{font-size:1.5rem;width:34px;text-align:center}.u-ct{display:grid;gap:5px;min-width:0}.u-ct b{font-size:.93rem;line-height:1.2}.u-ct small{color:#7a8398}
+.u-cr{display:grid;justify-items:end;gap:1px;text-align:right}.u-cr small{color:#5b6478;font-size:.78rem;white-space:nowrap}.u-cr em{font-style:normal;font-weight:800;color:#c2570c}
+.u-bds{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:7px}
+.u-bd{display:grid;gap:2px;justify-items:center;text-align:center;padding:8px 5px;border-radius:12px;background:#f1f3f9;border:2px solid transparent;filter:grayscale(1);opacity:.55}
+.u-bd span{font-size:1.7rem}.u-bd b{font-size:.78rem;line-height:1.15}.u-bd small{font-size:.68rem;color:#6b7385;line-height:1.15}
+.u-bd.on{filter:none;opacity:1;background:#fff8e1;border-color:#ffd43b}
+.u-note{font-size:.8rem;color:#6b7385;line-height:1.35}.u-note.warn{color:#c2570c;font-weight:700}
+.u-empty{padding:18px 8px;text-align:center;color:#6b7385}
+.u-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.u-kpis div{background:#f1f5ff;border-radius:12px;padding:9px 4px;text-align:center;display:grid;gap:2px}.u-kpis b{font-size:1.25rem;color:#1f5fd6}.u-kpis small{font-size:.7rem;color:#5b6478;line-height:1.1}
+.u-svg{width:100%;max-width:440px;height:auto;display:block;margin:0 auto}
+.u-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 3px 0 8px}.u-dot.g{background:#2f9e44}.u-dot.r{background:#ff8787}
+.u-sub{display:grid;gap:7px}.u-sr{display:grid;grid-template-columns:104px 1fr 46px 32px;gap:8px;align-items:center;font-size:.88rem}.u-sr b{text-align:right}.u-sr small{color:#7a8398;text-align:right}
+.u-tip{padding:10px 12px;border-radius:12px;background:#fff4e6;border:1px solid #ffd8a8;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem}.u-tip.ok{background:#ebfbee;border-color:#b2f2bb}
+.u-b{border:2px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;font:700 14px inherit;font-family:inherit;cursor:pointer;min-height:40px;color:#2b3350}
+.u-b.pr{background:#1f5fd6;border-color:#1f5fd6;color:#fff}.u-b.dg{background:#fff5f5;border-color:#ffa8a8;color:#c92a2a}
+.u-new{justify-self:start}
+.u-rk{display:grid;gap:5px}.u-rk div{display:grid;grid-template-columns:28px 36px 1fr auto;gap:8px;align-items:center;padding:4px 8px;border-radius:12px;background:#f7f8fc}.u-rk .u-av{width:34px;height:34px;font-size:20px}.u-rk em{font-style:normal;font-weight:800;color:#1f5fd6}
+.u-pl{display:grid;gap:7px}.u-pc{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:stretch}
+.u-pick{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;text-align:left;border:2px solid #e2e7f3;background:#fff;border-radius:14px;padding:8px 10px;cursor:pointer;font-family:inherit;color:inherit;min-height:56px}
+.u-pc.on .u-pick{border-color:var(--pc);background:#f7faff;box-shadow:0 0 0 2px var(--pc) inset}
+.u-pi{display:grid;gap:1px;min-width:0}.u-pi b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.u-pi small{color:#6b7385;font-size:.78rem}.u-act{font-size:.8rem;font-weight:800;color:#1f5fd6}
+.u-f{display:grid;gap:5px;font-weight:700;font-size:.9rem}.u-f input,.u-ta{font:inherit;font-weight:500;padding:10px;border-radius:12px;border:2px solid var(--line);min-height:44px;width:100%;box-sizing:border-box}
+.u-av-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px}.u-av-g button{aspect-ratio:1;border:3px solid #e2e7f3;background:#fff;border-radius:14px;font-size:26px;cursor:pointer;display:grid;place-items:center;padding:0}.u-av-g button .mx{width:80%;height:80%}.u-av-g button[aria-pressed=true]{border-color:#1f5fd6;background:#eaf1ff}
+.u-col-g{display:flex;gap:10px}.u-col-g button{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #cfd6e6;background:var(--c);cursor:pointer}.u-col-g button[aria-pressed=true]{box-shadow:0 0 0 3px #2b3350}
+.u-seg{display:flex;gap:6px}.u-seg button{flex:1;border:2px solid var(--line);background:#fff;border-radius:12px;padding:9px;font:700 15px inherit;font-family:inherit;cursor:pointer;min-height:42px}.u-seg button[aria-pressed=true]{background:#1f5fd6;color:#fff;border-color:#1f5fd6}
+.u-sv{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.u-msg{font-weight:700;color:#2b3350;background:#eef6ff;border-radius:10px;padding:8px 10px}
+.u-tipd summary{cursor:pointer;color:#6b7590;font-weight:600;font-size:.88rem}
+.u-toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;z-index:140;max-width:min(92vw,460px);background:#2b3350;color:#fff;padding:10px 14px;border-radius:16px;box-shadow:0 8px 28px rgba(20,26,40,.4);transition:.28s;display:flex;gap:10px;align-items:center;font-size:.92rem;line-height:1.3;pointer-events:auto}
+.u-toast.on{opacity:1;transform:translate(-50%,0)}.u-toast b{color:#ffe066}.u-toast button{border:0;border-radius:10px;background:#ffd43b;color:#2b3350;font:800 13px inherit;font-family:inherit;padding:7px 12px;cursor:pointer;flex:none}
+.u-ov{position:fixed;inset:0;z-index:150;background:rgba(20,26,40,.5);display:grid;place-items:center;padding:20px}.u-dlg{background:#fff;border-radius:18px;padding:18px;max-width:380px;width:100%;box-shadow:0 12px 40px rgba(20,26,40,.4)}.u-dlg p{margin:0 0 14px;color:#2b3350;line-height:1.4}.u-dr{display:flex;gap:8px;justify-content:flex-end}
+@media (max-width:520px){.u-kpis{grid-template-columns:repeat(2,1fr)}.u-sr{grid-template-columns:92px 1fr 42px 26px}}
 </style>
 </head>
 <body>
@@ -505,6 +555,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
   <div class="secs" role="tablist" aria-label="Rubrique"><button class="sec-b" data-s="de" aria-pressed="true"><span class="e">🇩🇪</span><span>Allemand</span></button><button class="sec-b" data-s="fr" aria-pressed="false"><span class="e">🇫🇷</span><span>Français</span></button><button class="sec-b" data-s="ma" aria-pressed="false"><span class="e">🧮</span><span>Maths</span></button><button class="sec-b" data-s="pt" aria-pressed="false"><span class="e">🧸</span><span>Petits</span></button><button class="sec-b" data-s="fa" aria-pressed="false"><span class="e">🏆</span><span>Grand Quiz</span></button></div>
   <div class="bar">
     <nav id="tabs" role="tablist"></nav>
+    <button class="tab gear" id="usrbtn" aria-controls="upanel" aria-selected="false"><span class="ic">👤</span><span class="lb">Profil</span><small class="av-b" id="usrBadge" hidden></small></button>
     <button class="tab gear" id="setbtn" aria-expanded="false" aria-controls="setpanel"><span class="ic">⚙️</span><span class="lb">Réglages</span></button>
     <button class="tab gear" id="avisbtn" aria-controls="setpanel"><span class="ic">💬</span><span class="lb">Avis</span><small class="av-b" id="avisBadge" hidden></small></button>
   </div>
@@ -526,6 +577,8 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
     <p class="about">💙 C’est avec bienveillance que le papa de Leonardo, Guilherme et Milena a mis en place ce petit jeu éducatif. Il est à disposition de tous les parents d’élèves qui souhaitent rendre l’apprentissage scolaire et la révision plus ludiques.</p>
     <div class="setgrab" id="setgrab" aria-label="Fermer"><i></i></div>
   </div>
+  <div class="vox upanel" id="upanel" hidden role="dialog" aria-label="Mon espace"></div>
+  <datalist id="dlProfNames"></datalist>
   <div class="vox avis" id="avpanel" hidden>
     <h3 class="av-t">💬 Un avis ? Une idée ?</h3>
     
@@ -585,6 +638,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "3.0", desc: "Profils, points, défis hebdo, évolution" },
     { v: "2.2", desc: "Version et historique dans Réglages" },
     { v: "2.1", desc: "Historique des versions en bas de page" },
     { v: "2.0", desc: "Plateau : longueur au choix, arrivée pile" },
@@ -1150,6 +1204,7 @@ if(FAST) window.__mq=makeQuestion;
 /* ================= ÉCRAN DE RÉGLAGE ================= */
 function renderSetup(){
   G=null; document.body.classList.remove('gp-play');
+  if(window.DLU) DLU.pre(setup,CHARS,true);
   root.innerHTML=`<h2 class="g-h">🎲 Jeu de plateau</h2>
   <p class="g-p">Lance les deux dés et réponds à la question : <b>bonne réponse = tu avances du total des dés</b>, sinon d’une case de moins ! Échelles, toboggans et cases spéciales t’attendent. Le premier arrivé à la case ${setup.len} gagne.</p>
   <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="gN"></div></div>
@@ -1184,12 +1239,13 @@ function renderPlayers(){
     const col=COLORS[p.co][0];
     return `<div class="g-pc" style="--pc:${col}" data-i="${i}">
       <div class="g-pc-top"><div class="g-pc-tok">${CHARS[p.ci][0]}</div>
-      <input type="text" maxlength="14" placeholder="Joueur ${i+1}" value="${esc(p.name)}" aria-label="Nom du joueur ${i+1}"></div>
+      <input type="text" maxlength="14" list="dlProfNames" placeholder="Joueur ${i+1}" value="${esc(p.name)}" aria-label="Nom du joueur ${i+1}"></div>
       <div class="g-gr" role="group" aria-label="Classe du joueur ${i+1}">${['1H','4H','6H'].map(g=>`<button data-gr="${g}" aria-pressed="${p.gr===g}">Classe ${g}</button>`).join('')}</div>
       <div class="g-chars">${CHARS.map((c,k)=>`<button data-ci="${k}" aria-pressed="${p.ci===k}" aria-label="${c[1]}" ${takenC.has(k)?'disabled':''}>${c[0]}</button>`).join('')}</div>
       <div class="g-cols">${COLORS.map((c,k)=>`<button data-co="${k}" style="background:${c[0]}" aria-pressed="${p.co===k}" aria-label="${c[1]}" ${takenK.has(k)?'disabled':''}></button>`).join('')}</div>
     </div>`;}).join('');
   box.oninput=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT') setup.pl[+c.dataset.i].name=e.target.value; };
+  box.onchange=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT'&&window.DLU&&DLU.match(setup.pl,+c.dataset.i,e.target.value,CHARS,true)) renderPlayers(); };
   box.onclick=e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; const c=b.closest('.g-pc'); const i=+c.dataset.i;
     if(b.dataset.gr) setup.pl[i].gr=b.dataset.gr; else if(b.dataset.ci!==undefined) setup.pl[i].ci=+b.dataset.ci; else if(b.dataset.co!==undefined) setup.pl[i].co=+b.dataset.co; else return;
     renderPlayers(); };
@@ -1352,7 +1408,7 @@ async function npcAnswer(p,d){
 /* ---- question ---- */
 function askQuestion(p,d){
   return new Promise(res=>{
-    const q=makeQuestion(G.topics,p.gr); curQ=q;
+    const q=makeQuestion(G.topics,p.gr); curQ=q; window.DLwho={name:p.name,multi:G.players.filter(x=>!x.npc).length>1};
     const ov=document.createElement('div'); ov.className='g-ov';
     ov.innerHTML=`<div class="g-sheet" style="--pc:${p.color}">
       <div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} 🎲 ${d}</span></div>
@@ -1395,7 +1451,7 @@ function restartDialog(){
 
 /* ---- victoire ---- */
 function win(p,i){
-  G.over=true; G.busy=false; layoutTokens();
+  G.over=true; G.busy=false; layoutTokens(); window.DLendAll=G.players.filter(x=>!x.npc).map(x=>x.name);
   const ov=document.createElement('div'); ov.className='g-ov'; ov.style.alignItems='center';
   ov.innerHTML=`<div class="g-win" style="--pc:${p.color}"><div class="cup">🏆</div>
     <h2 class="g-h">Bravo ${esc(p.name)} ! ${p.emoji}</h2>
@@ -1550,6 +1606,7 @@ function pickItems(topics,grade,count){
 function playerSetup(o,done){
   GCUR=null;
   const st={n:o.defN,npc:false,pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null};
+  if(window.DLU) DLU.pre(st,CHARS,false);
   function draw(){
     const list=st.pl.slice(0,st.n);
     body.innerHTML=`<h2 class="g-h">${o.title}</h2><p class="g-p">${o.intro}</p>
@@ -1570,10 +1627,11 @@ function playerSetup(o,done){
     box.innerHTML=list.map((p,i)=>{
       const taken=new Set(list.filter((_,j)=>j!==i).map(x=>x.ci));
       return `<div class="g-pc" style="--pc:${COLORS[i][0]}" data-i="${i}"><div class="g-pc-top"><div class="g-pc-tok">${CHARS[p.ci][0]}</div>
-        <input type="text" maxlength="14" placeholder="${o.who||'Joueur'} ${i+1}" value="${esc(p.name)}" aria-label="Nom ${i+1}"></div>
+        <input type="text" maxlength="14" list="dlProfNames" placeholder="${o.who||'Joueur'} ${i+1}" value="${esc(p.name)}" aria-label="Nom ${i+1}"></div>
         ${o.perGrade?`<div class="g-gr">${['1H','4H','6H'].map(g=>`<button data-gr="${g}" aria-pressed="${p.gr===g}">Classe ${g}</button>`).join('')}</div>`:''}
         <div class="g-chars">${CHARS.map((c,k)=>`<button data-ci="${k}" aria-pressed="${p.ci===k}" aria-label="${c[1]}" ${taken.has(k)?'disabled':''}>${c[0]}</button>`).join('')}</div></div>`; }).join('');
     box.oninput=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT') st.pl[+c.dataset.i].name=e.target.value; };
+    box.onchange=e=>{ const c=e.target.closest('.g-pc'); if(c&&e.target.tagName==='INPUT'&&window.DLU&&DLU.match(st.pl,+c.dataset.i,e.target.value,CHARS,!!o.perGrade)){ if(!o.perGrade&&+c.dataset.i===0) st.grade=st.pl[0].gr; draw(); } };
     box.onclick=e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; const i=+b.closest('.g-pc').dataset.i;
       if(b.dataset.gr) st.pl[i].gr=b.dataset.gr; else if(b.dataset.ci!==undefined) st.pl[i].ci=+b.dataset.ci; else return; draw(); };
     const T=body.querySelector('#hT'); if(T){ T.innerHTML=Object.keys(TOPICS).map(k=>`<button class="g-chip" data-k="${k}" aria-pressed="${st.topics.has(k)}">${TOPICS[k].label}</button>`).join('');
@@ -4008,6 +4066,331 @@ window.__pc={show,music,suggestPause,P,bubbles};
       M.textContent='Merci ! 💙'; F.nom.value=''; F.message.value=''; }
     catch(_){ M.textContent='Oups, ça n’a pas marché. Réessaie plus tard.'; }
     S.disabled=false; };
+})();
+</script>
+<script>
+/* ===== Profils, points, défis de la semaine, évolution (stockage local, sans compte) ===== */
+(function(){
+'use strict';
+const KEY='dl-users-v1';
+const $=(s,r)=>(r||document).querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const dkey=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n,12);
+const mondayOf=d=>addDays(d,-((d.getDay()+6)%7));
+const norm=s=>String(s||'').trim().toLowerCase();
+const SECN={de:'Allemand',fr:'Français',ma:'Maths',pt:'Petits',fa:'Famille'};
+const SECI={de:'🇩🇪',fr:'🇫🇷',ma:'🧮',pt:'🧸',fa:'👨‍👩‍👧'};
+const ANIMALS=['🦊','🐻','🐼','🐸','🦁','🐯','🐰','🐵','🦄','🐧','🐱','🐶'];
+const COLS=['#e5383b','#1f5fd6','#2f9e44','#f08c00','#8f6fd6','#e64980'];
+const LEVELS=[['🌱','Graine'],['🌿','Pousse'],['🍀','Bourgeon'],['🌼','Fleur'],['🧭','Petit explorateur'],['🗺️','Explorateur'],['⛰️','Aventurier'],['📚','Savant'],['🎓','Expert'],['🏅','Champion'],['👑','Maître'],['🌟','Légende']];
+const lvT=n=>25*n*(n-1);
+function level(pts){ let n=1; while(n<LEVELS.length&&pts>=lvT(n+1)) n++; const a=lvT(n), b=n<LEVELS.length?lvT(n+1):null;
+  return {n,e:LEVELS[n-1][0],name:LEVELS[n-1][1],a,b,pct:b?Math.round(100*(pts-a)/(b-a)):100,left:b?b-pts:0}; }
+
+/* ---------- données ---------- */
+let storeOk=true;
+function load(){ try{ const r=localStorage.getItem(KEY); if(r){ const d=JSON.parse(r); if(d&&Array.isArray(d.profiles)) return d; } }catch(e){ storeOk=false; }
+  return {v:1,active:null,profiles:[],lastBackup:0}; }
+let D=load();
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){ storeOk=false; } }
+function mk(o){ return {id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),name:o.name,av:o.av,col:o.col,gr:o.gr||'4H',t0:Date.now(),
+  pts:0,days:{},wk:{},bd:{},tot:{a:0,ok:0,g:0,mr:0,bs:0},sec:{},run:0}; }
+const act=()=>D.profiles.find(p=>p.id===D.active)||null;
+const byName=n=>{ n=norm(n); return n?D.profiles.find(p=>norm(p.name)===n)||null:null; };
+const avH=a=>a==='mx'?'<i class="mx"></i>':esc(a||'🙂');
+function day(p,k){ k=k||dkey(new Date()); return p.days[k]||(p.days[k]={a:0,ok:0,g:0,pts:0,s:{}}); }
+function wkRec(p,mk){ return p.wk[mk]||(p.wk[mk]={ch:{},mr:0,bonus:0}); }
+function streak(p){ let d=new Date(); const on=k=>p.days[k]&&(p.days[k].a||p.days[k].g); if(!on(dkey(d))) d=addDays(d,-1); let n=0; while(on(dkey(d))){ n++; d=addDays(d,-1); } return n; }
+
+/* ---------- défis de la semaine (les mêmes pour toute la famille) ---------- */
+function rng(a){ return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function challenges(mkey){
+  const r=rng([...mkey].reduce((h,c)=>(h*31+c.charCodeAt(0))|0,7)), pick=a=>a[Math.floor(r()*a.length)], L=[];
+  const ok=pick([[30,40],[45,60],[60,80]]); L.push({id:'ok'+ok[0],ic:'✅',t:`Réussir ${ok[0]} bonnes réponses`,m:'ok',n:ok[0],pts:ok[1]});
+  const g=pick([['g',2,30],['g',3,45],['g',4,60],['d',3,40],['d',4,55],['d',5,70]]);
+  L.push(g[0]==='g'?{id:'g'+g[1],ic:'🎲',t:`Terminer ${g[1]} parties`,m:'g',n:g[1],pts:g[2]}:{id:'d'+g[1],ic:'📅',t:`Jouer ${g[1]} jours différents`,m:'d',n:g[1],pts:g[2]});
+  const s=pick(['de','fr','ma']), sn=pick([15,20,25]); L.push({id:'s'+s+sn,ic:SECI[s],t:`${sn} bonnes réponses en ${SECN[s]}`,m:'s:'+s,n:sn,pts:sn*2});
+  const f=pick([['run',5,30],['run',8,45],['run',10,60],['acc',80,50]]);
+  L.push(f[0]==='run'?{id:'run'+f[1],ic:'⚡',t:`${f[1]} bonnes réponses d’affilée`,m:'run',n:f[1],pts:f[2]}:{id:'acc80',ic:'🎯',t:'80 % de réussite (au moins 20 réponses)',m:'acc',n:80,pts:50});
+  return L;
+}
+const BONUS=100;
+function weekStats(p,mkey){ const m=new Date(mkey+'T12:00:00'), o={a:0,ok:0,g:0,d:0,pts:0,s:{}};
+  for(let i=0;i<7;i++){ const x=p.days[dkey(addDays(m,i))]; if(!x) continue; o.a+=x.a; o.ok+=x.ok; o.g+=x.g; o.pts+=x.pts; if(x.a||x.g) o.d++; for(const s in x.s) o.s[s]=(o.s[s]||0)+x.s[s][1]; }
+  o.mr=(p.wk[mkey]&&p.wk[mkey].mr)||0; return o; }
+function val(c,w){ if(c.m==='ok') return w.ok; if(c.m==='g') return w.g; if(c.m==='d') return w.d; if(c.m==='run') return w.mr;
+  if(c.m==='acc') return w.a>=20?Math.round(100*w.ok/w.a):0; return w.s[c.m.slice(2)]||0; }
+const curMonday=()=>dkey(mondayOf(new Date()));
+
+/* ---------- badges ---------- */
+function nCh(p){ let n=0; for(const k in p.wk) n+=Object.keys(p.wk[k].ch||{}).length; return n; }
+const BADGES=[
+ ['first','🐣','Premier pas','Répondre à une première question',p=>p.tot.a>=1],
+ ['ok100','💯','100 bonnes réponses','Réussir 100 questions',p=>p.tot.ok>=100],
+ ['ok500','🥈','500 bonnes réponses','Réussir 500 questions',p=>p.tot.ok>=500],
+ ['ok1000','🥇','1000 bonnes réponses','Réussir 1000 questions',p=>p.tot.ok>=1000],
+ ['g5','🎲','5 parties','Terminer 5 parties',p=>p.tot.g>=5],
+ ['g25','🏆','25 parties','Terminer 25 parties',p=>p.tot.g>=25],
+ ['st3','🔥','3 jours de suite','Jouer 3 jours de suite',p=>p.tot.bs>=3],
+ ['st7','🌋','7 jours de suite','Jouer 7 jours de suite',p=>p.tot.bs>=7],
+ ['run10','⚡','10 d’affilée','10 bonnes réponses sans faute',p=>p.tot.mr>=10],
+ ['run20','🚀','20 d’affilée','20 bonnes réponses sans faute',p=>p.tot.mr>=20],
+ ['ch1','🎯','Premier défi','Réussir un défi de la semaine',p=>nCh(p)>=1],
+ ['wk','🌟','Semaine parfaite','Réussir les 4 défis d’une semaine',p=>Object.values(p.wk).some(w=>w.bonus)],
+ ['bi','🌍','Bilingue','30 bonnes réponses en allemand et en français',p=>((p.sec.de||[0,0])[1]>=30)&&((p.sec.fr||[0,0])[1]>=30)],
+ ['mat','🧮','Matheux','50 bonnes réponses en maths',p=>(p.sec.ma||[0,0])[1]>=50],
+ ['lv5','👑','Niveau 5','Atteindre le niveau 5',p=>level(p.pts).n>=5]];
+
+/* ---------- messages flottants ---------- */
+let tq=[], tb=false;
+function toast(html,o){ tq.push({html,o:o||{}}); if(!tb) nextToast(); }
+function nextToast(){ const t=tq.shift(); if(!t){ tb=false; return; } tb=true;
+  const el=document.createElement('div'); el.className='u-toast'; el.setAttribute('role','status'); el.innerHTML=t.html+(t.o.btn?`<button type="button">${esc(t.o.btn)}</button>`:'');
+  if(t.o.btn) el.querySelector('button').onclick=()=>{ el.remove(); t.o.go&&t.o.go(); };
+  document.body.appendChild(el); requestAnimationFrame(()=>el.classList.add('on'));
+  setTimeout(()=>{ el.classList.remove('on'); setTimeout(()=>{ el.remove(); nextToast(); },300); },t.o.ms||2600); }
+
+/* ---------- enregistrement ---------- */
+function addPts(p,n){ if(!n) return; const l0=level(p.pts).n; p.pts+=n; day(p).pts+=n; const l1=level(p.pts);
+  if(l1.n>l0) toast(`${l1.e} <b>Niveau ${l1.n} : ${esc(l1.name)} !</b>`,{ms:3200}); }
+function checkAll(p){
+  const mkey=curMonday(), w=weekStats(p,mkey), rec=wkRec(p,mkey), L=challenges(mkey);
+  L.forEach(c=>{ if(!rec.ch[c.id]&&val(c,w)>=c.n){ rec.ch[c.id]=dkey(new Date()); addPts(p,c.pts); toast(`🎯 <b>Défi réussi !</b> ${esc(c.t)} <b>+${c.pts}</b>`,{ms:3200}); } });
+  if(!rec.bonus&&L.every(c=>rec.ch[c.id])){ rec.bonus=1; addPts(p,BONUS); toast(`🌟 <b>Semaine parfaite !</b> Les 4 défis sont réussis <b>+${BONUS}</b>`,{ms:3600}); }
+  BADGES.forEach(b=>{ if(!p.bd[b[0]]&&b[4](p)){ p.bd[b[0]]=dkey(new Date()); toast(`${b[1]} <b>Nouveau badge :</b> ${esc(b[2])}`,{ms:3200}); } });
+}
+function touchDay(p){ const d=day(p); if(d.a||d.g) return false; return true; }
+function dailyBonus(p){ const s=streak(p); if(s>p.tot.bs) p.tot.bs=s; const b=5+Math.min(s-1,5)*2; addPts(p,b);
+  toast(s>1?`🔥 <b>${s} jours de suite !</b> +${b}`:`☀️ <b>Première activité du jour</b> +${b}`,{ms:2400}); }
+function done(p){ checkAll(p); save(); paintBtn(); if(!P.hidden) render(); }
+
+let nudged=false;
+function nudge(){ if(nudged||D.profiles.length) return; nudged=true; try{ if(sessionStorage.getItem('dl-u-nudge')) return; sessionStorage.setItem('dl-u-nudge','1'); }catch(e){}
+  toast('📈 <b>Crée ton profil</b> pour garder tes points et suivre tes progrès',{btn:'Créer',go:()=>openP('pro',true),ms:6000}); }
+
+/* qui répond ? (profil nommé dans le jeu, sinon le profil actif) */
+function chipNames(){ const out=[];
+  document.querySelectorAll('#gameRoot .h-pchip, #gameRoot .h-lane').forEach(c=>{ if(!c.offsetParent) return;
+    const src=c.classList.contains('h-lane')?(c.querySelector('.nm')||c):c;
+    const t=[...src.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim().replace(/^[^\p{L}\p{N}]+/u,'');
+    out.push({t,act:c.classList.contains('act'),mx:!!c.querySelector('.mx')}); }); return out; }
+function whoAnswers(){
+  const w=window.DLwho; let name=null, multi=false;
+  if(w&&document.querySelector('.g-ov .g-sheet')){ name=w.name; multi=!!w.multi; }
+  else { const ch=chipNames(); if(ch.length>1){ multi=true; const a=ch.find(x=>x.act); if(a) name=a.t; } }
+  if(name){ const m=byName(name); if(m) return m; if(multi) return null; }
+  else if(multi) return null;
+  return act();
+}
+function secKey(){ const s=document.body.dataset.sec; return SECN[s]?s:'fa'; }
+function onAnswer(ok){
+  try{
+    const p=whoAnswers(); if(!p){ if(!D.profiles.length) nudge(); return; }
+    const first=touchDay(p), d=day(p), s=secKey(), rec=wkRec(p,curMonday());
+    d.a++; p.tot.a++; (d.s[s]=d.s[s]||[0,0])[0]++; (p.sec[s]=p.sec[s]||[0,0])[0]++;
+    if(ok){ d.ok++; p.tot.ok++; d.s[s][1]++; p.sec[s][1]++; p.run=(p.run||0)+1; if(p.run>p.tot.mr) p.tot.mr=p.run; if(p.run>(rec.mr||0)) rec.mr=p.run; addPts(p,10); }
+    else { p.run=0; addPts(p,2); }
+    if(first) dailyBonus(p);
+    done(p);
+  }catch(e){ if(window.console) console.warn('DLU',e); }
+}
+let lastEnd=0;
+function onEnd(){
+  try{
+    if(Date.now()-lastEnd<1200) return; lastEnd=Date.now();
+    let names=window.DLendAll; window.DLendAll=null;
+    if(!names) names=chipNames().filter(x=>x.t&&!x.mx&&norm(x.t)!=='poutchoupoutchou').map(x=>x.t);
+    let ps=[...new Set(names.map(byName).filter(Boolean))];
+    if(!ps.length&&names.length<=1&&act()) ps=[act()];
+    if(!ps.length&&!D.profiles.length){ nudge(); return; }
+    ps.forEach(p=>{ const first=touchDay(p), d=day(p); d.g++; p.tot.g++; addPts(p,15); if(first) dailyBonus(p); done(p); });
+    if(ps.length) toast(`🏁 <b>Partie terminée</b> +15 pour ${ps.map(p=>esc(p.name)).join(', ')}`,{ms:2200});
+  }catch(e){ if(window.console) console.warn('DLU',e); }
+}
+
+/* ---------- bouton de l’en-tête ---------- */
+const BTN=$('#usrbtn'), BAD=$('#usrBadge');
+function paintBtn(){ const p=act();
+  BTN.querySelector('.ic').innerHTML=p?avH(p.av):'👤';
+  BTN.querySelector('.lb').textContent=p?(p.name.length>7?p.name.slice(0,6)+'…':p.name):'Profil';
+  BAD.hidden=!p; if(p) BAD.textContent=p.pts+' pts';
+  const dl=$('#dlProfNames'); if(dl) dl.innerHTML=D.profiles.map(x=>`<option value="${esc(x.name)}">`).join(''); }
+
+/* ---------- panneau ---------- */
+const P=$('#upanel'), K=$('#setbk'), ease='transform .32s cubic-bezier(.22,1,.36,1)'; let busy=false;
+const V={tab:'def',edit:null,form:null,msg:'',code:false};
+function openP(tab,forceNew){ if(busy||!P.hidden){ if(tab) { V.tab=tab; if(forceNew&&!D.profiles.length) startForm(null); render(); } return; }
+  if(window.setPanel) window.setPanel(false); const av=$('#avgrab'); if($('#avpanel')&&!$('#avpanel').hidden&&av) av.click();
+  V.tab=D.profiles.length?(tab||'def'):'pro'; V.edit=null; V.msg=''; if(!D.profiles.length) startForm(null); render();
+  busy=true; P.hidden=false; K.hidden=false; P.style.transition='none'; P.style.transform='translateY(-105%)'; K.style.opacity=0; P.scrollTop=0; void P.offsetWidth;
+  P.style.transition=ease; P.style.transform='translateY(0)'; K.style.opacity=1; BTN.setAttribute('aria-selected',true);
+  setTimeout(()=>{ P.style.transition=''; busy=false; },330); setTimeout(()=>{ if(!P.hidden){ K.hidden=false; K.style.opacity=1; } },345); }
+function closeP(){ if(P.hidden||busy) return; busy=true; P.style.transition=ease; P.style.transform='translateY(-105%)'; K.style.opacity=0; BTN.setAttribute('aria-selected',false);
+  setTimeout(()=>{ P.hidden=true; if($('#setpanel').hidden&&$('#avpanel').hidden) K.hidden=true; P.style.transition=''; P.style.transform=''; busy=false; },330); }
+function hideNow(){ if(P.hidden) return; busy=false; P.hidden=true; P.style.transform=''; P.style.transition=''; BTN.setAttribute('aria-selected',false); }
+BTN.addEventListener('click',()=>P.hidden?openP():closeP());
+K.addEventListener('click',closeP);
+['setbtn','avisbtn'].forEach(id=>{ const b=document.getElementById(id); if(b) b.addEventListener('click',hideNow); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!P.hidden) closeP(); });
+
+function ask(text,label,danger){ return new Promise(res=>{ const ov=document.createElement('div'); ov.className='u-ov';
+  ov.innerHTML=`<div class="u-dlg" role="alertdialog"><p>${text}</p><div class="u-dr"><button type="button" class="u-b" data-v="0">Annuler</button><button type="button" class="u-b ${danger?'dg':'pr'}" data-v="1">${esc(label)}</button></div></div>`;
+  ov.onclick=e=>{ const b=e.target.closest('button'); if(!b&&e.target!==ov) return; ov.remove(); res(!!b&&b.dataset.v==='1'); }; document.body.appendChild(ov); }); }
+
+/* graphiques */
+function barsSvg(vals,labels,color,sub){ const W=320,H=110,n=vals.length,mx=Math.max(1,...vals),bw=W/n; let s=`<svg viewBox="0 0 ${W} ${H+24}" class="u-svg" role="img" aria-label="${esc(sub||'Graphique')}">`;
+  s+=`<line x1="0" y1="${H}" x2="${W}" y2="${H}" stroke="#d7dce8"/>`;
+  vals.forEach((v,i)=>{ const h=Math.round(v/mx*(H-14)), x=i*bw+bw*.14, w=bw*.72;
+    s+=`<rect x="${x.toFixed(1)}" y="${H-h}" width="${w.toFixed(1)}" height="${h}" rx="4" fill="${color}" opacity="${i===n-1?1:.72}"/>`;
+    if(v) s+=`<text x="${(x+w/2).toFixed(1)}" y="${H-h-3}" text-anchor="middle" font-size="10" font-weight="700" fill="#4a5368">${v}</text>`;
+    s+=`<text x="${(x+w/2).toFixed(1)}" y="${H+15}" text-anchor="middle" font-size="9.5" fill="#7a8398">${labels[i]}</text>`; });
+  return s+'</svg>'; }
+function stackSvg(oks,kos,labels){ const W=320,H=110,n=oks.length,mx=Math.max(1,...oks.map((v,i)=>v+kos[i])),bw=W/n; let s=`<svg viewBox="0 0 ${W} ${H+24}" class="u-svg" role="img" aria-label="Réponses des 14 derniers jours">`;
+  s+=`<line x1="0" y1="${H}" x2="${W}" y2="${H}" stroke="#d7dce8"/>`;
+  oks.forEach((v,i)=>{ const ho=Math.round(v/mx*(H-14)), hk=Math.round(kos[i]/mx*(H-14)), x=i*bw+bw*.14, w=bw*.72;
+    if(ho) s+=`<rect x="${x.toFixed(1)}" y="${H-ho}" width="${w.toFixed(1)}" height="${ho}" rx="3" fill="#2f9e44" opacity="${i===n-1?1:.8}"/>`;
+    if(hk) s+=`<rect x="${x.toFixed(1)}" y="${H-ho-hk}" width="${w.toFixed(1)}" height="${hk}" rx="3" fill="#ff8787" opacity="${i===n-1?1:.8}"/>`;
+    s+=`<text x="${(x+w/2).toFixed(1)}" y="${H+15}" text-anchor="middle" font-size="9" fill="#7a8398">${labels[i]}</text>`; });
+  return s+'</svg>'; }
+
+/* onglet Défis */
+function tabDef(p){
+  const mkey=curMonday(), w=weekStats(p,mkey), rec=p.wk[mkey]||{ch:{}}, L=challenges(mkey), s=streak(p), dl=6-((new Date().getDay()+6)%7), dd=p.days[dkey(new Date())];
+  const nb=BADGES.filter(b=>p.bd[b[0]]).length;
+  return `<div class="u-strip"><span>🔥 <b>${s}</b> jour${s>1?'s':''} de suite</span><span>⭐ Aujourd’hui : <b>${dd?dd.pts:0}</b> pts</span><span>📆 Cette semaine : <b>${w.pts}</b> pts</span></div>
+  <h4 class="u-h">🎯 Défis de la semaine <small>${dl>0?'encore '+dl+' jour'+(dl>1?'s':''):'dernier jour !'}</small></h4>
+  <div class="u-chs">${L.map(c=>{ const v=Math.min(val(c,w),c.n), d=!!rec.ch[c.id], pc=Math.round(100*v/c.n);
+    const txt=c.m==='acc'?(w.a>=20?`${val(c,w)} %`:`${w.a} / 20 réponses`):`${v} / ${c.n}`;
+    return `<div class="u-ch${d?' ok':''}"><span class="u-ci">${d?'✅':c.ic}</span><div class="u-ct"><b>${esc(c.t)}</b><div class="u-pb"><i style="width:${d?100:pc}%"></i></div></div><span class="u-cr"><small>${d?'réussi':txt}</small><em>+${c.pts}</em></span></div>`; }).join('')}
+    <div class="u-ch bonus${rec.bonus?' ok':''}"><span class="u-ci">${rec.bonus?'🌟':'🎁'}</span><div class="u-ct"><b>Les 4 défis réussis</b><small>Bonus de la semaine parfaite</small></div><span class="u-cr"><em>+${BONUS}</em></span></div></div>
+  <h4 class="u-h">🏅 Mes badges <small>${nb} / ${BADGES.length}</small></h4>
+  <div class="u-bds">${BADGES.map(b=>`<div class="u-bd${p.bd[b[0]]?' on':''}" title="${esc(b[3])}"><span>${b[1]}</span><b>${esc(b[2])}</b><small>${p.bd[b[0]]?fmtD(p.bd[b[0]]):esc(b[3])}</small></div>`).join('')}</div>
+  <p class="u-note">Points : <b>+10</b> par bonne réponse · <b>+2</b> pour essayer · <b>+15</b> par partie terminée · <b>+5 à +15</b> le premier jour d’activité (plus de bonus si tu viens plusieurs jours de suite) · les défis et la semaine parfaite rapportent plus.</p>`; }
+const fmtD=k=>{ const [y,m,d]=k.split('-'); return d+'.'+m+'.'+y.slice(2); };
+
+/* onglet Évolution */
+function tabEvo(p){
+  const T=p.tot, pct=T.a?Math.round(100*T.ok/T.a):0;
+  if(!T.a&&!T.g) return `<p class="u-empty">Rien à montrer pour l’instant. Réponds à quelques questions ou termine une partie : les courbes apparaissent ici ! 📈</p>`;
+  const today=new Date(), m0=mondayOf(today), wv=[], wl=[];
+  for(let i=7;i>=0;i--){ const m=addDays(m0,-7*i); wv.push(weekStats(p,dkey(m)).pts); wl.push(i===0?'en cours':pad(m.getDate())+'.'+pad(m.getMonth()+1)); }
+  const dok=[],dko=[],dlb=[]; for(let i=13;i>=0;i--){ const d=addDays(today,-i), x=p.days[dkey(d)]; dok.push(x?x.ok:0); dko.push(x?x.a-x.ok:0); dlb.push(pad(d.getDate())); }
+  const S={}; for(let i=0;i<30;i++){ const x=p.days[dkey(addDays(today,-i))]; if(!x) continue; for(const s in x.s){ const r=S[s]||(S[s]=[0,0]); r[0]+=x.s[s][0]; r[1]+=x.s[s][1]; } }
+  const rows=Object.keys(S).filter(s=>S[s][0]>0).sort((a,b)=>S[b][0]-S[a][0]);
+  let weak=null; rows.forEach(s=>{ if(S[s][0]>=10){ const r=S[s][1]/S[s][0]; if(r<.8&&(!weak||r<S[weak][1]/S[weak][0])) weak=s; } });
+  const bestS=Math.max(T.bs||0,streak(p));
+  return `<div class="u-kpis"><div><b>${T.a}</b><small>réponses</small></div><div><b>${pct} %</b><small>de réussite</small></div><div><b>${T.g}</b><small>parties</small></div><div><b>${bestS}</b><small>jours de suite (record)</small></div></div>
+  <h4 class="u-h">📈 Points par semaine</h4>${barsSvg(wv,wl,'#1f5fd6','Points par semaine')}
+  <h4 class="u-h">📅 14 derniers jours <small><i class="u-dot g"></i>justes <i class="u-dot r"></i>à revoir</small></h4>${stackSvg(dok,dko,dlb)}
+  <h4 class="u-h">📚 Par matière <small>30 derniers jours</small></h4>
+  ${rows.length?`<div class="u-sub">${rows.map(s=>{ const a=S[s][0], r=Math.round(100*S[s][1]/a); return `<div class="u-sr"><span>${SECI[s]} ${SECN[s]}</span><div class="u-pb ${r>=80?'g':r>=60?'o':'r'}"><i style="width:${r}%"></i></div><b>${r} %</b><small>${a}</small></div>`; }).join('')}</div>`:'<p class="u-empty">Pas encore d’activité ces 30 derniers jours.</p>'}
+  ${weak?`<div class="u-tip">💡 <b>À travailler : ${SECN[weak]}</b> (${Math.round(100*S[weak][1]/S[weak][0])} % de réussite). <button type="button" class="u-b pr" data-go="${weak}">Réviser</button></div>`:(rows.length&&rows.some(s=>S[s][0]>=10)?'<div class="u-tip ok">🌟 Bravo, toutes tes matières sont au-dessus de 80 % !</div>':'')}`; }
+
+/* onglet Profils */
+function weekPts(p){ return weekStats(p,curMonday()).pts; }
+function tabPro(){
+  if(V.form) return formH();
+  const ranks=D.profiles.slice().sort((a,b)=>weekPts(b)-weekPts(a)), med=['🥇','🥈','🥉'];
+  const last=D.lastBackup?Math.floor((Date.now()-D.lastBackup)/864e5):null, anyPts=D.profiles.some(p=>p.pts>0);
+  return `${D.profiles.length>1?`<h4 class="u-h">🏁 Classement de la semaine</h4><div class="u-rk">${ranks.map((p,i)=>`<div><span>${med[i]||i+1}</span><span class="u-av" style="--pc:${p.col}">${avH(p.av)}</span><b>${esc(p.name)}</b><em>${weekPts(p)} pts</em></div>`).join('')}</div>`:''}
+  <h4 class="u-h">👥 Profils <small>touche un profil pour jouer avec</small></h4>
+  <div class="u-pl">${D.profiles.map(p=>{ const l=level(p.pts), on=p.id===D.active; return `<div class="u-pc${on?' on':''}" style="--pc:${p.col}"><button type="button" class="u-pick" data-pick="${p.id}" aria-pressed="${on}"><span class="u-av">${avH(p.av)}</span><span class="u-pi"><b>${esc(p.name)}</b><small>${l.e} Niv. ${l.n} · ${p.pts} pts · Classe ${p.gr}</small></span><span class="u-act">${on?'✔ Actif':'Choisir'}</span></button><button type="button" class="u-b" data-edit="${p.id}" aria-label="Modifier ${esc(p.name)}">✏️</button></div>`; }).join('')||'<p class="u-empty">Aucun profil pour l’instant.</p>'}</div>
+  ${D.profiles.length<8?'<button type="button" class="u-b pr u-new" data-new="1">＋ Nouveau profil</button>':''}
+  <h4 class="u-h">💾 Sauvegarde</h4>
+  <p class="u-note">Les profils sont gardés <b>dans cet appareil</b> (aucun compte, aucune donnée envoyée). ${storeOk?'':'<b style="color:#c92a2a">⚠️ La mémoire du navigateur est désactivée (navigation privée ?) : rien ne sera conservé.</b> '}Fais une sauvegarde de temps en temps, surtout si tu vides les données du navigateur ou changes d’appareil.</p>
+  <div class="u-sv"><button type="button" class="u-b" data-act="dl">⬇️ Télécharger</button><button type="button" class="u-b" data-act="cp">📋 Copier le code</button><button type="button" class="u-b" data-act="im">⬆️ Restaurer</button></div>
+  <p class="u-note ${anyPts&&(last===null||last>14)?'warn':''}">${last===null?'Aucune sauvegarde faite pour l’instant.':last===0?'Dernière sauvegarde : aujourd’hui.':'Dernière sauvegarde : il y a '+last+' jour'+(last>1?'s':'')+'.'}</p>
+  ${V.code?`<textarea class="u-ta" id="uTa" rows="4" placeholder="Colle ici le code de sauvegarde, ou choisis un fichier ci-dessous"></textarea><div class="u-sv"><input type="file" id="uFile" accept=".json,application/json,text/plain"><button type="button" class="u-b pr" data-act="go">Restaurer maintenant</button></div>`:''}
+  ${V.msg?`<p class="u-msg" role="status">${V.msg}</p>`:''}
+  <details class="u-tipd"><summary>ℹ️ Astuce iPad / iPhone</summary><p class="u-note">Safari efface parfois les données des sites peu visités. Pour les garder : ouvre le site dans Safari, touche <b>Partager</b> puis <b>Sur l’écran d’accueil</b>. Et pense à la sauvegarde ci-dessus.</p></details>`; }
+function startForm(id){ const p=id?D.profiles.find(x=>x.id===id):null, used=new Set(D.profiles.map(x=>x.av));
+  V.form={id:id||null,name:p?p.name:'',av:p?p.av:(ANIMALS.find(a=>!used.has(a))||ANIMALS[0]),col:p?p.col:COLS[D.profiles.length%COLS.length],gr:p?p.gr:((window.DLgrade&&DLgrade())||'4H')}; }
+function formH(){ const f=V.form, nw=!f.id;
+  return `<h4 class="u-h">${nw?'✨ Nouveau profil':'✏️ Modifier le profil'}</h4>
+  <label class="u-f">Prénom ou pseudo<input id="fName" maxlength="14" autocomplete="off" value="${esc(f.name)}" placeholder="Ex. Léo"></label>
+  <div class="u-f">Mon avatar<div class="u-av-g" id="fAv">${ANIMALS.concat(['mx']).map(a=>`<button type="button" data-av="${a}" aria-pressed="${f.av===a}" aria-label="avatar ${a==='mx'?'mascotte':a}">${avH(a)}</button>`).join('')}</div></div>
+  <div class="u-f">Ma couleur<div class="u-col-g" id="fCol">${COLS.map(c=>`<button type="button" data-col="${c}" style="--c:${c}" aria-pressed="${f.col===c}" aria-label="couleur"></button>`).join('')}</div></div>
+  <div class="u-f">Ma classe<div class="u-seg" id="fGr">${['1H','4H','6H'].map(g=>`<button type="button" data-gr="${g}" aria-pressed="${f.gr===g}">${g}</button>`).join('')}</div></div>
+  ${V.msg?`<p class="u-msg" role="status">${V.msg}</p>`:''}
+  <div class="u-sv"><button type="button" class="u-b pr" data-act="fsave">${nw?'Créer le profil':'Enregistrer'}</button>${D.profiles.length||!nw?'<button type="button" class="u-b" data-act="fcancel">Annuler</button>':'<button type="button" class="u-b" data-act="frest">📥 J’ai déjà une sauvegarde</button>'}</div>
+  ${!nw?'<div class="u-sv"><button type="button" class="u-b" data-act="freset">↺ Remettre à zéro</button><button type="button" class="u-b dg" data-act="fdel">🗑 Supprimer</button></div>':''}`; }
+
+function render(){
+  const p=act();
+  const head=p?(()=>{ const l=level(p.pts); return `<div class="u-head" style="--pc:${p.col}"><span class="u-av big">${avH(p.av)}</span><div class="u-hi"><b>${esc(p.name)}</b><small>${l.e} Niveau ${l.n} · ${esc(l.name)}</small><div class="u-pb"><i style="width:${l.pct}%"></i></div><small>${p.pts} pts${l.b?` · encore ${l.left} pour le niveau ${l.n+1}`:' · niveau maximum !'}</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`; })()
+    :`<div class="u-head"><span class="u-av big">👋</span><div class="u-hi"><b>Bienvenue !</b><small>Crée un profil pour garder tes points et ta progression.</small></div><button type="button" class="u-x" id="uX" aria-label="Fermer">✕</button></div>`;
+  const tabs=D.profiles.length?`<div class="u-tabs" role="tablist">${[['def','🎯','Défis'],['evo','📈','Évolution'],['pro','👥','Profils']].map(t=>`<button type="button" role="tab" data-t="${t[0]}" aria-selected="${V.tab===t[0]}">${t[1]} ${t[2]}</button>`).join('')}</div>`:'';
+  const body=!D.profiles.length?tabPro():V.tab==='def'?tabDef(p):V.tab==='evo'?tabEvo(p):tabPro();
+  const sc=P.scrollTop; P.innerHTML=head+tabs+`<div class="u-body">${body}</div><div class="setgrab" id="ugrab" aria-label="Fermer"><i></i></div>`; P.scrollTop=sc;
+}
+P.addEventListener('click',async e=>{
+  const t=e.target.closest('button'); if(!t) return;
+  if(t.id==='uX'||t.id==='ugrab'||e.target.closest('#ugrab')){ closeP(); return; }
+  if(t.dataset.t){ V.tab=t.dataset.t; V.form=null; V.msg=''; V.code=false; render(); P.scrollTop=0; return; }
+  if(t.dataset.go){ const b=document.querySelector('.sec-b[data-s="'+t.dataset.go+'"]'); closeP(); if(b) setTimeout(()=>b.click(),340); return; }
+  if(t.dataset.pick){ D.active=t.dataset.pick; save(); paintBtn(); V.tab='def'; V.msg=''; render(); toast(`👋 Salut <b>${esc(act().name)}</b> !`,{ms:1500}); return; }
+  if(t.dataset.edit){ startForm(t.dataset.edit); V.msg=''; render(); P.scrollTop=0; return; }
+  if(t.dataset.new){ startForm(null); V.msg=''; render(); P.scrollTop=0; return; }
+  if(t.dataset.av){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.av=t.dataset.av; render(); return; }
+  if(t.dataset.col){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.col=t.dataset.col; render(); return; }
+  if(t.dataset.gr&&V.form){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.gr=t.dataset.gr; render(); return; }
+  const a=t.dataset.act; if(!a) return;
+  if(a==='fcancel'){ V.form=null; V.msg=''; render(); return; }
+  if(a==='frest'){ V.form=null; V.msg=''; V.code=true; render(); return; }
+  if(a==='fsave'){ const f=V.form, nm=(($('#fName')||{}).value||'').trim();
+    if(!nm){ V.msg='⚠️ Écris un prénom ou un pseudo.'; V.form.name=''; render(); return; }
+    if(D.profiles.some(x=>x.id!==f.id&&norm(x.name)===norm(nm))){ V.msg='⚠️ Ce prénom existe déjà : choisis-en un autre.'; V.form.name=nm; render(); return; }
+    f.name=nm; V.msg='';
+    if(f.id){ const p=D.profiles.find(x=>x.id===f.id); Object.assign(p,{name:nm,av:f.av,col:f.col,gr:f.gr}); }
+    else { const p=mk(f); D.profiles.push(p); D.active=p.id; V.tab='def'; }
+    V.form=null; save(); paintBtn(); render(); toast('✅ Profil enregistré',{ms:1600}); return; }
+  if(a==='fdel'){ const p=D.profiles.find(x=>x.id===V.form.id); if(!p) return;
+    if(await ask(`Supprimer le profil <b>${esc(p.name)}</b> et toute sa progression ? <br><small>Cela ne peut pas être annulé (pense à la sauvegarde).</small>`,'Supprimer',true)){
+      D.profiles=D.profiles.filter(x=>x.id!==p.id); if(D.active===p.id) D.active=D.profiles[0]?D.profiles[0].id:null; V.form=null; V.msg=''; save(); paintBtn(); if(!D.profiles.length) startForm(null); render(); } return; }
+  if(a==='freset'){ const p=D.profiles.find(x=>x.id===V.form.id); if(!p) return;
+    if(await ask(`Remettre à zéro les points, défis et badges de <b>${esc(p.name)}</b> ?`,'Remettre à zéro',true)){
+      Object.assign(p,{pts:0,days:{},wk:{},bd:{},tot:{a:0,ok:0,g:0,mr:0,bs:0},sec:{},run:0}); V.form=null; save(); paintBtn(); render(); toast('↺ Progression remise à zéro',{ms:1800}); } return; }
+  if(a==='dl'||a==='cp'){ const txt=exportData(); D.lastBackup=Date.now(); save();
+    if(a==='dl'){ try{ const bl=new Blob([txt],{type:'application/json'}), u=URL.createObjectURL(bl), l=document.createElement('a'); l.href=u; l.download='sacrecoeur-bilingue-sauvegarde-'+dkey(new Date())+'.json'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); V.msg='✅ Fichier de sauvegarde téléchargé.'; }catch(x){ V.msg='⚠️ Téléchargement impossible : utilise « Copier le code ».'; } }
+    else { let ok=false; try{ await navigator.clipboard.writeText(txt); ok=true; }catch(x){}
+      if(!ok){ V.code=true; V.msg='Copie le code ci-dessous.'; render(); const ta=$('#uTa'); if(ta){ ta.value=txt; ta.focus(); ta.select(); } return; }
+      V.msg='✅ Code copié : colle-le dans une note ou un message à toi-même.'; }
+    render(); return; }
+  if(a==='im'){ V.code=!V.code; V.msg=''; render(); return; }
+  if(a==='go'){ const ta=$('#uTa'); await doImport(ta?ta.value:''); return; }
+});
+P.addEventListener('change',async e=>{ if(e.target.id==='uFile'&&e.target.files[0]){ try{ const t=await e.target.files[0].text(); await doImport(t); }catch(x){ V.msg='⚠️ Impossible de lire ce fichier.'; render(); } } });
+
+function exportData(){ return JSON.stringify({app:'sacrecoeur-bilingue',v:1,at:new Date().toISOString(),active:D.active,profiles:D.profiles}); }
+async function doImport(txt){
+  let d; try{ d=JSON.parse(String(txt).trim()); }catch(x){ V.msg='⚠️ Ce code n’est pas valide.'; render(); return; }
+  if(!d||d.app!=='sacrecoeur-bilingue'||!Array.isArray(d.profiles)||!d.profiles.length){ V.msg='⚠️ Ce n’est pas une sauvegarde de ce site.'; render(); return; }
+  const ok=await ask(`Restaurer <b>${d.profiles.length}</b> profil${d.profiles.length>1?'s':''} (${d.profiles.slice(0,4).map(p=>esc(p.name||'?')).join(', ')}${d.profiles.length>4?'…':''}) ?<br><small>Si un profil existe déjà, la version avec le plus de points est gardée.</small>`,'Restaurer');
+  if(!ok) return; let add=0, upd=0;
+  d.profiles.forEach(q=>{ if(!q||!q.id||!q.name||typeof q.pts!=='number') return; q.days=q.days||{}; q.wk=q.wk||{}; q.bd=q.bd||{}; q.sec=q.sec||{}; q.tot=Object.assign({a:0,ok:0,g:0,mr:0,bs:0},q.tot||{});
+    const i=D.profiles.findIndex(x=>x.id===q.id); if(i<0){ D.profiles.push(q); add++; } else if(q.pts>D.profiles[i].pts){ D.profiles[i]=q; upd++; } });
+  if(!act()) D.active=(d.active&&D.profiles.some(p=>p.id===d.active))?d.active:(D.profiles[0]||{}).id||null;
+  D.lastBackup=Date.now(); save(); paintBtn(); V.code=false; V.form=null; V.msg=`✅ Restauration faite : ${add} ajouté${add>1?'s':''}, ${upd} mis à jour.`; if(D.profiles.length&&V.tab!=='pro') V.tab='pro'; render(); }
+
+/* ---------- accroches dans le site ---------- */
+function hook(){
+  const p0=window.PCev; window.PCev=function(ok){ try{ onAnswer(!!ok); }catch(e){} return p0?p0.apply(this,arguments):undefined; };
+  const m0=window.DLmore; if(m0) window.DLmore=function(host,items){ const r=m0.apply(this,arguments); if(host&&items&&items.length) onEnd(); return r; };
+}
+function swapCi(pl,i,k){ if(k<0||pl[i].ci===k) return; const j=pl.findIndex((x,n)=>n!==i&&x.ci===k); if(j>=0) pl[j].ci=pl[i].ci; pl[i].ci=k; }
+window.DLU={
+  active:act, open:openP,
+  /* pré-remplit le joueur 1 avec le profil actif (une fois par profil) */
+  pre(st,chars,once){ const p=act(); if(!p||(once&&st._u===p.id)) return; if(once) st._u=p.id; const pl=st.pl; if(!pl||!pl[0]) return;
+    pl[0].name=p.name; const k=chars?chars.findIndex(c=>c[0]===p.av):-1; if(k>=0) swapCi(pl,0,k);
+    if(!(window.DLgrade&&DLgrade()==='1H')){ pl[0].gr=p.gr; if(st.grade!==undefined) st.grade=p.gr; } },
+  /* le prénom tapé correspond à un profil : avatar et classe repris */
+  match(pl,i,name,chars,gr){ const p=byName(name); if(!p) return false; pl[i].name=p.name; const k=chars.findIndex(c=>c[0]===p.av); if(k>=0) swapCi(pl,i,k); if(gr&&!(window.DLgrade&&DLgrade()==='1H')) pl[i].gr=p.gr; else if(!gr&&i===0) pl[0].gr=p.gr; return true; },
+  _d:()=>D, _rec:onAnswer, _end:onEnd, _lv:level, _ch:challenges, _mon:curMonday, _save:save
+};
+paintBtn(); hook();
 })();
 </script>
 </body>
