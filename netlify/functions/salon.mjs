@@ -51,9 +51,30 @@ async function mutate(code, fn) {
   return await s.get(code, { type: 'json' });
 }
 const okQ = q => q && typeof q === 'object' && Array.isArray(q.options) && q.options.length >= 2 && q.options.length <= 6 && Number.isInteger(q.correct) && q.correct >= 0 && q.correct < q.options.length && JSON.stringify(q).length < 12000;
+// « Qui est en ligne ? » : un petit carnet de présence anonyme (identifiant aléatoire, rien d'autre).
+const LB = '_lobby', FRESH = 75000;
+async function lobby(url, t) {
+  const me = url.searchParams.get('p') || ''; if (!PID.test(me)) return json({ error: 'pid' }, 400);
+  const s = st(); let d = await s.get(LB, { type: 'json' }); if (!d || !d.seen) d = { seen: {} };
+  const c = (url.searchParams.get('c') || '').toUpperCase(), e = { t };
+  if (CODE.test(c)) e.c = c;
+  d.seen[me] = e;
+  for (const k of Object.keys(d.seen)) if (d.seen[k].t < t - FRESH * 2) delete d.seen[k];
+  await s.setJSON(LB, d);
+  const live = Object.values(d.seen).filter(x => x.t > t - FRESH);
+  const codes = [...new Set(live.map(x => x.c).filter(x => x && x !== e.c))].slice(0, 8), open = [];
+  for (const k of codes) {
+    const r = await s.get(k, { type: 'json' });
+    if (!r || t - r.created > TTL || r.phase !== 'lobby' || r.players.length >= MAXP) continue;
+    const h = r.players.find(p => p.id === r.host) || r.players[0] || {};
+    open.push({ c: k, nm: h.name || 'Un joueur', av: h.av || '🙂', n: r.players.length });
+  }
+  return json({ online: live.length, open: open.slice(0, 4), now: t });
+}
 export default async (req) => {
   const s = st(), t = Date.now(), url = new URL(req.url);
   if (req.method === 'GET') {
+    if (url.searchParams.get('lobby')) return lobby(url, t);
     const c = (url.searchParams.get('c') || '').toUpperCase(), me = url.searchParams.get('p') || '', v = +url.searchParams.get('v') || 0;
     if (!CODE.test(c)) return json({ error: 'code' }, 400);
     let r = await s.get(c, { type: 'json' });
