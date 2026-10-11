@@ -403,7 +403,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cw.bad{background:#ffe3ea}
 .mx-seg.wrap.one{grid-template-columns:1fr}.mx-seg.wrap.one button{text-align:left;padding-left:14px}
 .cx-meth{margin:6px 0 4px;padding:8px 10px 8px 28px;background:#fff;border:2px dashed #e3d9a8;border-radius:12px;font-size:15px;font-weight:500;line-height:1.35}.cx-meth li{margin:2px 0}.cx-why{margin:8px 0 0;padding-left:0;list-style:none;font-size:15px}.cx-why li{margin:6px 0;padding:6px 8px;background:#fff;border-radius:10px}.cx-why small{display:block;color:#4a5370;font-size:14px;margin-top:2px}
-.tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko{background:#ffe6e6;border:2px solid #e03131}.cx-solh{margin:10px 0 4px;font-weight:800}.cx-solh small{font-weight:500;color:#555}.cx-sol{background:#fff;font-size:clamp(20px,5.4vw,26px);padding:10px;margin:0 0 6px;cursor:pointer}.cx-sol .cw{cursor:help}
+.tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko,.tx-fb.ok{background:none;border:0;padding:4px 2px}.tx-text.ok-box{border-color:#2f9e44;background:#effaf0}.tx-text.ko-box{border-color:#e03131;background:#fff1f1}.cx-solh{margin:10px 2px 4px;font-weight:800}.cx-solh small{font-weight:500;color:#555}.tx-text.cx-sol{border-color:#2f9e44;cursor:pointer}.cx-sol .cw{cursor:help}
 .tx-btns{display:flex;gap:8px;margin-top:8px}.tx-btns>*{flex:1}
 /* ---- séries, défi, petits ---- */
 #p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
@@ -3168,6 +3168,7 @@ root.innerHTML=`<div class="cx"><h2>🖍️ Colorie la phrase</h2>
  <div class="tx-top"><div class="gk-top"><span>Ta classe</span><div class="mx-seg" id="txG"></div></div><div class="gk-lab">Qu’est-ce que je cherche ?</div><div class="gk-chips" id="txL"></div></div>
  <div class="tx-goal" id="txO"></div>
  <div class="tx-text" id="txT"></div>
+ <div id="txSolW" hidden></div>
  <div class="tx-fb" id="txF" hidden></div>
  <div class="tx-pal" id="txC"></div><div class="tx-hint" id="txH"></div>
  <div class="tx-btns"><button class="mx-go" id="txV">✅ Vérifier</button></div>
@@ -3210,9 +3211,9 @@ function paintAll(keep){
   const A=act(); if(!A.includes(S.cur)) S.cur=A[0];
   $('txC').innerHTML=A.map(x=>`<button data-c="${x}" aria-pressed="${x===S.cur}" style="--cc:${CR[x][1]}"><i class="sw"></i>${CR[x][0]}</button>`).join('');
   $('txH').innerHTML='💡 '+CR[S.cur][2]; $('txH').style.setProperty('--cc',CR[S.cur][1]);
-  paintRules(); if(!keep) $('txF').hidden=true; $('txV').textContent=S.done?'➡️ Phrase suivante':'✅ Vérifier'; paintT();
+  paintRules(); if(!keep){ $('txF').hidden=true; $('txSolW').hidden=true; $('txT').classList.remove('ok-box','ko-box'); } $('txV').textContent=S.done?'➡️ Phrase suivante':'✅ Vérifier'; paintT();
 }
-$('txF').onclick=e=>{ const sol=e.target.closest('#txSol'); if(!sol) return; const w=e.target.closest('.cw'); if(!w) return; const run=w.closest('.tx-run'); const codes=[]; if(run) codes.push(run.dataset.x); (w.dataset.xs||'').split(',').filter(Boolean).forEach(c=>{ if(!codes.includes(c)) codes.push(c); }); $('txTip').innerHTML=codes.filter(c=>CR[c]).map(ruleCard).join('')||''; };
+$('txSolW').onclick=e=>{ const sol=e.target.closest('#txSol'); if(!sol) return; const w=e.target.closest('.cw'); if(!w) return; const run=w.closest('.tx-run'); const codes=[]; if(run) codes.push(run.dataset.x); (w.dataset.xs||'').split(',').filter(Boolean).forEach(c=>{ if(!codes.includes(c)) codes.push(c); }); $('txTip').innerHTML=codes.filter(c=>CR[c]).map(ruleCard).join('')||''; };
 $('txRb').onclick=()=>{ const o=$('txRp').hidden; $('txRp').hidden=!o; $('txRb').setAttribute('aria-expanded',o); $('txRb').textContent=o?'✖ Fermer les règles du coloriage':'📘 Apprendre les règles du coloriage'; };
 $('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; S.ti=-1; newText(); paintAll(); };
 $('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.i; S.ti=-1; newText(); paintAll(); };
@@ -3272,7 +3273,9 @@ function check(){
     if(e){ exp++; if(h) hit++; } else if(h&&!tol) bad++; }));
   S.done=true; paintT();
   const ok=hit===exp&&bad===0, f=$('txF'); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
-  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`❌ <b>${hit} / ${exp}</b> bien trouvés. <small>(rose = à corriger · pointillés = oublié)</small><div class="cx-solh">✅ La bonne réponse <small>(touche un bloc pour voir sa règle)</small></div><div class="tx-text cx-sol" id="txSol">${solution()}</div><div id="txTip"></div><ul class="cx-why">${explain().map(m=>'<li>'+m+'</li>').join('')}</ul>`;
+  const tb=$('txT'), sw=$('txSolW'); tb.classList.toggle('ok-box',ok); tb.classList.toggle('ko-box',!ok);
+  sw.hidden=ok; sw.innerHTML=ok?'':`<div class="cx-solh">✅ La bonne réponse <small>(touche un bloc pour voir sa règle)</small></div><div class="tx-text cx-sol" id="txSol">${solution()}</div><div id="txTip"></div>`;
+  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`<b>${hit} / ${exp}</b> bien trouvés <small>(rose = à corriger · pointillés = oublié)</small><ul class="cx-why">${explain().map(m=>'<li>'+m+'</li>').join('')}</ul>`;
   try{ window.PCev&&PCev(ok); }catch(e){}
 }
 $('txV').onclick=()=>{ if(S.done){ newText(); paintAll(); return; } check(); $('txV').textContent='➡️ Phrase suivante'; };
