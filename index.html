@@ -396,6 +396,8 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 @keyframes dmh{50%{transform:scale(1.08);box-shadow:0 0 0 5px #fcc419}}
 .dm-cover{text-align:center;padding:28px 12px;border-radius:20px;background:#fff;border:4px solid var(--pc,#1f5fd6)}.dm-cover .cup{font-size:4rem}
 .vox .about{margin-top:10px;padding:10px 12px;border-radius:12px;background:#eef6ff;border:1px solid rgba(31,95,214,.25);font-size:.85rem;line-height:1.35}
+.pt-fb{margin:10px 0 0;padding:8px 12px;border-radius:12px;background:#fff0e0;font-weight:700;text-align:center}
+.pt-opts button.hint{animation:dmh .6s ease-in-out 4;outline:4px solid #fcc419}
 </style>
 </head>
 <body>
@@ -490,21 +492,51 @@ function pickVoice(lang){
 loadVoices();
 if (synth && synth.addEventListener) synth.addEventListener('voiceschanged', loadVoices);
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),4000); }
-function speak(text, lang, el){
-  if(!synth || typeof SpeechSynthesisUtterance==='undefined'){ toast("Ton navigateur ne sait pas lire à voix haute."); return; }
-  try{ synth.cancel(); }catch(e){}
-  if(current) current.classList.remove('playing');
-  const u = new SpeechSynthesisUtterance(text);
+let seqTok=0;
+function spoken(t,lang){ t=String(t==null?'':t);
+  const W=lang==='de'?{'×':' mal ','÷':' geteilt durch ','−':' minus ','=':' gleich ','+':' plus '}:{'×':' fois ','÷':' divisé par ','−':' moins ','=':' égale ','+':' plus '};
+  return t.replace(/[×÷−=+]/g,c=>W[c]).replace(/\s+/g,' ').trim(); }
+function mkUtt(text,lang){
+  const u = new SpeechSynthesisUtterance(spoken(text,lang));
   u.lang = lang==='de' ? 'de-DE' : 'fr-FR';
   const v = pickVoice(lang);
   if(v){ u.voice=v; u.lang=v.lang; }
   else if(voices.length){ toast(lang==='de' ? "Aucune voix allemande installée : ajoute-la dans les réglages de l’appareil (bouton 🎙️ Voix)." : "Aucune voix française installée."); }
   u.rate = slow ? 0.55 : 0.85;
+  return u;
+}
+function speak(text, lang, el){
+  if(!synth || typeof SpeechSynthesisUtterance==='undefined'){ toast("Ton navigateur ne sait pas lire à voix haute."); return; }
+  seqTok++;
+  try{ synth.cancel(); }catch(e){}
+  if(current) current.classList.remove('playing');
+  const u = mkUtt(text,lang);
   if(el){ current = el; el.classList.add('playing'); }
   const done = ()=>{ if(el) el.classList.remove('playing'); };
   u.onend = done; u.onerror = done;
   synth.speak(u);
 }
+/* lit plusieurs morceaux à la suite, avec une pause entre chacun : [{t,l,pause}] */
+function speakSeq(items){
+  if(!synth || typeof SpeechSynthesisUtterance==='undefined') return;
+  const tok=++seqTok; try{ synth.cancel(); }catch(e){}
+  let i=0;
+  const next=()=>{ if(tok!==seqTok||i>=items.length) return; const it=items[i++];
+    if(!it||!it.t){ setTimeout(next,(it&&it.pause)||400); return; }
+    const u=mkUtt(it.t,it.l||'fr'); let fired=false;
+    const go=()=>{ if(fired||tok!==seqTok) return; fired=true; setTimeout(next,it.pause===undefined?500:it.pause); };
+    u.onend=go; u.onerror=go; setTimeout(go,Math.max(2500,String(it.t).length*180)); try{ synth.speak(u); }catch(e){} };
+  setTimeout(next,60);
+}
+window.DLspeakSeq=speakSeq;
+/* verdict parlé : « Bravo ! » ou « Pas tout à fait. La bonne réponse est… » puis la bonne réponse dans sa langue */
+window.DLverdict=function(ok,parts,noLead){
+  const pk=a=>a[Math.floor(Math.random()*a.length)];
+  const seq=[{t:ok?pk(['Bravo !','Très bien !','Super !','Exact !']):pk(['Pas tout à fait.','Oh, ce n’est pas ça.','Presque !']),l:'fr',pause:350}];
+  if(!ok&&!noLead&&parts&&parts.length) seq.push({t:'La bonne réponse est :',l:'fr',pause:350});
+  (parts||[]).forEach(x=>seq.push({t:x.t,l:x.l||'fr',pause:x.pause}));
+  speakSeq(seq);
+};
 document.addEventListener('click', e=>{
   const t = e.target.closest('[data-say]'); if(!t) return;
   speak(t.dataset.say, t.dataset.lang || 'de', t);
@@ -1079,7 +1111,7 @@ function askQuestion(p,d){
       fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances de <b>${d}</b> case${d>1?'s':''}.`
                       :`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu avances de <b>${d-1}</b> case${d-1>1?'s':''} (le total moins un).`;
-      next.hidden=false; say(q.reveal.t,q.reveal.l); curQ=Object.assign({},q,{answered:true});
+      next.hidden=false; DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}]); curQ=Object.assign({},q,{answered:true});
       next.onclick=()=>{ ov.remove(); res(ok); };
     };
   });
@@ -1324,12 +1356,12 @@ function startLoto(cfg){
     const b=e.target.closest('.h-lcell'); if(!b||L.busy) return; const c=L.cells[+b.dataset.i]; if(c.by>=0||!L.target) return;
     L.busy=true; const p=cfg.players[L.turn];
     if(c===L.target){
-      c.by=L.turn; L.scores[L.turn]++; L.target=null; paint(); msg(`✅ <b>Bravo !</b> ${esc(c.it.fr)} = ${esc(c.it.de)}`); say(c.it.de,c.it.lang||'de');
+      c.by=L.turn; L.scores[L.turn]++; L.target=null; paint(); msg(`✅ <b>Bravo !</b> ${esc(c.it.fr)} = ${esc(c.it.de)}`); DLverdict(true,[{t:c.it.de,l:c.it.lang||'de'}]);
       await sleep(1500); L.turn=(L.turn+1)%cfg.players.length; L.busy=false; next();
     } else {
       L.errors++; b.classList.add('shake'); msg(`❌ Ce n’est pas la bonne case…${multi?' Au suivant !':' Réécoute !'}`);
       await sleep(900); b.classList.remove('shake'); if(multi) L.turn=(L.turn+1)%cfg.players.length; L.busy=false; paint();
-      const q=cfg.players[L.turn]; msg(`${q.emoji} <b>${esc(q.name)}</b>, à toi ! Même mot.`); say(L.target.it.de,L.target.it.lang||'de');
+      const q=cfg.players[L.turn]; msg(`${q.emoji} <b>${esc(q.name)}</b>, à toi ! Même mot.`); DLspeakSeq([{t:'Ce n’est pas la bonne case. Écoute encore :',l:'fr',pause:450},{t:L.target.it.de,l:L.target.it.lang||'de',pause:900},{t:L.target.it.de,l:L.target.it.lang||'de'}]);
     }
   };
   function finish(){
@@ -1372,7 +1404,7 @@ function startRace(cfg){
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances d’une case.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu restes sur place.`;
-      say(q.reveal.t,q.reveal.l);
+      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}]);
       if(ok){ R.pos[R.turn]++; paint(); }
       R.q=Object.assign({},q,{answered:true});
       const nx=box.querySelector('.g-next'); nx.hidden=false;
@@ -1422,7 +1454,7 @@ function mcq(box,q,done){
   box.querySelector('.g-opts').onclick=e=>{
     const b=e.target.closest('button'); if(!b||fin) return; fin=true; const k=+b.dataset.k, ok=k===q.correct;
     box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
-    if(q.reveal) say(q.reveal.t,q.reveal.l);
+    DLverdict(ok,q.reveal?[{t:q.reveal.t,l:q.reveal.l}]:[]);
     done(ok,ok?`✅ <b>Bravo !</b> ${esc(q.shown||'')}`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown||q.options[q.correct])}`);
   };
   return ()=>box.querySelectorAll('.g-opts button')[q.correct].click();
@@ -1480,9 +1512,9 @@ G.dictee=simple('✍️ Dictée','Écoute le mot en allemand, puis écris-le en 
    }
    tl.onclick=async e=>{ const b=e.target.closest('.h-tile'); if(!b||fin||b.disabled) return; const t=tiles[+b.dataset.k]; t.used=true; typed.push(t); paint();
      if(typed.length===word.length){
-       if(typed.map(x=>x.c).join('')===word){ fin=true; ans.classList.add('good'); say(it.de,'de'); done(true,`✅ <b>Bravo !</b> ${esc(it.fr)} = ${esc(it.de)}${errs?'':' (du premier coup !)'}`); }
+       if(typed.map(x=>x.c).join('')===word){ fin=true; ans.classList.add('good'); DLverdict(true,[{t:it.de,l:'de'}]); done(true,`✅ <b>Bravo !</b> ${esc(it.fr)} = ${esc(it.de)}${errs?'':' (du premier coup !)'}`); }
        else { errs++; ans.classList.add('bad'); await sleep(700); ans.classList.remove('bad');
-         if(errs>=2){ fin=true; done(false,`❌ Le mot était : <b>${esc(it.de)}</b>`); say(it.de,'de'); return; }
+         if(errs>=2){ fin=true; done(false,`❌ Le mot était : <b>${esc(it.de)}</b>`); DLverdict(false,[{t:it.de,l:'de'}]); return; }
          tiles.forEach(x=>x.used=false); typed=[]; paint(); }
      } };
    box.querySelector('#dBack').onclick=()=>{ if(fin) return; const t=typed.pop(); if(t){ t.used=false; paint(); } };
@@ -1497,11 +1529,11 @@ G.chasse=simple('🔎 Chasse au mot','La voix te demande un objet en allemand : 
    const pool=POOLS.school.concat(p.gr==='6H'?POOLS.math:[]).filter(x=>EMO[x.de]); const pick=shuffle(pool).slice(0,6), target=pick[rnd(pick.length)];
    box.innerHTML=`<div class="g-q">Wo ist <span class="big">${esc(target.de)}</span> ?</div><button class="g-listen">🔊 Écouter</button>
      <div class="h-scene">${pick.map((x,i)=>`<button class="h-obj" data-i="${i}"><span ${x.de==='das Rechteck'?'style="color:#1f5fd6"':''}>${EMO[x.de]}</span></button>`).join('')}</div>`;
-   const say2=()=>say('Wo ist '+target.de+'?','de'); box.querySelector('.g-listen').onclick=say2; setTimeout(say2,FAST?0:350);
+   const say2=()=>DLspeakSeq([{t:'Wo ist '+target.de+'?',l:'de',pause:1100},{t:target.de,l:'de'}]); box.querySelector('.g-listen').onclick=say2; setTimeout(say2,FAST?0:350);
    let fin=false;
    box.querySelector('.h-scene').onclick=e=>{ const b=e.target.closest('.h-obj'); if(!b||fin) return; fin=true; const x=pick[+b.dataset.i], ok=x===target;
      box.querySelectorAll('.h-obj').forEach((o,i)=>{ o.disabled=true; if(pick[i]===target) o.classList.add('ok'); else if(i===+b.dataset.i) o.classList.add('ko'); });
-     say(target.de,'de'); done(ok,ok?`✅ <b>Bravo !</b> ${esc(target.fr)} = ${esc(target.de)}`:`❌ C’était : ${esc(target.fr)} = <b>${esc(target.de)}</b>`); };
+     DLverdict(ok,[{t:target.de,l:'de'}]); done(ok,ok?`✅ <b>Bravo !</b> ${esc(target.fr)} = ${esc(target.de)}`:`❌ C’était : ${esc(target.fr)} = <b>${esc(target.de)}</b>`); };
    return ()=>box.querySelectorAll('.h-obj')[pick.indexOf(target)].click();
  }}));
 
@@ -1541,7 +1573,7 @@ G.mur=simple('⚡ Mur de nombres','Un nombre est lu en allemand : touche-le le p
    const t0=Date.now(); let fin=false; const iv=setInterval(()=>{ const c=box.querySelector('#mC'); if(c&&!fin) c.textContent=((Date.now()-t0)/1000).toFixed(1)+' s'; else clearInterval(iv); },100);
    box.querySelector('.h-wall').onclick=e=>{ const b=e.target.closest('.h-wc'); if(!b||fin) return; fin=true; clearInterval(iv); const ok=+b.dataset.n===t, sec=((Date.now()-t0)/1000).toFixed(1);
      box.querySelectorAll('.h-wc').forEach(x=>{ x.disabled=true; if(+x.dataset.n===t) x.classList.add('ok'); else if(x===b) x.classList.add('ko'); });
-     say(nw(t),'de'); done(ok,ok?`✅ <b>Bravo !</b> ${t} = ${nw(t)} · ${sec} s`:`❌ C’était <b>${t}</b> = ${nw(t)}`); };
+     DLverdict(ok,[{t:nw(t),l:'de'}]); done(ok,ok?`✅ <b>Bravo !</b> ${t} = ${nw(t)} · ${sec} s`:`❌ C’était <b>${t}</b> = ${nw(t)}`); };
    return ()=>[...box.querySelectorAll('.h-wc')].find(x=>+x.dataset.n===t).click();
  }}));
 
@@ -1602,12 +1634,12 @@ function startDuel(cfg){
     const b=e.target.closest('.g-opts button'); if(!b||over||locked[pi]||b.disabled) return; const k=+b.dataset.k;
     if(k===q.correct){ over=true; sc[pi]++; score();
       halves.forEach(x=>x.querySelectorAll('.g-opts button').forEach((y,j)=>{ y.disabled=true; if(j===q.correct) y.classList.add('ok'); }));
-      say(q.reveal.t,q.reveal.l); await sleep(1500);
+      DLverdict(true,[{t:q.reveal.t,l:q.reveal.l}]); await sleep(1500);
       if(sc[pi]>=goal){ const p=cfg.players[pi]; return endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`${A.emoji} ${sc[0]} – ${sc[1]} ${B.emoji}`,color:p.color},()=>startDuel(cfg)); }
       ask();
-    } else { locked[pi]=true; b.classList.add('ko'); b.disabled=true;
+    } else { locked[pi]=true; b.classList.add('ko'); b.disabled=true; if(!(locked[0]&&locked[1])) DLverdict(false,[]);
       halves[pi].querySelectorAll('.g-opts button').forEach(y=>y.disabled=true);
-      if(locked[0]&&locked[1]){ over=true; halves.forEach(x=>x.querySelectorAll('.g-opts button')[q.correct].classList.add('ok')); say(q.reveal.t,q.reveal.l); await sleep(1600); ask(); } }
+      if(locked[0]&&locked[1]){ over=true; halves.forEach(x=>x.querySelectorAll('.g-opts button')[q.correct].classList.add('ok')); DLverdict(false,[{t:q.reveal.t,l:q.reveal.l}]); await sleep(1600); ask(); } }
   });
   ask();
 }
@@ -1726,7 +1758,7 @@ function start(cfg){
   function selectTile(i){
     const t=S.hands[S.turn][i]; S.sel=i; const f=fits(t); render();
     t.h.forEach((h,k)=>setTimeout(()=>speakHalf(h),FAST?0:k*900));
-    if(!f.L&&!f.R) setMsg('Ce domino ne va pas. Regarde bien les deux bouts !');
+    if(!f.L&&!f.R){ setMsg('Ce domino ne va pas. Regarde bien les deux bouts !'); setTimeout(()=>say('Ce domino ne va pas. Regarde bien les deux bouts.','fr'),FAST?0:1900); }
     else if(f.L&&f.R) setMsg('Il va des deux côtés : choisis !');
     else setMsg('Bien ! Touche le bouton à '+(f.L?'gauche ⬅':'droite ➡')+'.');
   }
@@ -1874,7 +1906,7 @@ function ask(){
     P.querySelectorAll('.cj-opts button').forEach((x,j)=>{ x.disabled=true; if(j===Q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
     const fb=P.querySelector('.cj-fb'); fb.hidden=false; fb.className='cj-fb '+(ok?'ok':'ko');
     fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(PR[i])} → ${esc(F.pe+F.f)}`:`❌ Pas tout à fait : <b>${esc(F.pe+F.f)}</b>`;
-    try{ speak(F.say,'fr'); }catch(e){}
+    try{ DLverdict(ok,[{t:F.say,l:'fr'}]); }catch(e){}
     const nx=P.querySelector('.cj-next'); nx.hidden=false; nx.onclick=ask; };
 }
 })();
@@ -1964,7 +1996,7 @@ function check(){
   inp.classList.add(ok?'good':'bad'); run.res[run.i]=ok; if(ok) run.ok++;
   fb.hidden=false; fb.className='mx-fb '+(ok?'ok':'ko');
   fb.innerHTML=ok?'✅ <b>Bravo !</b>':`❌ C’était <b>${Q.res}</b> : ${Q.a} ${Q.op} ${Q.b} = ${Q.res}`;
-  try{ speak(`${Q.a} ${OPW[Q.op]} ${Q.b} égale ${Q.res}`,'fr'); }catch(e){}
+  try{ DLverdict(ok,[{t:`${Q.a} ${OPW[Q.op]} ${Q.b} égale ${Q.res}`,l:'fr'}],true); }catch(e){}
   run.i++; const nx=document.createElement('button'); nx.className='mx-go'; nx.textContent=run.i>=run.total?'Voir mon score ▶':'Suivant ▶'; nx.onclick=next; fb.after(nx);
   P.querySelector('.mx-dots').outerHTML=dots();
 }
@@ -2061,7 +2093,7 @@ function MkSeries(rootId,cfg){
   function resolve(ok){
     if(run.fin) return; run.fin=true; run.res[run.i]=ok; if(ok) run.ok++; else run.wrong.push(Q);
     const fb=P.querySelector('#'+rootId+'Fb'); fb.hidden=false; fb.className='mx-fb '+(ok?'ok':'ko'); fb.innerHTML=ok?`✅ <b>Bravo !</b> ${Q.explain||''}`:`❌ ${Q.explain||'Pas tout à fait.'}`;
-    say(Q.after||Q.explain&&strip(Q.explain),Q.lang);
+    DLverdict(ok,[{t:Q.after||(Q.explain&&strip(Q.explain))||'',l:Q.lang||'fr'}],true);
     run.i++; const nx=document.createElement('button'); nx.className='mx-go'; nx.textContent=run.i>=run.total?'Voir mon score ▶':'Suivant ▶'; nx.onclick=next; fb.after(nx);
     P.querySelector('.mx-dots').outerHTML=dots();
   }
@@ -2549,6 +2581,11 @@ const sleep=ms=>new Promise(r=>setTimeout(r,FAST?0:ms));
 let LANG='mix'; try{ LANG=localStorage.getItem('dl-pt-lang')||'mix'; }catch(e){}
 const pickL=()=>LANG==='mix'?(Math.random()<.5?'fr':'de'):LANG;
 const sp=(t,l)=>{ try{ if(t) speak(t,l); }catch(e){} };
+const KEYS={de:[/^Wo ist (.+?)\?$/,/^Tippe auf den Buchstaben (.+?)!?$/,/^Tippe auf die (grösste|kleinste) Zahl!?$/,/^Tippe auf das (grösste|kleinste) Tier!?$/,/^Tippe auf (.+?)!?$/,/^Welches Bild passt zu „(.+)“\?$/,/^Welches Wort reimt sich auf (.+?)\?$/,/^Mit welchem Buchstaben beginnt „?(.+?)“?\?$/,/^Klatsche: wie viele Silben hat „(.+)“\?$/],
+ fr:[/^Touche la couleur (.+?) !$/,/^Touche la lettre (.+?) !$/,/^Touche (le plus (?:grand|petit)) (?:animal|nombre) !$/,/^Touche (.+?) !$/,/^Quelle image veut dire « (.+) » \?$/,/^Quel mot rime avec « (.+) » \?$/,/^Par quelle lettre commence « (.+) » \?$/,/^Frappe dans tes mains : combien de syllabes dans « (.+) » \?$/,/^Quel nombre vient (?:après|avant) (.+?) \?$/]};
+function keyOf(t,L){ for(const r of (KEYS[L]||[])){ const m=String(t).match(r); if(m) return m[1]; } return ''; }
+/* consigne, silence, puis le mot-clé seul : il ressort bien de la phrase */
+function sayKey(t,L){ const k=keyOf(t,L); if(k&&window.DLspeakSeq&&k!==t) DLspeakSeq([{t:t,l:L,pause:1100},{t:k,l:L}]); else sp(t,L); }
 const NUMF=['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix'], NUMD=['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn'];
 const THINGS=[['🍎','pommes','Äpfel'],['⭐','étoiles','Sterne'],['🎈','ballons','Ballons'],['🚗','voitures','Autos'],['🌸','fleurs','Blumen'],['🐟','poissons','Fische'],['🍓','fraises','Erdbeeren']];
 const COLS=[['rouge','rot','#e03131','🔴'],['bleu','blau','#1f5fd6','🔵'],['jaune','gelb','#fcc419','🟡'],['vert','grün','#2f9e44','🟢'],['orange','orange','#f76707','🟠'],['rose','rosa','#f783ac',null],['violet','lila','#9c36b5','🟣'],['noir','schwarz','#212529','⚫'],['marron','braun','#8d5524','🟤']];
@@ -2666,11 +2703,13 @@ function rounds(id){
     if(S.i>=S.total) return end();
     let q,tt=0; S.seen=S.seen||new Set(); do{ q=GEN[id](); tt++; }while(S.seen.has(q.fr+'|'+q.opts.map(o=>o.h+o.ok).join())&&tt<12); S.seen.add(q.fr+'|'+q.opts.map(o=>o.h+o.ok).join()); S.first=true; S.locked=false; const L=q.forceL||pickL(); T.q=q; q.L=L;
     frame(`<div class="pt-dots">${dots()}</div>${q.vis}<button class="pt-say" id="ptS">🔊 <span>${q[L]}</span></button>
-      <div class="pt-opts ${q.cls||''} n${q.opts.length}" id="ptO">${q.opts.map((o,k)=>`<button data-k="${k}">${o.h}</button>`).join('')}</div>`);
-    const say=()=>sp(q[L],L); root.querySelector('#ptS').onclick=say; setTimeout(say,FAST?0:250);
+      <div class="pt-opts ${q.cls||''} n${q.opts.length}" id="ptO">${q.opts.map((o,k)=>`<button data-k="${k}">${o.h}</button>`).join('')}</div><div class="pt-fb" id="ptFb" hidden></div>`);
+    S.w=0; const say=()=>sayKey(q[L],L); root.querySelector('#ptS').onclick=say; setTimeout(say,FAST?0:250);
     root.querySelector('#ptO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const o=q.opts[+b.dataset.k];
       if(o.ok){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.i++; sp((L==='de'?OKD:OKF)[rnd(3)],L); await sleep(1300); next(); }
-      else { S.first=false; b.classList.add('ko'); b.disabled=true; sp(L==='de'?'Versuch’s nochmal!':'Essaie encore !',L); } };
+      else { S.first=false; S.w++; b.classList.add('ko'); b.disabled=true; const fb=root.querySelector('#ptFb'); fb.hidden=false; fb.textContent=L==='de'?'❌ Nicht ganz. Versuch’s nochmal!':'❌ Pas tout à fait. Essaie encore !';
+        if(S.w>=2){ const c=root.querySelectorAll('#ptO button')[q.opts.findIndex(x=>x.ok)]; if(c) c.classList.add('hint'); }
+        if(window.DLspeakSeq) DLspeakSeq([{t:L==='de'?'Nicht ganz. Versuch’s nochmal!':'Pas tout à fait. Essaie encore !',l:L,pause:600}].concat(S.w>=2?[{t:L==='de'?'Schau, hier ist es!':'Regarde, c’est celui-là !',l:L}]:[])); else sp(L==='de'?'Versuch’s nochmal!':'Essaie encore !',L); } };
   }
   T.solve=()=>{ const q=T.q; root.querySelectorAll('#ptO button')[q.opts.findIndex(o=>o.ok)].click(); };
   function end(){
