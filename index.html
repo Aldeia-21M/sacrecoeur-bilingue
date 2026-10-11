@@ -818,7 +818,7 @@ function qPetit(){
     return mk('Touche où il y en a <b>'+(more?'plus':'moins')+'</b>',de?'Wo sind '+(more?'mehr':'weniger')+' '+th[2]+'?':'Où y a-t-il '+(more?'plus':'moins')+' de '+th[1]+' ?',[A,B],th[0].repeat(win),a+' et '+b); }
   if(kind==='add'){ const th=P.THINGS[rnd(P.THINGS.length)], a=1+rnd(5), b=1+rnd(5), n=a+b; return mk('<span class="big">'+th[0].repeat(a)+' + '+th[0].repeat(b)+' = ?</span>',nm(a)+(de?' plus ':' plus ')+nm(b),[n].concat(others(n,2,10,2)),n,a+' + '+b+' = '+n,nm(a)+' plus '+nm(b)+(de?' ist ':' égale ')+nm(n)); }
   let a=1+rnd(20), b=1+rnd(20); while(a===b) b=1+rnd(20); const big=Math.random()<.65, win=big?Math.max(a,b):Math.min(a,b);
-  return mk('Touche le nombre le plus <b>'+(big?'grand':'petit')+'</b>',de?(big?'Tippe auf die größte Zahl':'Tippe auf die kleinste Zahl'):(big?'Touche le plus grand nombre':'Touche le plus petit nombre'),[a,b],win,String(win));
+  return mk('Touche le nombre le plus <b>'+(big?'grand':'petit')+'</b>',de?(big?'Tippe auf die grösste Zahl':'Tippe auf die kleinste Zahl'):(big?'Touche le plus grand nombre':'Touche le plus petit nombre'),[a,b],win,String(win));
 }
 function makeQuestion(topics,grade){
   if(grade==='1H') return qPetit();
@@ -1898,7 +1898,7 @@ function coinHTML(v){
 }
 function genMoney(g,a){
   if(a==='change'){
-    if(g==='6H'){ const note=[5,10,20][rnd(3)], price=Math.round((1+rnd(note-2)+[0,0.05,0.1,0.2,0.25,0.3,0.5,0.75,0.9,0.95][rnd(10)])*100)/100, ch=Math.round((note-price)*100)/100; const ans=fr(ch);
+    if(g==='6H'){ const note=[10,20,50][rnd(3)], price=Math.round((1+rnd(note-2)+[0,0.05,0.1,0.2,0.25,0.3,0.5,0.75,0.9,0.95][rnd(10)])*100)/100, ch=Math.round((note-price)*100)/100; const ans=fr(ch);
       const options=opts4(ans,[fr(ch+0.5),fr(Math.max(0.05,ch-0.5)),fr(ch+1),fr(ch+0.1),fr(Math.max(0.05,ch-0.1)),fr(price)]); return {kind:'mcq',vis:coinHTML(note),prompt:`Tu paies <b>${fr(price)}</b> avec un billet de <b>${note} fr.</b> Combien te rend-on ?`,say:`Tu paies ${fr(price)} avec ${note} francs. Combien te rend-on ?`,options,correct:options.indexOf(ans),explain:`${fr(note)} − ${fr(price)} = <b>${ans}</b>`}; }
     const note=[10,20,50][rnd(3)], price=1+rnd(note-2), ch=note-price;
     return {kind:'num',vis:coinHTML(note),prompt:`Tu paies <b>${price} fr.</b> avec un billet de <b>${note} fr.</b> Combien te rend-on ?`,say:`Tu paies ${price} francs avec un billet de ${note} francs. Combien te rend-on ?`,answer:ch,unit:'fr.',explain:`${note} − ${price} = ${ch}`};
@@ -2007,14 +2007,14 @@ const THINGS=[['🍎','pommes','Äpfel'],['⭐','étoiles','Sterne'],['🎈','ba
 const COLS=[['rouge','rot','#e03131','🔴'],['bleu','blau','#1f5fd6','🔵'],['jaune','gelb','#fcc419','🟡'],['vert','grün','#2f9e44','🟢'],['orange','orange','#f76707','🟠'],['rose','rosa','#f783ac',null],['violet','lila','#9c36b5','🟣'],['noir','schwarz','#212529','⚫'],['marron','braun','#8d5524','🟤']];
 const svg=p=>`<svg viewBox="0 0 100 100" class="pt-shape">${p}</svg>`; const FILL='fill="#f59f00" stroke="#1d2433" stroke-width="5" stroke-linejoin="round"';
 const SHAPES=[['le cercle','der Kreis',svg(`<circle cx="50" cy="50" r="40" ${FILL}/>`),'⚫'],['le carré','das Quadrat',svg(`<rect x="12" y="12" width="76" height="76" ${FILL}/>`),'🟦'],['le triangle','das Dreieck',svg(`<path d="M50 10 L92 86 L8 86 Z" ${FILL}/>`),'🔺'],['le rectangle','das Rechteck',svg(`<rect x="6" y="26" width="88" height="48" ${FILL}/>`),null],['l’étoile','der Stern',svg(`<path d="M50 6 L62 38 L96 38 L68 58 L79 92 L50 71 L21 92 L32 58 L4 38 L38 38 Z" ${FILL}/>`),'⭐'],['le cœur','das Herz',svg(`<path d="M50 90 C10 58 6 32 26 20 C38 14 48 22 50 32 C52 22 62 14 74 20 C94 32 90 58 50 90 Z" ${FILL}/>`),'❤️']];
-const ANI=[['🐶','le chien','der Hund','ouaf ouaf','wau wau'],['🐱','le chat','die Katze','miaou','miau'],['🐮','la vache','die Kuh','meuh','muh'],['🦆','le canard','die Ente','coin coin','quak quak'],['🐷','le cochon','das Schwein','groin groin','oink oink'],['🐑','le mouton','das Schaf','bêê','mäh'],['🐴','le cheval','das Pferd','hihihi','iah'],['🐔','la poule','das Huhn','cot cot','gack gack'],['🐸','la grenouille','der Frosch','coa coa','quak quak'],['🐰','le lapin','der Hase','','']];
+const ANI=[['🐶','le chien','der Hund','ouaf ouaf','wau wau'],['🐱','le chat','die Katze','miaou','miau'],['🐮','la vache','die Kuh','meuh','muh'],['🦆','le canard','die Ente','coin coin','quak quak'],['🐷','le cochon','das Schwein','groin groin','oink oink'],['🐑','le mouton','das Schaf','bêê','mäh'],['🐴','le cheval','das Pferd','hihihi','iah'],['🐔','la poule','das Huhn','cot cot','gack gack'],['🐸','la grenouille','der Frosch','coa coa','quak quak'],['🐰','le lapin','das Kaninchen','','']];
 const LET='ABCDEFGHILMOPRSTU'.split('');
 const FL=[['🍎','pomme','P','Apfel','A'],['🐱','chat','C','Katze','K'],['🏠','maison','M','Haus','H'],['🌙','lune','L','Mond','M'],['🐟','poisson','P','Fisch','F'],['🌞','soleil','S','Sonne','S'],['🚗','voiture','V','Auto','A'],['🍌','banane','B','Banane','B'],['🐸','grenouille','G','Frosch','F'],['🦁','lion','L','Löwe','L'],['🌸','fleur','F','Blume','B'],['🎈','ballon','B','Ballon','B'],['🐶','chien','C','Hund','H'],['🥖','pain','P','Brot','B']];
 const VOC={
  fruits:{ic:'🍎',t:'Les fruits',l:[['🍎','la pomme','der Apfel'],['🍌','la banane','die Banane'],['🍓','la fraise','die Erdbeere'],['🍇','le raisin','die Traube'],['🍊','l’orange','die Orange'],['🍋','le citron','die Zitrone'],['🍒','les cerises','die Kirschen'],['🍉','la pastèque','die Wassermelone'],['🍐','la poire','die Birne']]},
- body:{ic:'🖐️',t:'Le corps',l:[['🖐️','la main','die Hand'],['👁️','l’œil','das Auge'],['👂','l’oreille','das Ohr'],['👃','le nez','die Nase'],['👄','la bouche','der Mund'],['🦶','le pied','der Fuß'],['🦵','la jambe','das Bein']]},
+ body:{ic:'🖐️',t:'Le corps',l:[['🖐️','la main','die Hand'],['👁️','l’œil','das Auge'],['👂','l’oreille','das Ohr'],['👃','le nez','die Nase'],['👄','la bouche','der Mund'],['🦶','le pied','der Fuss'],['🦵','la jambe','das Bein']]},
  family:{ic:'👨‍👩‍👧',t:'La famille',l:[['👩','maman','die Mama'],['👨','papa','der Papa'],['👶','le bébé','das Baby'],['👵','mamie','die Oma'],['👴','papi','der Opa'],['👧','la fille','das Mädchen'],['👦','le garçon','der Junge']]},
- clothes:{ic:'👕',t:'Les habits',l:[['👕','le t-shirt','das T-Shirt'],['👖','le pantalon','die Hose'],['🧦','la chaussette','die Socke'],['🧢','la casquette','die Kappe'],['👟','la chaussure','der Schuh'],['🧥','le manteau','die Jacke'],['👗','la robe','das Kleid'],['🧤','les gants','die Handschuhe']]},
+ clothes:{ic:'👕',t:'Les habits',l:[['👕','le t-shirt','das T-Shirt'],['👖','le pantalon','die Hose'],['🧦','la chaussette','die Socke'],['🧢','la casquette','die Kappe'],['👟','la chaussure','der Schuh'],['🧥','le manteau','der Mantel'],['👗','la robe','das Kleid'],['🧤','les gants','die Handschuhe']]},
  food:{ic:'🥖',t:'À manger',l:[['🥖','le pain','das Brot'],['🧀','le fromage','der Käse'],['🥛','le lait','die Milch'],['🍫','le chocolat','die Schokolade'],['🥚','l’œuf','das Ei'],['🥕','la carotte','die Karotte'],['🍕','la pizza','die Pizza']]},
  transport:{ic:'🚗',t:'Les transports',l:[['🚗','la voiture','das Auto'],['🚌','le bus','der Bus'],['🚲','le vélo','das Fahrrad'],['✈️','l’avion','das Flugzeug'],['🚂','le train','der Zug'],['🚢','le bateau','das Schiff'],['🚜','le tracteur','der Traktor']]},
  weather:{ic:'☀️',t:'La météo',l:[['☀️','le soleil','die Sonne'],['🌧️','la pluie','der Regen'],['☁️','le nuage','die Wolke'],['❄️','la neige','der Schnee'],['🌈','l’arc-en-ciel','der Regenbogen'],['💨','le vent','der Wind']]},
@@ -2045,7 +2045,7 @@ const GEN={
  add(){ const th=THINGS[rnd(THINGS.length)], a=1+rnd(5), b=1+rnd(5), n=a+b; const o=nums(n,2,10);
   return {vis:`<div class="pt-things">${th[0].repeat(a)} ➕ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} plus ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} plus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,ok:x===n}))}; },
  bigger(){ let a=1+rnd(20), b=1+rnd(20); while(a===b) b=1+rnd(20); const big=Math.random()<.65;
-  return {vis:'',fr:`Touche le nombre le plus ${big?'grand':'petit'} !`,de:`Tippe auf die ${big?'größte':'kleinste'} Zahl!`,cls:'two',opts:[a,b].map(x=>({h:x,ok:big?x===Math.max(a,b):x===Math.min(a,b)}))}; },
+  return {vis:'',fr:`Touche le nombre le plus ${big?'grand':'petit'} !`,de:`Tippe auf die ${big?'grösste':'kleinste'} Zahl!`,cls:'two',opts:[a,b].map(x=>({h:x,ok:big?x===Math.max(a,b):x===Math.min(a,b)}))}; },
  color(){ const o=shuffle(COLS).slice(0,4), c=o[rnd(4)];
   return {vis:'',fr:`Touche la couleur ${c[0]} !`,de:`Tippe auf ${c[1]}!`,opts:o.map(x=>({h:`<i class="pt-dot" style="background:${x[2]}"></i>`,ok:x===c}))}; },
  shape(){ const o=shuffle(SHAPES).slice(0,4), c=o[rnd(4)];
