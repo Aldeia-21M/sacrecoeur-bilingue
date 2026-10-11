@@ -2846,7 +2846,7 @@ function gmFind(bank,code,label,g){
   const toks=gmP(pick(bank)); const ti=toks.findIndex(x=>x.c===code); const tw=toks[ti].w;
   const others=shuffle([...new Set(toks.filter((x,i)=>i!==ti&&x.c!==code&&x.w.replace(/’$/,'').length>=3).map(x=>x.w))].filter(w=>w!==tw)).slice(0,3);
   const o=shuffle([tw].concat(others)), nm=NATN[code];
-  return {kind:'mcq',vis:`<div class="gm-s">${gmJoin(toks)}</div>`,prompt:`Trouve ${/^[aeiouy]/i.test(label)?'l’':'la '}<b>${label}</b> dans la phrase.`,say:gmPlain(toks),lang:'fr',options:o,correct:o.indexOf(tw),explain:`« <b>${esc(tw)}</b> » est ${nm[1]}. ${nm[2]}`,after:`${tw} est ${nm[1]}.`};
+  return {kind:'mcq',vis:`<div class="gm-s">${gmJoin(toks)}</div>`,prompt:`Trouve ${/^[aeiouyéè]/i.test(label)?'l’':/^(nom|verbe|déterminant|pronom)/i.test(label)?'le ':'la '}<b>${label}</b> dans la phrase.`,say:gmPlain(toks),lang:'fr',options:o,correct:o.indexOf(tw),explain:`« <b>${esc(tw)}</b> » est ${nm[1]}. ${nm[2]}`,after:`${tw} est ${nm[1]}.`};
 }
 function gmAdvType(){
   const k=pick(Object.keys(ADV_T)), w=pick(ADV_T[k]); const keys=Object.keys(ADV_N);
@@ -2893,10 +2893,10 @@ function gmTemps(){
   const L=['présent','imparfait','futur simple','passé composé']; const t4=TS_S.filter(x=>L.includes(x[2])); const [f2,k2,tp2,s2]=pick(t4); const o=L.map(x=>x[0].toUpperCase()+x.slice(1));
   return {kind:'mcq',vis:`<div class="gm-s">${s2}</div>`,prompt:'Quel est le <b>temps</b> du verbe en gras ?',say:s2.replace(/<[^>]+>/g,''),lang:'fr',options:o,correct:L.indexOf(tp2),explain:`« ${esc(f2)} » est au <b>${tp2}</b> (${k2==='simple'?'temps simple, 1 mot':'temps composé, 2 mots'}).`,after:`${f2} : ${tp2}.`};
 }
-function gmPhrase(g){
+function gmPhrase(g,force){
   const L=g==='6H'?PH_S:PH_4; const [a,b,c]=pick(L); const s0=a+' '+b; const full=g==='6H'?s0+' '+c:s0; const cap=x=>x[0].toUpperCase()+x.slice(1);
   const S=cap(s0)+'.';
-  const t=rnd(g==='6H'?5:4);
+  const t=force!==undefined?force:rnd(g==='6H'?5:4);
   if(t===0){ // phrase correcte
     const w=s0.split(' '); const bad=[]; bad.push(S.charAt(0).toLowerCase()+S.slice(1)); bad.push(S.slice(0,-1)); let sh=w.slice(); let n=0; do{ sh=shuffle(w); n++; }while(sh.join(' ')===w.join(' ')&&n<9); bad.push(cap(sh.join(' '))+'.');
     const sh2=w.slice().reverse(); bad.push(cap(sh2.join(' '))+'.');
@@ -2909,7 +2909,7 @@ function gmPhrase(g){
   }
   if(t===2){ // groupe sujet / qui
     const other=pick(PH_S.filter(x=>x[0]!==a&&x[1]!==b)); const o=shuffle([a,b,other[0],other[1]]); const ans=a;
-    return {kind:'mcq',vis:`<div class="gm-s">${esc(g==='6H'?cap(full)+'.':S)}</div>`,prompt:g==='6H'?'Quel est le <b>groupe sujet</b> (GN) de cette phrase ?':'<b>Qui</b> fait l’action ? Trouve le groupe sujet.',say:g==='6H'?cap(full)+'.':S,lang:'fr',options:o,correct:o.indexOf(ans),explain:`Le <b>groupe sujet</b> dit <b>qui</b> fait l’action : « <b>${esc(a)}</b> ».`,after:`Le groupe sujet est : ${a}`};
+    return {kind:'mcq',vis:`<div class="gm-s">${esc(g==='6H'?cap(full)+'.':S)}</div>`,prompt:g==='6H'?'Quel est le <b>groupe sujet</b> (GS) de cette phrase ?':'<b>Qui</b> fait l’action ? Trouve le groupe sujet.',say:g==='6H'?cap(full)+'.':S,lang:'fr',options:o,correct:o.indexOf(ans),explain:`Le <b>groupe sujet</b> dit <b>qui</b> fait l’action : « <b>${esc(a)}</b> ».`,after:`Le groupe sujet est : ${a}`};
   }
   if(t===3){ // groupe verbal
     const other=pick(PH_S.filter(x=>x[1]!==b)); const o=shuffle([b,a,other[1],other[0]].filter((x,i,arr)=>arr.indexOf(x)===i));
@@ -2984,10 +2984,35 @@ function gmHomo(g){
   const L=g==='6H'?HM:HM.filter(x=>['aà','et','ou'].includes(x[0])); const [k,s,a,w,why]=pick(L); const o=shuffle([a,w]);
   return {kind:'mcq',prompt:`Complète avec le bon petit mot :<div class="gm-s">${esc(s).replace('___','<span class="gm-bl">___</span>')}</div>`,say:s.replace('___','…'),lang:'fr',options:o,correct:o.indexOf(a),explain:`${esc(s).replace('___','<b>'+esc(a)+'</b>')}<br>Astuce : ${why}`,after:s.replace('___',a)};
 }
+
+/* ---- natures une par une, groupes de la phrase ---- */
+const natBank=c=>NAT_S.filter(s=>new RegExp('/'+c+'(?![a-z])').test(s));
+const NOM_T=[['Léa','propre'],['Genève','propre'],['Paul','propre'],['la Suisse','propre'],['Milena','propre'],['le Rhône','propre'],['chat','commun'],['école','commun'],['pomme','commun'],['jardin','commun'],['livre','commun'],['maîtresse','commun'],['montagne','commun'],['ballon','commun']];
+function gmNomType(){
+  const [w,k]=pick(NOM_T);
+  return {kind:'mcq',prompt:`« <b>${esc(w)}</b> » est un nom… ?`,say:w,lang:'fr',options:['commun (minuscule)','propre (majuscule)'],correct:k==='commun'?0:1,explain:k==='commun'?`« <b>${esc(w)}</b> » est un <b>nom commun</b> : il désigne une chose ou un être en général, sans majuscule.`:`« <b>${esc(w)}</b> » est un <b>nom propre</b> : il désigne quelqu’un ou quelque chose de précis, avec une majuscule.`,after:`${w} : nom ${k}`};
+}
+const GN_L=[['Le petit chat','Le','chat'],['Une grosse araignée','Une','araignée'],['Mes amis','Mes','amis'],['La belle fleur','La','fleur'],['Un gentil voisin','Un','voisin'],['Les enfants','Les','enfants'],['Ma sœur','Ma','sœur'],['Des oiseaux bleus','Des','oiseaux'],['Ces jolies roses','Ces','roses'],['Notre maison','Notre','maison'],['Un livre drôle','Un','livre']];
+const NOGN=['mange une pomme','joue dehors','regarde un film','dort sur le canapé','chante joyeusement','court très vite','arrive demain','lit un livre'];
+function gmGN(g){
+  const t=rnd(3), [txt,det,noyau]=pick(GN_L);
+  if(t===0){
+    const o=shuffle([txt].concat(shuffle(NOGN).slice(0,3)));
+    return {kind:'mcq',prompt:'Quel est un <b>groupe nominal</b> (un nom et les mots qui l’accompagnent) ?',say:'',lang:'fr',options:o,correct:o.indexOf(txt),explain:`« <b>${esc(txt)}</b> » est un groupe nominal : il s’organise autour d’un <b>nom</b>. Les autres contiennent un verbe.`,after:`${txt} : groupe nominal`};
+  }
+  const ask=t===1?noyau:det; const inside=txt.split(' ').filter(w=>w!==ask&&w.length>1&&!/^(de|mon)$/.test(w));
+  const pool=shuffle(GN_L.filter(x=>x[0]!==txt).map(x=>t===1?x[2]:x[1]).filter(w=>!txt.split(' ').includes(w)));
+  let o=[ask].concat(inside.slice(0,2),pool).filter((x,i,a)=>a.indexOf(x)===i).slice(0,4); o=shuffle(o);
+  return {kind:'mcq',vis:`<div class="gm-s">${esc(txt)}</div>`,prompt:t===1?'Dans ce groupe nominal, quel est le <b>nom</b> (le noyau) ?':'Dans ce groupe nominal, quel est le <b>déterminant</b> ?',say:txt,lang:'fr',options:o,correct:o.indexOf(ask),explain:t===1?`Le <b>nom</b> est le mot principal du groupe : « <b>${esc(ask)}</b> ». On peut mettre un / une devant.`:`Le <b>déterminant</b> est le petit mot placé devant le nom : « <b>${esc(ask)}</b> ».`,after:`${t===1?'Nom':'Déterminant'} : ${ask}`};
+}
 const GM_GEN={
  phrase:g=>Math.random()<.28?gmOrder(g):gmPhrase(g),
  ptype:g=>gmPtype(g), det:g=>gmDet(g), genre:g=>gmGenre(g), pron:g=>gmPron(g), homo:g=>gmHomo(g),
  nature:g=>g==='6H'&&Math.random()<.2?gmVarQ():gmNatQ(g),
+ nom:g=>Math.random()<.3?gmNomType():gmFind(natBank('N'),'N','nom',g),
+ adj:g=>gmFind(natBank('A'),'A','adjectif',g),
+ verbe:g=>gmFind(natBank('V').filter(s=>s.split('/V').length===2),'V','verbe',g),
+ gn:g=>gmGN(g), gs:g=>gmPhrase(g,2), gv:g=>gmPhrase(g,3), cp:g=>gmPhrase('6H',4),
  conj:g=>g==='6H'&&Math.random()<.25?gmFind(CONJ_F,'C','conjonction',g):gmConjFill(g),
  pcomplexe:g=>gmPc(g),
  fonction:()=>gmFn(),
@@ -2997,12 +3022,19 @@ const GM_GEN={
  temps:()=>gmTemps()
 };
 
-const GM_ACTS=[['phrase','📝 La phrase : GS, GV, complément',['4H','6H'],'La phrase'],
+const GM_ACTS=[['phrase','📝 La phrase',['4H','6H'],'La phrase'],
  ['ptype','❓ Types et formes de phrases',['4H','6H'],'La phrase'],
  ['pcomplexe','🌳 Phrase simple · complexe',['6H'],'La phrase'],
- ['nature','🏷️ La nature des mots',['4H','6H'],'Les mots'],
- ['det','🎀 Les déterminants',['4H','6H'],'Les mots'],
- ['pron','👤 Les pronoms',['4H','6H'],'Les mots'],
+ ['gn','🧱 Le groupe nominal (GN)',['4H','6H'],'Les groupes de la phrase'],
+ ['gs','👤 Le groupe sujet (GS)',['4H','6H'],'Les groupes de la phrase'],
+ ['gv','🎬 Le prédicat (groupe verbal)',['4H','6H'],'Les groupes de la phrase'],
+ ['cp','🌿 Le complément de phrase',['6H'],'Les groupes de la phrase'],
+ ['nature','🗂️ Tous les mots (vue d’ensemble)',['4H','6H'],'Les mots'],
+ ['nom','🏷️ Le nom',['4H','6H'],'Les mots'],
+ ['adj','🎨 L’adjectif',['4H','6H'],'Les mots'],
+ ['verbe','🏃 Le verbe',['4H','6H'],'Les mots'],
+ ['det','🎀 Le déterminant',['4H','6H'],'Les mots'],
+ ['pron','🙋 Le pronom',['4H','6H'],'Les mots'],
  ['adverbe','🐙 L’adverbe',['6H'],'Les mots'],
  ['prep','🐛 La préposition',['6H'],'Les mots'],
  ['conj','🔗 La conjonction (mais, ou, et…)',['4H','6H'],'Les mots'],
@@ -3017,10 +3049,24 @@ const blk=(t,b,c)=>`<div class="gm-b" style="--c:${c||'#fff8dc'}"><b>${t}</b>${b
 function gmCard(act,g){
   const h6=g==='6H';
   const wrap=(ic,tt,body)=>`<details class="gm-card" open><summary><span class="gm-mic">${ic}</span><span class="gm-ti">${tt}<small>Je retiens</small></span></summary><div class="gm-body">${body}</div></details>`;
+  if(act==='nom') return wrap('🏷️','Le nom',
+   blk('Le nom désigne…','une <b>personne</b>, un <b>animal</b>, une <b>chose</b>, un <b>lieu</b> ou une <b>idée</b>.'+exs('<span class="n-n">Léa</span> · un <span class="n-n">chat</span> · l’<span class="n-n">école</span> · la <span class="n-n">joie</span>'),'#fff8dc')+`<div class="gm-two"><div class="gm-b" style="--c:#e4f8e4"><b>Nom commun</b>sans majuscule${exs('un chat, une école')}</div><div class="gm-b" style="--c:#ffe3ee"><b>Nom propre</b>avec une majuscule${exs('Léa, Genève, la Suisse')}</div></div>`+blk('Je le reconnais','On peut mettre <b>un</b> ou <b>une</b> devant : <i>un chat</i>, <i>une école</i>.<br>Il a un <b>genre</b> (masculin / féminin) et un <b>nombre</b> (singulier / pluriel).','#e9f2ff')+(h6?blk('Dans la phrase','Le nom est le <b>noyau</b> du groupe nominal : <i>le <b>chat</b> noir</i>.','#fff'):''));
+  if(act==='adj') return wrap('🎨','L’adjectif',
+   blk('L’adjectif dit comment est le nom','Il le <b>qualifie</b> : il donne une information sur lui.'+exs('un chat <span class="n-a">noir</span> · une <span class="n-a">grosse</span> araignée'),'#fff8dc')+blk('Il s’accorde avec le nom',`${ch('un chat noir','#cfe8ff')} ${ch('une chatte noire','#ffd6e5')} ${ch('des chats noirs','#d9f2d1')} ${ch('des chattes noires','#ffe58a')}`,'#fff')+blk('Je le reconnais','Il dit <b>comment</b> est le nom. On peut le supprimer : la phrase reste correcte.','#e9f2ff')+(h6?blk('Deux places possibles',`${ch('épithète · à côté du nom : une <u>grosse</u> araignée','#e4d6fb')} ${ch('attribut · après être, devenir, sembler : il est <u>grand</u>','#d9f2d1')}`,'#fff'):''));
+  if(act==='verbe') return wrap('🏃','Le verbe',
+   blk('Le verbe dit ce que fait le sujet… ou comment il est','Une <b>action</b> ou un <b>état</b>.'+exs('Le chat <span class="n-v">dort</span>. · Léa <span class="n-v">mange</span>. · Il <span class="n-v">est</span> content.'),'#fff8dc')+blk('Il se conjugue','Il <b>change</b> selon la personne et le temps.'+exs('je <b>dors</b> · nous <b>dormons</b> · hier il <b>dormait</b> · demain il <b>dormira</b>'),'#fff')+blk('Je le reconnais',`Je change le <b>temps</b> (hier / demain) : le verbe change.<br>Je l’entoure avec <b>ne … pas</b> : il <b>ne</b> dort <b>pas</b>.<br>Son nom, c’est l’<b>infinitif</b> : dormir, manger, finir.`,'#e9f2ff')+(h6?blk('Les auxiliaires','<b>être</b> et <b>avoir</b> aident les autres verbes (passé composé) : il <b>a</b> mangé, elle <b>est</b> partie.','#fff'):''));
+  if(act==='gn') return wrap('🧱','Le groupe nominal (GN)',
+   blk('Un nom et les mots qui l’accompagnent','Le <b>nom</b> est le mot principal (le <b>noyau</b>).'+exs('<span class="n-d">Le</span> <span class="n-a">petit</span> <span class="n-n">chat</span> · <span class="n-d">mes</span> <span class="n-n">amis</span>'),'#fff8dc')+`<div class="gm-3"><div style="--c:#cfe8ff"><b>déterminant</b>devant le nom<br><small>le, une, mes</small></div><div style="--c:#ffd6e5"><b>nom</b>le noyau<br><small>chat, amis</small></div><div style="--c:#ffe58a"><b>adjectif</b>facultatif<br><small>petit, noir</small></div></div>`+blk('Astuce','Je peux le <b>remplacer par un pronom</b> : <i>le petit chat</i> → <i>il</i> · <i>mes amis</i> → <i>ils</i>.','#e9f2ff')+(h6?blk('Dans la phrase','Un GN peut être <b>sujet</b>, <b>COD</b> ou faire partie d’un <b>complément</b>.','#fff'):''));
+  if(act==='gs') return wrap('👤','Le groupe sujet (GS)',
+   blk('Il dit de qui ou de quoi on parle','Pour le trouver : <b>« Qui est-ce qui … ? »</b>'+exs('<span class="gm-y">Mon frère</span> regarde un film. → Qui regarde ? <b>Mon frère</b>.'),'#fff8dc')+blk('Je le reconnais',`Je peux le remplacer par <b>il · elle · ils · elles</b>.<br>Il est souvent un <b>groupe nominal</b> (<i>mon frère</i>) ou un <b>pronom</b> (<i>elle</i>).<br>Le verbe s’accorde avec lui.`,'#e9f2ff')+(h6?blk('Encadre-le','C’est le groupe qui reste devant le verbe, même si on déplace le complément de phrase : <i>Hier, <span class="gm-y">Léa</span> jouait.</i>','#fff'):''));
+  if(act==='gv') return wrap('🎬','Le prédicat (groupe verbal)',
+   blk('Il dit ce que l’on dit du sujet','Il contient le <b>verbe</b> et les mots qui vont avec lui.'+exs('Mon frère <span class="gm-g">regarde un film</span>.'),'#fff8dc')+blk('Je le reconnais',`Pour le trouver : <b>« Que se passe-t-il ? »</b> ou <b>« Qu’est-ce qu’on dit du sujet ? »</b><br>Il ne peut <b>pas être supprimé</b> : sans lui, la phrase n’existe plus.`,'#e9f2ff')+(h6?blk('Dedans, on trouve',`${ch('le verbe','#e4d6fb')} ${ch('un COD · il mange <u>une pomme</u>','#ffd6e5')} ${ch('un COI · elle parle <u>à sa maîtresse</u>','#cfe8ff')} ${ch('un attribut · il est <u>grand</u>','#d9f2d1')}`,'#fff'):''));
+  if(act==='cp') return wrap('🌿','Le complément de phrase',
+   blk('Il donne un détail sur toute la phrase','Il répond à : <b>où ? quand ? comment ? pourquoi ?</b>'+exs('<span class="gm-v">Hier</span>, Pierre skie. · Pierre skie <span class="gm-v">aujourd’hui</span>.'),'#fff8dc')+blk('Je le reconnais',`Il est <b>facultatif</b> : je peux le <b>supprimer</b>, la phrase reste correcte.<br>Je peux le <b>déplacer</b> : <i>Pierre skie à Verbier</i> → <i>À Verbier, Pierre skie</i>.`,'#e4f8e4')+blk('Son autre nom','On l’appelle aussi le <b>complément circonstanciel</b>, noté <b>CC</b>.','#fff'));
   if(act==='ptype') return wrap('❓','Types et formes de phrases',`<div class="gm-4"><div style="--c:#e4f8e4"><b>Déclarative</b><small>elle raconte</small>Léa lit un livre<b>.</b></div><div style="--c:#cfe8ff"><b>Interrogative</b><small>elle demande</small>Où vas-tu<b> ?</b></div><div style="--c:#ffe3ee"><b>Exclamative</b><small>elle s’émerveille</small>Quel beau dessin<b> !</b></div>${h6?'<div style="--c:#fff0b8"><b>Impérative</b><small>elle ordonne</small>Range ta chambre<b>.</b></div>':''}</div>`+(h6?blk('Affirmative ou négative ?','La négation entoure le verbe : <b>ne … pas</b>, <b>ne … jamais</b>, <b>ne … rien</b>, <b>ne … plus</b>.'+exs('Je <b>ne</b> mange <b>pas</b> de poisson.'),'#fff8dc'):''));
-  if(act==='det') return wrap('🎀','Les déterminants',blk('Il se place devant le nom','Il donne le <b>genre</b> (masculin / féminin) et le <b>nombre</b> (un / plusieurs).','#fff8dc')+`<div class="gm-4"><div style="--c:#cfe8ff"><b>Défini</b>le · la · les</div><div style="--c:#ffd6e5"><b>Indéfini</b>un · une · des</div><div style="--c:#d9f2d1"><b>Possessif</b>mon · ma · mes · son · sa · ses…</div>${h6?'<div style="--c:#ffe58a"><b>Démonstratif</b>ce · cet · cette · ces</div>':''}</div>`+blk('Astuce','<b>un / le</b> → masculin · <b>une / la</b> → féminin · <b>les / des / mes</b> → pluriel.','#e9f2ff'));
+  if(act==='det') return wrap('🎀','Le déterminant',blk('Il se place devant le nom','Il donne le <b>genre</b> (masculin / féminin) et le <b>nombre</b> (un / plusieurs).','#fff8dc')+`<div class="gm-4"><div style="--c:#cfe8ff"><b>Défini</b>le · la · les</div><div style="--c:#ffd6e5"><b>Indéfini</b>un · une · des</div><div style="--c:#d9f2d1"><b>Possessif</b>mon · ma · mes · son · sa · ses…</div>${h6?'<div style="--c:#ffe58a"><b>Démonstratif</b>ce · cet · cette · ces</div>':''}</div>`+blk('Astuce','<b>un / le</b> → masculin · <b>une / la</b> → féminin · <b>les / des / mes</b> → pluriel.','#e9f2ff'));
   if(act==='genre') return wrap('👫','Genre et nombre, accords',`<div class="gm-two"><div class="gm-b" style="--c:#e9f2ff"><b>Genre</b>masculin <i>un chat</i><br>féminin <i>une chatte</i></div><div class="gm-b" style="--c:#ffe3ee"><b>Nombre</b>singulier <i>un chat</i><br>pluriel <i>des chats</i></div></div>`+(h6?blk('Pluriels à retenir',`${ch('-s : un chat → des chats','#d9f2d1')} ${ch('-x : un gâteau → des gâteaux','#ffd9b3')} ${ch('-aux : un cheval → des chevaux','#cfe8ff')} ${ch('inchangé : un nez → des nez','#e4d6fb')}`,'#fff')+blk('Les accords','L’adjectif et le déterminant <b>s’accordent</b> avec le nom : <i>des pommes vertes</i>.','#fff8dc'):blk('Le petit mot devant le nom m’aide','<b>un, le</b> → masculin. <b>une, la</b> → féminin. <b>des, les</b> → pluriel.','#fff8dc')));
-  if(act==='pron') return wrap('👤','Les pronoms',blk('Le pronom remplace un groupe nominal','Il évite de répéter le nom.'+exs('<span class="gm-y">Léa</span> mange une pomme. → <span class="gm-y">Elle</span> mange une pomme.'),'#fff8dc')+`<div class="gm-4"><div style="--c:#cfe8ff"><b>il</b>un garçon, un animal</div><div style="--c:#ffd6e5"><b>elle</b>une fille, une chose</div><div style="--c:#d9f2d1"><b>ils</b>plusieurs (ou garçons + filles)</div><div style="--c:#ffe58a"><b>elles</b>plusieurs filles</div></div>`+(h6?blk('Aussi','<b>je, tu</b> : celui qui parle, celui à qui l’on parle. <b>nous</b> = moi + d’autres. <b>vous</b> = toi + d’autres.','#e9f2ff'):''));
+  if(act==='pron') return wrap('🙋','Le pronom',blk('Le pronom remplace un groupe nominal','Il évite de répéter le nom.'+exs('<span class="gm-y">Léa</span> mange une pomme. → <span class="gm-y">Elle</span> mange une pomme.'),'#fff8dc')+`<div class="gm-4"><div style="--c:#cfe8ff"><b>il</b>un garçon, un animal</div><div style="--c:#ffd6e5"><b>elle</b>une fille, une chose</div><div style="--c:#d9f2d1"><b>ils</b>plusieurs (ou garçons + filles)</div><div style="--c:#ffe58a"><b>elles</b>plusieurs filles</div></div>`+(h6?blk('Aussi','<b>je, tu</b> : celui qui parle, celui à qui l’on parle. <b>nous</b> = moi + d’autres. <b>vous</b> = toi + d’autres.','#e9f2ff'):''));
   if(act==='homo') return wrap('👯','Les petits mots qui se ressemblent',`<div class="gm-3"><div style="--c:#e4f8e4"><b>a / à</b>« avait » → <b>a</b><br><small>Il a faim · à la piscine</small></div><div style="--c:#cfe8ff"><b>et / est</b>« était » → <b>est</b><br><small>Il est tard · Léa et Paul</small></div><div style="--c:#ffe58a"><b>ou / où</b>« ou bien » → <b>ou</b><br><small>thé ou café · Où vas-tu ?</small></div></div>`+(h6?`<div class="gm-3"><div style="--c:#ffd6e5"><b>on / ont</b>« avaient » → <b>ont</b><br><small>Ils ont faim · On joue</small></div><div style="--c:#e4d6fb"><b>son / sont</b>« étaient » → <b>sont</b><br><small>Ils sont là · son sac</small></div><div style="--c:#ffd9b3"><b>ce / se</b>« me » → <b>se</b><br><small>Il se lave · ce livre</small></div><div style="--c:#d9f2d1"><b>ces / ses</b>ses = les siens<br><small>ses jouets · ces oiseaux-là</small></div></div>`:''));
   if(act==='phrase') return wrap('📝','La phrase',h6
    ?blk('Une phrase, c’est…','des mots <b>dans le bon ordre</b>, qui ont un <b>sens</b>, avec une <b>majuscule</b> au début et un <b>point</b> à la fin.','#fff8dc')+blk('2 groupes obligatoires',`${ch('groupe sujet (GN)','#ffe58a')} ${ch('groupe verbal (GV) = le prédicat','#cfd6e4')}`+exs('<span class="gm-y">Mon frère</span> <span class="gm-g">regarde un film</span>.'),'#e9f2ff')+blk('1 groupe facultatif',`Le <b>complément de phrase</b> (groupe vert). On peut le supprimer ou le déplacer.`+exs('Pierre skie <span class="gm-v">aujourd’hui</span>.'),'#e4f8e4')
@@ -3047,6 +3093,7 @@ function gmCard(act,g){
   return '';
 }
 function genGram(g,act){ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].includes(gg)).map(a=>a[0]); const a=act&&ok.includes(act)?act:pick(ok); const q=GM_GEN[a](gg); if(q.options&&q.options.some(o=>o.length>12)) q.wide=true; return q; }
+window.__gg=genGram;
 MkSeries('p-gramS',{title:'📘 Apprendre la règle',intro:'',
   compact:true,acts:GM_ACTS.map(a=>[a[0],a[1],a[2],a[3]]),grades:[['4H','4H · les bases'],['6H','6H · toutes les notions']],card:gmCard,
   hints:{'4H':'La phrase, les natures (nom, verbe, adjectif, déterminant) et les petits mots qui relient.','6H':'Phrase simple ou complexe, nature et fonction des mots, adverbe, préposition, conjonction, groupes de verbes, temps simples et composés.'},gen:genGram});
