@@ -116,7 +116,8 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .g-pc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .g-pc-tok{flex:none;width:46px;height:46px;border-radius:50%;background:var(--pc);display:grid;place-items:center;font-size:26px;border:3px solid #fff;box-shadow:0 0 0 2px var(--pc)}
 .g-pc input{flex:1;min-width:0;min-height:46px;border-radius:12px;border:2px solid rgba(29,36,51,.18);padding:4px 10px;font:inherit;font-size:18px;background:#fff}
-.g-leg{margin:6px 0;font-size:.9rem;color:#4a5368}.g-leg summary{cursor:pointer;font-weight:700}.g-leg ul{margin:6px 0 0;padding-left:18px;display:grid;gap:4px}.gc-row{display:grid;gap:6px;margin:8px 0}.gc-nm{font-weight:800;text-align:left}.g-chars{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:8px;max-height:210px;overflow-y:auto}
+.g-leg{margin:6px 0;font-size:.9rem;color:#4a5368}.g-leg summary{cursor:pointer;font-weight:700}.g-leg ul{margin:6px 0 0;padding-left:18px;display:grid;gap:4px}.g-win{position:relative}.g-x{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(29,36,51,.2);background:#f4f6fb;font-size:17px;cursor:pointer;color:#5b6478;padding:0;z-index:2}
+.gc-row{display:grid;gap:6px;margin:8px 0}.gc-nm{font-weight:800;text-align:left}.g-chars{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:8px;max-height:210px;overflow-y:auto}
 .g-chars button{aspect-ratio:1;border-radius:12px;border:2px solid rgba(29,36,51,.14);background:#f6f7fb;font-size:clamp(20px,6vw,28px);padding:0}
 .g-chars button[aria-pressed="true"]{background:#fff;border-color:var(--pc);box-shadow:0 0 0 3px var(--pc)}
 .g-chars button:disabled,.g-cols button:disabled{opacity:.25;cursor:not-allowed}
@@ -640,6 +641,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "3.6", desc: "Fermer la fenêtre de fin de partie" },
     { v: "3.5", desc: "Plateau : pièges de fin et nouvelles cases" },
     { v: "3.4", desc: "Bouton Voix plus clair, texte explicatif" },
     { v: "3.3", desc: "Classe par joueur, plus d’avatars et couleurs" },
@@ -1487,13 +1489,13 @@ function win(p,i){
   ov.innerHTML=`<div class="g-win" style="--pc:${p.color}"><div class="cup">🏆</div>
     <h2 class="g-h">Bravo ${esc(p.name)} ! ${p.emoji}</h2>
     <p class="g-p">Tu as atteint la case ${SIZE} !</p>
-    <button class="g-big replay" data-a="again">▶ Rejouer</button><button class="g-ghost" data-a="grade" style="margin-top:8px">🎓 Changer de classe</button></div>`;
+    <button class="g-x" data-a="close" aria-label="Fermer">✕</button><button class="g-big replay" data-a="again">▶ Rejouer</button><button class="g-ghost" data-a="grade" style="margin-top:8px">🎓 Changer de classe</button><button class="g-ghost" data-a="close" style="margin-top:8px">✔ Fermer, je ne rejoue pas</button></div>`;
   document.body.appendChild(ov); DLmore(ov.querySelector('.g-win'),window.DLH.hubItems('plateau').map(it=>({ic:it.ic,t:it.t,go:()=>{ ov.remove(); conf.forEach(c=>c.remove()); it.go(); }})),'Ou joue à un autre jeu :');
   const conf=[]; for(let k=0;k<36;k++){ const c=document.createElement('span'); c.className='g-conf'; c.textContent=['🎉','⭐','🎊','✨'][k%4];
     c.style.left=rnd(96)+'%'; c.style.animationDuration=(2.2+Math.random()*2)+'s'; c.style.animationDelay=(Math.random()*1.2)+'s'; document.body.appendChild(c); conf.push(c); }
   setTimeout(()=>conf.forEach(c=>c.remove()),6000);
   say('Bravo !','fr');
-  ov.onclick=e=>{ const b=e.target.closest('button[data-a]'); if(!b) return; if(b.dataset.a==='grade'){ restartDialog(); return; } ov.remove(); conf.forEach(c=>c.remove());
+  ov.onclick=e=>{ const b=e.target.closest('button[data-a]'); if(!b) return; if(b.dataset.a==='grade'){ restartDialog(); return; } ov.remove(); conf.forEach(c=>c.remove()); if(b.dataset.a==='close') return;
     if(b.dataset.a==='again'){ G.players.forEach(x=>x.pos=0); G.cur=0; G.over=false; G.busy=false; renderGame(); } else renderSetup(); };
 }
 
@@ -1599,10 +1601,10 @@ function endScreen(o,again){
   const ov=document.createElement('div'); ov.className='g-ov'; ov.style.alignItems='center';
   ov.innerHTML=`<div class="g-win" style="--pc:${o.color||'#1f5fd6'}"><div class="cup">${o.icon||'🏆'}</div>
     <h2 class="g-h">${o.title}</h2><p class="g-p">${o.sub||''}</p>
-    <button class="g-big replay" data-a="again">▶ Rejouer</button></div>`;
+    <button class="g-x" data-a="close" aria-label="Fermer">✕</button><button class="g-big replay" data-a="again">▶ Rejouer</button><button class="g-ghost" data-a="close" style="margin-top:8px">✔ Fermer, je ne rejoue pas</button></div>`;
   document.body.appendChild(ov); confetti();
   const gid=curGame; DLmore(ov.querySelector('.g-win'),hubItems(gid).map(it=>({ic:it.ic,t:it.t,go:()=>{ ov.remove(); it.go(); }})),'Ou joue à un autre jeu :');
-  ov.onclick=e=>{ const b=e.target.closest('button[data-a]'); if(!b) return; ov.remove(); again(); };
+  ov.onclick=e=>{ const b=e.target.closest('button[data-a]'); if(!b) return; ov.remove(); if(b.dataset.a==='close') return; again(); };
 }
 function numItem(grade){
   const r=Math.random(); let lo,hi;
