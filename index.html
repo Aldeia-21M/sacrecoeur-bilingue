@@ -3657,6 +3657,7 @@ let ah; function autoHide(ms){ clearTimeout(ah); ah=setTimeout(()=>{P.hidden=tru
 function show(t,speak){ clearTimeout(ah); T.textContent=t; P.hidden=false; nudge.hidden=true; if(speak) say(t); }
 fab.onclick=()=>{ if(P.hidden) show('Coucou ! Je suis PoutchouPoutchou. Qu’est-ce qu’il te faut ?',false); else P.hidden=true; };
 P.querySelector('.pc-x').onclick=P.querySelector('#pcBy').onclick=()=>{ P.hidden=true; };
+document.addEventListener('pointerdown',e=>{ if(!P.hidden&&!P.contains(e.target)&&!fab.contains(e.target)) P.hidden=true; },true);
 nudge.onclick=()=>{ nudge.hidden=true; show('Besoin d’un coup de pouce ? Appuie sur l’ampoule !',true); };
 function push(t){ nudge.textContent=t; nudge.hidden=false; clearTimeout(push.t); push.t=setTimeout(()=>{nudge.hidden=true;},7000); }
 const vis=el=>el&&el.offsetParent!==null;
