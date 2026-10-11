@@ -383,15 +383,16 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .tx-pal{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .tx-pal button{display:flex;align-items:center;gap:8px;min-height:46px;padding:4px 14px;border-radius:999px;border:3px solid rgba(29,36,51,.15);background:#fff;font-weight:800;font-size:16px}
 .tx-pal button[aria-pressed=true]{border-color:var(--cc);box-shadow:0 0 0 3px var(--cc) inset;background:#fff}
-.sw{display:inline-block;width:22px;height:12px;border-radius:4px}.sw-p{border-bottom:5px solid #e03131}.sw-i{border-bottom:5px solid #7048e8}.sw-n{border-bottom:5px solid #2f9e44}.sw-s{border:3px solid #e0a800;border-radius:6px}.sw-a{background:#b2f2bb}
-.tx-hint{margin:0 0 8px;padding:8px 12px;border-radius:14px;background:#fff;border-left:6px solid var(--cc,#e0b100);font-size:clamp(14.5px,3.9vw,16.5px);line-height:1.4}
-.tx-text{margin:8px 0;padding:14px 12px;border-radius:16px;background:#fff;border:3px dashed #1d2433;font-size:clamp(22px,6vw,26px);line-height:2.3;-webkit-user-select:none;user-select:none}
-.tw{cursor:pointer;padding:2px 1px;border-radius:6px;border-bottom:4px solid transparent;-webkit-tap-highlight-color:transparent}
-.tw.m-p{border-bottom-color:#e03131}.tw.m-i{border-bottom-color:#7048e8}.tw.m-n{border-bottom-color:#2f9e44}.tw.m-a{background:#b2f2bb}
-.tx-run{border:3px solid #e0a800;border-radius:10px;padding:2px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.tw.miss-p{border-bottom:4px dashed #e03131}.tw.miss-i{border-bottom:4px dashed #7048e8}.tw.miss-n{border-bottom:4px dashed #2f9e44}
-.tw.miss-s{outline:3px dashed #e0a800;outline-offset:1px}.tw.miss-a{background:repeating-linear-gradient(45deg,#d8f5dc 0 4px,#fff 4px 8px)}
+.sw{display:inline-block;width:22px;height:12px;border-radius:4px;background:var(--cc)}
+.tw{cursor:pointer;padding:2px 1px;border-radius:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;-webkit-tap-highlight-color:transparent}
+.tw.m-p,.tw.m-v{border-bottom-color:#e03131}.tw.m-i{border-bottom-color:#7048e8}.tw.m-u{border-bottom-color:#e8590c}.tw.m-c{border-bottom-color:#1c7ed6}.tw.m-n{border-bottom-color:#2f9e44}
+.tw.m-g{border-top-color:#5f3dc4}.tw.m-x{background:#b2f2bb}
+.tw.m-D{background:#cfe8ff}.tw.m-N{background:#ffd6e5}.tw.m-J{background:#ffe58a}.tw.m-R{background:#d9f2d1}.tw.m-V{background:#e4d6fb}.tw.m-B{background:#ffd9b3}.tw.m-P{background:#c5f6fa}.tw.m-C{background:#f3d9fa}
+.tx-run{border:3px solid var(--rc);border-radius:10px;padding:2px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.tw.miss{outline:3px dashed var(--mc);outline-offset:1px}
 .tw.bad{background:#ffe3ea}
+.tx-goal{margin:4px 2px 6px;font-size:clamp(15px,4vw,17px);font-weight:700}
+.mx-seg.wrap.one{grid-template-columns:1fr}.mx-seg.wrap.one button{text-align:left;padding-left:14px}
 .tx-fb{margin:8px 0;padding:10px 12px;border-radius:14px;font-size:clamp(16px,4.3vw,19px);line-height:1.4}.tx-fb.ok{background:#e4f8e4;border:2px solid #2f9e44}.tx-fb.ko{background:#fff0e0;border:2px solid #e08a1e}
 .tx-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.tx-btns>*{flex:1 1 140px}
 /* ---- séries, défi, petits ---- */
@@ -2899,8 +2900,69 @@ function gmOrder(g){
   const cap=x=>x[0].toUpperCase()+x.slice(1); const P=parts.slice(); P[0]=cap(P[0]); P[P.length-1]+='.';
   return {kind:'tiles',parts:P,answer:P.join(' '),prompt:`Remets les mots dans le bon ordre pour faire une phrase.${g==='6H'?'':' <small>(Qui ? Que se passe-t-il ?)</small>'}`,vis:'',explain:`« <b>${esc(P.join(' '))}</b> » Qui ? <b>${esc(a)}</b>. Que se passe-t-il ? <b>${esc(b)}</b>.`,after:P.join(' ')};
 }
+/* ---- notions complémentaires : types de phrases, déterminants, genre/nombre, pronoms, homophones ---- */
+const PT_N={dec:['Déclarative','elle raconte, elle informe (.)'],int:['Interrogative','elle pose une question (?)'],exc:['Exclamative','elle exprime une émotion (!)'],imp:['Impérative','elle donne un ordre ou un conseil']};
+const PT_S={dec:['Le chat dort sur le canapé.','Mes amis arrivent demain.','Nous mangeons une pizza.','Il pleut depuis ce matin.','La maîtresse corrige les cahiers.','Léa lit un livre.','Papa prépare le repas.'],
+ int:['Où vas-tu ?','Veux-tu du thé ?','Quel âge as-tu ?','Pourquoi pleures-tu ?','Est-ce que tu viens avec nous ?','Qui a pris mon crayon ?','Quand partons-nous ?'],
+ exc:['Quelle belle journée !','Comme ce gâteau est bon !','Que ce chien est drôle !','Quel beau dessin !','Comme il fait froid !'],
+ imp:['Range ta chambre.','Ferme la porte !','Écoutez bien la maîtresse.','Lave-toi les mains.','Mange ta soupe !','Prends ton cartable.']};
+const PT_NEG=[['Je ne mange pas de poisson.',1,'ne … pas'],['Il n’aime pas les épinards.',1,'n’ … pas'],['Tu ne viens jamais.',1,'ne … jamais'],['Nous ne voyons rien.',1,'ne … rien'],['Elle ne parle plus.',1,'ne … plus'],['Elle mange du poisson.',0],['Il aime les épinards.',0],['Tu viens souvent.',0],['Nous voyons un film.',0],['Elle parle beaucoup.',0]];
+function gmPtype(g){
+  if(g==='6H'&&Math.random()<.3){ const [s,n,m]=pick(PT_NEG); return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Phrase <b>affirmative</b> ou <b>négative</b> ?',say:s,lang:'fr',options:['Affirmative','Négative'],correct:n,explain:n?`La phrase est <b>négative</b> : le verbe est entouré de « <b>${m}</b> ».`:'La phrase est <b>affirmative</b> : il n’y a pas de négation (ne … pas).',after:n?'Phrase négative.':'Phrase affirmative.'}; }
+  const ks=g==='6H'?['dec','int','exc','imp']:['dec','int','exc']; const k=pick(ks), s=pick(PT_S[k]);
+  const o=ks.map(x=>PT_N[x][0]+' · '+PT_N[x][1]);
+  return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Quel est le <b>type</b> de cette phrase ?',say:s,lang:'fr',options:o,correct:ks.indexOf(k),explain:`C’est une phrase <b>${PT_N[k][0].toLowerCase()}</b> : ${PT_N[k][1]}.`,after:`Phrase ${PT_N[k][0].toLowerCase()}.`,wide:true};
+}
+const DT_N=[['chat','chats','m'],['chien','chiens','m'],['livre','livres','m'],['ballon','ballons','m'],['jardin','jardins','m'],['cartable','cartables','m'],['vélo','vélos','m'],['gâteau','gâteaux','m'],['maison','maisons','f'],['table','tables','f'],['fleur','fleurs','f'],['classe','classes','f'],['pomme','pommes','f'],['chaise','chaises','f'],['poupée','poupées','f'],['fête','fêtes','f']];
+const DT_F={déf:{m:'le',f:'la',p:'les',n:'article défini'},ind:{m:'un',f:'une',p:'des',n:'article indéfini'},pos:{m:'mon',f:'ma',p:'mes',n:'déterminant possessif'},dem:{m:'ce',f:'cette',p:'ces',n:'déterminant démonstratif'}};
+const DT_W={déf:['le','la','les'],ind:['un','une','des'],pos:['mon','ma','mes','ton','ta','tes','son','sa','ses','notre','nos','votre','vos','leur','leurs'],dem:['ce','cet','cette','ces']};
+function gmDet(g){
+  const fams=g==='6H'?['déf','ind','pos','dem']:['déf','ind','pos'];
+  if(Math.random()<.4){ const f=pick(fams), w=pick(DT_W[f]); const [m,p,gn]=pick(DT_N); const noun=['les','des','mes','ses','tes','ces','nos','vos','leurs'].includes(w)?p:m; const s=`${w} ${noun}`;
+    const names=fams.map(x=>DT_F[x].n[0].toUpperCase()+DT_F[x].n.slice(1));
+    return {kind:'mcq',vis:`<div class="gm-s"><u class="gm-t">${esc(w)}</u> ${esc(noun)}</div>`,prompt:`Quelle sorte de <b>déterminant</b> est « <b>${esc(w)}</b> » ?`,say:s,lang:'fr',options:names,correct:fams.indexOf(f),explain:`« <b>${esc(w)}</b> » est un <b>${DT_F[f].n}</b>.`,after:`${w} : ${DT_F[f].n}`,wide:true}; }
+  const f=pick(fams), [m,p,gn]=pick(DT_N), plural=Math.random()<.3, ans=plural?DT_F[f].p:DT_F[f][gn], noun=plural?p:m;
+  const pool=['m','f','p'].map(x=>DT_F[f][x]); const o=shuffle([ans].concat(shuffle(pool.filter(x=>x!==ans)).slice(0,2)));
+  return {kind:'mcq',prompt:`Complète avec le bon déterminant (${DT_F[f].n}) :<div class="gm-s"><span class="gm-bl">___</span> ${esc(noun)}</div>`,say:'… '+noun,lang:'fr',options:o,correct:o.indexOf(ans),explain:`« <b>${esc(ans)} ${esc(noun)}</b> » : le nom est ${plural?'<b>pluriel</b>':gn==='m'?'<b>masculin singulier</b>':'<b>féminin singulier</b>'}.`,after:`${ans} ${noun}`};
+}
+const GN_ADJ=[['Les fleurs sont ___.','jolies',['joli','jolie','jolis']],['Mon frère est ___.','petit',['petite','petits','petites']],['Ma sœur est ___.','contente',['content','contents','contentes']],['Les enfants sont ___.','contents',['content','contente','contentes']],['Une histoire ___ !','drôle',['drôles','drôlement']],['Des chats ___ dorment.','noirs',['noir','noire','noires']],['La table est ___.','ronde',['rond','ronds','rondes']],['Des pommes ___.','vertes',['vert','verte','verts']]];
+const GN_P=[['un cheval','des chevaux',['des chevals','des chevaus']],['un journal','des journaux',['des journals','des journaus']],['un animal','des animaux',['des animals','des animaus']],['un gâteau','des gâteaux',['des gâteaus','des gâteau']],['un bateau','des bateaux',['des bateaus','des bateau']],['un jeu','des jeux',['des jeus','des jeu']],['un chapeau','des chapeaux',['des chapeaus','des chapeau']],['un chou','des choux',['des chous','des chou']],['un nez','des nez',['des nezs','des nezes']],['un prix','des prix',['des prixs','des prixes']],['un clou','des clous',['des cloux','des clou']],['un cadeau','des cadeaux',['des cadeaus','des cadeau']],['un chat','des chats',['des chaux','des chat']],['une fleur','des fleurs',['des fleux','des fleur']]];
+const GN_F=[['un ami','une amie',['une ami','un amie']],['un voisin','une voisine',['une voisin','une voisinne']],['un joueur','une joueuse',['une joueur','une joueure']],['un coiffeur','une coiffeuse',['une coiffeur','une coiffeure']],['un boulanger','une boulangère',['une boulanger','une boulangerre']],['un chanteur','une chanteuse',['une chanteur','une chanteure']],['un lion','une lionne',['une lione','une lion']],['un chat','une chatte',['une chate','une chat']],['un acteur','une actrice',['une acteuse','une acteure']],['un cousin','une cousine',['une cousin','une cousinne']],['un directeur','une directrice',['une directeuse','une directeur']],['un prince','une princesse',['une prince','une princece']]];
+const GN_G=[['le garçon','m'],['un chat','m'],['le soleil','m'],['un livre','m'],['le jardin','m'],['un ballon','m'],['le bonbon','m'],['un crayon','m'],['la fille','f'],['une maison','f'],['la lune','f'],['une fleur','f'],['la table','f'],['une pomme','f'],['la classe','f'],['une école','f']];
+const GN_N=[['les chats',1],['un chat',0],['des fleurs',1],['une fleur',0],['les enfants',1],['mon cartable',0],['mes amis',1],['ses jouets',1],['ta sœur',0],['ces gâteaux',1],['cette pomme',0],['nos voisins',1]];
+function gmGenre(g){
+  const r=Math.random();
+  if(g==='6H'&&r<.55){ const t=rnd(3);
+    if(t===0){ const [s,a,w]=pick(GN_P); const o=shuffle([a].concat(w)); return {kind:'mcq',prompt:`Écris au <b>pluriel</b> : « <b>${esc(s)}</b> »`,say:s,lang:'fr',options:o,correct:o.indexOf(a),explain:`${esc(s)} → <b>${esc(a)}</b>.${/eau|al|ou$/.test(s)?' Pluriel en <b>-x</b> ou <b>-aux</b> : on le retient !':''}`,after:a}; }
+    if(t===1){ const [s,a,w]=pick(GN_F); const o=shuffle([a].concat(w)); return {kind:'mcq',prompt:`Écris au <b>féminin</b> : « <b>${esc(s)}</b> »`,say:s,lang:'fr',options:o,correct:o.indexOf(a),explain:`${esc(s)} → <b>${esc(a)}</b>.`,after:a}; }
+    const [s,a,w]=pick(GN_ADJ); const o=shuffle([a].concat(w)); return {kind:'mcq',prompt:`Accorde l’adjectif :<div class="gm-s">${esc(s).replace('___','<span class="gm-bl">___</span>')}</div>`,say:s.replace('___','…'),lang:'fr',options:o,correct:o.indexOf(a),explain:`${esc(s).replace('___','<b>'+esc(a)+'</b>')} L’adjectif s’accorde avec le nom (genre et nombre).`,after:s.replace('___',a)}; }
+  if(r<.5||g==='6H'){ const [s,gn]=pick(GN_G); return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Ce nom est-il <b>masculin</b> ou <b>féminin</b> ?',say:s,lang:'fr',options:['Masculin','Féminin'],correct:gn==='m'?0:1,explain:`<b>${esc(s)}</b> : avec <b>le / un</b> c’est masculin, avec <b>la / une</b> c’est féminin.`,after:`${s} : ${gn==='m'?'masculin':'féminin'}`}; }
+  const [s,n]=pick(GN_N); return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Singulier ou pluriel ?',say:s,lang:'fr',options:['Singulier (un seul)','Pluriel (plusieurs)'],correct:n,explain:`<b>${esc(s)}</b> : ${n?'<b>les, des, mes, ses, ces</b> annoncent un pluriel.':'<b>un, une, le, la, mon, ma</b> annoncent un singulier.'}`,after:`${s} : ${n?'pluriel':'singulier'}`,wide:true};
+}
+const PR_S=[['Léa mange une pomme.','Elle'],['Mon frère joue au foot.','Il'],['Les enfants chantent.','Ils'],['Le chat dort.','Il'],['La maîtresse écrit.','Elle'],['Les filles dansent.','Elles'],['Maman prépare le repas.','Elle'],['Mes parents travaillent.','Ils'],['Ma sœur et ma mère rient.','Elles'],['Pierre et Léa courent.','Ils'],['Paul et moi jouons.','Nous'],['Toi et ton frère venez.','Vous']];
+function gmPron(g){
+  const L=g==='6H'?PR_S:PR_S.slice(0,8); const [s,a]=pick(L); const words=s.replace('.','').split(' ');
+  const gs={'Elle':1,'Il':1,'Ils':1,'Elles':1,'Nous':1,'Vous':1}; const pool=g==='6H'?['Il','Elle','Ils','Elles','Nous','Vous']:['Il','Elle','Ils','Elles'];
+  const o=shuffle([a].concat(shuffle(pool.filter(x=>x!==a)).slice(0,3)));
+  const why={Elle:'un seul être, <b>féminin</b> → <b>elle</b>',Il:'un seul être, <b>masculin</b> → <b>il</b>',Ils:'plusieurs, <b>masculin</b> (ou mélange garçons et filles) → <b>ils</b>',Elles:'plusieurs, que des <b>féminins</b> → <b>elles</b>',Nous:'celui qui parle + d’autres → <b>nous</b>',Vous:'« toi » + d’autres → <b>vous</b>'}[a];
+  return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Quel <b>pronom</b> remplace le groupe sujet (au début de la phrase) ?',say:s,lang:'fr',options:o,correct:o.indexOf(a),explain:`${why}.`,after:`Le pronom est ${a.toLowerCase()}.`};
+}
+const HM=[
+ ['aà','Léa ___ une nouvelle poupée.','a','à','On peut dire « avait » : Léa avait → <b>a</b> (verbe avoir).'],['aà','Nous allons ___ la piscine.','à','a','« avait » ne va pas : c’est la préposition <b>à</b>.'],['aà','Il ___ très faim.','a','à','Il avait faim → <b>a</b> (verbe avoir).'],['aà','Je donne le livre ___ Paul.','à','a','« avait » ne va pas : <b>à</b>.'],['aà','Mon frère ___ dix ans.','a','à','Il avait dix ans → <b>a</b>.'],['aà','Ils jouent ___ cache-cache.','à','a','« avait » ne va pas : <b>à</b> (jouer à).'],
+ ['et','Le ciel ___ bleu.','est','et','On peut dire « était » : le ciel était bleu → <b>est</b> (verbe être).'],['et','Pierre ___ Marie sont amis.','et','est','On peut dire « et puis » : <b>et</b> relie deux mots.'],['et','Il ___ tard.','est','et','Il était tard → <b>est</b>.'],['et','Je mange du pain ___ du fromage.','et','est','« et puis du fromage » → <b>et</b>.'],['et','La soupe ___ chaude.','est','et','La soupe était chaude → <b>est</b>.'],['et','Tu chantes ___ elle danse.','et','est','« et puis » → <b>et</b>.'],
+ ['on','Les enfants ___ faim.','ont','on','On peut dire « avaient » : les enfants avaient faim → <b>ont</b>.'],['on','___ joue dans la cour.','On','Ont','« On » = « il, elle » : <b>on</b> joue. « Avaient » ne va pas.'],['on','Elles ___ un chien.','ont','on','Elles avaient un chien → <b>ont</b>.'],['on','___ mange à midi.','On','Ont','« On » peut être remplacé par « il » : <b>On</b> mange.'],
+ ['sn','Léa range ___ cartable.','son','sont','On peut dire « mon » : mon cartable → <b>son</b>.'],['sn','Mes amis ___ gentils.','sont','son','On peut dire « étaient » : ils étaient gentils → <b>sont</b>.'],['sn','Ils ___ en classe.','sont','son','Ils étaient en classe → <b>sont</b>.'],['sn','Paul lit ___ livre.','son','sont','« mon livre » → <b>son</b>.'],
+ ['ou','Veux-tu une pomme ___ une poire ?','ou','où','On peut dire « ou bien » : <b>ou</b>.'],['ou','___ habites-tu ?','Où','Ou','<b>Où</b> parle d’un lieu (avec un accent).'],['ou','Tu viens ___ tu restes ?','ou','où','« ou bien » → <b>ou</b>.'],['ou','La ville ___ je vis est petite.','où','ou','<b>où</b> parle d’un lieu (la ville où…).'],
+ ['cs','Il ___ réveille tôt.','se','ce','On peut dire « me » : je me réveille → <b>se</b>.'],['cs','___ livre est drôle.','Ce','Se','« ce livre » = « ce » devant un nom → <b>Ce</b>.'],['cs','Elle ___ promène dans le parc.','se','ce','Je me promène → <b>se</b>.'],['cs','Je prends ___ crayon bleu.','ce','se','« ce crayon » → <b>ce</b> (devant un nom).'],
+ ['ces','Léa range ___ jouets.','ses','ces','« ses » = « à lui, à elle » : ses jouets (les siens).'],['ces','Regarde ___ oiseaux là-bas !','ces','ses','« ces oiseaux-là » : on montre → <b>ces</b>.'],['ces','Paul prend ___ crayons.','ses','ces','« ses » = ses crayons à lui → <b>ses</b>.'],['ces','J’aime beaucoup ___ fleurs-ci.','ces','ses','« ces fleurs-ci » : on montre → <b>ces</b>.']
+];
+function gmHomo(g){
+  const L=g==='6H'?HM:HM.filter(x=>['aà','et','ou'].includes(x[0])); const [k,s,a,w,why]=pick(L); const o=shuffle([a,w]);
+  return {kind:'mcq',prompt:`Complète avec le bon petit mot :<div class="gm-s">${esc(s).replace('___','<span class="gm-bl">___</span>')}</div>`,say:s.replace('___','…'),lang:'fr',options:o,correct:o.indexOf(a),explain:`${esc(s).replace('___','<b>'+esc(a)+'</b>')}<br>Astuce : ${why}`,after:s.replace('___',a)};
+}
 const GM_GEN={
  phrase:g=>Math.random()<.28?gmOrder(g):gmPhrase(g),
+ ptype:g=>gmPtype(g), det:g=>gmDet(g), genre:g=>gmGenre(g), pron:g=>gmPron(g), homo:g=>gmHomo(g),
  nature:g=>g==='6H'&&Math.random()<.2?gmVarQ():gmNatQ(g),
  conj:g=>g==='6H'&&Math.random()<.25?gmFind(CONJ_F,'C','conjonction',g):gmConjFill(g),
  pcomplexe:g=>gmPc(g),
@@ -2911,13 +2973,18 @@ const GM_GEN={
  temps:()=>gmTemps()
 };
 
-const GM_ACTS=[['phrase','📝 La phrase',['4H','6H']],['nature','🏷️ La nature des mots',['4H','6H']],['conj','🔗 Les mots qui relient',['4H','6H']],['pcomplexe','🌳 Phrase simple · complexe',['6H']],['fonction','🚂 La fonction des mots',['6H']],['adverbe','🐙 L’adverbe',['6H']],['prep','🐛 La préposition',['6H']],['groupes','🏖️ Les groupes de verbes',['6H']],['temps','⏱️ Temps simples · composés',['6H']]];
+const GM_ACTS=[['phrase','📝 La phrase',['4H','6H']],['ptype','❓ Types et formes de phrases',['4H','6H']],['nature','🏷️ La nature des mots',['4H','6H']],['det','🎀 Les déterminants',['4H','6H']],['genre','👫 Genre et nombre, accords',['4H','6H']],['pron','👤 Les pronoms',['4H','6H']],['conj','🔗 Les mots qui relient',['4H','6H']],['homo','👯 Les petits mots qui se ressemblent',['4H','6H']],['pcomplexe','🌳 Phrase simple · complexe',['6H']],['fonction','🚂 La fonction des mots',['6H']],['adverbe','🐙 L’adverbe',['6H']],['prep','🐛 La préposition',['6H']],['groupes','🏖️ Les groupes de verbes',['6H']],['temps','⏱️ Temps simples · composés',['6H']]];
 const ch=(t,c)=>`<span class="gm-ch" style="--c:${c}">${t}</span>`;
 const exs=h=>`<div class="gm-ex">${h}</div>`;
 const blk=(t,b,c)=>`<div class="gm-b" style="--c:${c||'#fff8dc'}"><b>${t}</b>${b}</div>`;
 function gmCard(act,g){
   const h6=g==='6H';
   const wrap=(ic,tt,body)=>`<details class="gm-card" open><summary><span class="gm-mic">${ic}</span><span class="gm-ti">${tt}<small>Je retiens</small></span></summary><div class="gm-body">${body}</div></details>`;
+  if(act==='ptype') return wrap('❓','Types et formes de phrases',`<div class="gm-4"><div style="--c:#e4f8e4"><b>Déclarative</b><small>elle raconte</small>Léa lit un livre<b>.</b></div><div style="--c:#cfe8ff"><b>Interrogative</b><small>elle demande</small>Où vas-tu<b> ?</b></div><div style="--c:#ffe3ee"><b>Exclamative</b><small>elle s’émerveille</small>Quel beau dessin<b> !</b></div>${h6?'<div style="--c:#fff0b8"><b>Impérative</b><small>elle ordonne</small>Range ta chambre<b>.</b></div>':''}</div>`+(h6?blk('Affirmative ou négative ?','La négation entoure le verbe : <b>ne … pas</b>, <b>ne … jamais</b>, <b>ne … rien</b>, <b>ne … plus</b>.'+exs('Je <b>ne</b> mange <b>pas</b> de poisson.'),'#fff8dc'):''));
+  if(act==='det') return wrap('🎀','Les déterminants',blk('Il se place devant le nom','Il donne le <b>genre</b> (masculin / féminin) et le <b>nombre</b> (un / plusieurs).','#fff8dc')+`<div class="gm-4"><div style="--c:#cfe8ff"><b>Défini</b>le · la · les</div><div style="--c:#ffd6e5"><b>Indéfini</b>un · une · des</div><div style="--c:#d9f2d1"><b>Possessif</b>mon · ma · mes · son · sa · ses…</div>${h6?'<div style="--c:#ffe58a"><b>Démonstratif</b>ce · cet · cette · ces</div>':''}</div>`+blk('Astuce','<b>un / le</b> → masculin · <b>une / la</b> → féminin · <b>les / des / mes</b> → pluriel.','#e9f2ff'));
+  if(act==='genre') return wrap('👫','Genre et nombre, accords',`<div class="gm-two"><div class="gm-b" style="--c:#e9f2ff"><b>Genre</b>masculin <i>un chat</i><br>féminin <i>une chatte</i></div><div class="gm-b" style="--c:#ffe3ee"><b>Nombre</b>singulier <i>un chat</i><br>pluriel <i>des chats</i></div></div>`+(h6?blk('Pluriels à retenir',`${ch('-s : un chat → des chats','#d9f2d1')} ${ch('-x : un gâteau → des gâteaux','#ffd9b3')} ${ch('-aux : un cheval → des chevaux','#cfe8ff')} ${ch('inchangé : un nez → des nez','#e4d6fb')}`,'#fff')+blk('Les accords','L’adjectif et le déterminant <b>s’accordent</b> avec le nom : <i>des pommes vertes</i>.','#fff8dc'):blk('Le petit mot devant le nom m’aide','<b>un, le</b> → masculin. <b>une, la</b> → féminin. <b>des, les</b> → pluriel.','#fff8dc')));
+  if(act==='pron') return wrap('👤','Les pronoms',blk('Le pronom remplace un groupe nominal','Il évite de répéter le nom.'+exs('<span class="gm-y">Léa</span> mange une pomme. → <span class="gm-y">Elle</span> mange une pomme.'),'#fff8dc')+`<div class="gm-4"><div style="--c:#cfe8ff"><b>il</b>un garçon, un animal</div><div style="--c:#ffd6e5"><b>elle</b>une fille, une chose</div><div style="--c:#d9f2d1"><b>ils</b>plusieurs (ou garçons + filles)</div><div style="--c:#ffe58a"><b>elles</b>plusieurs filles</div></div>`+(h6?blk('Aussi','<b>je, tu</b> : celui qui parle, celui à qui l’on parle. <b>nous</b> = moi + d’autres. <b>vous</b> = toi + d’autres.','#e9f2ff'):''));
+  if(act==='homo') return wrap('👯','Les petits mots qui se ressemblent',`<div class="gm-3"><div style="--c:#e4f8e4"><b>a / à</b>« avait » → <b>a</b><br><small>Il a faim · à la piscine</small></div><div style="--c:#cfe8ff"><b>et / est</b>« était » → <b>est</b><br><small>Il est tard · Léa et Paul</small></div><div style="--c:#ffe58a"><b>ou / où</b>« ou bien » → <b>ou</b><br><small>thé ou café · Où vas-tu ?</small></div></div>`+(h6?`<div class="gm-3"><div style="--c:#ffd6e5"><b>on / ont</b>« avaient » → <b>ont</b><br><small>Ils ont faim · On joue</small></div><div style="--c:#e4d6fb"><b>son / sont</b>« étaient » → <b>sont</b><br><small>Ils sont là · son sac</small></div><div style="--c:#ffd9b3"><b>ce / se</b>« me » → <b>se</b><br><small>Il se lave · ce livre</small></div><div style="--c:#d9f2d1"><b>ces / ses</b>ses = les siens<br><small>ses jouets · ces oiseaux-là</small></div></div>`:''));
   if(act==='phrase') return wrap('📝','La phrase',h6
    ?blk('Une phrase, c’est…','des mots <b>dans le bon ordre</b>, qui ont un <b>sens</b>, avec une <b>majuscule</b> au début et un <b>point</b> à la fin.','#fff8dc')+blk('2 groupes obligatoires',`${ch('groupe sujet (GN)','#ffe58a')} ${ch('groupe verbal (GV)','#cfd6e4')}`+exs('<span class="gm-y">Mon frère</span> <span class="gm-g">regarde un film</span>.'),'#e9f2ff')+blk('1 groupe facultatif',`Le <b>complément de phrase</b> (groupe vert). On peut le supprimer ou le déplacer.`+exs('Pierre skie <span class="gm-v">aujourd’hui</span>.'),'#e4f8e4')
    :blk('Une phrase, c’est…','des mots <b>dans le bon ordre</b> qui ont du <b>sens</b>.<br>Elle commence par une <b>majuscule</b> et finit par un <b>point</b>.','#fff8dc')+blk('Qui ? Que se passe-t-il ?',exs('<span class="gm-y">Mon frère</span> <span class="gm-g">regarde un film</span>.')+'<small>« Mon frère » dit <b>qui</b>. « regarde un film » dit <b>ce qui se passe</b>.</small>','#e9f2ff'));
@@ -2950,41 +3017,109 @@ G.gram=g=>{ const gg=g==='6H'?'6H':'4H'; const ok=GM_ACTS.filter(a=>a[2].include
 /* ---- LE TEXTE À COLORIER (exercice de classe) ---- */
 (function(){
 const root=document.getElementById('p-gramT'); if(!root) return;
+/* Codes : p présent · i imparfait · u futur · c passé composé · n infinitif · x accord · y toléré
+   Natures : D déterminant · N nom · J adjectif · R pronom · B adverbe · P préposition · C conjonction
+   Groupes ( ) : s sujet · o COD · k COI · t attribut · e complément circonstanciel · g groupe nominal */
 const TXT={
  '4H':[
-  'Le/s chat/s dort/p sur le canapé. Les/s enfants/s jouent/p dans le jardin.',
-  'Maman/s prépare/p le repas. Papa/s lit/p le journal. Je/s mange/p une pomme.',
-  'Léa/s aime/p les fleurs. Elle/s cueille/p des roses rouges.',
-  'Nous/s allons/p à l’ école. Mes/s amis/s arrivent/p aussi.',
-  'Les/s oiseaux/s chantent/p le matin. Tu/s écoutes/p leur chanson.',
-  'Le/s boulanger/s fait/p du pain. Il/s ouvre/p son magasin tôt.',
-  'Mon/s frère/s et/s moi/s regardons/p un film. Nous/s aimons/p les histoires drôles.',
-  'Vous/s dessinez/p un château. Les/s enfants/s colorient/p les tours en bleu.'],
+  '(s Le chat/N noir/J) dort/p sur le canapé/N. (s Les enfants/N) jouent/p dans le jardin/N.',
+  '(s Maman/N) prépare/p le repas/N. (s Papa/N) lit/p le journal/N. (s Je) mange/p une pomme/N rouge/J.',
+  '(s Léa/N) aime/p les fleurs/N. (s Elle) cueille/p des roses/N rouges/J.',
+  '(s Nous) allons/p à l’école/N. (s Mes amis/N) arrivent/p aussi.',
+  '(s Les oiseaux/N) chantent/p le matin/N. (s Tu) écoutes/p leur chanson/N douce/J.',
+  '(s Le boulanger/N) fait/p du pain/N chaud/J. (s Il) ouvre/p son magasin/N tôt.',
+  '(s Mon frère/N et moi) regardons/p un film/N. (s Nous) aimons/p les histoires/N drôles/J.',
+  '(s Vous) dessinez/p un château/N. (s Les enfants/N) colorient/p les grandes/J tours/N.',
+  '(s La petite/J fille/N) mange/p une glace/N fraîche/J.',
+  '(s Le gentil/J chien/N) garde/p la grande/J maison/N.'],
  '6H':[
-  'Hier, il/s pleuvait/i. Aujourd’hui, le/s soleil/s brille/p. Les/sa enfants/s jouent/p dehors avec des/a ballons rouges/a.',
-  'Mon/s frère/s adore/p les/a bonbons sucrés/a. Hier, il/s mangeait/i trois gâteaux. Ma/sf sœur/s préfère/p manger/n des/a fruits mûrs/a.',
-  'Avant, nous/s habitions/i à Genève. Maintenant, nous/s habitons/p dans une/f petite/a ville. Mes/sa parents/s aiment/p travailler/n dans le jardin.',
-  'Dans la/f classe, les/sa élèves/s écoutent/p la/f maîtresse. Hier, elle/s racontait/i une/f histoire drôle/a et les/sa enfants/s riaient/i.',
-  'Le/s petit/s chat/s dormait/i sur le canapé. Maintenant, il/s joue/p avec des/a pelotes rouges/a.',
-  'Je/s me réjouis/p de continuer/n à apprendre/n. Hier, mes/sa amis/s et/s moi/s jouions/i au football.',
-  'Chaque matin, Papa/s prépare/p le café. Autrefois, il/s préparait/i du thé. Mes/sa sœurs/s préfèrent/p dormir/n longtemps.',
-  'Les/sa oiseaux/s chantent/p dans les/a arbres verts/a. Hier, ils/s volaient/i vers le sud.']
+  '(e Hier,) (s il) pleuvait/i. (e Aujourd’hui,) (s (g le soleil/N)) brille/p. (s (g Les/x enfants/N)) jouent/p (e avec (g des/x ballons/N rouges/Jx)).',
+  '(s (g Mon frère/N)) adore/p (o (g les/x bonbons/N sucrés/Jx)). (e Hier,) (s il) mangeait/i (o (g trois gâteaux/N)). (s (g Ma/y sœur/N)) aime/p dormir/n. (s Elle) mange/p (o (g des/x fruits/N mûrs/Jx)) (e (g le matin/N)).',
+  '(e Avant,) (s nous) habitions/i (e à (g Genève/N)). (e Maintenant,) (s nous) habitons/p (e dans (g une/y petite/Jx ville/N)). (s (g Mes/x parents/N)) aiment/p travailler/n (e dans (g le jardin/N)).',
+  '(e Dans (g la/y classe/N)), (s (g les/x élèves/N)) écoutent/p (o (g la/y maîtresse/N)). (e Hier,) (s elle) racontait/i (o (g une/y histoire/N drôle/Jx)) et (s (g les/x enfants/N)) riaient/i.',
+  '(s (g Le petit/J chat/N)) dormait/i (e sur (g le canapé/N)). (e Maintenant,) (s il) joue/p (e avec (g des/x pelotes/N rouges/Jx)).',
+  '(e Demain,) (s je) vais/p continuer/n à apprendre/n. (e Hier,) (s (g mes/x amis/N) et moi) jouions/i (e dans (g la/y cour/N)). (e Bientôt,) (s nous) irons/u (e à (g la/y piscine/N)).',
+  '(e Chaque matin/N,) (s (g Papa/N)) prépare/p (o (g le café/N)). (e Autrefois,) (s il) préparait/i (o (g du thé/N)). (s (g Mes/x sœurs/N)) préfèrent/p dormir/n (e longtemps).',
+  '(s (g Les/x oiseaux/N)) chantent/p (e dans (g les/x arbres/N verts/Jx)). (e Hier,) (s ils) volaient/i (e vers (g le sud/N)). (e Demain,) (s ils) chanteront/u encore.',
+  '(e Hier,) (s (g Léa/N)) a/c mangé/c (o (g une/y glace/N)). (s Elle) est/c partie/cy (e à (g la/y piscine/N)). (e Demain,) (s elle) jouera/u (e avec (g ses/x amies/N)).',
+  '(s (g Mon frère/N)) est/p (t grand/J). (s (g Ma/y sœur/N)) semble/p (t fatiguée/Jx). (e Aujourd’hui,) (s (g les/x élèves/N)) sont/p (t contents/Jx) (e à (g l’école/N)).',
+  '(s (g Léa/N)) parle/p (k à (g sa/y maîtresse/N)). (s Elle) pense/p (k à (g ses/x vacances/N)). (e Hier,) (s elle) a/c offert/c (o (g un cadeau/N)) (k à (g sa/y sœur/N)).',
+  '(s Nous) voulons/p jouer/n dehors mais (s il) pleut/p. (s (g Les/x enfants/N)) restent/p (e dans (g la/y maison/N)) et (s ils) dessinent/p (o (g des/x animaux/N rigolos/Jx)).',
+  '(e Le soir/N,) (s (g mon petit/J chien/N)) dort/p (e dans (g son panier/N)). (e Le matin/N,) (s il) court/p (e dans (g le jardin/N)) et (s il) joue/p (e avec (g ses/x amis/N)).']
 };
+const LEX={D:'le la l’ les un une des du mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs ce cet cette ces chaque trois deux quatre cinq plusieurs',
+ R:'je j’ tu il elle on nous vous ils elles me m’ moi se s’ lui eux c’',
+ B:'hier aujourd’hui demain maintenant avant autrefois bientôt toujours souvent jamais déjà aussi très trop beaucoup peu bien mal vite doucement dehors ici longtemps tôt tard encore parfois enfin soudain partout',
+ P:'à de d’ dans sur sous avec sans pour par en vers chez devant derrière après pendant depuis',
+ C:'et ou mais car donc or ni'};
+const LMAP={}; Object.keys(LEX).forEach(k=>LEX[k].split(' ').forEach(w=>LMAP[w]=k));
+const MISSING=[];
+function PARSE(src){
+  const out=[], stack=[]; 
+  src.split(' ').forEach(raw=>{
+    let m=/^\((\w)$/.exec(raw); if(m){ stack.push(m[1]); return; }
+    m=/^(.+?)(?:\/([A-Za-z]+))?(\)*)([.,!?;:]*)(\)*)$/.exec(raw); if(!m){ MISSING.push('PARSE '+raw); return; }
+    let text=m[1], codes=m[2]||'', cl=m[3].length+m[5].length, p=m[4];
+    const parts=[]; const el=/^([A-Za-zÀ-ÿ]{1,2}’)(.+)$/.exec(text);
+    if(el){ parts.push([el[1],'']); parts.push([el[2],codes]); } else parts.push([text,codes]);
+    parts.forEach(([w,c],ix)=>{
+      const last=ix===parts.length-1; let cc=c+stack.join('');
+      if(!/[DNJRBPC]/.test(cc)){ const L=LMAP[w.toLowerCase()]; if(L&&!/[piucn]/.test(cc)) cc+=L; }
+      if(/[piucn]/.test(cc)) cc+='V';
+      if(!/[DNJRBPCV]/.test(cc)) MISSING.push(w);
+      out.push({w,c:cc,p:last?p:''});
+    });
+    for(let i=0;i<cl;i++) stack.pop();
+  });
+  return out;
+}
 const CR={
- p:['Présent','#e03131','Un verbe change si on change le temps. Essaie avec « hier… » : si le mot change, c’est un verbe ! Ici, souligne ceux qui disent ce qui se passe <b>maintenant</b>.'],
- i:['Imparfait','#7048e8','L’imparfait raconte ce qui se passait <b>avant</b>. Il finit par <b>-ais, -ait, -aient, -ions, -iez</b> : il pleuvait, nous habitions.'],
- n:['Infinitif','#2f9e44','Le verbe qui <b>ne change pas</b> : il finit par <b>-er, -ir, -re</b>. Il suit souvent un autre verbe ou « à », « de » : j’aime <i>manger</i>.'],
- s:['Sujet','#e0a800','Pour trouver le sujet, demande : « <b>Qui est-ce qui</b> + le verbe ? ». Entoure tous les mots du groupe sujet (les petits mots et le nom).'],
- a:['Accords','#37b24d','Colorie les <b>déterminants</b> et les <b>adjectifs</b> qui portent la marque du pluriel ou du féminin (<b>-s, -x, -e</b>) : des, mes, neufs, rondes.']
+ v:['Verbe','#e03131','Le verbe conjugué change avec le temps. Astuce : ajoute « hier » ou « demain » au début de la phrase : le mot qui change, c’est le verbe !'],
+ p:['Présent','#e03131','Le présent dit ce qui se passe <b>maintenant</b> : il joue, nous habitons.'],
+ i:['Imparfait','#7048e8','L’imparfait raconte ce qui se passait <b>avant</b>. Fins : <b>-ais, -ait, -aient, -ions, -iez</b> : il pleuvait.'],
+ u:['Futur','#e8590c','Le futur dit ce qui arrivera <b>demain</b>. Il a toujours un <b>R</b> avant la fin : je chanterai, nous irons.'],
+ c:['Passé composé','#1c7ed6','<b>avoir</b> ou <b>être</b> + participe passé : il a mangé, elle est partie. Colorie les <b>deux mots</b>.'],
+ n:['Infinitif','#2f9e44','Le verbe qui <b>ne change pas</b> : -er, -ir, -re. Il suit souvent un autre verbe ou « à » : il aime <i>dormir</i>.'],
+ s:['Sujet','#e0a800','Demande : « <b>Qui est-ce qui</b> + le verbe ? ». Entoure <b>tous les mots</b> du groupe sujet (les petits mots et le nom).'],
+ g:['GN','#5f3dc4','Le <b>groupe nominal</b> (GN) : un déterminant + un nom (+ un adjectif) : <i>le petit chat</i>. Un trait au-dessus de chaque mot du GN.'],
+ o:['COD','#1971c2','Le <b>COD</b> répond à « <b>quoi ?</b> / <b>qui ?</b> » juste après le verbe, <b>sans préposition</b> : il mange <i>une pomme</i>.'],
+ k:['COI','#0ca678','Le <b>COI</b> est introduit par une préposition (<b>à, de</b>) : elle parle <i>à sa maîtresse</i>. Entoure aussi la préposition.'],
+ t:['Attribut','#d6336c','L’<b>attribut du sujet</b> suit un verbe d’état (être, sembler, devenir) et décrit le sujet : il est <i>grand</i>.'],
+ e:['CC','#f08c00','Le <b>complément circonstanciel</b> donne un détail : <b>où ? quand ? comment ?</b> On peut le supprimer ou le déplacer. Entoure aussi la préposition.'],
+ x:['Accords','#37b24d','Colorie les <b>déterminants</b> et <b>adjectifs</b> qui portent la marque du pluriel ou du féminin (<b>-s, -x, -e</b>) : les, des, mes, rouges, petite.'],
+ D:['Déterminant','#74c0fc','Il précise le nom : <b>le, la, un, des, mon, ce…</b>'],
+ N:['Nom','#f783ac','Il désigne une personne, un animal, une chose, un lieu. On peut mettre <b>un / une</b> devant.'],
+ J:['Adjectif','#fcc419','Il dit <b>comment est</b> le nom : un chat <i>noir</i>.'],
+ R:['Pronom','#8ce99a','Il remplace un nom : <b>il, elle, nous, je, moi…</b>'],
+ V:['Verbe','#b197fc','Il dit l’action ou l’état. Il change avec je, tu, il… (et l’infinitif aussi est un verbe).'],
+ B:['Adverbe','#ffa94d','Il précise le verbe et ne change jamais : <b>hier, bien, vite, longtemps…</b>'],
+ P:['Préposition','#3bc9db','Elle relie deux éléments : <b>à, dans, sur, avec, vers…</b>'],
+ C:['Conjonction','#e599f7','Elle relie deux mots ou phrases : <b>et, mais, ou, car, donc…</b>']
 };
-const LV={'4H':[['1 · Les verbes',['p']],['2 · Verbes et sujets',['p','s']]],'6H':[['1 · Les verbes',['p','i','n']],['2 · + les sujets',['p','i','n','s']],['3 · Tout !',['p','i','n','s','a']]]};
-const PARSE=s=>s.split(' ').map(t=>{ const m=/^(.+?)(?:\/([a-z]+))?([.,!?;:]*)$/.exec(t); return {w:m[1],c:m[2]||'',p:m[3]||''}; });
-const S={g:'6H',lv:0,cur:'p',ti:-1,toks:[],marks:[],done:false};
-function newText(){ const L=TXT[S.g]; let k; do{ k=rnd(L.length); }while(L.length>1&&k===S.ti); S.ti=k; S.toks=PARSE(L[k]); S.marks=S.toks.map(()=>[]); S.done=false; }
-const act=()=>LV[S.g][S.lv][1];
-root.innerHTML=`<div class="cx"><h2>🖍️ Colorie le texte</h2><p class="tx-in">C’est l’exercice de la classe ! Choisis un crayon, touche les mots, puis vérifie. Les fiches plus bas t’aident à réussir.</p>
+const MODES={
+ '4H':[
+  ['1 · Les verbes','Trouve tous les <b>verbes conjugués</b> du texte.',['v']],
+  ['2 · Le sujet et le verbe','Pour chaque phrase : <b>qui fait l’action</b> (le sujet) et <b>le verbe</b>.',['s','v']],
+  ['3 · Déterminant, nom, adjectif, verbe','Donne la <b>nature</b> des mots : choisis un crayon par nature.',['D','N','J','V']]],
+ '6H':[
+  ['1 · Les verbes et leur temps','Trouve les <b>verbes</b> et colorie-les selon leur <b>temps</b>.',['p','i','u','c','n']],
+  ['2 · Le sujet et le verbe','<b>Qui fait l’action ?</b> Entoure le sujet, puis souligne le verbe.',['s','v']],
+  ['3 · La nature des mots','Donne la <b>nature</b> de chaque mot : un crayon par nature.',['D','N','J','R','V','B','P','C']],
+  ['4 · Les accords','Trouve les mots qui portent la <b>marque d’un accord</b> (-s, -x, -e).',['x']],
+  ['5 · Les fonctions : S, V, COD, COI, CC','Cherche le <b>sujet</b>, le <b>verbe</b>, l’<b>attribut</b>, les <b>compléments</b> (COD, COI, CC).',['s','v','o','k','t','e']],
+  ['6 · Tout : GN, S, V et compléments','L’analyse complète : <b>groupes nominaux</b> (GN), sujet, verbe et compléments.',['g','s','v','o','k','t','e']]]
+};
+const BOX=['s','o','k','t','e'], TEN=['p','i','u','c','n','v'], NAT=['D','N','J','R','B','P','C','V'];
+const EXP=(t,x)=>x==='v'?/[piuc]/.test(t.c):t.c.includes(x);
+const PT={}; Object.keys(TXT).forEach(g=>PT[g]=TXT[g].map(PARSE));
+const S={g:'6H',lv:0,cur:null,ti:-1,toks:[],marks:[],done:false};
+const act=()=>MODES[S.g][S.lv][2];
+const cnt=toks=>{ let n=0; toks.forEach(t=>act().forEach(x=>{ if(EXP(t,x)) n++; })); return n; };
+function newText(){ const L=PT[S.g]; const ok=L.map((t,i)=>i).filter(i=>i!==S.ti&&cnt(L[i])>=3); const k=ok.length?ok[rnd(ok.length)]:rnd(L.length); S.ti=k; S.toks=L[k]; S.marks=S.toks.map(()=>[]); S.done=false; }
+root.innerHTML=`<div class="cx"><h2>🖍️ Colorie le texte</h2><p class="tx-in">C’est l’exercice de la classe ! Choisis ce que tu cherches, prends le bon crayon et touche les mots. Les fiches plus bas t’aident à réussir.</p>
  <div class="mx-sec"><div class="mx-lab">Ta classe</div><div class="mx-seg wrap" id="txG"></div></div>
- <div class="mx-sec"><div class="mx-lab">Je cherche…</div><div class="mx-seg wrap" id="txL"></div></div>
+ <div class="mx-sec"><div class="mx-lab">Je cherche…</div><div class="mx-seg wrap one" id="txL"></div></div>
+ <div class="tx-goal" id="txO"></div>
  <div class="tx-pal" id="txC"></div><div class="tx-hint" id="txH"></div>
  <div class="tx-text" id="txT"></div>
  <div class="tx-fb" id="txF" hidden></div>
@@ -2994,52 +3129,56 @@ const $=id=>root.querySelector('#'+id);
 const segH=(list,cur)=>list.map(([v,t])=>`<button data-v="${v}" aria-pressed="${v==cur}">${t}</button>`).join('');
 const sp=k=>(k<S.toks.length-1&&!/’$/.test(S.toks[k].w))?' ':'';
 function wordCls(k){
-  const t=S.toks[k], m=S.marks[k], A=act(), c=[];
-  m.forEach(x=>c.push('m-'+x));
-  if(S.done) A.forEach(x=>{ const e=t.c.includes(x), h=m.includes(x), tol=x==='a'&&t.c.includes('f');
-    if(h&&!e&&!tol) c.push('bad'); else if(e&&!h) c.push('miss-'+x); });
-  return c.join(' ');
+  const t=S.toks[k], m=S.marks[k], A=act(), c=[]; let ms=null;
+  m.forEach(x=>{ if(!BOX.includes(x)) c.push('m-'+x); });
+  if(S.done) A.forEach(x=>{ const e=EXP(t,x), h=m.includes(x)||(x==='v'&&false), tol=x==='x'&&t.c.includes('y');
+    if(h&&!e&&!tol) c.push('bad'); else if(e&&!h&&!ms){ ms=x; c.push('miss'); } });
+  return {cls:c.join(' '),ms};
 }
+const boxOf=k=>S.marks[k].find(x=>BOX.includes(x));
 function paintT(){
-  const n=S.toks.length, has=(k,x)=>S.marks[k].includes(x); let h='';
-  const word=k=>`<span class="tw ${wordCls(k)}" data-i="${k}">${esc(S.toks[k].w)}</span>`;
+  const n=S.toks.length; let h='';
+  const word=k=>{ const w=wordCls(k); return `<span class="tw ${w.cls}" data-i="${k}"${w.ms?` style="--mc:${CR[w.ms][1]}"`:''}>${esc(S.toks[k].w)}</span>`; };
   for(let i=0;i<n;){
-    if(has(i,'s')){ let j=i; while(j+1<n&&has(j+1,'s')&&!S.toks[j].p) j++;
-      h+='<span class="tx-run">'; for(let k=i;k<=j;k++) h+=word(k)+(k<j?sp(k):''); h+='</span>'+esc(S.toks[j].p)+sp(j); i=j+1; }
+    const b=boxOf(i);
+    if(b){ let j=i; while(j+1<n&&boxOf(j+1)===b&&!S.toks[j].p) j++;
+      h+=`<span class="tx-run" style="--rc:${CR[b][1]}">`; for(let k=i;k<=j;k++) h+=word(k)+(k<j?sp(k):''); h+='</span>'+esc(S.toks[j].p)+sp(j); i=j+1; }
     else { h+=word(i)+esc(S.toks[i].p)+sp(i); i++; }
   }
   $('txT').innerHTML=h;
 }
-function paintAll(){
+function paintAll(keep){
+  const M=MODES[S.g][S.lv];
   $('txG').innerHTML=segH([['4H','4H'],['6H','6H']],S.g);
-  $('txL').innerHTML=segH(LV[S.g].map((x,i)=>[i,x[0]]),S.lv);
+  $('txL').innerHTML=segH(MODES[S.g].map((x,i)=>[i,x[0]]),S.lv);
+  $('txO').innerHTML='🎯 '+M[1];
   const A=act(); if(!A.includes(S.cur)) S.cur=A[0];
-  $('txC').innerHTML=A.map(x=>`<button data-c="${x}" aria-pressed="${x===S.cur}" style="--cc:${CR[x][1]}"><i class="sw sw-${x}"></i>${CR[x][0]}</button>`).join('');
+  $('txC').innerHTML=A.map(x=>`<button data-c="${x}" aria-pressed="${x===S.cur}" style="--cc:${CR[x][1]}"><i class="sw"></i>${CR[x][0]}</button>`).join('');
   $('txH').innerHTML='💡 '+CR[S.cur][2]; $('txH').style.setProperty('--cc',CR[S.cur][1]);
-  $('txF').hidden=true; paintT();
+  if(!keep) $('txF').hidden=true; paintT();
 }
-$('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; newText(); paintAll(); };
-$('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.v; S.marks=S.toks.map(()=>[]); S.done=false; paintAll(); };
-$('txC').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.cur=b.dataset.c; paintAll_keep(); };
-function paintAll_keep(){ const f=$('txF').hidden; paintAll(); if(S.done) check(true); }
-$('txT').onclick=e=>{ const w=e.target.closest('.tw'); if(!w||S.done) return; const k=+w.dataset.i, m=S.marks[k], c=S.cur, V=['p','i','n'];
-  if(m.includes(c)) S.marks[k]=m.filter(x=>x!==c); else { S.marks[k]=(V.includes(c)?m.filter(x=>!V.includes(x)):m).concat(c); }
+$('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.dataset.v; S.lv=0; S.ti=-1; newText(); paintAll(); };
+$('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.v; S.ti=-1; newText(); paintAll(); };
+$('txC').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.cur=b.dataset.c; paintAll(true); };
+$('txT').onclick=e=>{ const w=e.target.closest('.tw'); if(!w||S.done) return; const k=+w.dataset.i, m=S.marks[k], c=S.cur;
+  const grp=BOX.includes(c)?BOX:TEN.includes(c)?TEN:NAT.includes(c)?NAT:[c];
+  S.marks[k]=m.includes(c)?m.filter(x=>x!==c):m.filter(x=>!grp.includes(x)).concat(c);
   paintT(); };
 $('txR').onclick=()=>{ S.marks=S.toks.map(()=>[]); S.done=false; paintAll(); };
 $('txN').onclick=()=>{ newText(); paintAll(); };
 const plain=()=>S.toks.map((t,k)=>t.w+t.p+sp(k)).join('');
 $('txS').onclick=()=>say(plain(),'fr');
-function check(quiet){
+function check(){
   const A=act(); let exp=0,hit=0,bad=0;
-  S.toks.forEach((t,k)=>A.forEach(x=>{ const e=t.c.includes(x), h=S.marks[k].includes(x), tol=x==='a'&&t.c.includes('f');
+  S.toks.forEach((t,k)=>A.forEach(x=>{ const e=EXP(t,x), h=S.marks[k].includes(x), tol=x==='x'&&t.c.includes('y');
     if(e){ exp++; if(h) hit++; } else if(h&&!tol) bad++; }));
   S.done=true; paintT();
   const ok=hit===exp&&bad===0, f=$('txF'); f.hidden=false; f.className='tx-fb '+(ok?'ok':'ko');
-  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tous les mots sont bien trouvés.':`<b>${hit} / ${exp}</b> mots trouvés${bad?` · <b>${bad}</b> à corriger (en rose)`:''}.<br><small>Les pointillés montrent ce que tu as oublié.</small>`;
-  if(!quiet){ try{ DLverdict(ok,[{t:ok?'Parfait, tout est juste':hit+' sur '+exp+'. Regarde les pointillés.',l:'fr'}]); }catch(e){} }
+  f.innerHTML=ok?'🌟 <b>Parfait !</b> Tout est bien trouvé.':`<b>${hit} / ${exp}</b> bien trouvés${bad?` · <b>${bad}</b> à corriger (en rose)`:''}.<br><small>Les pointillés montrent ce que tu as oublié.</small>`;
+  try{ DLverdict(ok,[{t:ok?'Parfait, tout est juste':hit+' sur '+exp+'. Regarde les pointillés.',l:'fr'}]); }catch(e){}
 }
 $('txV').onclick=()=>{ if(S.done) return; check(); };
-window.__tx={S,check,get exp(){ return S.toks; },mark:(k,c)=>{ S.marks[k]=(S.marks[k]||[]).concat(c); }};
+window.__tx={S,check,MISSING,PT,MODES,EXP};
 newText(); paintAll();
 })();
 
