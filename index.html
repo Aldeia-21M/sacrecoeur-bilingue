@@ -723,6 +723,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "4.4", desc: "PoutchouPoutchou : bulle silencieuse qui disparaît" },
     { v: "4.3", desc: "Petits : alphabet et compter, français puis allemand" },
     { v: "4.2", desc: "Joueur et en ligne réunis en une carte" },
     { v: "4.1", desc: "Pastille en ligne sous l’avatar, menu salon" },
@@ -4137,7 +4138,7 @@ function show(t,speak){ clearTimeout(ah); T.textContent=t; P.hidden=false; nudge
 fab.onclick=()=>{ if(P.hidden) show('Coucou ! Je suis PoutchouPoutchou. Qu’est-ce qu’il te faut ?',false); else P.hidden=true; };
 P.querySelector('.pc-x').onclick=P.querySelector('#pcBy').onclick=()=>{ P.hidden=true; };
 document.addEventListener('pointerdown',e=>{ if(!P.hidden&&!P.contains(e.target)&&!fab.contains(e.target)) P.hidden=true; },true);
-nudge.onclick=()=>{ nudge.hidden=true; show('Besoin d’un coup de pouce ? Appuie sur l’ampoule !',true); };
+nudge.onclick=()=>{ nudge.hidden=true; show('Besoin d’un coup de pouce ? Appuie sur l’ampoule !',false); autoHide(5000); };
 function push(t){ nudge.textContent=t; nudge.hidden=false; clearTimeout(push.t); push.t=setTimeout(()=>{nudge.hidden=true;},7000); }
 const vis=el=>el&&el.offsetParent!==null;
 /* répéter la question */
@@ -4146,15 +4147,15 @@ P.querySelector('#pcRe').onclick=()=>{
   if(vis(ptS)&&ptq){ const L=ptq.L||'fr'; const k=ptq.ask?ptq.ask[L]:ptq[L]; if(window.DLspeakSeq&&ptq.ask) DLspeakSeq([{t:ptq.ask[L],l:L,pause:900},{t:ptq.key[L],l:L}]); else say(k,L); T.textContent='Écoute bien !'; autoHide(1500); return; }
   const q=[...document.querySelectorAll('.sr-q,.g-q')].find(vis);
   if(q){ T.textContent='Je relis !'; autoHide(1800); say(q.textContent.replace(/\s+/g,' ').trim()); const h=[...document.querySelectorAll('.mx-hear,.g-listen')].find(vis); if(h) setTimeout(()=>h.click(),200); }
-  else { T.textContent='Choisis un jeu, et je t’aiderai !'; say('Choisis un jeu, et je t’aiderai !'); }
+  else { T.textContent='Choisis un jeu, et je t’aiderai !'; autoHide(3500); }
 };
 /* coup de pouce : j'enlève une mauvaise réponse */
 P.querySelector('#pcHi').onclick=()=>{
   const c=window.DLctx; let done=false;
   if(c&&c.opts){ const bs=[...c.opts()].filter(b=>b.isConnected&&vis(b)); const live=bs.filter((b,i)=>!b.disabled&&!b.classList.contains('pc-elim'));
     const wrong=bs.map((b,i)=>({b,i})).filter(x=>x.i!==c.correct&&!x.b.disabled&&!x.b.classList.contains('pc-elim')&&!x.b.classList.contains('ko'));
-    if(wrong.length&&live.length>2){ pick(wrong).b.classList.add('pc-elim'); done=true; T.textContent='J’ai caché une mauvaise réponse. Tu y es presque !'; say('J’ai caché une mauvaise réponse. Tu y es presque !'); autoHide(2600); } }
-  if(!done){ const t=pick(['Lis bien la question jusqu’au bout, puis réfléchis.','Prends ton temps. Tu peux y arriver !','Si tu hésites, écarte les réponses qui ne vont pas.','Écoute encore une fois, avec tes oreilles de détective !']); T.textContent=t; say(t); autoHide(3500); }
+    if(wrong.length&&live.length>2){ pick(wrong).b.classList.add('pc-elim'); done=true; T.textContent='J’ai caché une mauvaise réponse. Tu y es presque !'; autoHide(3000); } }
+  if(!done){ const t=pick(['Lis bien la question jusqu’au bout, puis réfléchis.','Prends ton temps. Tu peux y arriver !','Si tu hésites, écarte les réponses qui ne vont pas.','Écoute encore une fois, avec tes oreilles de détective !']); T.textContent=t; autoHide(4000); }
 };
 /* musique douce : générée par le navigateur, aucun fichier, libre de droit */
 let AC=null,master=null,mt=null,playing=false;
@@ -4173,7 +4174,7 @@ function music(on){ const b=P.querySelector('#pcMu');
 P.querySelector('#pcMu').onclick=()=>music(!playing);
 /* il observe et propose une pause */
 let wrong=0,lastPause=Date.now();
-function suggestPause(why){ lastPause=Date.now(); wrong=0; P.querySelector('#pcMu').classList.add('glow'); P.querySelector('#pcGa').classList.add('glow'); show(why,true); }
+function suggestPause(why){ lastPause=Date.now(); wrong=0; P.querySelector('#pcMu').classList.add('glow'); P.querySelector('#pcGa').classList.add('glow'); show(why,false); autoHide(7000); }
 window.PCev=function(ok){
   if(ok){ wrong=0; fab.classList.remove('hop'); void fab.offsetWidth; fab.classList.add('hop'); return; }
   wrong++; if(wrong===2&&P.hidden) push('Besoin d’un coup de pouce ? 💡');
@@ -4199,7 +4200,7 @@ function bubbles(){
   clock=setInterval(()=>{ left--; Tm.textContent=left; if(left<=0){ clearInterval(spawn); clearInterval(clock); end(); } },1000);
   function end(){ if(!gOv) return; const e=document.createElement('div'); e.className='gend'; const msg=score>=25?'Wow, tu es rapide !':score>=12?'Joli travail !':'Bien joué !';
     e.innerHTML=`<div><img src="${IMG_B}" alt=""><br>${msg}<br>Tu as éclaté <b>${score}</b> bulles.<br><button id="gA">🫧 Encore</button><button id="gB">📚 On y retourne !</button></div>`;
-    gOv.appendChild(e); say(msg+' On retourne travailler ?'); e.querySelector('#gA').onclick=()=>{ close(); bubbles(); }; e.querySelector('#gB').onclick=close; }
+    gOv.appendChild(e); e.querySelector('#gA').onclick=()=>{ close(); bubbles(); }; e.querySelector('#gB').onclick=close; }
 }
 P.querySelector('#pcGa').onclick=bubbles;
 window.__pc={show,music,suggestPause,P,bubbles};
