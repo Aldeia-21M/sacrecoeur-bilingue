@@ -625,6 +625,12 @@ body.has-on #whoPill{bottom:calc(46px + env(safe-area-inset-bottom,0px))}body.ha
 #dock #onbar .ob-b:only-child{border-radius:0}
 body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
 #onMenu{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+.pt-ph{text-align:center;font-weight:800;font-size:20px;padding:6px 10px;border-radius:999px;margin:0 auto 8px;width:max-content}.pt-ph.fr{background:#dbe7ff;color:#1f3f9a}.pt-ph.de{background:#fff0b8;color:#7a5200}
+.pt-prog{height:12px;border-radius:99px;background:#e2e7ef;overflow:hidden}.pt-prog i{display:block;height:100%;background:#2f9e44;border-radius:99px;transition:width .3s}.pt-pc{text-align:center;margin:4px 0 8px;font-weight:700;color:#4a5568}
+.pt-big{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;min-height:230px;border-radius:26px;border:4px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;padding:10px}
+.pt-L{font-size:clamp(84px,26vw,130px);font-weight:800;line-height:1;color:#1d2433}.pt-I{font-size:clamp(60px,18vw,88px);line-height:1}.pt-big .pt-things{margin:0}.pt-big .pt-things.sm{font-size:clamp(22px,6.2vw,30px);letter-spacing:0}
+.pt-lsw{text-align:center;font-size:26px;margin:10px 0}
+.pt-lsn{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:10px}.pt-lsn button{min-height:72px;border-radius:20px;border:3px solid #1f5fd6;background:#fff;color:#1f5fd6;font-size:40px;font-weight:800;cursor:pointer}.pt-lsn button.go{background:#1f5fd6;color:#fff}.pt-lsn button:disabled{opacity:.35}
 </style>
 </head>
 <body>
@@ -717,6 +723,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-11", versions: [
+    { v: "4.3", desc: "Petits : alphabet et compter, français puis allemand" },
     { v: "4.2", desc: "Joueur et en ligne réunis en une carte" },
     { v: "4.1", desc: "Pastille en ligne sous l’avatar, menu salon" },
     { v: "4.0", desc: "Choix rapide des joueurs de la famille" },
@@ -3881,6 +3888,7 @@ const OKF=['Bravo !','Super !','Génial !'], OKD=['Bravo!','Super!','Toll!'];
 
 /* ---- menu ---- */
 const MENU=[
+ ['📖 J’apprends',[['abc','🔤','L’alphabet'],['cnt10','🔢','Compter jusqu’à 10'],['cnt20','🔟','Compter de 11 à 20']]],
  ['🔢 Les nombres',[['count','🔢','Compter 1 à 10'],['count20','🔟','Compter jusqu’à 20'],['hear','👂','Écouter un nombre'],['add','➕','Petites additions'],['sub','➖','Enlever'],['more','⚖️','Plus ou moins'],['bigger','📏','Le plus grand'],['next','⏭️','Avant · après'],['pattern','🔁','Les suites']]],
  ['🎨 Couleurs et formes',[['color','🎨','Les couleurs'],['shape','🔺','Les formes']]],
  ['🧠 Je réfléchis',[['odd','🕵️','L’intrus'],['sizes','🐘','Grand · petit'],['syll','👏','Les syllabes'],['rhyme','🎵','Les rimes']]],
@@ -3964,7 +3972,7 @@ function frame(inner){
   root.querySelector('#ptB').onclick=menu; window.scrollTo(0,0);
 }
 function ptMore(id){ const all=[]; MENU.forEach(([t,l])=>l.forEach(([i,ic,tx])=>{ if(i!==id) all.push({ic,t:tx,go:()=>play(i)}); })); return shuffle(all).slice(0,8); }
-function play(id){ if(id==='memory') return memory(); rounds(id); }
+function play(id){ if(id==='memory') return memory(); if(LESSONS[id]) return lesson(id); rounds(id); }
 function rounds(id){
   const S={i:0,ok:0,first:true,total:8}; T.S=S;
   const dots=()=>Array.from({length:S.total},(_,k)=>`<i class="${k<S.i?'ok':k===S.i?'cur':''}"></i>`).join('');
@@ -3998,6 +4006,46 @@ function rounds(id){
   }
   next();
 }
+/* ---- leçons guidées : d'abord en français, puis en allemand ---- */
+const ABC={
+ fr:[['a','abeille','🐝'],['bé','ballon','🎈'],['cé','chat','🐱'],['dé','dauphin','🐬'],['eu','éléphant','🐘'],['effe','fleur','🌸'],['gé','gâteau','🎂'],['ache','hibou','🦉'],['i','île','🏝️'],['gi','jus','🧃'],['ka','koala','🐨'],['elle','lune','🌙'],['emme','maison','🏠'],['enne','nuage','☁️'],['o','orange','🍊'],['pé','pomme','🍎'],['ku','quille','🎳'],['erre','renard','🦊'],['esse','soleil','☀️'],['té','tortue','🐢'],['u','usine','🏭'],['vé','vache','🐮'],['double vé','wagon','🚃'],['ixe','xylophone','🎼'],['i grec','yaourt','🥛'],['zède','zèbre','🦓']],
+ de:[['a','Apfel','🍎'],['be','Baum','🌳'],['ze','Clown','🤡'],['de','Delfin','🐬'],['e','Elefant','🐘'],['eff','Fisch','🐟'],['ge','Giraffe','🦒'],['ha','Haus','🏠'],['i','Igel','🦔'],['jot','Jacke','🧥'],['ka','Katze','🐱'],['ell','Löwe','🦁'],['emm','Maus','🐭'],['enn','Nase','👃'],['o','Ohr','👂'],['pe','Pizza','🍕'],['ku','Quadrat','🟦'],['err','Rakete','🚀'],['ess','Sonne','☀️'],['te','Tiger','🐯'],['u','Uhr','🕐'],['fau','Vogel','🐦'],['we','Wolke','☁️'],['iks','Xylofon','🎼'],['üpsilon','Yoga','🧘'],['zett','Zebra','🦓']]
+};
+const NF=['un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf','vingt'];
+const ND=['eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn','zwanzig'];
+const LESSONS={abc:{t:'L’alphabet'},cnt10:{t:'Compter jusqu’à 10',lo:1,hi:10},cnt20:{t:'Compter de 11 à 20',lo:11,hi:20}};
+function lesson(id){
+  const D=LESSONS[id], isA=id==='abc', th=pick(THINGS)[0];
+  const total=isA?26:D.hi-D.lo+1; const S={ph:0,i:0}; T.les=S;
+  const seq=(L,k)=>{ const f=L==='de'?'de':'fr';
+    if(isA){ const a=ABC[f][k], c=String.fromCharCode(65+k); return [{t:a[0],l:f,pause:450},{t:(f==='de'?c+' wie ':c+' comme ')+a[1],l:f}]; }
+    const n=D.lo+k; return [{t:(f==='de'?ND:NF)[n-1],l:f}]; };
+  const say=()=>{ const L=S.ph?'de':'fr'; const q=seq(L,S.i); if(window.DLspeakSeq) DLspeakSeq(q); else q.forEach(x=>sp(x.t,x.l)); };
+  function view(){
+    const L=S.ph?'de':'fr', k=S.i; let big,sub;
+    if(isA){ const a=ABC[L][k], c=String.fromCharCode(65+k); big=`<span class="pt-L">${c} ${c.toLowerCase()}</span><span class="pt-I">${a[2]}</span>`; sub=`<b>${c}</b> ${L==='de'?'wie':'comme'} <b>${a[1]}</b>`; }
+    else { const n=D.lo+k; big=`<span class="pt-L">${n}</span><div class="pt-things${n>10?' sm':''}">${things(th,n)}</div>`; sub=`<b>${(L==='de'?ND:NF)[n-1]}</b>`; }
+    frame(`<div class="pt-ph ${L}">${L==='fr'?'🇫🇷 En français':'🇩🇪 Auf Deutsch'}</div><div class="pt-prog"><i style="width:${Math.round((k+1)/total*100)}%"></i></div><p class="pt-pc">${k+1} / ${total}</p>
+      <button class="pt-big" id="lsBig" aria-label="Écouter">${big}</button><div class="pt-lsw">${sub}</div>
+      <div class="pt-lsn"><button id="lsP" ${k===0?'disabled':''} aria-label="Précédent">‹</button><button id="lsH" aria-label="Écouter">🔊</button><button id="lsN" class="go" aria-label="Suivant">›</button></div>`);
+    root.querySelector('#lsBig').onclick=root.querySelector('#lsH').onclick=say;
+    root.querySelector('#lsP').onclick=()=>{ if(S.i>0){ S.i--; view(); } };
+    root.querySelector('#lsN').onclick=()=>{ if(S.i<total-1){ S.i++; view(); } else if(!S.ph) bridge(); else done(); };
+    setTimeout(say,FAST?0:200);
+  }
+  function bridge(){
+    frame(`<div class="pt-end"><div class="st">🇩🇪</div><h3>Bravo !</h3><p class="pt-pc">Maintenant, on le dit en allemand !<br>Jetzt auf Deutsch!</p><button class="mx-go big" id="lsGo">▶ Los geht’s !</button></div>`);
+    sp('Bravo ! Maintenant, on le dit en allemand !','fr'); root.querySelector('#lsGo').onclick=()=>{ S.ph=1; S.i=0; view(); };
+  }
+  function done(){
+    addStars(2);
+    frame(`<div class="pt-end"><div class="st">⭐⭐</div><h3>Super gemacht !</h3><button class="mx-go big" id="lsAg">▶ Encore !</button></div>`);
+    sp('Super gemacht ! Bravo !','de'); root.querySelector('#lsAg').onclick=()=>lesson(id);
+    DLmore(root.querySelector('.pt-end'),ptMore(id),'Ou joue à autre chose :');
+  }
+  view();
+}
+
 function memory(){
   const pick=shuffle(ANI).slice(0,6); const cards=shuffle(pick.concat(pick).map((a,i)=>({a,i,open:false,done:false})));
   let first=null,busy=false,found=0,tries=0; T.mem={cards};
