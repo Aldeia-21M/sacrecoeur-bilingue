@@ -647,6 +647,15 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .sn-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.sn-opts button{min-height:104px;border-radius:20px;border:4px solid rgba(29,36,51,.18);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:4px}
 .sn-opts button.ok{background:#bfeebf;border-color:#2f9e44}.sn-opts button.ko{background:#ffc9c9;border-color:#e03131;opacity:.55}
 .sn-og{font-size:clamp(24px,7.4vw,34px);font-weight:900;color:var(--c);text-align:center;line-height:1.1}.sn-oe{font-size:44px;line-height:1}.sn-oe.big{font-size:64px}.sn-ow{font-size:15px;font-weight:700}
+#p-genre{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
+.gn-head{text-align:center;margin:6px 0 10px}.gn-head h2{margin:0 0 4px}.gn-head p{margin:0;color:#4a5164}
+.gn-row{background:#fff;border:3px solid rgba(29,36,51,.15);border-radius:22px;padding:10px;margin:10px 0}.gn-row.done{border-color:#2f9e44;background:#f3fbf4}
+.gn-top{display:flex;gap:8px;align-items:center}.gn-w{flex:1;display:flex;align-items:center;gap:10px;border:0;background:#fff0b8;border-radius:16px;padding:8px 12px;cursor:pointer;font-family:inherit;min-height:56px}.gn-w i{font-style:normal;font-size:30px}.gn-w b{font-size:clamp(20px,5.6vw,28px);color:#1d2433}
+.gn-i{width:48px;min-height:48px;border-radius:50%;border:2px solid #1971c2;background:#e7f1ff;font-size:22px;cursor:pointer;flex:none}
+.gn-cells{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.gn-cells button{min-height:52px;border-radius:14px;border:3px solid rgba(29,36,51,.2);background:#fff;font:700 clamp(14px,4vw,17px) inherit;font-family:inherit;color:#1d2433;cursor:pointer}
+.gn-cells button.ok{background:#b2f2bb;border-color:#2f9e44}.gn-cells button.ko{background:#ffc9c9;border-color:#e03131}.gn-cells button:disabled{cursor:default}
+.gn-why{margin:8px 2px 0;padding:8px 10px;border-radius:12px;background:#fff4e6;color:#5c3b00;font-weight:600;line-height:1.35}.gn-why.info{background:#e7f1ff;color:#123a6b}
+.gn-end{text-align:center;margin:14px 0}.gn-end .st{font-size:34px}
 .sn-var{margin-bottom:14px}.sn-var .sn-words button{min-width:0}.sn-var .sn-w{font-size:clamp(15px,4.2vw,20px);overflow-wrap:anywhere;min-width:0}.sn-sub{text-align:center;font-weight:700;color:#4a5164;margin:4px 0}.sn-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin-top:12px}.sn-cols button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;padding:8px;border-radius:18px;border:3px solid var(--c);background:#fff;cursor:pointer;font-family:inherit}.sn-cols b{font-size:1.15rem;color:var(--c)}.sn-cols span{font-size:.78rem;color:#4a5164;word-break:break-word}.sn-cols button.ok{background:color-mix(in srgb,var(--c) 18%,#fff)}.sn-cols button.ko{background:#ffe3e3;opacity:.5}
 .sn-menu button.sn-ex{background:#ffe3e3;min-height:120px}.sn-menu button.wide{grid-column:1/-1;min-height:110px;background:#dff4dc}.sn-txt p{font-size:clamp(24px,6.6vw,34px);line-height:1.6;margin:8px 0;font-weight:700;color:#1d2433;cursor:pointer}.sn-leg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px}.sn-leg span{background:color-mix(in srgb,var(--c) 16%,#fff);color:var(--c);font-weight:900;border-radius:10px;padding:2px 10px}
 .sn-oth{margin:18px 2px 8px;font-size:18px}.sn-chips{display:flex;flex-wrap:wrap;gap:8px}.sn-chips button{min-width:58px;min-height:48px;padding:4px 14px;border-radius:14px;border:3px solid var(--c);background:#fff;color:var(--c);font-weight:900;font-size:18px;cursor:pointer}
@@ -727,6 +736,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 <section class="page" data-sec="fr" id="p-conj" data-label="📘 Conjugaison"></section>
 <section class="page" data-sec="fr" id="p-ortho" data-label="✏️ Orthographe"></section>
 <section class="page" data-sec="fr" id="p-sons" data-label="📖 Lecture"></section>
+<section class="page" data-sec="fr" id="p-genre" data-label="🏷️ Genre"></section>
 <section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><div class="gk-nav"><button class="gk-open on" id="gkCo"><b>🖍️</b>Colorie la phrase</button><button class="gk-open" id="gkBtn"><b>📘</b>Apprendre les règles</button><button class="gk-open" id="gkTr"><b>🏋️</b>M’entraîner aux règles</button></div><div id="p-gramS" hidden></div><div id="p-gramT"></div></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
@@ -743,6 +753,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "4.8", desc: "Nouvelle section Genre : masculin, féminin, pluriel" },
     { v: "4.7", desc: "Lettres pièges : tri des mots par lettre" },
     { v: "4.6", desc: "Lecture : lettre X, lettres pièges, plus de sons" },
     { v: "4.5", desc: "Lecture : les sons et textes à lire (4H)" }
@@ -5150,6 +5161,50 @@ function quiz(){
 }
 window.DLsons={G,mkQ,setEX:v=>{EX=v;},P};
 menu();
+})();
+</script>
+
+<script>
+/* ===== Genre et nombre : masculin / féminin, singulier / pluriel ===== */
+(function(){
+'use strict';
+const root=document.getElementById('p-genre'); if(!root) return;
+const FAST=/#test/.test(location.hash);
+const shuf=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const seq=a=>{ try{ if(window.DLspeakSeq) DLspeakSeq(a); else if(window.speak) speak(a.map(x=>x.t).join('. '),'fr'); }catch(e){} };
+const say=t=>seq([{t,l:'fr'}]);
+const W=[['🐱','chat','m'],['🐶','chien','m'],['🐴','cheval','m','chevaux'],['🐦','oiseau','m','oiseaux'],['🐟','poisson','m'],['🐰','lapin','m'],['📖','livre','m'],['🖊️','stylo','m'],['📓','cahier','m'],['🎒','sac','m'],['⚽','ballon','m'],['🚲','vélo','m'],['🚚','camion','m'],['⛵','bateau','m','bateaux'],['🎂','gâteau','m','gâteaux'],['🍞','pain','m'],['🧀','fromage','m'],['🍋','citron','m'],['☀️','soleil','m'],['☁️','nuage','m'],['🌳','arbre','m'],['🌻','jardin','m'],['🎩','chapeau','m','chapeaux'],['👖','pantalon','m'],['🧥','manteau','m','manteaux'],['🦶','pied','m'],['👁️','œil','m','yeux'],['📰','journal','m','journaux'],['🐾','animal','m','animaux'],['🏰','château','m','châteaux'],['🖼️','tableau','m','tableaux'],['✈️','avion','m'],['🚆','train','m'],['🐘','éléphant','m'],['🦁','lion','m'],['🐒','singe','m'],['🖍️','crayon','m'],['🧤','gant','m'],['🏨','hôtel','m'],['⛈️','orage','m'],['🐌','escargot','m'],['🐮','vache','f'],['🐔','poule','f'],['🦒','girafe','f'],['🌸','fleur','f'],['🏠','maison','f'],['🚗','voiture','f'],['🪑','chaise','f'],['🚪','porte','f'],['🪟','fenêtre','f'],['🏫','école','f'],['📏','règle','f'],['🍒','cerise','f'],['🍓','fraise','f'],['🍎','pomme','f'],['🍌','banane','f'],['🍊','orange','f'],['🍦','glace','f'],['🍾','bouteille','f'],['🌙','lune','f'],['⭐','étoile','f'],['⛰️','montagne','f'],['🌊','vague','f'],['✋','main','f'],['🦵','jambe','f'],['🦷','dent','f'],['👂','oreille','f'],['🔑','clé','f'],['⌚','montre','f'],['🪔','lampe','f'],['🐢','tortue','f'],['🐸','grenouille','f'],['🐝','abeille','f'],['🕷️','araignée','f'],['👟','chaussure','f'],['👗','robe','f'],['👕','chemise','f'],['💍','bague','f'],['👑','couronne','f'],['🎸','guitare','f'],['🎺','trompette','f'],['🕯️','bougie','f'],['🧳','valise','f'],['🥕','carotte','f'],['🍅','tomate','f'],['🔔','cloche','f'],['🌧️','pluie','f'],['🪶','plume','f']].map(([e,s,g,p])=>({e,s,g,p:p||s+'s',irr:!!p}));
+const un=w=>(w.g==='f'?'une ':'un ')+w.s;
+function pick6(){ const m=shuf(W.filter(w=>w.g==='m')).slice(0,3), f=shuf(W.filter(w=>w.g==='f')).slice(0,3); return shuf(m.concat(f)).map(w=>({w,pl:Math.random()<.5,g:false,n:false,first:true})); }
+const form=r=>r.pl?r.w.p:r.w.s;
+const gW=(w)=>`Non : on dit « ${un(w)} », donc c’est ${w.g==='m'?'masculin':'féminin'}. (un → masculin, une → féminin)`;
+const nW=(r)=>r.pl?`Non : on voit plusieurs ${r.w.e}. « ${r.w.p} », c’est le pluriel (des ${r.w.p}).`:`Non : il n’y en a qu’un. « ${r.w.s} », c’est le singulier (${un(r.w)}).`;
+const info=r=>`${form(r)} : ${r.w.g==='m'?'masculin':'féminin'}, ${r.pl?'pluriel':'singulier'}. On dit « ${un(r.w)} » et au pluriel « des ${r.w.p} »${r.w.irr?' (attention : mot spécial)':''}.`;
+let R=[];
+function render(){
+  root.innerHTML=`<div class="gn-head"><h2>🏷️ Genre et nombre</h2><p>Coche : masculin ou féminin ? singulier ou pluriel ? Touche le mot pour l’entendre, 💡 pour l’explication.</p></div><div id="gnL">${R.map((r,i)=>`<div class="gn-row" data-i="${i}"><div class="gn-top"><button class="gn-w" data-a="w"><i>${r.pl?r.w.e+r.w.e:r.w.e}</i><b>${form(r)}</b></button><button class="gn-i" data-a="i" aria-label="Explication">💡</button></div>
+   <div class="gn-cells"><button data-a="g" data-v="m">♂ Masculin</button><button data-a="g" data-v="f">♀ Féminin</button><button data-a="n" data-v="s">1 Singulier</button><button data-a="n" data-v="p">👥 Pluriel</button></div><p class="gn-why" hidden></p></div>`).join('')}</div><div id="gnE"></div>`;
+}
+function why(row,txt,cls){ const p=row.querySelector('.gn-why'); p.hidden=false; p.className='gn-why'+(cls?' '+cls:''); p.textContent=txt; }
+function finish(){
+  const ok=R.filter(r=>r.first).length, st=ok>=5?3:ok>=3?2:1;
+  try{ localStorage.setItem('dl-pt-stars',String((+localStorage.getItem('dl-pt-stars')||0)+st)); }catch(e){}
+  document.getElementById('gnE').innerHTML=`<div class="gn-end"><div class="st">${'⭐'.repeat(st)}</div><h3>Bravo !</h3><button class="mx-go big" id="gnN">▶ Autre série</button></div>`;
+  document.getElementById('gnN').onclick=start; say('Bravo !');
+}
+function start(){ R=pick6(); render(); window.scrollTo(0,0); }
+root.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-a]'); if(!b) return; const row=b.closest('.gn-row'); if(!row) return; const r=R[+row.dataset.i];
+  const a=b.dataset.a;
+  if(a==='w'){ say(form(r)); return; }
+  if(a==='i'){ const t=info(r); why(row,t,'info'); say(t); return; }
+  if(r[a]) return;
+  const good=a==='g'?r.w.g:(r.pl?'p':'s');
+  if(b.dataset.v===good){ b.classList.add('ok'); r[a]=true; row.querySelectorAll(`button[data-a="${a}"]`).forEach(x=>{ x.disabled=true; });
+    if(r.g&&r.n){ row.classList.add('done'); row.querySelector('.gn-why').hidden=true; if(R.every(x=>x.g&&x.n)) finish(); } }
+  else { b.classList.add('ko'); b.disabled=true; r.first=false; const t=a==='g'?gW(r.w):nW(r); why(row,t); say(t); }
+});
+start();
 })();
 </script>
 </body>
