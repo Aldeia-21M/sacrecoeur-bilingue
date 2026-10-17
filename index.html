@@ -822,6 +822,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "9.1", desc: "Pseudo famille : réaffiché tous les 8 jours" },
     { v: "9.0", desc: "Connexion : texte allégé, pseudo famille coché d’office" },
     { v: "8.9", desc: "Mode hors ligne 48 h, pseudos famille en ligne" },
     { v: "8.8", desc: "Jeu de chiffres : bug des briques corrigé" },
@@ -5738,7 +5739,8 @@ window.DLON=(function(){ const H48=48*36e5; let tg=null;
   const g=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } }, st=(k,v)=>{ try{ if(v==null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} };
   const o={ off(){ const t=+g('dl-off')||0; if(t&&t<Date.now()){ st('dl-off',null); return 0; } return t; },
     setOff(b){ st('dl-off',b?String(Date.now()+H48):null); o.changed(); },
-    shown(){ return g('dl-shown')!=='0'; }, setShown(b){ st('dl-shown',b?'1':'0'); o.changed(); },
+    shown(){ if(g('dl-shown')!=='0') return true; const t=+g('dl-shown-t')||0; if(t&&Date.now()-t>8*864e5){ st('dl-shown',null); st('dl-shown-t',null); return true; } return false; },
+    setShown(b){ if(b){ st('dl-shown','1'); st('dl-shown-t',null); } else { st('dl-shown','0'); st('dl-shown-t',String(Date.now())); } o.changed(); },
     famOk(){ return !!(D.sync&&D.sync.code); },
     /* empreinte du code famille : le code lui-même n’est jamais envoyé au salon */
     async tag(){ const c=D.sync&&D.sync.code; if(!c) return ''; if(tg&&tg.c===c) return tg.t; let t=''; try{ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('dl-lobby:'+c)); t=[...new Uint8Array(b)].slice(0,8).map(x=>x.toString(16).padStart(2,'0')).join(''); }catch(e){} tg={c,t}; return t; },
