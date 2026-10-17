@@ -234,6 +234,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .c4-board{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:8px;border-radius:20px;background:#1f5fd6;border:4px solid #174aa8;max-width:520px;margin:8px auto}.c4-col{display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation}.c4-col:disabled{cursor:default}.c4-col:not(:disabled):active .c4-cell:not(.on){background:#a5d8ff}.c4-cell{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:50%;background:#fff;font-size:clamp(12px,4vw,22px);line-height:1;box-shadow:inset 0 3px 0 rgba(0,0,0,.18)}.c4-cell.on{background:var(--pc);border:3px solid rgba(255,255,255,.85);animation:c4drop .3s ease-out}.c4-cell.win{outline:4px solid #ffd43b;outline-offset:-1px;animation:chpulse .6s infinite alternate}@keyframes c4drop{from{transform:translateY(-40px);opacity:.3}}
 .bt-wrap{max-width:520px;margin:8px auto}.bt-grid{display:grid;grid-template-columns:28px repeat(var(--n),1fr);gap:3px;padding:8px;border-radius:18px;background:#a5d8ff;border:4px solid #339af0}.bt-h{display:flex;align-items:center;justify-content:center;font-weight:900;color:#1c4a7a;font-size:14px}.bt-c{aspect-ratio:1;border-radius:8px;border:2px solid #74c0fc;background:#e7f5ff;font-size:clamp(14px,4.6vw,24px);padding:0;cursor:pointer;touch-action:manipulation;line-height:1}.bt-c:disabled{cursor:default}.bt-c:not(:disabled):active{background:#fff3bf}.bt-c.m{background:#d0ebff;border-color:#a5d8ff}.bt-c.h{background:#ffe3e3;border-color:#e03131}.bt-c.s{background:#ffd8a8;border-color:#e8590c}
 .pd-top{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:center;margin:8px 0}.pd-svg{width:100%;max-height:170px}.pd-clue{display:grid;gap:8px}.pd-clue small{color:#5b6478;font-weight:700}.pd-hint{font-size:clamp(18px,5vw,26px);font-weight:900;color:#1d2433}.pd-word{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin:10px 0}.pd-art{font-weight:900;font-size:clamp(18px,5vw,26px);color:#1f5fd6;margin-right:6px}.pd-s{display:flex;align-items:center;justify-content:center;width:clamp(26px,7.4vw,40px);height:clamp(34px,9vw,50px);border-bottom:5px solid #1d2433;font-style:normal;font-weight:900;font-size:clamp(20px,6vw,32px);color:#1d2433}.pd-s.on{color:#2f9e44;border-bottom-color:#2f9e44}.pd-s.dash{border-bottom:0}.pd-kb{display:grid;gap:6px;margin-top:10px}.pd-r{display:flex;gap:5px;justify-content:center}.pd-r button{flex:1;max-width:46px;min-height:50px;border-radius:10px;border:2px solid #ced4da;background:#fff;font-size:20px;font-weight:800;font-family:inherit;padding:0;cursor:pointer;color:#1d2433;touch-action:manipulation}.pd-r button.ok{background:#d3f9d8;border-color:#2f9e44}.pd-r button.ko{background:#ffe3e3;border-color:#e03131;opacity:.6}.pd-r button:disabled{cursor:default}
+.mu-wrap{max-width:520px;margin:10px auto;padding:0 4%}.mu-board{position:relative;aspect-ratio:1;background:#f3d9a4;border:4px solid #b8893a;border-radius:20px;padding:0}.mu-svg{position:absolute;inset:0;width:100%;height:100%}.mu-pt{position:absolute;width:11.5%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:3px solid #7a5c2e;background:#fff7e0;padding:0;font-size:clamp(14px,5vw,26px);line-height:1;cursor:pointer;touch-action:manipulation}.mu-pt.on{background:var(--pc);border:3px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.3)}.mu-pt.sel{outline:4px solid #f59f00;outline-offset:2px}.mu-pt.tg{background:#b2f2bb;border-color:#2f9e44;animation:chpulse .7s infinite alternate}.mu-pt.rm{outline:4px solid #e03131;outline-offset:2px;animation:chpulse .6s infinite alternate}.mu-pt.can{outline:3px dashed #2f9e44;outline-offset:2px}
 .h-track{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .h-lane{display:grid;grid-template-columns:minmax(70px,26%) 1fr;gap:8px;align-items:center;padding:6px 8px;border-radius:16px;background:#fff;border:3px solid rgba(29,36,51,.14)}
 .h-lane.act{border-color:var(--pc);background:#fffbe0}
@@ -388,7 +389,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .k-s{--k:#e0a800;--kb:#ffe9a0}.k-q{--k:#c2255c;--kb:#f3b6cd}.k-e{--k:#2f9e44;--kb:#cdeccd}.k-v{--k:#e03131;--kb:#ffc9c9}.k-o{--k:#1971c2;--kb:#cfe3fa}.k-k{--k:#0b7285;--kb:#c5ecf1}.k-t{--k:#d6336c;--kb:#fbd0e1}.k-g{--k:#5f3dc4;--kb:#dcd3f7}
 
 .pf1{--k:#1c7ed6;--kb:#cfe8ff}.pf2{--k:#e0a800;--kb:#ffe58a}.pf3{--k:#2f9e44;--kb:#d3f0d3}
-.pfam{background:var(--kb)!important;border-radius:14px;padding:10px 12px;border:2px solid var(--k);display:flex;flex-direction:column;gap:2px}.pfam small{margin-top:4px;display:block;font-style:italic}
+.pfam{background:var(--kb)!important;border-radius:14px;padding:10px 12px;border:2px solid var(--k);display:flex;flex-direction:column;gap:2px}.pfam>b{font-size:1.15em}.pchs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}.pch{display:inline-block;background:#fff;border:3px solid var(--k);border-radius:999px;padding:4px 14px;font-weight:900;font-size:1.2em;line-height:1.3;color:#1d2433;box-shadow:0 2px 0 var(--k)}.pfam small{margin-top:4px;display:block;font-style:italic}
 .k-D{--k:#74c0fc;--kb:#cfe8ff}.k-N{--k:#f783ac;--kb:#ffd6e5}.k-J{--k:#fcc419;--kb:#ffe58a}.k-R{--k:#8ce99a;--kb:#d9f2d1}.k-V{--k:#e03131;--kb:#ffc9c9}.k-B{--k:#ffa94d;--kb:#ffd9b3}.k-P{--k:#3bc9db;--kb:#c5f6fa}.k-C{--k:#e599f7;--kb:#f3d9fa}
 
 .n-d,.n-n,.n-a,.n-v{font-weight:800}.n-d{color:#1f5fd6}.n-n{color:#d6336c}.n-a{color:#d9780f}.n-v{color:#7048e8}
@@ -812,6 +813,8 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "7.6", desc: "Moulin (Mühle) BÊTA" },
+    { v: "7.5", desc: "Prépositions : mots bien visibles" },
     { v: "7.4", desc: "Pendu BÊTA (allemand, français)" },
     { v: "7.3", desc: "Bataille navale BÊTA" },
     { v: "7.2", desc: "Puissance 4 des questions BÊTA" },
@@ -1907,6 +1910,7 @@ const GROUPS=[
   {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
+  {id:'moulin',ic:'⚪',t:'Moulin / Mühle (BÊTA)',d:'Aligne 3 pions, réponds, retire un pion · 2',c:'#f3d9a4'},
   {id:'pendu',ic:'🔤',t:'Pendu (BÊTA)',d:'Devine le mot lettre par lettre · 1–4',c:'#fff0b8'},
   {id:'navale',ic:'🚢',t:'Bataille navale (BÊTA)',d:'Réponds pour tirer · cases lues en allemand · 1–4',c:'#d9ecfb'},
   {id:'puissance4',ic:'🔴',t:'Puissance 4 (BÊTA)',d:'Réponds pour poser un jeton · 1–2',c:'#ffe3e3'},
@@ -1930,7 +1934,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','moulin','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1940,7 +1944,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','moulin','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -1973,7 +1977,7 @@ function openGame(id){
   document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
-  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(id==='navale') navale(); else if(id==='pendu') pendu(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
+  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(id==='navale') navale(); else if(id==='pendu') pendu(); else if(id==='moulin') moulin(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
 }
 root.querySelector('#gBack').onclick=showHub;
@@ -2626,6 +2630,116 @@ function startPendu(cfg){
   function finish(){ S.over=true; const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
     endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>startPendu(cfg)); }
   newWord();
+}
+/* ================= MOULIN (MÜHLE) ================= */
+const MU={
+ XY:[[0,0],[3,0],[6,0],[6,3],[6,6],[3,6],[0,6],[0,3],[1,1],[3,1],[5,1],[5,3],[5,5],[3,5],[1,5],[1,3],[2,2],[3,2],[4,2],[4,3],[4,4],[3,4],[2,4],[2,3]],
+ MILLS:[],ADJ:[]
+};
+for(let r=0;r<3;r++){ const o=r*8; for(let k=0;k<4;k++) MU.MILLS.push([o+2*k,o+2*k+1,o+(2*k+2)%8]); }
+[1,3,5,7].forEach(k=>MU.MILLS.push([k,k+8,k+16]));
+for(let i=0;i<24;i++) MU.ADJ[i]=[];
+for(let r=0;r<3;r++){ const o=r*8; for(let k=0;k<8;k++){ const a=o+k, b=o+(k+1)%8; MU.ADJ[a].push(b); MU.ADJ[b].push(a); } }
+[1,3,5,7].forEach(k=>{ MU.ADJ[k].push(k+8); MU.ADJ[k+8].push(k,k+16); MU.ADJ[k+16].push(k+8); });
+const muMill=(B,i,pl)=>MU.MILLS.some(m=>m.includes(i)&&m.every(j=>B[j]===pl));
+const muCount=(B,pl)=>B.filter(v=>v===pl).length;
+function muMoves(S,pl){   // [{from,to}] (from=-1 : pose)
+  const B=S.B, out=[], empty=[...Array(24).keys()].filter(i=>!B[i]);
+  if(S.hand[pl-1]>0){ empty.forEach(t=>out.push({from:-1,to:t})); return out; }
+  const fly=muCount(B,pl)===3;
+  for(let f=0;f<24;f++) if(B[f]===pl) (fly?empty:MU.ADJ[f].filter(t=>!B[t])).forEach(t=>out.push({from:f,to:t}));
+  return out;
+}
+function muRemovable(B,opp){ const mine=[...Array(24).keys()].filter(i=>B[i]===opp), free=mine.filter(i=>!muMill(B,i,opp)); return free.length?free:mine; }
+function muApply(S,pl,m){ if(m.from<0) S.hand[pl-1]--; else S.B[m.from]=0; S.B[m.to]=pl; return muMill(S.B,m.to,pl); }
+function muAi(S,pl){
+  const mv=muMoves(S,pl), opp=3-pl, B=S.B; if(!mv.length) return null;
+  const sc=m=>{ let s=Math.random()*2; const t=m.to; const B2=B.slice(); if(m.from>=0) B2[m.from]=0; B2[t]=pl; if(muMill(B2,t,pl)) s+=20;
+    const B3=B.slice(); B3[t]=opp; if(muMill(B3,t,opp)) s+=9; if(MU.ADJ[t].length>=3) s+=1.5; if(m.from>=0&&muMill(B,m.from,pl)) s+=2; return s; };
+  return mv.slice().sort((a,b)=>sc(b)-sc(a))[0];
+}
+function muAiRemove(S,opp){ const c=muRemovable(S.B,opp); const sc=i=>{ let s=Math.random(); MU.MILLS.forEach(m=>{ if(m.includes(i)){ const o=m.filter(j=>S.B[j]===opp).length, e=m.filter(j=>!S.B[j]).length; if(o===2&&e===1) s+=5; } }); return s; }; return c.slice().sort((a,b)=>sc(b)-sc(a))[0]; }
+T2.mu={MU,muMill,muMoves,muApply,muAi,muAiRemove,muRemovable,muCount};
+function moulin(){
+  playerSetup({title:'⚪ Moulin (Mühle)',npc:true,intro:'Pose tes pions, puis déplace-les d’un point à l’autre. <b>Aligne 3 pions</b> pour faire un <b>moulin</b> : réponds alors à une question — bonne réponse = tu retires un pion adverse ! Il faut arriver à moins de 3 pions pour perdre. Avec 3 pions, tu peux <b>voler</b> n’importe où. Chaque joueur choisit sa classe.',min:2,max:2,defN:2,perGrade:true,
+    extra:{label:'Pions par joueur',opts:[[6,'6 pions (rapide)'],[9,'9 pions']],def:6}},startMoulin);
+}
+function startMoulin(cfg){
+  const NP=cfg.x||6, S={cfg,B:Array(24).fill(0),hand:[NP,NP],turn:0,sel:-1,phase:'move',busy:false,over:false}; T2.mug=S;
+  const P=i=>cfg.players[i];
+  const pts=MU.XY.map(([x,y],i)=>`<button class="mu-pt" data-i="${i}" style="left:${(x+0.4)*100/6.8}%;top:${(y+0.4)*100/6.8}%" aria-label="point ${i+1}"></button>`).join('');
+  const lines=(()=>{ let d=''; for(let r=0;r<3;r++){ const o=r*8; d+=`M${MU.XY[o][0]} ${MU.XY[o][1]}L${MU.XY[o+2][0]} ${MU.XY[o+2][1]}L${MU.XY[o+4][0]} ${MU.XY[o+4][1]}L${MU.XY[o+6][0]} ${MU.XY[o+6][1]}Z`; } [1,3,5,7].forEach(k=>{ d+=`M${MU.XY[k][0]} ${MU.XY[k][1]}L${MU.XY[k+16][0]} ${MU.XY[k+16][1]}`; }); return d; })();
+  body.innerHTML=`<div class="h-bar"><div id="mInfo" class="h-info"></div><button class="g-ghost" id="mQuit">↩ Quitter</button></div>
+    <div class="g-msg" id="mMsg"></div>
+    <div class="mu-wrap"><div class="mu-board" id="mBoard"><svg viewBox="-0.4 -0.4 6.8 6.8" class="mu-svg"><path d="${lines}" fill="none" stroke="#7a5c2e" stroke-width=".09" stroke-linejoin="round"/></svg>${pts}</div></div>
+    <div class="h-qbox" id="mQ" hidden></div>`;
+  const msg=t=>body.querySelector('#mMsg').innerHTML='<span>'+t+'</span>', box=body.querySelector('#mQ'), bd=body.querySelector('#mBoard');
+  body.querySelector('#mQuit').onclick=()=>moulin();
+  const tot=pl=>S.hand[pl-1]+muCount(S.B,pl);
+  let targets=[];
+  function paint(){
+    const pl=S.turn+1; targets=[];
+    if(!S.over&&S.phase==='move'&&!P(S.turn).npc){ if(S.hand[S.turn]>0) targets=muMoves(S,pl).map(m=>m.to); else if(S.sel>=0) targets=muMoves(S,pl).filter(m=>m.from===S.sel).map(m=>m.to); }
+    const rem=S.phase==='remove'&&!P(S.turn).npc?muRemovable(S.B,3-pl):[];
+    const selectable=(!S.over&&S.phase==='move'&&!P(S.turn).npc&&S.hand[S.turn]===0)?[...new Set(muMoves(S,pl).map(m=>m.from))]:[];
+    bd.querySelectorAll('.mu-pt').forEach(b=>{ const i=+b.dataset.i, v=S.B[i]; b.className='mu-pt'+(v?' on':'')+(S.sel===i?' sel':'')+(targets.includes(i)?' tg':'')+(rem.includes(i)?' rm':'')+(selectable.includes(i)&&S.sel!==i?' can':'');
+      b.style.setProperty('--pc',v?P(v-1).color:'transparent'); b.textContent=v?P(v-1).emoji.replace(/<[^>]*>/g,'')||'●':''; });
+    body.querySelector('#mInfo').innerHTML=[0,1].map(i=>chip(P(i),i===S.turn&&!S.over)+`<b class="h-sc">${S.hand[i]>0?'✋'+S.hand[i]+' + ':''}${muCount(S.B,i+1)}</b>`).join('');
+  }
+  function status(){ const p=P(S.turn), pl=S.turn+1;
+    if(S.hand[S.turn]>0) return `${p.emoji} <b>${esc(p.name)}</b> : pose un pion (${S.hand[S.turn]} à poser).`;
+    return muCount(S.B,pl)===3?`${p.emoji} <b>${esc(p.name)}</b> : tu as 3 pions, tu peux <b>voler</b> ! Touche un pion puis une case vide.`:`${p.emoji} <b>${esc(p.name)}</b> : touche un de tes pions, puis une case voisine.`; }
+  function nextTurn(){
+    S.turn=1-S.turn; S.sel=-1; S.phase='move'; S.busy=false;
+    const pl=S.turn+1; if(!muMoves(S,pl).length) return win(1-S.turn,'ne peut plus bouger');
+    paint(); msg(status()); if(P(S.turn).npc) setTimeout(npcMove,FAST?10:900);
+  }
+  function win(w,why){ S.over=true; paint(); const p=P(w); endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`${esc(P(1-w).name)} ${why}.`,color:p.color},()=>startMoulin(cfg)); }
+  function afterMove(m){
+    const pl=S.turn+1, mill=muMill(S.B,m.to,pl); paint();
+    if(!mill) return nextTurn();
+    S.phase='q'; paint(); question();
+  }
+  function doMove(m){ if(S.busy) return; S.busy=true; const mill=muApply(S,S.turn+1,m); S.sel=-1; S.quiet=(S.quiet||0)+1; paint(); S.busy=false;
+    if(S.quiet>=70&&!mill){ S.over=true; return endScreen({title:'Match nul !',sub:'Plus personne ne peut avancer : égalité.',color:'#7048e8'},()=>startMoulin(cfg)); }
+    afterMove(m); }
+  function npcMove(){ if(S.over||S.phase!=='move') return; const m=muAi(S,S.turn+1); if(!m) return win(1-S.turn,'ne peut plus bouger'); doMove(m); }
+  function question(){
+    const p=P(S.turn), pl=S.turn+1; box.hidden=false; box.style.setProperty('--pc',p.color);
+    const after=ok=>{ box.hidden=true; box.innerHTML='';
+      if(!ok){ msg(`${p.emoji} <b>${esc(p.name)}</b> n’a pas trouvé : le moulin ne rapporte rien…`); return sleep(FAST?20:1100).then(nextTurn); }
+      S.phase='remove'; paint();
+      if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> retire un pion !`); return sleep(FAST?20:1000).then(()=>removePiece(muAiRemove(S,3-pl))); }
+      msg(`✅ Moulin ! ${p.emoji} <b>${esc(p.name)}</b>, touche un pion adverse à retirer.`); };
+    if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> a fait un moulin ! Il répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+      return sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); }
+    msg(`🎯 <b>Moulin !</b> ${p.emoji} <b>${esc(p.name)}</b> : réponds pour retirer un pion adverse.`);
+    const q=makeQuestion(cfg.topics,p.gr);
+    box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
+      <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
+      <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
+    D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
+    if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
+    let ans=false;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+      box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
+      const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu retires un pion adverse !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Pas de pion retiré.`;
+      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
+      const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>after(ok); };
+  }
+  function removePiece(i){
+    const pl=S.turn+1, opp=3-pl; S.B[i]=0; S.quiet=0; S.phase='move'; paint();
+    if(tot(opp)<3) return win(S.turn,'n’a plus assez de pions');
+    nextTurn();
+  }
+  bd.onclick=e=>{ const b=e.target.closest('.mu-pt'); if(!b||S.busy||S.over||P(S.turn).npc) return; const i=+b.dataset.i, pl=S.turn+1;
+    if(S.phase==='remove'){ if(muRemovable(S.B,3-pl).includes(i)) removePiece(i); return; }
+    if(S.phase!=='move') return;
+    if(S.hand[S.turn]>0){ if(!S.B[i]) doMove({from:-1,to:i}); return; }
+    if(S.B[i]===pl){ if(muMoves(S,pl).some(m=>m.from===i)){ S.sel=i; paint(); } return; }
+    if(S.sel>=0&&!S.B[i]){ const m=muMoves(S,pl).find(m=>m.from===S.sel&&m.to===i); if(m) doMove(m); } };
+  paint(); msg(status()); if(P(0).npc) setTimeout(npcMove,500);
 }
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
@@ -4156,7 +4270,7 @@ function gmCard(act,g){
   if(act==='adverbe') return wrap('🐙','L’adverbe',
    blk('Il précise le sens d’un verbe, d’un adjectif, d’une phrase ou d’un autre adverbe','Il est <b>invariable</b> : on ne peut pas le mettre au pluriel.'+exs('Il mange <span class="k k-B">salement</span>.'),'#fff8dc')+blk('Les 4 grands types',`<div class="gm-4"><div style="--c:#ffd9b3"><b>📍 Lieu</b><small>où ?</small>ici, partout, là-bas</div><div style="--c:#ffd9b3"><b>🕐 Temps</b><small>quand ?</small>demain, maintenant, hier</div><div style="--c:#ffd9b3"><b>❓ Manière</b><small>comment ?</small>doucement, vite, mal</div><div style="--c:#ffd9b3"><b>🍎 Quantité</b><small>combien ?</small>trop, peu, beaucoup, assez</div></div>`,'#fff'));
   if(act==='prep') return wrap('🐛','La préposition',
-   blk('Elle fait un lien entre deux éléments','Elle est <b>invariable</b> et on <b>ne peut pas la supprimer</b>.<br><small>La couleur d’une préposition = sa <b>famille</b> (voir plus bas).</small>'+exs('Une machine <span class="k pf1">à</span> laver · Tu cours <span class="k pf1">dans</span> la forêt.'),'#fff8dc')+blk('Elle se place devant',`${ch('un nom · Elle vit <span class="k pf1">à</span> Paris','#f1f3f5')} ${ch('un groupe nominal · Le chat dort <span class="k pf2">sur</span> le canapé','#f1f3f5')} ${ch('un verbe à l’infinitif · Je mange <span class="k pf3">avant de</span> partir','#f1f3f5')} ${ch('un pronom · Tu te moques <span class="k pf1">de</span> moi','#f1f3f5')} ${ch('un adverbe · Il dort <span class="k pf3">depuis</span> hier','#f1f3f5')}`,'#fff')+blk('Les principales prépositions : 3 familles',`<div class="gm-3"><div class="pfam pf1"><b>🧳 Le voyage d’Adam</b>à, dans, par, pour, en, vers, avec, de, sans<small>Elle part <span class="k pf1">avec</span> son sac.<br>Je vais <span class="k pf1">à</span> l’école.<br>Il court <span class="k pf1">vers</span> la mer.<br>Un café <span class="k pf1">sans</span> sucre.</small></div><div class="pfam pf2"><b>🏖️ Chacun sa place</b>au-dessus de, près de, sur, devant, derrière, sous, entre<small>Le chat est <span class="k pf2">devant</span> la porte.<br>Le livre est <span class="k pf2">sur</span> la table.<br>Il se cache <span class="k pf2">derrière</span> l’arbre.<br>Assieds-toi <span class="k pf2">près de</span> moi.</small></div><div class="pfam pf3"><b>⌚ La montre du temps</b>avant, pendant, après, depuis, jusqu’à<small>Il joue <span class="k pf3">après</span> l’école.<br>Je lis <span class="k pf3">avant</span> le dîner.<br>Il dort <span class="k pf3">pendant</span> le film.<br>Je t’attends <span class="k pf3">jusqu’à</span> midi.</small></div></div>`,'#fff'));
+   blk('Elle fait un lien entre deux éléments','Elle est <b>invariable</b> et on <b>ne peut pas la supprimer</b>.<br><small>La couleur d’une préposition = sa <b>famille</b> (voir plus bas).</small>'+exs('Une machine <span class="k pf1">à</span> laver · Tu cours <span class="k pf1">dans</span> la forêt.'),'#fff8dc')+blk('Elle se place devant',`${ch('un nom · Elle vit <span class="k pf1">à</span> Paris','#f1f3f5')} ${ch('un groupe nominal · Le chat dort <span class="k pf2">sur</span> le canapé','#f1f3f5')} ${ch('un verbe à l’infinitif · Je mange <span class="k pf3">avant de</span> partir','#f1f3f5')} ${ch('un pronom · Tu te moques <span class="k pf1">de</span> moi','#f1f3f5')} ${ch('un adverbe · Il dort <span class="k pf3">depuis</span> hier','#f1f3f5')}`,'#fff')+blk('Les principales prépositions : 3 familles',`<div class="gm-3"><div class="pfam pf1"><b>🧳 Le voyage d’Adam</b><span class="pchs">${['à', 'dans', 'par', 'pour', 'en', 'vers', 'avec', 'de', 'sans'].map(w=>`<span class="pch">${w}</span>`).join('')}</span><small>Elle part <span class="k pf1">avec</span> son sac.<br>Je vais <span class="k pf1">à</span> l’école.<br>Il court <span class="k pf1">vers</span> la mer.<br>Un café <span class="k pf1">sans</span> sucre.</small></div><div class="pfam pf2"><b>🏖️ Chacun sa place</b><span class="pchs">${['au-dessus de', 'près de', 'sur', 'devant', 'derrière', 'sous', 'entre'].map(w=>`<span class="pch">${w}</span>`).join('')}</span><small>Le chat est <span class="k pf2">devant</span> la porte.<br>Le livre est <span class="k pf2">sur</span> la table.<br>Il se cache <span class="k pf2">derrière</span> l’arbre.<br>Assieds-toi <span class="k pf2">près de</span> moi.</small></div><div class="pfam pf3"><b>⌚ La montre du temps</b><span class="pchs">${['avant', 'pendant', 'après', 'depuis', 'jusqu’à'].map(w=>`<span class="pch">${w}</span>`).join('')}</span><small>Il joue <span class="k pf3">après</span> l’école.<br>Je lis <span class="k pf3">avant</span> le dîner.<br>Il dort <span class="k pf3">pendant</span> le film.<br>Je t’attends <span class="k pf3">jusqu’à</span> midi.</small></div></div>`,'#fff'));
   if(act==='groupes') return wrap('🏖️','Les groupes de verbes',
    blk('Avec l’infinitif, on trouve le groupe','Il y a <b>3 groupes</b>.','#fff8dc')+`<div class="gm-3"><div style="--c:#dff4dc"><b>1er groupe</b>verbes en <b>-er</b><br>parler, chanter, jouer…<br><small>⚠️ sauf <b>aller</b> !</small></div><div style="--c:#dbeafb"><b>2ᵉ groupe</b>verbes en <b>-ir</b> qui font <b>-issant</b><br>finir, grandir, grossir…<br><small>en finiss<b>ant</b></small></div><div style="--c:#ffe8cc"><b>3ᵉ groupe</b>tous les autres<br><b>-ir</b> : partir, sortir, venir<br><b>-re</b> : prendre, dire, faire<br><b>-oir</b> : vouloir, pouvoir<br><small>en part<b>ant</b></small></div></div>`);
   if(act==='temps') return wrap('⏱️','Temps simples · temps composés',
