@@ -819,6 +819,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "8.1", desc: "Zahlen : Jeu de chiffres avant Mon nombre" },
     { v: "8.0", desc: "Salon : moteur commun, chevaux en ligne (BÊTA)" },
     { v: "7.9", desc: "Nouveau jeu : cartes couleurs (BÊTA)" },
     { v: "7.8", desc: "Prépositions : titres en bandeau coloré" },
@@ -1267,11 +1268,11 @@ B.addEventListener('click',e=>{
     else { t.classList.add('shake'); setTimeout(()=>t.classList.remove('shake'),400); const fb=B.querySelector('#mnFb'); if(fb) fb.innerHTML='<div class="ko">Pas encore celui-là ! Écoute-le avec le 🔊 et essaie un autre morceau.</div>'; } }
 });
 
-/* ---------- Jeu de chiffres (BÊTA) : série de nombres au hasard ---------- */
+/* ---------- Jeu de chiffres : série de nombres au hasard ---------- */
 window.__mnLoad=function(n){ st.d=String(n).padStart(5,'0').split('').map(Number); if(st.mode==='see') st.mode='build'; st.tries=0; if(B.hidden) T.click(); paint(); try{ box.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} };
 const G=document.createElement('div'); G.className='mn-box gm-box';
-G.innerHTML=`<button class="tr-toggle" id="gmT" aria-expanded="false"><span><span>🎮 Jeu de chiffres <em class="gm-beta">BÊTA</em></span><small>10 nombres au hasard : écouter, écrire, assembler</small></span><span class="ch" aria-hidden="true">▾</span></button><div class="tr-body" id="gmB" hidden></div>`;
-sec.appendChild(G);
+G.innerHTML=`<button class="tr-toggle" id="gmT" aria-expanded="false"><span><span>🎮 Jeu de chiffres</span><small>10 nombres au hasard : écouter, écrire, assembler</small></span><span class="ch" aria-hidden="true">▾</span></button><div class="tr-body" id="gmB" hidden></div>`;
+sec.insertBefore(G,box);
 const GT=G.querySelector('#gmT'), GB=G.querySelector('#gmB');
 GT.onclick=()=>{ const open=GB.hidden; GB.hidden=!open; GT.setAttribute('aria-expanded',open); GT.querySelector('.ch').textContent=open?'▴':'▾'; if(open&&!GB.firstChild) gmMenu(); };
 const g={rg:1,i:0,score:0,list:[],t:null,tries:0,err:0,b:null,done:false};
