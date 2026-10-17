@@ -231,6 +231,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .ch-toks{position:absolute;inset:6px;pointer-events:none}.ch-tok{position:absolute;width:calc(100%/11);height:calc(100%/11);padding:0;border:0;background:none;pointer-events:none;transition:left .15s linear,top .15s linear}.ch-tok span{display:flex;align-items:center;justify-content:center;width:86%;height:86%;margin:7%;border-radius:50%;background:var(--pc);border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25);font-size:clamp(10px,3.4vw,22px);line-height:1}.ch-tok.go{pointer-events:auto;cursor:pointer;z-index:3}.ch-tok.go span{animation:chpulse .7s infinite alternate;outline:3px solid #fff;outline-offset:1px}@keyframes chpulse{to{transform:scale(1.22)}}
 .ch-dcol{display:flex;flex-direction:column;align-items:center;gap:2px}.ch-dcol small{font-weight:800;color:#1f5fd6;font-size:13px;min-height:1.2em}.ch-d{cursor:pointer;font:inherit;width:68px;height:68px}.ch-d.used{opacity:.3}.ch-d.sel{outline:4px solid #f59f00;outline-offset:2px}.ch-d:disabled{cursor:default}.ch-side{display:grid;gap:8px;justify-items:center}.ch-die{display:flex;align-items:center;gap:12px;justify-content:center;min-height:76px;flex-wrap:wrap}.ch-dbtn{min-height:64px;padding:0 22px;border-radius:18px;border:3px solid var(--pc,#1f5fd6);background:color-mix(in srgb,var(--pc,#1f5fd6) 18%,#fff);font-weight:900;font-size:20px;font-family:inherit;cursor:pointer;color:#1d2433}
 .bn-cards{display:grid;gap:10px;margin:10px 0}.bn-cards.n3{grid-template-columns:repeat(3,1fr)}.bn-cards.n4{grid-template-columns:repeat(2,1fr)}.bn-card{display:flex;flex-direction:column;gap:6px;align-items:stretch}.bn-face{min-height:120px;border-radius:18px;border:3px solid rgba(29,36,51,.2);background:#fff;font-family:inherit;font-weight:900;font-size:clamp(15px,4.4vw,24px);color:#1d2433;cursor:pointer;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow-wrap:anywhere;hyphens:auto;touch-action:manipulation}.bn-face:disabled{cursor:default}.bn-face .bn-v{font-size:1.5em;color:#7048e8;min-height:1.2em}.bn-face.ok{background:#d3f9d8;border-color:#2f9e44}.bn-face.ko{background:#ffe3e3;border-color:#e03131}.bn-hear{min-height:44px;border-radius:12px;border:2px solid rgba(29,36,51,.15);background:#fff0b8;font-size:20px;cursor:pointer}@media(max-width:420px){.bn-cards.n3{grid-template-columns:1fr}.bn-face{min-height:84px;flex-direction:row;gap:14px}.bn-card{flex-direction:row}.bn-card .bn-face{flex:1}.bn-hear{width:56px}}
+.c4-board{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:8px;border-radius:20px;background:#1f5fd6;border:4px solid #174aa8;max-width:520px;margin:8px auto}.c4-col{display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation}.c4-col:disabled{cursor:default}.c4-col:not(:disabled):active .c4-cell:not(.on){background:#a5d8ff}.c4-cell{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:50%;background:#fff;font-size:clamp(12px,4vw,22px);line-height:1;box-shadow:inset 0 3px 0 rgba(0,0,0,.18)}.c4-cell.on{background:var(--pc);border:3px solid rgba(255,255,255,.85);animation:c4drop .3s ease-out}.c4-cell.win{outline:4px solid #ffd43b;outline-offset:-1px;animation:chpulse .6s infinite alternate}@keyframes c4drop{from{transform:translateY(-40px);opacity:.3}}
 .h-track{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .h-lane{display:grid;grid-template-columns:minmax(70px,26%) 1fr;gap:8px;align-items:center;padding:6px 8px;border-radius:16px;background:#fff;border:3px solid rgba(29,36,51,.14)}
 .h-lane.act{border-color:var(--pc);background:#fffbe0}
@@ -809,6 +810,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "7.2", desc: "Puissance 4 des questions BÊTA" },
     { v: "7.1", desc: "Bataille de chiffres BÊTA" },
     { v: "7.0", desc: "Petits chevaux BÊTA, deux dés" },
     { v: "6.8", desc: "Bouton Quitter le jeu" },
@@ -1901,6 +1903,7 @@ const GROUPS=[
   {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
+  {id:'puissance4',ic:'🔴',t:'Puissance 4 (BÊTA)',d:'Réponds pour poser un jeton · 1–2',c:'#ffe3e3'},
   {id:'cartes',ic:'🃏',t:'Bataille de chiffres (BÊTA)',d:'Trouve la carte la plus grande · 2–4',c:'#e9defa'},
   {id:'chevaux',ic:'🐴',t:'Petits chevaux (BÊTA)',d:'Dé, 6 pour sortir, cases ⭐ questions · 2–4',c:'#ffe8cc'},
   {id:'memory',ic:'🃏',t:'Memory',d:'Paires français ↔ allemand · 1–4',c:'#d9ecfb'},
@@ -1921,7 +1924,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1931,7 +1934,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -1964,7 +1967,7 @@ function openGame(id){
   document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
-  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
+  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
 }
 root.querySelector('#gBack').onclick=showHub;
@@ -2395,6 +2398,78 @@ function startCartes(cfg){
     endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>startCartes(cfg));
   }
   nextRound();
+}
+/* ================= PUISSANCE 4 DES QUESTIONS ================= */
+const C4={W:7,H:6};
+function c4Drop(B,c,pl){ for(let r=C4.H-1;r>=0;r--){ if(!B[r][c]){ B[r][c]=pl; return r; } } return -1; }
+function c4Line(B,r,c){
+  const pl=B[r][c]; if(!pl) return null;
+  for(const [dr,dc] of [[0,1],[1,0],[1,1],[1,-1]]){
+    const cells=[[r,c]]; for(const s of [1,-1]){ let rr=r+dr*s, cc=c+dc*s; while(rr>=0&&rr<C4.H&&cc>=0&&cc<C4.W&&B[rr][cc]===pl){ cells.push([rr,cc]); rr+=dr*s; cc+=dc*s; } }
+    if(cells.length>=4) return cells; }
+  return null;
+}
+function c4Ai(B,me){
+  const opp=me===1?2:1, cols=[...Array(C4.W).keys()].filter(c=>!B[0][c]);
+  const tryC=(c,pl)=>{ const r=c4Drop(B,c,pl); if(r<0) return false; const w=!!c4Line(B,r,c); B[r][c]=0; return w; };
+  for(const c of cols) if(tryC(c,me)) return c;
+  for(const c of cols) if(tryC(c,opp)) return c;
+  const safe=cols.filter(c=>{ const r=c4Drop(B,c,me); if(r<=0){ if(r===0) B[r][c]=0; return true; } B[r][c]=0; B[r-1][c]=opp; const w=!!c4Line(B,r-1,c); B[r-1][c]=0; return !w; });
+  const pool=(safe.length?safe:cols).slice().sort((a,b)=>Math.abs(a-3)-Math.abs(b-3)+(Math.random()-.5)*2.2);
+  return pool[0];
+}
+T2.c4={C4,c4Drop,c4Line,c4Ai};
+function puissance4(){
+  playerSetup({title:'🔴 Puissance 4',npc:true,intro:'Réponds à une question pour gagner le droit de jouer un jeton, puis choisis la colonne. Bonne réponse = tu poses un jeton ; mauvaise réponse = tu passes ton tour. Le premier qui aligne <b>4 jetons</b> gagne !',min:2,max:2,defN:2,perGrade:true},startPuissance4);
+}
+function startPuissance4(cfg){
+  const B=Array.from({length:C4.H},()=>Array(C4.W).fill(0)), S={cfg,B,turn:0,phase:'q',busy:false,over:false}; T2.c4g=S;
+  const P=i=>cfg.players[i];
+  body.innerHTML=`<div class="h-bar"><div id="c4Info" class="h-info"></div><button class="g-ghost" id="c4Quit">↩ Quitter</button></div>
+    <div class="g-msg" id="c4Msg"></div>
+    <div class="c4-board" id="c4Board">${[...Array(C4.W).keys()].map(c=>`<button class="c4-col" data-c="${c}" aria-label="colonne ${c+1}">${[...Array(C4.H).keys()].map(r=>`<i class="c4-cell" data-r="${r}"></i>`).join('')}</button>`).join('')}</div>
+    <div class="h-qbox" id="c4Q"></div>`;
+  const msg=t=>body.querySelector('#c4Msg').innerHTML='<span>'+t+'</span>', boardEl=body.querySelector('#c4Board'), box=body.querySelector('#c4Q');
+  body.querySelector('#c4Quit').onclick=()=>puissance4();
+  function paint(win){
+    boardEl.querySelectorAll('.c4-col').forEach((col,c)=>{ col.disabled=!(S.phase==='drop'&&!P(S.turn).npc&&!B[0][c]);
+      col.querySelectorAll('.c4-cell').forEach((el,r)=>{ const v=B[r][c]; el.style.setProperty('--pc',v?P(v-1).color:'transparent'); el.className='c4-cell'+(v?' on':'')+(win&&win.some(([a,b])=>a===r&&b===c)?' win':''); el.textContent=v?P(v-1).emoji.replace(/<[^>]*>/g,'')||'●':''; }); });
+    body.querySelector('#c4Info').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn&&!S.over)).join('');
+  }
+  async function dropIn(c){
+    const pl=S.turn+1, r=c4Drop(B,c,pl); if(r<0) return; S.phase='anim'; paint();
+    const line=c4Line(B,r,c); paint(line); await sleep(FAST?10:350);
+    if(line){ S.over=true; paint(line); const p=P(S.turn); return endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'4 jetons alignés !',color:p.color},()=>startPuissance4(cfg)); }
+    if(B[0].every(v=>v)){ S.over=true; return endScreen({title:'Match nul !',sub:'La grille est pleine.',color:'#7048e8'},()=>startPuissance4(cfg)); }
+    S.turn=1-S.turn; turn();
+  }
+  function turn(){
+    const p=P(S.turn); S.phase='q'; paint(); box.style.setProperty('--pc',p.color); box.hidden=false;
+    const afterAnswer=ok=>{
+      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> passe son tour…`); sleep(FAST?20:900).then(()=>{ S.turn=1-S.turn; turn(); }); return; }
+      box.hidden=true; S.phase='drop'; paint();
+      if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); sleep(FAST?20:900).then(()=>dropIn(c4Ai(B,S.turn+1))); }
+      else msg(`✅ Bien joué ! ${p.emoji} <b>${esc(p.name)}</b>, choisis une colonne pour poser ton jeton.`);
+    };
+    if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+      sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>afterAnswer(ok)); }); return; }
+    msg(`${p.emoji} <b>${esc(p.name)}</b> : réponds pour jouer !`);
+    const q=makeQuestion(cfg.topics,p.gr);
+    box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
+      <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
+      <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
+    D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
+    if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
+    let ans=false;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+      box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
+      const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux poser un jeton.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu passes ton tour.`;
+      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
+      const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>afterAnswer(ok); };
+  }
+  boardEl.onclick=e=>{ const col=e.target.closest('.c4-col'); if(!col||col.disabled||S.phase!=='drop'||P(S.turn).npc) return; dropIn(+col.dataset.c); };
+  turn();
 }
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
