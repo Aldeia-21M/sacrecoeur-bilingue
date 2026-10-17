@@ -693,7 +693,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .cl-wh{position:relative;flex:1;max-width:74px;height:144px;border-radius:16px;overflow:hidden;background:color-mix(in srgb,var(--c) 10%,#fff);border:3px solid var(--c)}.cl-wh::before{content:"";position:absolute;left:0;right:0;top:45px;height:48px;border-top:3px solid var(--c);border-bottom:3px solid var(--c);background:color-mix(in srgb,var(--c) 22%,transparent);pointer-events:none;z-index:1}.cl-wh::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(#fff 0,transparent 32%,transparent 68%,#fff 100%);opacity:.85;z-index:2}
 .cl-wl{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;padding:48px 0;box-sizing:border-box;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}.cl-wl::-webkit-scrollbar{display:none}.cl-wi{height:48px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-weight:900;font-size:30px;color:var(--c);cursor:pointer}.cl-err{color:#c92a2a;font-weight:700;text-align:center;min-height:1.2em;margin:4px 0}.cl-q button:disabled{opacity:.4}#p-colonnes .cl-menu .m{background:#e5dbff}
 
-.cl-card{touch-action:pan-y}.cl-top.glow{touch-action:none}.cl-drag{position:fixed;z-index:9999;transform:translate(-50%,-50%);pointer-events:none;background:var(--c);color:#fff;font-weight:900;font-size:22px;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.cl-card{touch-action:pan-y}.cl-card.lend,.cl-card.lend .cl-grid{touch-action:none}.cl-top.glow{touch-action:none}.cl-drag{position:fixed;z-index:9999;transform:translate(-50%,-50%);pointer-events:none;background:var(--c);color:#fff;font-weight:900;font-size:22px;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 .cl-up:not(:empty){animation:clin .4s ease}@keyframes clin{from{transform:translateX(-26px);opacity:0}to{transform:none;opacity:1}}
 .cl-sum{text-align:center}.cl-big{font-size:3.4rem;font-weight:900;color:#2f9e44}.cl-dots i.bad{background:#f08c00}
 
@@ -779,7 +779,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 <section class="page" data-sec="fr" id="p-genre" data-label="🏷️ Genre"></section>
 <section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><div class="gk-nav"><button class="gk-open on" id="gkCo"><b>🖍️</b>Colorie la phrase</button><button class="gk-open" id="gkBtn"><b>📘</b>Apprendre les règles</button><button class="gk-open" id="gkTr"><b>🏋️</b>M’entraîner aux règles</button></div><div id="p-gramS" hidden></div><div id="p-gramT"></div></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
-<section class="page" data-sec="ma" id="p-colonnes" data-label="➖ Colonnes"></section>
+<section class="page" data-sec="ma" id="p-colonnes" data-label="➖ Colonnes" data-noswipe></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
 <section class="page" data-sec="ma" id="p-mesures" data-label="📏 Mesures"></section>
 <section class="page" data-sec="ma" id="p-defi" data-label="⏱️ Défi"></section>
@@ -794,6 +794,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "6.1", desc: "Colonnes : le glissement ne change plus de page" },
     { v: "6.0", desc: "Calcul 6H : choisir + − × ÷ séparément" },
     { v: "5.9", desc: "Colonnes : Mon calcul avec roues crantées (jusqu’à 9999)" },
     { v: "5.8", desc: "Colonnes : silencieux, glisser pour emprunter, série de 10" },
@@ -1032,11 +1033,11 @@ function setSec(s,keep){
   if(!keep){ const l=lastTab[s]; show(l!=null?l:pages.findIndex((p,i)=>secsOf(i).includes(s)),s); }
 }
 secBtns.forEach(b=>b.onclick=()=>setSec(b.dataset.s));
-let sx=0, sy=0, st=0;
+let sx=0, sy=0, st=0, noSw=false;
 const mainEl=document.getElementById('main');
-mainEl.addEventListener('touchstart',e=>{ if(e.touches.length!==1) return; sx=e.touches[0].clientX; sy=e.touches[0].clientY; st=Date.now(); },{passive:true});
+mainEl.addEventListener('touchstart',e=>{ if(e.touches.length!==1) return; sx=e.touches[0].clientX; sy=e.touches[0].clientY; st=Date.now(); noSw=!!(e.target.closest&&e.target.closest('[data-noswipe]')); },{passive:true});
 mainEl.addEventListener('touchend',e=>{
-  if(!e.changedTouches.length || Date.now()-st>700) return;
+  if(noSw||!e.changedTouches.length || Date.now()-st>700) return;
   if(window.visualViewport && window.visualViewport.scale>1.05) return;
   if(pages[cur].id==='p-game') return;
   const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
@@ -5616,7 +5617,7 @@ function practice(cfg){
     if(phase==='calc'){ const c=COL[S.act]; return `<div class="cl-pad" style="--c:${c}">${[1,2,3,4,5,6,7,8,9,0].map(d=>`<button data-d="${d}">${d}</button>`).join('')}</div>`; }
     if(phase==='end') return `<div class="cl-q"><button data-a="again" class="ok">➡️ ${LS&&cfg.i<LS.length-1?'Calcul suivant':LS?'Voir mon score':cfg.my?'Changer le calcul':'Un autre calcul'}</button><button data-a="menu">← Niveaux</button></div>`;
     return ''; }
-  function paint(){ root.innerHTML=back()+head()+`<div class="cl-card">${eqH(P)}${gridH(P,S)}${legendH(P)}<div class="cl-coach"><button class="cl-ear" id="clE" aria-label="Écouter">🔊</button><div id="clT">${msg}</div></div><div id="clA">${actions()}</div></div>${recap}`;
+  function paint(){ root.innerHTML=back()+head()+`<div class="cl-card${phase==='lend'?' lend':''}">${eqH(P)}${gridH(P,S)}${legendH(P)}<div class="cl-coach"><button class="cl-ear" id="clE" aria-label="Écouter">🔊</button><div id="clT">${msg}</div></div><div id="clA">${actions()}</div></div>${recap}`;
     root.querySelector('#clB').onclick=menu; root.querySelector('#clE').onclick=()=>say(msg); }
   function enter(i){ S.act=i; S.glow=-1; tries=0;
     if(i>=P.w||lead0(P,S,i)) return finish();
