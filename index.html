@@ -80,7 +80,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .mn-num{text-align:center;font-weight:900;font-size:clamp(44px,14vw,70px);color:#1d2433;line-height:1.1;margin:8px 0 4px}.mn-num.hid{visibility:hidden}.mn-w{display:block;width:100%;border:3px solid rgba(29,36,51,.12);border-radius:18px;background:#fff;padding:10px 8px;font-family:inherit;font-size:clamp(24px,7vw,36px);font-weight:800;color:#1f5fd6;text-align:center;cursor:pointer;overflow-wrap:anywhere}.mn-w .gp,.mn-built .gp,.mn-w2 .gp{padding:2px 5px}
 .mn-leg{margin:8px 0;display:grid;gap:4px;font-size:.92rem;color:#4a5164}.mn-btns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.mn-b{flex:1 1 120px;min-height:50px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff0b8;font-weight:800;font-size:16px;font-family:inherit;cursor:pointer;color:#1d2433}.mn-b[aria-pressed="true"]{background:#b2f2bb;border-color:#2f9e44}
 .mn-in{width:100%;min-height:56px;font-size:26px;font-weight:700;padding:6px 12px;border-radius:14px;border:3px solid #339af0;font-family:inherit;margin:6px 0;text-transform:none}.mn-keys{display:flex;gap:8px;margin:4px 0}.mn-keys button{flex:1;min-height:48px;font-size:24px;font-weight:800;border-radius:12px;border:2px solid #ced4da;background:#fff;font-family:inherit;cursor:pointer}.mn-go{width:100%;min-height:56px;margin-top:8px;border-radius:16px;border:3px solid #2f9e44;background:#b2f2bb;font-weight:800;font-size:19px;font-family:inherit;cursor:pointer;color:#1d2433}.mn-go.sec{background:#fff0b8;border-color:rgba(29,36,51,.2)}
-.mn-rnd{flex:1 1 100%;background:#d0bfff;border-color:#7048e8}.mn-rg .mn-b{flex:1 1 60px;min-height:44px}.mn-fb{margin-top:10px;overflow-wrap:anywhere}.mn-fb .ok,.mn-fb .ko{padding:10px 12px;border-radius:14px;font-weight:700;font-size:clamp(16px,4.4vw,19px);line-height:1.5}.mn-fb .ok{background:#d3f9d8;border:2px solid #2f9e44}.mn-fb .ko{background:#ffe3e3;border:2px solid #e03131}.mn-bad{color:#e03131;text-decoration:underline wavy;font-weight:900}.mn-att{font-size:1.2em;font-weight:800;word-break:break-all}.mn-w2{font-size:1.15em;font-weight:800;color:#1f5fd6;overflow-wrap:anywhere}
+.mn-rnd{flex:1 1 100%;background:#d0bfff;border-color:#7048e8}.mn-rg .mn-b{flex:1 1 60px;min-height:44px}.exb{border:2px solid rgba(29,36,51,.15);border-radius:10px;background:#fff;font-weight:700;font-size:13px;font-family:inherit;min-height:36px;color:#1d2433;cursor:pointer}.gm-box{background:#f3ecff}.gm-box .tr-toggle{background:#d0bfff;border-color:#7048e8;box-shadow:0 4px 0 #7048e8}.gm-beta{font-style:normal;font-size:.6em;background:#ffe27a;border-radius:8px;padding:1px 6px;vertical-align:middle}.gm-top{display:flex;justify-content:space-between;font-weight:800;color:#1d2433}.gm-bar{height:10px;border-radius:6px;background:#e9ecef;margin:6px 0 10px;overflow:hidden}.gm-bar i{display:block;height:100%;background:#7048e8}.gm-end{text-align:center}.gm-big{font-size:48px;font-weight:900;color:#7048e8}.mn-fb{margin-top:10px;overflow-wrap:anywhere}.mn-fb .ok,.mn-fb .ko{padding:10px 12px;border-radius:14px;font-weight:700;font-size:clamp(16px,4.4vw,19px);line-height:1.5}.mn-fb .ok{background:#d3f9d8;border:2px solid #2f9e44}.mn-fb .ko{background:#ffe3e3;border:2px solid #e03131}.mn-bad{color:#e03131;text-decoration:underline wavy;font-weight:900}.mn-att{font-size:1.2em;font-weight:800;word-break:break-all}.mn-w2{font-size:1.15em;font-weight:800;color:#1f5fd6;overflow-wrap:anywhere}
 .mn-built{min-height:58px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;padding:8px;border-radius:16px;background:#fff;border:3px dashed #339af0;font-size:clamp(24px,7vw,34px);font-weight:800;color:#1f5fd6}.mn-tiles{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}.mn-t{border:3px solid rgba(29,36,51,.18);border-radius:14px;background:#fff;padding:8px 12px;font-family:inherit;font-size:clamp(22px,6.4vw,30px);font-weight:800;color:#1f5fd6;cursor:pointer;touch-action:manipulation}.mn-t.shake{animation:mnsh .35s}@keyframes mnsh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 
 .g-u{color:#1f5fd6}.g-und{background:#9be29b}.g-zw{background:#ffe27a}.g-zig{background:#f7b7d6}.g-zehn{background:#f6a85f}.g-hund{background:#a9d8f5}.g-taus{background:#cfa8f0}.g-sp{color:#e5383b}.g-faint{opacity:.5}
@@ -803,6 +803,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "6.5", desc: "Jeu de chiffres BÊTA, bouton S’exercer" },
     { v: "6.4", desc: "Mon nombre : séparateur, nombres au hasard" },
     { v: "6.3", desc: "Mon nombre jusqu’à 99 999" },
     { v: "6.2", desc: "Mon calcul : flèches ▲ ▼ lisibles, gros boutons" },
@@ -1116,7 +1117,7 @@ function render(){
     const hi=p.findIndex(x=>x[1]==='hund');
     const chunks=hi>=0&&hi<p.length-1?[p.slice(0,hi+1),p.slice(hi+1)]:[p];
     const html=chunks.map(c=>`<span class="ck">${c.map(sp).join('')}</span>`).join('<wbr>');
-    return `<div class="tc c${i%5}"><button class="td${mode===1?' hid':''}" data-say="${n}" data-lang="fr" aria-label="${n}">${n}</button><button class="tw${mode===2?' hid':''}" data-say="${say}" data-lang="de">${html}</button></div>`;
+    return `<div class="tc c${i%5}"><button class="exb" data-ex="${n}" aria-label="S’exercer">🎯 S’exercer</button><button class="td${mode===1?' hid':''}" data-say="${n}" data-lang="fr" aria-label="${n}">${n}</button><button class="tw${mode===2?' hid':''}" data-say="${say}" data-lang="de">${html}</button></div>`;
   }).join('');
 }
 document.getElementById('trNew').addEventListener('click',render);
@@ -1133,7 +1134,7 @@ document.querySelectorAll('.lv').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x===b));
   render();
 }));
-grid.addEventListener('click',e=>{ const w=e.target.closest('.tw,.td'); if(w) w.classList.remove('hid'); });
+grid.addEventListener('click',e=>{ const x=e.target.closest('.exb'); if(x){ e.stopPropagation(); if(window.__mnLoad) window.__mnLoad(+x.dataset.ex); return; } const w=e.target.closest('.tw,.td'); if(w) w.classList.remove('hid'); });
 document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.lv===lvl));
 render();
 paintMode();
@@ -1226,6 +1227,69 @@ B.addEventListener('click',e=>{
     if(b.p[i][0]===b.p[b.order.find(j=>!b.got.includes(j)&&false)||0][0]&&false){}
     if(b.p[i][0]===b.p[nx][0]){ b.got.push(b.order.filter(j=>!b.got.includes(j)&&b.p[j][0]===b.p[nx][0])[0]); drawBuild(); }
     else { t.classList.add('shake'); setTimeout(()=>t.classList.remove('shake'),400); const fb=B.querySelector('#mnFb'); if(fb) fb.innerHTML='<div class="ko">Pas encore celui-là ! Écoute-le avec le 🔊 et essaie un autre morceau.</div>'; } }
+});
+
+/* ---------- Jeu de chiffres (BÊTA) : série de nombres au hasard ---------- */
+window.__mnLoad=function(n){ st.d=String(n).padStart(5,'0').split('').map(Number); if(st.mode==='see') st.mode='build'; st.tries=0; if(B.hidden) T.click(); paint(); try{ box.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} };
+const G=document.createElement('div'); G.className='mn-box gm-box';
+G.innerHTML=`<button class="tr-toggle" id="gmT" aria-expanded="false"><span><span>🎮 Jeu de chiffres <em class="gm-beta">BÊTA</em></span><small>10 nombres au hasard : écouter, écrire, assembler</small></span><span class="ch" aria-hidden="true">▾</span></button><div class="tr-body" id="gmB" hidden></div>`;
+sec.appendChild(G);
+const GT=G.querySelector('#gmT'), GB=G.querySelector('#gmB');
+GT.onclick=()=>{ const open=GB.hidden; GB.hidden=!open; GT.setAttribute('aria-expanded',open); GT.querySelector('.ch').textContent=open?'▴':'▾'; if(open&&!GB.firstChild) gmMenu(); };
+const g={rg:1,i:0,score:0,list:[],t:null,tries:0,err:0,b:null,done:false};
+const TYPES=['build','write','listen'];
+function gmMenu(){
+  GB.innerHTML=`<p class="mn-p">Choisis ton niveau. Chaque nombre te demande de l’assembler, de l’écrire, ou de l’écrire en l’écoutant seulement.</p>
+  <div class="mn-btns mn-rg">${RG.map((r,i)=>`<button class="mn-b" data-grg="${i}" aria-pressed="${g.rg===i}">${r[2]}</button>`).join('')}</div>
+  <button class="mn-go" data-gstart="1">▶ Jouer (10 nombres)</button>`;
+}
+function gmStart(){ const [a,b]=RG[g.rg]; const set=new Set(); const k=Math.min(10,b-a+1); while(set.size<k) set.add(a+Math.floor(Math.random()*(b-a+1))); g.list=shuf([...set]); g.i=0; g.score=0; gmRound(); }
+function gmRound(){
+  if(g.i>=g.list.length){ const tot=g.list.length, pct=g.score/tot; GB.innerHTML=`<div class="gm-end"><div class="gm-big">${pct>=.8?'🏆':pct>=.5?'👏':'💪'} ${g.score} / ${tot}</div><p class="mn-p">${pct>=.8?'Excellent !':pct>=.5?'Bien joué, continue !':'Continue de t’entraîner, tu progresses !'}</p></div><button class="mn-go" data-gstart="1">🔁 Rejouer</button><button class="mn-go sec" data-gmenu="1">⚙️ Changer de niveau</button>`; return; }
+  const n=g.list[g.i]; g.t=TYPES[g.i%3]; g.tries=0; g.err=0; g.done=false; g.b=null;
+  const hide=g.t==='listen', p=parts(n);
+  if(g.t==='build') g.b={p,order:shuf(p.map((_,i)=>i)),got:[]};
+  GB.innerHTML=`<div class="gm-top"><span>Nombre ${g.i+1} / ${g.list.length}</span><span>⭐ ${g.score}</span></div>
+  <div class="gm-bar"><i style="width:${g.i/g.list.length*100}%"></i></div>
+  <p class="mn-p">${g.t==='build'?'🧩 Assemble ce nombre en allemand.':g.t==='write'?'✍️ Écris ce nombre en allemand.':'👂 Écoute, puis écris le nombre en allemand.'}</p>
+  <div class="mn-num ${hide?'hid':''}">${fm(n)}</div>
+  <div class="mn-btns"><button class="mn-b" data-gsay="1">🔊 Écouter</button><button class="mn-b" data-gslow="1">🐢 Morceau par morceau</button></div>
+  <div id="gmEx"></div><div class="mn-fb" id="gmFb"></div>`;
+  gmEx(); if(hide) say(full(n));
+}
+function gmEx(){
+  const E=GB.querySelector('#gmEx'), n=g.list[g.i];
+  if(g.t==='build'){ const b=g.b; E.innerHTML=`<div class="mn-built">${b.got.map(i=>spanH(b.p[i])).join('')||'<small>…</small>'}</div><div class="mn-tiles">${b.order.filter(i=>!b.got.includes(i)).map(i=>`<button class="mn-t" data-gi="${i}" data-say="${esc(sayOf(b.p[i][0]))}" data-lang="de"><span class="gp g-${b.p[i][1]}">${b.p[i][0]}</span></button>`).join('')}</div>`;
+    if(b.got.length===b.p.length) gmEnd(g.err===0); }
+  else { E.innerHTML=`<input class="mn-in" id="gmIn" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="écris ici…"><div class="mn-keys">${['ä','ö','ü','ß'].map(c=>`<button data-gch="${c}">${c}</button>`).join('')}</div><button class="mn-go" data-gck="1">✅ Vérifier</button>`; const inp=E.querySelector('#gmIn'); inp.onkeydown=e=>{ if(e.key==='Enter') gmCheck(); }; }
+}
+function gmEnd(ok){
+  if(g.done) return; g.done=true; const n=g.list[g.i]; if(ok) g.score++; verdict(ok,n);
+  GB.querySelector('#gmEx').innerHTML=''; GB.querySelector('.mn-num').classList.remove('hid');
+  GB.querySelector('#gmFb').innerHTML=`<div class="${ok?'ok':'ko'}">${ok?'✅ Richtig !':'Voici la bonne écriture :'} <span class="mn-w2">${wordH(n)}</span></div><button class="mn-go" data-gnext="1">${g.i+1>=g.list.length?'🏁 Voir mon score':'Suivant ▶'}</button>`;
+  GB.querySelector('.gm-top span:last-child').textContent='⭐ '+g.score;
+}
+function gmCheck(){
+  const n=g.list[g.i], inp=GB.querySelector('#gmIn'), fb=GB.querySelector('#gmFb'), v=inp.value.trim(); if(!v){ fb.innerHTML='<div class="ko">Écris d’abord le nombre.</div>'; return; }
+  const a=norm(v), good=okWords(n);
+  if(good.includes(a)) return gmEnd(g.tries===0);
+  g.tries++;
+  if(g.tries<2) fb.innerHTML=`<div class="ko">Presque ! Regarde la partie soulignée :<br><span class="mn-att">${diffH(a,good[0])}</span><br><small>Essaie encore (🔊 pour réécouter).</small></div>`;
+  else gmEnd(false);
+}
+GB.addEventListener('click',e=>{
+  const q=s=>e.target.closest(s);
+  if(q('[data-gmenu]')) return gmMenu();
+  const r=q('[data-grg]'); if(r){ g.rg=+r.dataset.grg; return gmMenu(); }
+  if(q('[data-gstart]')) return gmStart();
+  if(q('[data-gnext]')){ g.i++; return gmRound(); }
+  if(q('[data-gsay]')) return say(full(g.list[g.i]));
+  if(q('[data-gslow]')){ const p=parts(g.list[g.i]); try{ if(window.DLspeakSeq) DLspeakSeq(p.map(x=>({t:sayOf(x[0]),l:'de',pause:450})).concat([{t:full(g.list[g.i]),l:'de'}])); }catch(x){} return; }
+  if(q('[data-gck]')) return gmCheck();
+  const c=q('[data-gch]'); if(c){ const inp=GB.querySelector('#gmIn'); inp.value+=c.dataset.gch; inp.focus(); return; }
+  const t=q('.mn-t[data-gi]'); if(t&&g.b&&!g.done){ const i=+t.dataset.gi,b=g.b,nx=b.got.length;
+    if(b.p[i][0]===b.p[nx][0]){ b.got.push(b.order.filter(j=>!b.got.includes(j)&&b.p[j][0]===b.p[nx][0])[0]); gmEx(); }
+    else { g.err++; t.classList.add('shake'); setTimeout(()=>t.classList.remove('shake'),400); GB.querySelector('#gmFb').innerHTML='<div class="ko">Pas celui-là ! Écoute avec 🔊 et réessaie.</div>'; } }
 });
 })();
 })();
