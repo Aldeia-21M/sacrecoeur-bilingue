@@ -768,6 +768,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "5.5", desc: "Lis pas à pas : raccourcis vers les autres fiches" },
     { v: "5.4", desc: "Lecture : Lis pas à pas, 6 fiches (x, oin, ien, ill…)" },
     { v: "5.3", desc: "Poutchou plus bas ; en ligne compte tout le monde" },
     { v: "5.2", desc: "Poutchou remonté ; compteur en ligne fiable" },
@@ -5184,7 +5185,7 @@ function lpPage(ti){
   lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null; const T=LP[ti], all=[].concat(...T.b.map(b=>b.l));
   root.innerHTML=back(0,'← Les fiches')+`<div class="mx-head"><h2>🐢 ${T.t}</h2><p> touche une syllabe, 🔊 pour le mot, « Pas à pas » pour lire avec moi.</p></div>
   <div class="lp-top" id="lpSp">${LPS.map((x,i)=>`<button data-v="${i}" class="${i===lpSpd?'on':''}">${x.n}</button>`).join('')}</div><div class="lp-top"><button id="lpAll">▶️ Tout le texte, pas à pas</button><button id="lpStop" class="lp-stop">⏹️ Stop</button></div>`
-   +T.b.map(b=>`<h3 class="lp-h">${b.h}</h3>`+b.l.map(l=>lineH(l,T.H)).join('')).join('');
+   +T.b.map(b=>`<h3 class="lp-h">${b.h}</h3>`+b.l.map(l=>lineH(l,T.H)).join('')).join('')+`<button class="mx-go" id="lpN">${LP[(ti+1)%LP.length].e} Fiche suivante : ${LP[(ti+1)%LP.length].t} →</button><h3 class="sn-oth">Une autre fiche</h3><div class="sn-chips" id="lpC">${LP.map((t,i)=>i===ti?'':`<button data-f="${i}" style="--c:${LPC[i%3]}">${t.e} ${t.t}</button>`).join('')}</div>`;
   root.querySelector('#snB').onclick=()=>{ lpTok++; guide(); }; window.scrollTo(0,0);
   const lines=[...root.querySelectorAll('.lp-line')];
   const clear=()=>root.querySelectorAll('.lp-s.big,.lp-w.cur').forEach(e=>e.classList.remove('big','cur'));
@@ -5195,7 +5196,7 @@ function lpPage(ti){
       await sleep(FAST?10:(ws[k].p?st.step:st.step*0.4)); wEl.classList.remove('cur'); }
     return true; }
   const run=async(from,to)=>{ const my=++lpTok; clear(); for(let i=from;i<to;i++){ lines[i].scrollIntoView({block:'center',behavior:FAST?'auto':'smooth'}); if(!await playLine(i,my)) return; await sleep(FAST?10:700); } clear(); };
-  root.onclick=e=>{ const sp=e.target.closest('#lpSp button'); if(sp){ lpSpd=+sp.dataset.v; lpTok++; clear(); root.querySelectorAll('#lpSp button').forEach(b=>b.classList.toggle('on',+b.dataset.v===lpSpd)); root.querySelectorAll('[data-a=gd]').forEach(b=>b.textContent=LPS[lpSpd].n.split(' ')[0]+' Pas à pas'); return; }
+  root.onclick=e=>{ const fc=e.target.closest('#lpC button'); if(fc) return lpPage(+fc.dataset.f); if(e.target.closest('#lpN')) return lpPage((ti+1)%LP.length); const sp=e.target.closest('#lpSp button'); if(sp){ lpSpd=+sp.dataset.v; lpTok++; clear(); root.querySelectorAll('#lpSp button').forEach(b=>b.classList.toggle('on',+b.dataset.v===lpSpd)); root.querySelectorAll('[data-a=gd]').forEach(b=>b.textContent=LPS[lpSpd].n.split(' ')[0]+' Pas à pas'); return; }
     if(e.target.closest('#lpStop')){ lpTok++; clear(); try{ speechSynthesis.cancel(); }catch(x){} return; }
     if(e.target.closest('#lpAll')) return run(0,lines.length);
     const ln=e.target.closest('.lp-line'); if(!ln) return; const i=lines.indexOf(ln);
