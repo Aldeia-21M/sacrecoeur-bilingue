@@ -136,6 +136,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .g-cols{display:flex;gap:8px;flex-wrap:wrap}
 .g-cols button{width:42px;height:42px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px rgba(29,36,51,.2);padding:0}
 .g-cols button[aria-pressed="true"]{box-shadow:0 0 0 4px #1d2433}
+.g-big[hidden],.g-next[hidden],.g-fb[hidden],.g-listen[hidden]{display:none!important}
 .g-big{display:block;width:100%;min-height:58px;border-radius:999px;border:2px solid #174aa8;background:#1f5fd6;color:#fff;font-weight:700;font-size:clamp(18px,4.8vw,22px);box-shadow:0 4px 0 #174aa8;margin-top:6px}
 .g-big:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #174aa8}
 .g-big:disabled{opacity:.55;cursor:default}
@@ -229,6 +230,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .ch-c{border-radius:50%;background:transparent;display:block;min-width:0}.ch-c.loop{background:#fff;border:2px solid #ced4da;border-radius:10px}.ch-c.start{background:color-mix(in srgb,var(--pc,#999) 35%,#fff);border-color:var(--pc,#999)}.ch-c.star{background:#fff3bf;border-color:#f59f00;position:relative}.ch-c.star::after{content:"⭐";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,2.6vw,16px)}.ch-c.home{background:color-mix(in srgb,var(--pc) 40%,#fff);border:2px solid var(--pc);border-radius:10px}.ch-c.yard{background:color-mix(in srgb,var(--pc) 25%,#fff);border:3px dashed var(--pc)}.ch-c.mid{background:#e9ecef;border-radius:12px}.ch-c.mid::after{content:"🏆";display:flex;align-items:center;justify-content:center;height:100%;font-size:clamp(10px,3vw,20px)}
 .ch-toks{position:absolute;inset:6px;pointer-events:none}.ch-tok{position:absolute;width:calc(100%/11);height:calc(100%/11);padding:0;border:0;background:none;pointer-events:none;transition:left .15s linear,top .15s linear}.ch-tok span{display:flex;align-items:center;justify-content:center;width:86%;height:86%;margin:7%;border-radius:50%;background:var(--pc);border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25);font-size:clamp(10px,3.4vw,22px);line-height:1}.ch-tok.go{pointer-events:auto;cursor:pointer;z-index:3}.ch-tok.go span{animation:chpulse .7s infinite alternate;outline:3px solid #fff;outline-offset:1px}@keyframes chpulse{to{transform:scale(1.22)}}
 .ch-dcol{display:flex;flex-direction:column;align-items:center;gap:2px}.ch-dcol small{font-weight:800;color:#1f5fd6;font-size:13px;min-height:1.2em}.ch-d{cursor:pointer;font:inherit;width:68px;height:68px}.ch-d.used{opacity:.3}.ch-d.sel{outline:4px solid #f59f00;outline-offset:2px}.ch-d:disabled{cursor:default}.ch-side{display:grid;gap:8px;justify-items:center}.ch-die{display:flex;align-items:center;gap:12px;justify-content:center;min-height:76px;flex-wrap:wrap}.ch-dbtn{min-height:64px;padding:0 22px;border-radius:18px;border:3px solid var(--pc,#1f5fd6);background:color-mix(in srgb,var(--pc,#1f5fd6) 18%,#fff);font-weight:900;font-size:20px;font-family:inherit;cursor:pointer;color:#1d2433}
+.bn-cards{display:grid;gap:10px;margin:10px 0}.bn-cards.n3{grid-template-columns:repeat(3,1fr)}.bn-cards.n4{grid-template-columns:repeat(2,1fr)}.bn-card{display:flex;flex-direction:column;gap:6px;align-items:stretch}.bn-face{min-height:120px;border-radius:18px;border:3px solid rgba(29,36,51,.2);background:#fff;font-family:inherit;font-weight:900;font-size:clamp(15px,4.4vw,24px);color:#1d2433;cursor:pointer;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow-wrap:anywhere;hyphens:auto;touch-action:manipulation}.bn-face:disabled{cursor:default}.bn-face .bn-v{font-size:1.5em;color:#7048e8;min-height:1.2em}.bn-face.ok{background:#d3f9d8;border-color:#2f9e44}.bn-face.ko{background:#ffe3e3;border-color:#e03131}.bn-hear{min-height:44px;border-radius:12px;border:2px solid rgba(29,36,51,.15);background:#fff0b8;font-size:20px;cursor:pointer}@media(max-width:420px){.bn-cards.n3{grid-template-columns:1fr}.bn-face{min-height:84px;flex-direction:row;gap:14px}.bn-card{flex-direction:row}.bn-card .bn-face{flex:1}.bn-hear{width:56px}}
 .h-track{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .h-lane{display:grid;grid-template-columns:minmax(70px,26%) 1fr;gap:8px;align-items:center;padding:6px 8px;border-radius:16px;background:#fff;border:3px solid rgba(29,36,51,.14)}
 .h-lane.act{border-color:var(--pc);background:#fffbe0}
@@ -807,6 +809,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "7.1", desc: "Bataille de chiffres BÊTA" },
     { v: "7.0", desc: "Petits chevaux BÊTA, deux dés" },
     { v: "6.8", desc: "Bouton Quitter le jeu" },
     { v: "6.7", desc: "Bouton Passer aux briques" },
@@ -1898,6 +1901,7 @@ const GROUPS=[
   {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
+  {id:'cartes',ic:'🃏',t:'Bataille de chiffres (BÊTA)',d:'Trouve la carte la plus grande · 2–4',c:'#e9defa'},
   {id:'chevaux',ic:'🐴',t:'Petits chevaux (BÊTA)',d:'Dé, 6 pour sortir, cases ⭐ questions · 2–4',c:'#ffe8cc'},
   {id:'memory',ic:'🃏',t:'Memory',d:'Paires français ↔ allemand · 1–4',c:'#d9ecfb'},
   {id:'loto',ic:'🎧',t:'Loto',d:'Écoute et touche la bonne case · 1–6',c:'#fff0b8'},
@@ -1917,7 +1921,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1927,7 +1931,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -1960,7 +1964,7 @@ function openGame(id){
   document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
-  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
+  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
 }
 root.querySelector('#gBack').onclick=showHub;
@@ -2334,6 +2338,63 @@ function startChevaux(cfg){
   rollB.onclick=rollDice;
   msg(`${P(0).emoji} <b>${esc(P(0).name)}</b>, lance les dés ! Il faut un 6 pour sortir un cheval.`); paint();
   if(P(0).npc) setTimeout(rollDice,600);
+}
+/* ================= BATAILLE DE CHIFFRES ================= */
+function frNum(n){
+  const U=['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf'], T=['','','vingt','trente','quarante','cinquante','soixante','septante','huitante','nonante'];
+  const u100=m=>{ if(m<20) return U[m]; const t=Math.floor(m/10), o=m%10; return o===0?T[t]:o===1?T[t]+' et un':T[t]+'-'+U[o]; };
+  if(n<100) return u100(n); const h=Math.floor(n/100), r=n%100;
+  const hw=h===1?'cent':U[h]+' cent'+(r===0?'s':''); return r===0?hw:hw+' '+u100(r);
+}
+T2.frNum=frNum;
+function cartes(){
+  playerSetup({title:'🃏 Bataille de chiffres',npc:true,intro:'Trois cartes (ou plus) sont posées. À tour de rôle, un joueur doit trouver <b>la carte la plus grande</b>. Touche 🔊 pour entendre une carte. Chaque joueur choisit sa classe, et ce que montrent les cartes : nombres allemands, nombres en français (en lettres) ou calculs.',min:2,max:4,defN:2,perGrade:true,noTopics:true,
+    extra:{label:'Les cartes montrent…',opts:[[0,'🇩🇪 Nombres en allemand'],[1,'🇫🇷 Nombres en lettres'],[2,'➕ Calculs (maths)']],def:0}},startCartes);
+}
+function startCartes(cfg){
+  const n=cfg.players.length, mode=cfg.x||0, nc=Math.max(3,n), ROUNDS=n*5;
+  const S={cfg,turn:0,round:0,scores:cfg.players.map(()=>0),cards:[],busy:false}; T2.cartes=S;
+  const genNum=g=>{ const r=Math.random(); if(g==='1H') return 1+rnd(20); if(g==='6H') return r<.2?1+rnd(20):r<.55?21+rnd(79):100+rnd(900); return r<.4?1+rnd(20):21+rnd(79); };
+  function deal(g){
+    const set=new Map(); let guard=0;
+    while(set.size<nc&&guard++<200){
+      if(mode===2){ const c=calcItem(g==='1H'?'4H':g), v=+c.de; if(!set.has(v)) set.set(v,{v,label:c.fr,sub:'',lang:'fr',say:c.fr.replace('×','fois').replace('÷','divisé par').replace('−','moins')}); }
+      else { const v=genNum(g); if(!set.has(v)) set.set(v,{v,label:mode===0?numWord(v):frNum(v),lang:mode===0?'de':'fr',say:mode===0?numWord(v):frNum(v)}); } }
+    return shuffle([...set.values()]);
+  }
+  body.innerHTML=`<div class="h-bar"><div id="cInfo" class="h-info"></div><button class="g-ghost" id="cQuit">↩ Quitter</button></div>
+    <div class="h-qbox bn-box" id="cBox"></div>`;
+  body.querySelector('#cQuit').onclick=()=>cartes();
+  const box=body.querySelector('#cBox'), P=i=>cfg.players[i];
+  const info=()=>body.querySelector('#cInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn)+`<b class="h-sc">${S.scores[i]}</b>`).join('');
+  function nextRound(){
+    if(S.round>=ROUNDS) return finish();
+    S.busy=false; const p=P(S.turn); S.cards=deal(p.gr); info(); box.style.setProperty('--pc',p.color);
+    const hint=mode===2?'Quel calcul donne le plus grand résultat ?':'Quelle carte est la plus grande ?';
+    box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:#7048e8">Manche ${S.round+1} / ${ROUNDS}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
+      <div class="g-q">${hint}</div>
+      <div class="bn-cards n${nc}">${S.cards.map((c,i)=>`<div class="bn-card" data-i="${i}"><button class="bn-face" data-i="${i}"><span class="bn-t" style="font-size:${c.label.length>18?.72:c.label.length>12?.86:1}em">${esc(c.label)}</span><span class="bn-v"></span></button><button class="bn-hear" data-h="${i}" aria-label="Écouter">🔊</button></div>`).join('')}</div>
+      <div class="g-fb" hidden></div><button class="g-big g-next" hidden>Suivant ▶</button>`;
+    if(p.npc){ S.busy=true; sleep(FAST?20:1500).then(()=>{ const best=S.cards.reduce((a,c,i)=>c.v>S.cards[a].v?i:a,0); const ok=Math.random()<.7; let pick=best; if(!ok){ const o=S.cards.map((_,i)=>i).filter(i=>i!==best); pick=o[rnd(o.length)]; } answer(pick,true); }); }
+  }
+  function answer(i,byNpc){
+    const p=P(S.turn); S.busy=true; const best=S.cards.reduce((a,c,k)=>c.v>S.cards[a].v?k:a,0), ok=i===best;
+    box.querySelectorAll('.bn-face').forEach((b,k)=>{ b.disabled=true; b.classList.toggle('ok',k===best); b.classList.toggle('ko',k===i&&!ok); b.querySelector('.bn-v').textContent=S.cards[k].v; });
+    const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
+    const w=S.cards[best];
+    fb.innerHTML=(ok?`✅ <b>Bravo !</b> `:`❌ <b>Pas tout à fait.</b> `)+`La plus grande : <b>${esc(w.label)}</b> = ${w.v}.`+(ok?` ${byNpc?esc(p.name)+' marque':'Tu marques'} un point.`:'');
+    if(ok) S.scores[S.turn]++; info();
+    if(!byNpc||ok||true) DLverdict(ok,[{t:w.say,l:w.lang}],false,{});
+    const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>{ S.round++; S.turn=(S.turn+1)%n; nextRound(); };
+    if(byNpc&&FAST) nx.click();
+  }
+  box.onclick=e=>{ const h=e.target.closest('.bn-hear'); if(h){ const c=S.cards[+h.dataset.h]; if(c) say(c.say,c.lang); return; }
+    const f=e.target.closest('.bn-face'); if(!f||S.busy||f.disabled||P(S.turn).npc) return; answer(+f.dataset.i,false); };
+  function finish(){
+    const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
+    endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>startCartes(cfg));
+  }
+  nextRound();
 }
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
