@@ -688,6 +688,10 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .cl-nav{display:flex;align-items:center;gap:10px;margin-top:12px}.cl-nav span{font-weight:800;color:#4a5164}.cl-nav button:disabled{opacity:.4}.cl-chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}.cl-chips button{flex:1 1 100px;padding:8px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff;font-weight:800;font-family:inherit;font-size:15px;cursor:pointer;display:flex;flex-direction:column;color:#1d2433}.cl-chips button small{font-weight:700;color:#4a5164}.cl-chips button.on{background:#d0ebff;border-color:#1971c2}
 .cl-rec{margin:8px 0;padding:10px 14px;background:#fff;border-radius:16px;border:2px solid rgba(29,36,51,.12);font-weight:600}.cl-rec summary{font-weight:800;cursor:pointer}.cl-rec li{margin:6px 0}.cl-dots{display:flex;gap:6px;justify-content:center;margin:6px 0}.cl-dots i{width:14px;height:14px;border-radius:50%;background:#dee2e6}.cl-dots i.ok{background:#2f9e44}.cl-dots i.cur{background:#f08c00}
 
+.cl-tags{display:flex;justify-content:flex-end;gap:6px;margin:0 0 6px 36px}.cl-tags span{flex:1;text-align:center;font-size:.62rem;font-weight:800;color:var(--c);line-height:1.1}.cl-wr{display:flex;gap:6px;align-items:center;justify-content:center;margin:4px 0}.cl-wr .cl-s{width:30px;flex:none}
+.cl-wh{position:relative;flex:1;max-width:74px;height:144px;border-radius:16px;overflow:hidden;background:color-mix(in srgb,var(--c) 10%,#fff);border:3px solid var(--c)}.cl-wh::before{content:"";position:absolute;left:0;right:0;top:45px;height:48px;border-top:3px solid var(--c);border-bottom:3px solid var(--c);background:color-mix(in srgb,var(--c) 22%,transparent);pointer-events:none;z-index:1}.cl-wh::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(#fff 0,transparent 32%,transparent 68%,#fff 100%);opacity:.85;z-index:2}
+.cl-wl{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;padding:48px 0;box-sizing:border-box;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}.cl-wl::-webkit-scrollbar{display:none}.cl-wi{height:48px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-weight:900;font-size:30px;color:var(--c);cursor:pointer}.cl-err{color:#c92a2a;font-weight:700;text-align:center;min-height:1.2em;margin:4px 0}.cl-q button:disabled{opacity:.4}#p-colonnes .cl-menu .m{background:#e5dbff}
+
 .cl-card{touch-action:pan-y}.cl-top.glow{touch-action:none}.cl-drag{position:fixed;z-index:9999;transform:translate(-50%,-50%);pointer-events:none;background:var(--c);color:#fff;font-weight:900;font-size:22px;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 .cl-up:not(:empty){animation:clin .4s ease}@keyframes clin{from{transform:translateX(-26px);opacity:0}to{transform:none;opacity:1}}
 .cl-sum{text-align:center}.cl-big{font-size:3.4rem;font-weight:900;color:#2f9e44}.cl-dots i.bad{background:#f08c00}
@@ -789,6 +793,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "5.9", desc: "Colonnes : Mon calcul avec roues crantées (jusqu’à 9999)" },
     { v: "5.8", desc: "Colonnes : silencieux, glisser pour emprunter, série de 10" },
     { v: "5.7", desc: "Maths 6H : soustractions en colonnes avec emprunt" },
     { v: "5.6", desc: "Famille : l’appareil se reconnecte tout seul" },
@@ -5538,8 +5543,9 @@ function menu(){
   <button data-a="serie" class="wide s"><i>🎲</i><span>10 calculs au hasard</span><small>pour s’entraîner · on peut recommencer</small></button>
   <button data-a="1"><i>🌱</i><span>Niveau 1</span><small>sans emprunt</small></button><button data-a="2"><i>🌿</i><span>Niveau 2</span><small>avec emprunt</small></button>
   <button data-a="3" class="wide"><i>🌳</i><span>Niveau 3 · avec des zéros</span><small>8000 − 4806…</small></button>
+  <button data-a="my" class="wide m"><i>🧮</i><span>Mon calcul</span><small>je tape les nombres de mon devoir</small></button>
   <button data-a="fiche" class="wide f"><i>📄</i><span>Ma fiche (série 1)</span><small>les 8 calculs de la feuille</small></button></div>`;
-  root.querySelector('.cl-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const a=b.dataset.a; if(a==='learn') learn(0); else if(a==='fiche') practice({list:FICHE,i:0,t:'Ma fiche',again:'fiche'}); else if(a==='serie') practice({list:serie(),i:0,t:'10 calculs au hasard',again:'serie'}); else practice({lvl:+a}); };
+  root.querySelector('.cl-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const a=b.dataset.a; if(a==='learn') learn(0); else if(a==='fiche') practice({list:FICHE,i:0,t:'Ma fiche',again:'fiche'}); else if(a==='serie') practice({list:serie(),i:0,t:'10 calculs au hasard',again:'serie'}); else if(a==='my') custom(); else practice({lvl:+a}); };
   window.scrollTo(0,0); }
 /* ---- apprendre : pas à pas ---- */
 const EXS=[[4582,676,'Avec emprunt'],[2200,654,'Avec un zéro'],[6871,421,'Sans emprunt']];
@@ -5553,21 +5559,45 @@ function steps(a,b){ const P=prob(a,b), S=newS(P), out=[]; const snap=(html,act,
     const r=S.top[i]-bb(P,i); S.res[i]=r; snap(`<b>${S.top[i]} − ${bb(P,i)} = ${r}</b>. J’écris <b>${r}</b> sous la colonne des ${cn(i)}.`,i); }
   S.act=-1; snap(`Le résultat est <b>${P.r}</b> ! Pour vérifier, je fais la <b>preuve</b> : ${P.r} + ${b} = ${a}. C’est juste ✔️`,-1);
   return {P,out}; }
-function learn(k,n){
-  const [a,b]=EXS[k], {P,out}=steps(a,b); n=n||0; const st=out[n];
-  root.innerHTML=back()+`<div class="mx-head"><h2>📘 La méthode</h2><p>Touche « Suivant » ou <b>glisse le calcul</b> ⬅️➡️ pour avancer. Le 🔊 lit l’explication.</p></div>
-  <div class="cl-chips">${EXS.map((x,i)=>`<button data-x="${i}" class="${i===k?'on':''}">${x[2]}<small>${x[0]} − ${x[1]}</small></button>`).join('')}</div>
+function learn(k,n,pair){
+  const [a,b]=pair||EXS[k], {P,out}=steps(a,b); n=n||0; const st=out[n];
+  root.innerHTML=back(0,pair?'← Mon calcul':'')+`<div class="mx-head"><h2>📘 La méthode</h2><p>Touche « Suivant » ou <b>glisse le calcul</b> ⬅️➡️ pour avancer. Le 🔊 lit l’explication.</p></div>
+  ${pair?'':`<div class="cl-chips">${EXS.map((x,i)=>`<button data-x="${i}" class="${i===k?'on':''}">${x[2]}<small>${x[0]} − ${x[1]}</small></button>`).join('')}</div>`}
   <div class="cl-card">${eqH(P)}${gridH(P,st)}${legendH(P)}<div class="cl-coach"><button class="cl-ear" id="clE" aria-label="Écouter">🔊</button><div id="clT">${st.html}</div></div>
   <div class="cl-nav"><button id="clP" ${n===0?'disabled':''}>◀ Avant</button><span>${n+1} / ${out.length}</span>${n<out.length-1?'<button id="clN" class="go">Suivant ▶</button>':'<button id="clG" class="go">✏️ À toi !</button>'}</div></div>`;
-  root.querySelector('#clB').onclick=menu; window.scrollTo(0,0);
+  root.querySelector('#clB').onclick=pair?custom:menu; window.scrollTo(0,0);
   root.querySelector('#clE').onclick=()=>say(st.html);
-  const nx=root.querySelector('#clN'); if(nx) nx.onclick=()=>learn(k,n+1); const g=root.querySelector('#clG'); if(g) g.onclick=()=>practice({lvl:2,ex:[a,b]});
-  root.querySelector('#clP').onclick=()=>learn(k,n-1);
-  root.querySelector('.cl-chips').onclick=e=>{ const c=e.target.closest('button'); if(c) learn(+c.dataset.x,0); };
+  const nx=root.querySelector('#clN'); if(nx) nx.onclick=()=>learn(k,n+1,pair); const g=root.querySelector('#clG'); if(g) g.onclick=()=>practice({lvl:2,ex:[a,b],my:!!pair});
+  root.querySelector('#clP').onclick=()=>learn(k,n-1,pair);
+  const ch=root.querySelector('.cl-chips'); if(ch) ch.onclick=e=>{ const c=e.target.closest('button'); if(c) learn(+c.dataset.x,0); };
   const cd=root.querySelector('.cl-card'); let sx=null, sy=0;
   cd.onpointerdown=e=>{ sx=e.clientX; sy=e.clientY; };
-  cd.onpointerup=e=>{ if(sx===null) return; const dx=e.clientX-sx, dy=e.clientY-sy; sx=null; if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){ if(dx<0&&n<out.length-1) learn(k,n+1); else if(dx>0&&n>0) learn(k,n-1); } };
+  cd.onpointerup=e=>{ if(sx===null) return; const dx=e.clientX-sx, dy=e.clientY-sy; sx=null; if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){ if(dx<0&&n<out.length-1) learn(k,n+1,pair); else if(dx>0&&n>0) learn(k,n-1,pair); } };
   }
+/* ---- Mon calcul : roues crantées (0 à 9 ou case vide), jusqu’à 9999 ---- */
+const MY={a:[4,5,8,2],b:[null,6,7,6]}, WH=48;
+const wheelH=(r,k,i)=>`<div class="cl-wh" style="--c:${COL[i]}" data-r="${r}" data-k="${k}"><div class="cl-wl">${['',0,1,2,3,4,5,6,7,8,9].map((x,j)=>`<div class="cl-wi" data-j="${j}">${x===''?'·':x}</div>`).join('')}</div></div>`;
+function myNum(arr){ const d=arr.slice(); while(d.length&&d[0]===null) d.shift(); if(!d.length) return {n:null,err:'empty'}; if(d.some(x=>x===null)) return {n:null,err:'gap'}; return {n:+d.join(''),err:''}; }
+function custom(){
+  root.innerHTML=back()+`<div class="mx-head"><h2>🧮 Mon calcul</h2><p>Tourne les roues pour taper le calcul de ton devoir (de 0 à 9, ou une case vide à gauche). Maximum 9999.</p></div>
+  <div class="cl-card"><div class="cl-tags">${[3,2,1,0].map(i=>`<span style="--c:${COL[i]}">${NM[i]}</span>`).join('')}</div>
+  <div class="cl-wr"><span class="cl-s"></span>${[0,1,2,3].map(k=>wheelH('a',k,3-k)).join('')}</div>
+  <div class="cl-wr"><span class="cl-s">−</span>${[0,1,2,3].map(k=>wheelH('b',k,3-k)).join('')}</div>
+  <div class="cl-eq" id="clEq"></div><p class="cl-err" id="clEr"></p>
+  <div class="cl-q"><button class="ok" id="clGo">✏️ Je m’entraîne</button><button id="clMe">📘 Montre-moi la méthode</button></div></div>`;
+  root.querySelector('#clB').onclick=menu; window.scrollTo(0,0);
+  const eq=root.querySelector('#clEq'), er=root.querySelector('#clEr'), go=root.querySelector('#clGo'), me=root.querySelector('#clMe');
+  function check(){ const A=myNum(MY.a), B=myNum(MY.b); let m='';
+    if(A.err==='gap'||B.err==='gap') m='Pas de case vide au milieu d’un nombre : les cases vides se mettent à gauche.';
+    else if(A.err==='empty') m='Tape le premier nombre.'; else if(B.err==='empty') m='Tape le nombre à retirer.'; else if(B.n>A.n) m='Le premier nombre doit être plus grand que celui qu’on retire.';
+    eq.textContent=(A.n===null?'…':A.n)+' − '+(B.n===null?'…':B.n)+' = ?'; er.textContent=m; const ok=!m; go.disabled=me.disabled=!ok; return ok?[A.n,B.n]:null; }
+  root.querySelectorAll('.cl-wh').forEach(w=>{ const L=w.querySelector('.cl-wl'), arr=MY[w.dataset.r], k=+w.dataset.k; let t;
+    L.scrollTop=(arr[k]===null?0:arr[k]+1)*WH;
+    L.onscroll=()=>{ clearTimeout(t); t=setTimeout(()=>{ const j=Math.max(0,Math.min(10,Math.round(L.scrollTop/WH))); arr[k]=j===0?null:j-1; check(); },60); };
+    L.onclick=e=>{ const it=e.target.closest('.cl-wi'); if(it) L.scrollTo({top:+it.dataset.j*WH,behavior:'smooth'}); }; });
+  go.onclick=()=>{ const v=check(); if(v) practice({lvl:2,ex:v,my:true}); };
+  me.onclick=()=>{ const v=check(); if(v) learn(0,0,v); };
+  check(); }
 /* ---- s’exercer : interactif ---- */
 function practice(cfg){
   const LS=cfg.list||null; let pr; if(LS) pr=LS[cfg.i]; else if(cfg.ex) pr=cfg.ex; else pr=GEN[cfg.lvl]();
@@ -5578,7 +5608,7 @@ function practice(cfg){
   function actions(){
     if(phase==='look') return `<div class="cl-q"><button data-a="can" class="ok">✅ Je peux calculer</button><button data-a="no" class="no">🔁 Je dois emprunter</button></div>`;
     if(phase==='calc'){ const c=COL[S.act]; return `<div class="cl-pad" style="--c:${c}">${[1,2,3,4,5,6,7,8,9,0].map(d=>`<button data-d="${d}">${d}</button>`).join('')}</div>`; }
-    if(phase==='end') return `<div class="cl-q"><button data-a="again" class="ok">➡️ ${LS&&cfg.i<LS.length-1?'Calcul suivant':LS?'Voir mon score':'Un autre calcul'}</button><button data-a="menu">← Niveaux</button></div>`;
+    if(phase==='end') return `<div class="cl-q"><button data-a="again" class="ok">➡️ ${LS&&cfg.i<LS.length-1?'Calcul suivant':LS?'Voir mon score':cfg.my?'Changer le calcul':'Un autre calcul'}</button><button data-a="menu">← Niveaux</button></div>`;
     return ''; }
   function paint(){ root.innerHTML=back()+head()+`<div class="cl-card">${eqH(P)}${gridH(P,S)}${legendH(P)}<div class="cl-coach"><button class="cl-ear" id="clE" aria-label="Écouter">🔊</button><div id="clT">${msg}</div></div><div id="clA">${actions()}</div></div>${recap}`;
     root.querySelector('#clB').onclick=menu; root.querySelector('#clE').onclick=()=>say(msg); }
@@ -5614,7 +5644,7 @@ function practice(cfg){
           paint(); }
         else { err++; msg=need?`Regarde : <b>${S.top[i]} est plus petit que ${bb(P,i)}</b>, donc on ne peut pas calculer : il faut emprunter.`:`Regarde : <b>${S.top[i]} est plus grand ou égal à ${bb(P,i)}</b> : on peut calculer directement, pas besoin d’emprunter.`; paint(); }
         return; }
-      if(v==='again'){ if(LS){ const sc=(cfg.sc||[]).concat([err]); if(cfg.i<LS.length-1) practice(Object.assign({},cfg,{i:cfg.i+1,sc})); else summary(cfg,sc); } else practice(cfg.ex?{lvl:2}:cfg); return; }
+      if(v==='again'){ if(LS){ const sc=(cfg.sc||[]).concat([err]); if(cfg.i<LS.length-1) practice(Object.assign({},cfg,{i:cfg.i+1,sc})); else summary(cfg,sc); } else if(cfg.my) custom(); else practice(cfg.ex?{lvl:2}:cfg); return; }
       if(v==='menu'){ menu(); return; } }
     const d=e.target.closest('[data-d]'); if(d&&phase==='calc') onCalc(+d.dataset.d); };
   window.__clKey=d=>{ if(phase==='calc') onCalc(d); };
