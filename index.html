@@ -825,6 +825,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "9.4", desc: "Contenu : syllabes, âne, déterminants, ß retiré" },
     { v: "9.3", desc: "Salon verrouillé : rien d’extérieur ne peut s’insérer" },
     { v: "9.2", desc: "Question : plus rien par-dessus les réponses" },
     { v: "9.1", desc: "Pseudo famille : réaffiché tous les 8 jours" },
@@ -1222,7 +1223,7 @@ function cmpH(att,cor){ const A=[...att], B=[...cor], n=A.length, m=B.length, d=
 function diffH(att,cor){ let i=0; while(i<att.length&&i<cor.length&&att[i]===cor[i]) i++; let j=0; while(j<att.length-i&&j<cor.length-i&&att[att.length-1-j]===cor[cor.length-1-j]) j++;
   return esc(att.slice(0,i))+'<u class="mn-bad">'+esc(att.slice(i,att.length-j)||'_')+'</u>'+esc(att.slice(att.length-j)); }
 const VK=()=>{ try{ return localStorage.getItem('dl-vk')!=='0'; }catch(e){ return true; } };
-const KR=['qwertzuiopü','asdfghjklöä','yxcvbnmß'];
+const KR=['qwertzuiopü','asdfghjklöä','yxcvbnm'];
 function kbHTML(){ const v=VK(); return `<div class="vk-bar"><button class="vk-sw" data-vksw="1">${v?'⌨️ Utiliser le clavier de l’appareil':'🔤 Utiliser le clavier à l’écran'}</button></div>${v?`<div class="vk">${KR.map((r,i)=>`<div class="vk-r">${[...r].map(c=>`<button data-vk="${c}">${c}</button>`).join('')}${i===2?'<button data-vk="⌫" class="vk-del" aria-label="Effacer">⌫</button>':''}</div>`).join('')}</div>`:''}`; }
 function kbBind(E,inp,redo){ inp.setAttribute('inputmode',VK()?'none':'text'); E._redo=redo; if(!VK()) setTimeout(()=>{ try{ inp.focus(); }catch(e){} },50);
   if(E._vk) return; E._vk=1;
@@ -1581,7 +1582,7 @@ function qPetit(){
   if(kind==='next'){ const n=1+rnd(18), after=Math.random()<.6, m=after?n:n+1, ans=after?n+1:n; return mk('Quel nombre vient '+(after?'après':'avant')+' <span class="big">'+m+'</span> ?',de?'Welche Zahl kommt '+(after?'nach ':'vor ')+m+'?':'Quel nombre vient '+(after?'après ':'avant ')+m+' ?',[ans].concat(others(ans,0,20,2)),ans,m+(after?' → ':' ← ')+ans,String(ans)); }
   if(kind==='sizes'){ let o,s2; do{ o=shuffle(P.SIZES).slice(0,3); s2=o.slice().sort((x,y)=>x[1]-y[1]); }while(s2[2][1]===s2[1][1]||s2[0][1]===s2[1][1]); const big=Math.random()<.6, c=big?s2[2]:s2[0]; return mk('Touche le plus '+(big?'grand':'petit')+' animal',de?(big?'Tippe auf das grösste Tier':'Tippe auf das kleinste Tier'):(big?'Touche le plus grand animal':'Touche le plus petit animal'),o.map(x=>x[0]),c[0],c[0]+' '+(de?c[3]:c[2])); }
   if(kind==='odd'){ const [A,B]=shuffle(P.ODD).slice(0,2), three=shuffle(A).slice(0,3), od=B[rnd(B.length)]; return mk('Touche l’intrus',de?'Welches Bild passt nicht?':'Touche l’intrus : celui qui ne va pas avec les autres',three.concat([od]),od,od); }
-  if(kind==='syll'){ const w=P.SYL[rnd(P.SYL.length)], n=w[2]; return mk('Combien de syllabes ? <span class="big">'+w[0]+'</span>',de?'Klatsche: wie viele Silben hat '+w[3]+'?':'Frappe dans tes mains : combien de syllabes dans '+w[1]+' ?',[n].concat(others(n,1,4,2)),n,w[1]+' : '+n); }
+  if(kind==='syll'){ const w=P.SYL[rnd(P.SYL.length)], n=de?w[4]:w[2], wd=de?w[3]:w[1]; return mk('Combien de syllabes ? <span class="big">'+w[0]+'</span>',de?'Klatsche: wie viele Silben hat '+w[3]+'?':'Frappe dans tes mains : combien de syllabes dans '+w[1]+' ?',[n].concat(others(n,1,4,2)),n,wd+' : '+n); }
   if(kind==='rhyme'){ const r=P.RHY[rnd(P.RHY.length)], ot=shuffle(P.RHY.filter(x=>x!==r)).slice(0,2); const q=mk('Quel mot rime avec <span class="big">'+r[0]+'</span> ?','Quel mot rime avec '+r[1]+' ?',[r[2]].concat(ot.map(x=>x[0])),r[2],r[1]+' – '+r[3]); q.audio.l='fr'; q.reveal.l='fr'; return q; }
   if(kind==='lower'){ const L=P.LET[rnd(P.LET.length)], l=L.toLowerCase(); const o=[l].concat(shuffle('abcdefghilmoprstu'.split('').filter(x=>x!==l)).slice(0,2)); return mk('Touche la petite lettre de <span class="big">'+L+'</span>',de?'Welcher Kleinbuchstabe passt zu '+L+'?':'Quelle est la petite lettre de '+L+' ?',o,l,L+' → '+l); }
   if(kind==='more'){ const th=P.THINGS[rnd(P.THINGS.length)]; let a=1+rnd(9), b=1+rnd(9); while(a===b) b=1+rnd(9); const more=Math.random()<.6, win=more?Math.max(a,b):Math.min(a,b); const A=th[0].repeat(a), B=th[0].repeat(b);
@@ -2821,7 +2822,7 @@ function startPendu(cfg,net){
   const words=shuffle(pool).slice(0,ROUNDS);
   const S={cfg,mode,words,round:0,turn:0,scores:cfg.players.map(()=>0),w:null,shown:[],used:{},err:0,busy:false,over:false}; T2.pdg=S;
   const P=i=>cfg.players[i], MAX=7, ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me), ai=pi=>!!P(pi).npc&&!net;
-  const ROWS=mode===0?['qwertzuiopü','asdfghjklöä','yxcvbnmß']:['azertyuiop','qsdfghjklm','wxcvbn'];
+  const ROWS=mode===0?['qwertzuiopü','asdfghjklöä','yxcvbnm']:['azertyuiop','qsdfghjklm','wxcvbn'];
   const man=e=>{ const st=[`<path d="M10 190h120M40 190V15h90v25"/>`,`<circle cx="130" cy="58" r="18"/>`,`<path d="M130 76v55"/>`,`<path d="M130 90l-25 25"/>`,`<path d="M130 90l25 25"/>`,`<path d="M130 131l-22 35"/>`,`<path d="M130 131l22 35"/>`]; return `<svg viewBox="0 0 170 200" class="pd-svg"><g fill="none" stroke="#1d2433" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">${st.slice(0,e).join('')}</g></svg>`; };
   body.innerHTML=`<div class="h-bar"><div id="pInfo" class="h-info"></div><button class="g-ghost" id="pQuit">↩ Quitter</button></div>
     <div class="g-msg" id="pMsg"></div><div class="pd-top"><div id="pMan"></div><div class="pd-clue"><small id="pRound"></small><div class="pd-hint" id="pHint"></div><button class="g-ghost" id="pHear">🔊 Écouter l’indice</button></div></div>
@@ -3885,11 +3886,12 @@ window.SERGEN=G;
 const NAMES=[['Léa','f'],['Noé','m'],['Mia','f'],['Lucas','m'],['Emma','f'],['Nathan','m'],['Zoé','f'],['Louis','m'],['Lina','f'],['Théo','m'],['Jade','f'],['Hugo','m'],['Alice','f'],['Gabriel','m'],['Sofia','f'],['Liam','m']];
 const THINGS=[['🍎','pommes'],['⚽','ballons'],['🍪','biscuits'],['🐟','poissons'],['🚗','voitures'],['🌸','fleurs'],['🎈','ballons'],['📚','livres'],['🍓','fraises'],['🐞','coccinelles'],['🍬','bonbons'],['🖍️','crayons'],['🥕','carottes'],['🐚','coquillages'],['⭐','étoiles'],['🧩','pièces de puzzle'],['🍋','citrons'],['🪁','cerfs-volants']];
 const R=(a,b)=>a+rnd(b-a+1);
+const DE=t=>/^[aeiouyéèêàh]/i.test(t)?'d’'+t:'de '+t, FEMT=new Set(['pommes','fleurs','voitures','fraises','coccinelles','carottes','étoiles','pièces de puzzle']);
 const STORY={
  add:[
   c=>({txt:`${c.n} a ${c.a} ${c.it}. ${c.P} en reçoit ${c.b} de plus. Combien en a-t-${c.p} maintenant ?`,res:c.a+c.b}),
-  c=>({txt:`Dans un panier, il y a ${c.a} ${c.it}. On en ajoute ${c.b}. Combien y a-t-il de ${c.it} maintenant ?`,res:c.a+c.b}),
-  c=>({txt:`${c.n} range ${c.a} ${c.it} dans une boîte et ${c.b} dans un sac. Combien de ${c.it} a-t-${c.p} rangés en tout ?`,res:c.a+c.b}),
+  c=>({txt:`Dans un panier, il y a ${c.a} ${c.it}. On en ajoute ${c.b}. Combien y a-t-il ${DE(c.it)} maintenant ?`,res:c.a+c.b}),
+  c=>({txt:`${c.n} range ${c.a} ${c.it} dans une boîte et ${c.b} dans un sac. Combien ${DE(c.it)} a-t-${c.p} rang${FEMT.has(c.it)?'ées':'és'} en tout ?`,res:c.a+c.b}),
   c=>({txt:`Il y a ${c.a} filles et ${c.b} garçons dans la classe. Combien d’élèves y a-t-il ?`,res:c.a+c.b,vis:'🧒'.repeat(Math.min(c.a+c.b,12))}),
   c=>({txt:`Hier, ${c.n} a dessiné ${c.a} ${c.it}. Aujourd’hui, ${c.p} en dessine ${c.b}. Combien en a-t-${c.p} dessiné en tout ?`,res:c.a+c.b}),
   c=>({txt:`Dans le bus, il y a ${c.a} personnes. ${c.b} personnes montent à l’arrêt. Combien de personnes y a-t-il maintenant ?`,res:c.a+c.b,vis:'🚌'})
@@ -3903,12 +3905,12 @@ const STORY={
   c=>({txt:`Dans un bus, il y a ${c.a} personnes. ${c.b} personnes descendent. Combien de personnes restent dans le bus ?`,res:c.a-c.b,vis:'🚌'})
  ],
  mul:[
-  c=>({txt:`Il y a ${c.a} boîtes. Dans chaque boîte, il y a ${c.b} ${c.it}. Combien y a-t-il de ${c.it} en tout ?`,res:c.a*c.b,vis:'📦'.repeat(c.a)}),
-  c=>({txt:`Il y a ${c.a} rangées de ${c.b} ${c.it}. Combien de ${c.it} y a-t-il en tout ?`,res:c.a*c.b}),
-  c=>({txt:`${c.n} achète ${c.a} paquets de ${c.b} ${c.it}. Combien de ${c.it} a-t-${c.p} en tout ?`,res:c.a*c.b}),
+  c=>({txt:`Il y a ${c.a} boîtes. Dans chaque boîte, il y a ${c.b} ${c.it}. Combien y a-t-il ${DE(c.it)} en tout ?`,res:c.a*c.b,vis:'📦'.repeat(c.a)}),
+  c=>({txt:`Il y a ${c.a} rangées de ${c.b} ${c.it}. Combien ${DE(c.it)} y a-t-il en tout ?`,res:c.a*c.b}),
+  c=>({txt:`${c.n} achète ${c.a} paquets de ${c.b} ${c.it}. Combien ${DE(c.it)} a-t-${c.p} en tout ?`,res:c.a*c.b}),
   c=>({txt:`Un livre coûte ${c.b} francs. ${c.n} achète ${c.a} livres. Combien paie-t-${c.p} ?`,res:c.a*c.b,unit:'fr.',vis:'📚'}),
   c=>({txt:`${c.n} lit ${c.b} pages chaque jour pendant ${c.a} jours. Combien de pages a-t-${c.p} lues ?`,res:c.a*c.b,vis:'📖'}),
-  c=>({txt:`Dans chaque assiette, il y a ${c.b} ${c.it}. Il y a ${c.a} assiettes. Combien de ${c.it} faut-il en tout ?`,res:c.a*c.b,vis:'🍽️'.repeat(c.a)})
+  c=>({txt:`Dans chaque assiette, il y a ${c.b} ${c.it}. Il y a ${c.a} assiettes. Combien ${DE(c.it)} faut-il en tout ?`,res:c.a*c.b,vis:'🍽️'.repeat(c.a)})
  ],
  div:[
   c=>({txt:`${c.n} a ${c.a} ${c.it} et les partage entre ${c.b} amis, à parts égales. Combien chaque ami en reçoit-il ?`,res:c.a/c.b}),
@@ -4394,11 +4396,12 @@ function gmPtype(g){
   return {kind:'mcq',vis:`<div class="gm-s">${esc(s)}</div>`,prompt:'Quel est le <b>type</b> de cette phrase ?',say:s,lang:'fr',options:o,correct:ks.indexOf(k),explain:`C’est une phrase <b>${PT_N[k][0].toLowerCase()}</b> : ${PT_N[k][1]}.`,after:`Phrase ${PT_N[k][0].toLowerCase()}.`,wide:true};
 }
 const DT_N=[['chat','chats','m'],['chien','chiens','m'],['livre','livres','m'],['ballon','ballons','m'],['jardin','jardins','m'],['cartable','cartables','m'],['vélo','vélos','m'],['gâteau','gâteaux','m'],['maison','maisons','f'],['table','tables','f'],['fleur','fleurs','f'],['classe','classes','f'],['pomme','pommes','f'],['chaise','chaises','f'],['poupée','poupées','f'],['fête','fêtes','f']];
+const DT_V=['arbre','oiseau','ami','éléphant','escargot'];
 const DT_F={déf:{m:'le',f:'la',p:'les',n:'article défini'},ind:{m:'un',f:'une',p:'des',n:'article indéfini'},pos:{m:'mon',f:'ma',p:'mes',n:'déterminant possessif'},dem:{m:'ce',f:'cette',p:'ces',n:'déterminant démonstratif'}};
 const DT_W={déf:['le','la','les'],ind:['un','une','des'],pos:['mon','ma','mes','ton','ta','tes','son','sa','ses','notre','nos','votre','vos','leur','leurs'],dem:['ce','cet','cette','ces']};
 function gmDet(g){
   const fams=g==='6H'?['déf','ind','pos','dem']:['déf','ind','pos'];
-  if(Math.random()<.4){ const f=pick(fams), w=pick(DT_W[f]); const [m,p,gn]=pick(DT_N); const noun=['les','des','mes','ses','tes','ces','nos','vos','leurs'].includes(w)?p:m; const s=`${w} ${noun}`;
+  if(Math.random()<.4){ const f=pick(fams), w=pick(DT_W[f]); const [m,p,gn]=pick(DT_N); const noun=['les','des','mes','ses','tes','ces','nos','vos','leurs'].includes(w)?p:w==='cet'?pick(DT_V):['la','une','ma','ta','sa','cette'].includes(w)?pick(DT_N.filter(x=>x[2]==='f'))[0]:['le','un','mon','ton','son','ce'].includes(w)?pick(DT_N.filter(x=>x[2]==='m'))[0]:m; const s=`${w} ${noun}`;
     const names=fams.map(x=>DT_F[x].n[0].toUpperCase()+DT_F[x].n.slice(1));
     return {kind:'mcq',vis:`<div class="gm-s"><u class="gm-t">${esc(w)}</u> ${esc(noun)}</div>`,prompt:`Quelle sorte de <b>déterminant</b> est « <b>${esc(w)}</b> » ?`,say:s,lang:'fr',options:names,correct:fams.indexOf(f),explain:`« <b>${esc(w)}</b> » est un <b>${DT_F[f].n}</b>.`,after:`${w} : ${DT_F[f].n}`,wide:true}; }
   const f=pick(fams), [m,p,gn]=pick(DT_N), plural=Math.random()<.3, ans=plural?DT_F[f].p:DT_F[f][gn], noun=plural?p:m;
@@ -4955,7 +4958,7 @@ const THINGS=[['🍎','pommes','Äpfel'],['⭐','étoiles','Sterne'],['🎈','ba
 const COLS=[['rouge','rot','#e03131','🔴'],['bleu','blau','#1f5fd6','🔵'],['jaune','gelb','#fcc419','🟡'],['vert','grün','#2f9e44','🟢'],['orange','orange','#f76707','🟠'],['rose','rosa','#f783ac',null],['violet','lila','#9c36b5','🟣'],['noir','schwarz','#212529','⚫'],['marron','braun','#8d5524','🟤']];
 const svg=p=>`<svg viewBox="0 0 100 100" class="pt-shape">${p}</svg>`; const FILL='fill="#f59f00" stroke="#1d2433" stroke-width="5" stroke-linejoin="round"';
 const SHAPES=[['le cercle','der Kreis',svg(`<circle cx="50" cy="50" r="40" ${FILL}/>`),'⚫'],['le carré','das Quadrat',svg(`<rect x="12" y="12" width="76" height="76" ${FILL}/>`),'🟦'],['le triangle','das Dreieck',svg(`<path d="M50 10 L92 86 L8 86 Z" ${FILL}/>`),'🔺'],['le rectangle','das Rechteck',svg(`<rect x="6" y="26" width="88" height="48" ${FILL}/>`),null],['l’étoile','der Stern',svg(`<path d="M50 6 L62 38 L96 38 L68 58 L79 92 L50 71 L21 92 L32 58 L4 38 L38 38 Z" ${FILL}/>`),'⭐'],['le cœur','das Herz',svg(`<path d="M50 90 C10 58 6 32 26 20 C38 14 48 22 50 32 C52 22 62 14 74 20 C94 32 90 58 50 90 Z" ${FILL}/>`),'❤️']];
-const ANI=[['🐶','le chien','der Hund','ouaf ouaf','wau wau'],['🐱','le chat','die Katze','miaou','miau'],['🐮','la vache','die Kuh','meuh','muh'],['🦆','le canard','die Ente','coin coin','quak quak'],['🐷','le cochon','das Schwein','groin groin','oink oink'],['🐑','le mouton','das Schaf','bêê','mäh'],['🐴','le cheval','das Pferd','hihihi','iah'],['🐔','la poule','das Huhn','cot cot','gack gack'],['🐸','la grenouille','der Frosch','coa coa','quak quak'],['🐰','le lapin','der Hase','','']];
+const ANI=[['🐶','le chien','der Hund','ouaf ouaf','wau wau'],['🐱','le chat','die Katze','miaou','miau'],['🐮','la vache','die Kuh','meuh','muh'],['🦆','le canard','die Ente','coin coin','quak quak'],['🐷','le cochon','das Schwein','groin groin','oink oink'],['🐑','le mouton','das Schaf','bêê','mäh'],['🐴','le cheval','das Pferd','hiiihii','wihihi'],['🫏','l’âne','der Esel','hi-han','iah'],['🐔','la poule','das Huhn','cot cot','gack gack'],['🐸','la grenouille','der Frosch','coa coa','quak quak'],['🐰','le lapin','der Hase','','']];
 const LET='ABCDEFGHILMOPRSTU'.split('');
 const FL=[['🍎','pomme','P','Apfel','A'],['🐱','chat','C','Katze','K'],['🏠','maison','M','Haus','H'],['🌙','lune','L','Mond','M'],['🐟','poisson','P','Fisch','F'],['🌞','soleil','S','Sonne','S'],['🚗','voiture','V','Auto','A'],['🍌','banane','B','Banane','B'],['🐸','grenouille','G','Frosch','F'],['🦁','lion','L','Löwe','L'],['🌸','fleur','F','Blume','B'],['🎈','ballon','B','Ballon','B'],['🐶','chien','C','Hund','H'],['🥖','pain','P','Brot','B']];
 const VOC={
@@ -5023,7 +5026,7 @@ const GEN={
 };
 const SIZES=[['🐜',1,'la fourmi','die Ameise'],['🐭',2,'la souris','die Maus'],['🐱',3,'le chat','die Katze'],['🐶',4,'le chien','der Hund'],['🐴',5,'le cheval','das Pferd'],['🐘',6,'l’éléphant','der Elefant'],['🦒',6,'la girafe','die Giraffe']];
 const ODD=[['🐶','🐱','🐴','🐮','🐷'],['🍎','🍌','🍓','🍇','🍊'],['🚗','🚌','🚲','✈️','🚂'],['👕','👖','🧦','👟','🧢'],['🌳','🌸','🍄','🌿','🌵'],['✏️','📖','✂️','📏','🎒'],['⚽','🏀','🎾','🏐','🏈'],['☀️','🌧️','❄️','☁️','🌈']];
-const SYL=[['🐱','chat',1,'Katze'],['🥖','pain',1,'Brot'],['🌙','lune',2,'Mond'],['🍎','pomme',2,'Apfel'],['🚲','vélo',2,'Rad'],['🍌','banane',3,'Banane'],['🦋','papillon',3,'Schmetterling'],['🐘','éléphant',3,'Elefant'],['🍫','chocolat',3,'Schokolade'],['💻','ordinateur',4,'Computer']];
+const SYL=[['🐱','chat',1,'Katze',2],['🥖','pain',1,'Brot',1],['🌙','lune',2,'Mond',1],['🍎','pomme',2,'Apfel',2],['🚲','vélo',2,'Rad',1],['🍌','banane',3,'Banane',3],['🦋','papillon',3,'Schmetterling',3],['🐘','éléphant',3,'Elefant',3],['🍫','chocolat',3,'Schokolade',4],['💻','ordinateur',4,'Computer',3]];
 const RHY=[['🐱','chat','🐀','rat'],['🥖','pain','🖐️','main'],['🌙','lune','🍑','prune'],['🐔','poule','⚽','boule'],['🍌','banane','🌴','cabane'],['🌸','fleur','❤️','cœur']];
 Object.assign(window.PETV,{SIZES,ODD,SYL,RHY});
 GEN.sub=function(){ const th=THINGS[rnd(THINGS.length)], a=2+rnd(8), b=1+rnd(a-1), n=a-b; const o=nums(n,0,9);
@@ -5034,7 +5037,7 @@ GEN.sizes=function(){ const o=shuffle(SIZES).slice(0,3); const big=Math.random()
   return {vis:'',fr:big?'Touche le plus grand animal !':'Touche le plus petit animal !',de:big?'Tippe auf das grösste Tier!':'Tippe auf das kleinste Tier!',opts:o.map(x=>({h:x[0],n:{fr:x[2],de:x[3]},ok:x===c}))}; };
 GEN.odd=function(){ const [A,B]=shuffle(ODD).slice(0,2); const three=shuffle(A).slice(0,3), odd=pick(B); const all=shuffle(three.concat([odd]));
   return {vis:'',fr:'Touche l’intrus : celui qui ne va pas avec les autres !',de:'Welches Bild passt nicht zu den anderen?',opts:all.map(x=>({h:x,ok:x===odd}))}; };
-GEN.syll=function(){ const w=pick(SYL), n=w[2]; const o=shuffle([1,2,3,4].filter(x=>x!==n)).slice(0,2).concat([n]); const oo=shuffle(o);
+GEN.syll=function(){ const w=pick(SYL.filter(x=>x[2]===x[4])), n=w[2]; const o=shuffle([1,2,3,4].filter(x=>x!==n)).slice(0,2).concat([n]); const oo=shuffle(o);
   return {vis:`<div class="pt-things">${w[0]}</div>`,fr:`Frappe dans tes mains : combien de syllabes dans « ${w[1]} » ?`,de:`Klatsche: wie viele Silben hat „${w[3]}“?`,opts:oo.map(x=>({h:x,ok:x===n}))}; };
 GEN.rhyme=function(){ const r=pick(RHY); const others=shuffle(RHY.filter(x=>x!==r)).slice(0,2); const all=shuffle([[r[2],r[3]]].concat(others.map(x=>[x[0],x[1]])));
   return {vis:`<div class="pt-things">${r[0]}</div>`,fr:`Quel mot rime avec « ${r[1]} » ?`,forceL:'fr',opts:all.map(x=>({h:x[0],ok:x[1]===r[3]}))}; };
@@ -6083,14 +6086,14 @@ const ADD={
 /* ===== Lettres pièges : une même lettre, plusieurs sons ===== */
 const X0='Ici, le x se prononce comme dans', XM='Ici, le x ne se prononce pas, comme dans';
 const EXD=[
- ['xks','x = ks','x','ks','x',X0,'taxi',[['🚕','ta[x]i'],['🥊','bo[x]e'],['🥤','mi[x]eur'],['📝','te[x]te'],['🎷','sa[x]ophone'],['💎','lu[x]e'],['🧭','e[x]plorer'],['🏔️','e[x]pédition'],['⭐','e[x]tra'],['🙏','e[x]cuse'],['🧑‍🔬','e[x]pert'],['📖','le[x]ique'],['🏷️','ta[x]e'],['📌','fi[x]er']]],
- ['xgz','x = gs','x','gz','x',X0,'examen',[['📝','e[x]amen'],['📋','e[x]emple'],['🎯','e[x]act'],['🏋️','e[x]ercice'],['🌟','e[x]ister'],['☝️','e[x]iger'],['🏝️','e[x]otique'],['🔷','he[x]agone'],['😮','e[x]agérer'],['🚪','e[x]il'],['🎼','[x]ylophone']]],
+ ['xks','x = ks','x','ks','x',X0,'taxi',[['🚕','ta[x]i'],['🥊','bo[x]e'],['🥤','mi[x]eur'],['📝','te[x]te'],['🎷','sa[x]ophone'],['🎼','[x]ylophone'],['💎','lu[x]e'],['🧭','e[x]plorer'],['🏔️','e[x]pédition'],['⭐','e[x]tra'],['🙏','e[x]cuse'],['🧑‍🔬','e[x]pert'],['📖','le[x]ique'],['🏷️','ta[x]e'],['📌','fi[x]er']]],
+ ['xgz','x = gs','x','gz','x',X0,'examen',[['📝','e[x]amen'],['📋','e[x]emple'],['🎯','e[x]act'],['🏋️','e[x]ercice'],['🌟','e[x]ister'],['☝️','e[x]iger'],['🏝️','e[x]otique'],['🔷','he[x]agone'],['😮','e[x]agérer'],['🚪','e[x]il'],]],
  ['xs','x = s','x','s','x',X0,'six',[['6️⃣','si[x]'],['🔟','di[x]'],['🕰️','soi[x]ante'],['🏙️','Bru[x]elles'],['🏛️','Au[x]erre']]],
  ['xz','x = z','x','z','x',X0,'deuxième',[['2️⃣','deu[x]ième'],['6️⃣','si[x]ième'],['🔟','di[x]ième'],['1️⃣8️⃣','di[x]-huit'],['1️⃣9️⃣','di[x]-neuf']]],
  ['xmu','x = muet','x','mu','x',XM,'deux',[['2️⃣','deu[x]'],['🏷️','pri[x]'],['🗣️','voi[x]'],['😄','heureu[x]'],['👴','vieu[x]'],['🧸','dou[x]'],['😒','jalou[x]'],['🙅','fau[x]'],['🤔','choi[x]'],['✝️','croi[x]'],['🕊️','pai[x]'],['🥜','noi[x]'],['😃','joyeu[x]'],['😨','peureu[x]']]],
  ['sss','s = s','s','s','s','Ici, le s se prononce comme dans','soleil',[['☀️','[s]oleil'],['🎒','[s]ac'],['🥗','[s]alade'],['🌲','[s]apin'],['🍯','[s]irop'],['🍬','[s]ucre'],['🧂','[s]el'],['🎭','ma[s]que'],['🐟','poi[ss]on'],['🛋️','cou[ss]in'],['🧹','bro[ss]e']]],
  ['ssz','s = z','s','z','s','Ici, entre deux voyelles, le s se prononce z, comme dans','rose',[['🌹','ro[s]e'],['🏠','mai[s]on'],['🪑','chai[s]e'],['🍓','frai[s]e'],['🐦','oi[s]eau'],['⛪','égli[s]e'],['🏺','va[s]e'],['👕','chemi[s]e'],['🎶','mu[s]ique'],['🧑‍🤝‍🧑','cou[s]in'],['😊','plai[s]ir'],['🙂','vi[s]age'],['☠️','poi[s]on']]],
- ['ssm','s = muet','s','mu','s','Ici, le s ne se prononce pas, comme dans','bras',[['💪','bra[s]'],['🔙','do[s]'],['🐘','gro[s]'],['🧶','tapi[s]'],['🌍','pay[s]'],['⏳','temp[s]'],['🍽️','repa[s]'],['🐻','our[s]'],['🚫','jamai[s]'],['🗓️','moi[s]'],['🪵','boi[s]'],['🐱','chat[s]'],['🍬','bonbon[s]']]],
+ ['ssm','s = muet','s','mu','s','Ici, le s ne se prononce pas, comme dans','bras',[['💪','bra[s]'],['🔙','do[s]'],['🐘','gro[s]'],['🧶','tapi[s]'],['🌍','pay[s]'],['⏳','temp[s]'],['🍽️','repa[s]'],['🚫','jamai[s]'],['🗓️','moi[s]'],['🪵','boi[s]'],['🐱','chat[s]'],['🍬','bonbon[s]']]],
  ['ck','c = k','c','k','c','Ici, le c se prononce comme dans','camion',[['🚚','[c]amion'],['🎁','[c]adeau'],['🥕','[c]arotte'],['🩳','[c]ulotte'],['🪢','[c]orde'],['🥤','[c]ola'],['🦀','[c]rabe'],['🤡','[c]lown'],['🏫','é[c]ole'],['🧊','[c]ube']]],
  ['cs','c = s','c','s','c','Ici, le c se prononce comme dans','cerise',[['🍒','[c]erise'],['🍋','[c]itron'],['🌤️','[c]iel'],['🎬','[c]inéma'],['5️⃣','[c]inq'],['🧾','re[ç]u'],['🧒','gar[ç]on'],['🧊','gla[ç]on'],['📖','le[ç]on'],['🧱','ma[ç]on'],['🎪','[c]irque']]],
  ['cm','c = muet','c','mu','c','Ici, le c ne se prononce pas, comme dans','blanc',[['⚪','blan[c]'],['🪑','ban[c]'],['🫃','estoma[c]'],['🐖','por[c]'],['🌳','tron[c]']]],
@@ -6253,7 +6256,7 @@ const LP=[
   {h:'Lis les phrases.',l:['De·main la che·nille=niy se trans·for·me·ra en pa·pill=piy·on=on.','La fille=fiy s\'ha·bille=biy pour faire=fèr un jeu de quilles=kiy.','Les grill=griy·ons=on sont ca·chés sous les myr·tilles=tiy.','Un go·rille=riy nous ob·ser·ve der·rière=ryèr la grille=griy.','La co·quille=kiy d\'es·car·got=go brille=briy sous la pluie.']}]},
  {t:'ain · ein',e:'🍞',H:t=>t.replace(/(^|[^o])(ain|ein|aim|in)/g,(m,a,b)=>a+'<mark>'+b+'</mark>'),b:[
   {h:'Lis les mots.',l:['du bois=boi peint=pin en bleu','u·ne faim=fin de loup']},
-  {h:'Lis les phrases.',l:['Le pou·lain=lin ga·lo·pe sur le che·min=min qui lon·ge le train=trin.','Au·jour·d\'hui=dui, Ro·main=min a plein=plin de co·pains=pin.','Ga·bin=bin se la·ve les mains=min a·vant de man·ger=jé son pain=pin.','Ro·bin=bin re·peint=pin les freins=frin de son vé·lo tout- ter·rain=rin.','Syl·vain=vin rê·ve de vo·ya·ger=jé dans des pays=péi loin·tains=tin.']}]},
+  {h:'Lis les phrases.',l:['Le pou·lain=lin ga·lo·pe sur le che·min=min qui lon·ge le train=trin.','Au·jour·d\'hui=dui, Ro·main=min a plein=plin de co·pains=pin.','Ga·bin=bin se la·ve les mains=min a·vant de man·ger=jé son pain=pin.','Ro·bin=bin re·peint=pin les freins=frin de son vé·lo tout-ter·rain=rin.','Syl·vain=vin rê·ve de vo·ya·ger=jé dans des pays=péi loin·tains=tin.']}]},
  {t:'Révision',e:'🔁',H:null,b:[
   {h:'Lis les phrases.',l:['Le ka·ki est=è un fruit=frui qui=ki se man·ge=manj cru.','Zoé a vu un lé·zard=zar bi·zar·re=reu sur le ga·zon.','Le vé·lo d\'Ed=èd·wi=oui·ge=je est=è bien la·vé.','U·lys·se=sse des·si·ne a·vec=vèk son cray=crè·on=on blanc=blan.','L\'or·di·na·teur=teur est=è dé·jà vieux=vieu.','L\'Es·pa·gne=gneu est=è un beau=bo pays=péi.','Fa·bri·ce=sse a cas·sé son té·lé·phone=fone.']}]},
  {t:'Mots fréquents',e:'⭐',H:null,b:[
