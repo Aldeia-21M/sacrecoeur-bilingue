@@ -768,6 +768,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "5.6", desc: "Famille : l’appareil se reconnecte tout seul" },
     { v: "5.5", desc: "Lis pas à pas : raccourcis vers les autres fiches" },
     { v: "5.4", desc: "Lecture : Lis pas à pas, 6 fiches (x, oin, ien, ill…)" },
     { v: "5.3", desc: "Poutchou plus bas ; en ligne compte tout le monde" },
@@ -4339,7 +4340,15 @@ function load(){ try{ const r=localStorage.getItem(KEY); if(r){ const d=JSON.par
   return {v:1,active:null,profiles:[],lastBackup:0}; }
 let D=load();
 D.del=D.del||{}; D.sync=D.sync||null; D.fam=D.fam||''; D.famMt=D.famMt||0;
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){ storeOk=false; } sched(); }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){ storeOk=false; } mirror(); sched(); }
+/* l’appareil se souvient de la famille : copie du code famille à plusieurs endroits (mémoire, cookie, IndexedDB) */
+const MKEY='dl-fam-code'; let mirrored='';
+function idb(op,val){ return new Promise(res=>{ try{ const q=indexedDB.open('dl-fam',1); q.onupgradeneeded=()=>q.result.createObjectStore('k'); q.onerror=()=>res(null);
+  q.onsuccess=()=>{ try{ const db=q.result, st=db.transaction('k',op==='get'?'readonly':'readwrite').objectStore('k'), r=op==='get'?st.get('c'):op==='set'?st.put(val,'c'):st.delete('c'); r.onsuccess=()=>{ res(r.result); db.close(); }; r.onerror=()=>res(null); }catch(e){ res(null); } }; }catch(e){ res(null); } }); }
+const ckGet=()=>{ const m=document.cookie.match(/(?:^|; )dl-fam=([^;]+)/); return m?decodeURIComponent(m[1]):''; };
+function mirror(){ const c=D.sync&&D.sync.code; if(!c||c===mirrored) return; mirrored=c;
+  try{ localStorage.setItem(MKEY,c); }catch(e){} try{ document.cookie='dl-fam='+encodeURIComponent(c)+'; max-age=34560000; path=/; SameSite=Lax'; }catch(e){} idb('set',c); }
+function unmirror(){ mirrored=''; try{ localStorage.removeItem(MKEY); }catch(e){} try{ document.cookie='dl-fam=; max-age=0; path=/'; }catch(e){} idb('del'); }
 function mk(o){ return {id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),name:o.name,av:o.av,col:o.col,gr:o.gr||'4H',t0:Date.now(),
   pts:0,days:{},wk:{},bd:{},tot:{a:0,ok:0,g:0,mr:0,bs:0},sec:{},run:0,mt:Date.now()}; }
 const act=()=>D.profiles.find(p=>p.id===D.active)||null;
@@ -4495,6 +4504,15 @@ async function joinCode(raw){
     if(!r.ok) throw 0; const j=await r.json(); const n=mergeIn(j.data||{});
     D.sync={code,last:Date.now()}; save(); V.join=false; V.form=null; V.tab=D.profiles.length?'def':'pro'; paintBtn(); V.msg=`✅ Code reconnu : ${n} joueur${n>1?'s':''} retrouvé${n>1?'s':''}.`; render(); toast(`🏠 <b>Famille retrouvée</b> (${D.profiles.map(p=>esc(p.name)).join(', ')})`,{ms:3000}); sync(false);
   }catch(e){ V.msg='⚠️ Pas de connexion pour l’instant. Réessaie dans un moment.'; render(); } }
+async function autoRestore(){
+  try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+  if(D.sync&&D.sync.code){ mirror(); return; }
+  let c='', fromUrl=false; try{ const u=new URLSearchParams(location.search).get('famille'); if(u){ c=u; fromUrl=true; history.replaceState(null,'',location.pathname+location.hash); } }catch(e){}
+  if(!c){ try{ c=localStorage.getItem(MKEY)||''; }catch(e){} } if(!c) c=ckGet(); if(!c) c=await idb('get')||'';
+  c=normCode(c||''); if(!CODE_RE.test(c)) return;
+  try{ const r=await fetch(API+'?c='+encodeURIComponent(c),{cache:'no-store'}); if(!r.ok) return; const j=await r.json(); const n=mergeIn(j.data||{});
+    D.sync={code:c,last:Date.now()}; save(); paintBtn(); if(!P.hidden) render(); toast(`🏠 <b>Famille retrouvée</b> sur cet appareil (${D.profiles.length} joueur${D.profiles.length>1?'s':''})`); }catch(e){} }
+setTimeout(autoRestore,700);
 const NOTICE=`<div class="u-notice"><b>🏠 Une famille = un code</b>
 <ul><li>Chaque joueur de la famille a son <b>prénom</b>, son <b>avatar</b>, ses <b>points</b> et sa <b>progression</b>.</li>
 <li>Avec le code, vous retrouvez tous vos joueurs <b>sur un autre appareil</b> (iPad, téléphone, ordinateur) : il suffit de le taper dans « J’ai déjà un code famille ».</li>
@@ -4516,7 +4534,8 @@ function famCard(){
   return `<h4 class="u-h" style="margin-top:0">🔑 Code de ${V.famEdit?'la famille':esc(D.fam||'ma famille')} <small>${V.famEdit?'':'<button type="button" class="u-lk" data-act="famed">✏️ renommer</button>'}</small></h4>
   ${V.famEdit?`<div class="u-sv"><input class="u-in" id="uFamN" maxlength="30" value="${esc(D.fam)}" placeholder="Ex. Les Dupont" style="text-transform:none;font-family:inherit;letter-spacing:0"><button type="button" class="u-b pr" data-act="famok">Enregistrer</button></div>`:''}
   <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier</button></div>
-  <p class="u-note">Code famille · ${st} · Sur un autre appareil : <b>Famille → J’ai déjà un code famille</b>.</p>`; }
+  <p class="u-note">Code famille · ${st} · Sur un autre appareil : <b>Famille → J’ai déjà un code famille</b>.</p>
+  <p class="u-note">📌 Cet appareil se souvient de la famille et s’y reconnecte tout seul.</p><div class="u-sv"><button type="button" class="u-b" data-act="sylk">🔗 Copier le lien de connexion</button></div>`; }
 function famBottom(){ const s=D.sync;
   return `<details class="u-tipd"><summary>ℹ️ Comment ça marche ?</summary>${NOTICE}</details>
   ${s?`<div class="u-sv"><button type="button" class="u-b" data-act="sysync">🔄 Synchroniser</button><button type="button" class="u-b" data-act="syoff">Quitter la famille sur cet appareil</button></div>`:''}`; }
@@ -4670,8 +4689,9 @@ P.addEventListener('click',async e=>{
   if(a==='syjoin'){ V.join=!V.join; V.msg=''; render(); setTimeout(()=>{ const i=$('#uCode'); if(i) i.focus(); },50); return; }
   if(a==='sygo'){ await joinCode(($('#uCode')||{}).value); return; }
   if(a==='sysync'){ V.msg=''; sync(true); render(); return; }
+  if(a==='sylk'){ let ok=false; const l=location.origin+location.pathname+'?famille='+D.sync.code; try{ await navigator.clipboard.writeText(l); ok=true; }catch(x){} V.msg=ok?'✅ Lien copié : ouvre-le sur un appareil pour le rattacher à la famille.':'Copie le lien : '+l; render(); return; }
   if(a==='sycp'){ let ok=false; try{ await navigator.clipboard.writeText(D.sync.code); ok=true; }catch(x){} V.msg=ok?'✅ Code copié.':'Note le code affiché.'; render(); return; }
-  if(a==='syoff'){ if(await ask('Quitter la famille sur <b>cet appareil</b> ?<br><small>Les joueurs restent ici, mais ne seront plus synchronisés. Tu pourras retaper le code famille plus tard.</small>','Quitter',true)){ D.sync=null; save(); V.msg=''; render(); } return; }
+  if(a==='syoff'){ if(await ask('Quitter la famille sur <b>cet appareil</b> ?<br><small>Les joueurs restent ici, mais ne seront plus synchronisés. Tu pourras retaper le code famille plus tard.</small>','Quitter',true)){ D.sync=null; unmirror(); save(); V.msg=''; render(); } return; }
   if(a==='fsave'){ const f=V.form, nm=(($('#fName')||{}).value||'').trim();
     if(!nm){ V.msg='⚠️ Écris un prénom ou un pseudo.'; V.form.name=''; render(); return; }
     if(D.profiles.some(x=>x.id!==f.id&&norm(x.name)===norm(nm))){ V.msg='⚠️ Ce prénom existe déjà : choisis-en un autre.'; V.form.name=nm; render(); return; }
