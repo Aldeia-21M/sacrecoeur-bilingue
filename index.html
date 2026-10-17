@@ -4987,9 +4987,13 @@ const EXD=[
 ];
 const EXFN={x:'La lettre X',s:'La lettre S',c:'La lettre C',g:'La lettre G',t:'La lettre T',y:'La lettre Y',ent:'La fin « ent »',ch:'Les lettres CH',gn:'Les lettres GN',ill:'Les lettres ILL',um:'Autres sons',en:'Autres sons'};
 const EXPAL=['#e03131','#1971c2','#2f9e44','#f08c00','#7048e8','#0c8599','#d6336c','#5c940d'];
+const TOK={ks:'ikss',gz:'égz',s:'sss',z:'zzz',k:'ke',g:'gue',j:'je',t:'te',i:'i',ye:'ye',an:'an',ch:'che',ny:'gne',il:'il',om:'om',in:'in'};
+const EXSP=(id,snd,pre,exw)=>{ if(snd==='mu') return [{t:pre,l:'fr',pause:300},{t:exw,l:'fr'}];
+  const base=id==='gng'?'Ici, on entend':pre.replace(/ se prononce.*$/,' fait'); const tok=id==='gng'?'gue, ne':TOK[snd];
+  return [{t:base,l:'fr',pause:250},{t:tok,l:'fr',pause:400},{t:'comme dans',l:'fr',pause:250},{t:exw,l:'fr'}]; };
 const exc={};
 EXD.forEach(([id,l,fam,snd,lt,pre,exw,w])=>{ const set=new Set(w.map(x=>x[1].replace(/[\[\]]/g,''))); exc[fam]=(exc[fam]||0); const c=EXPAL[(exc[fam]++)%8];
-  G.push({id,l,s:exw,ex:true,fam:(fam==='um'?'en':fam),snd,let:lt,mn:(snd==='mu'?'on ne l’entend pas : « ':'comme dans « ')+exw+' »',sp:[{t:pre,l:'fr',pause:300},{t:exw,l:'fr'}],c,det:{test:p=>set.has(p)},w}); });
+  G.push({id,l,s:exw,ex:true,fam:(fam==='um'?'en':fam),snd,let:lt,mn:(snd==='mu'?'on ne l’entend pas : « ':'comme dans « ')+exw+' »',sp:EXSP(id,snd,pre,exw),tok:snd==='mu'?null:(id==='gng'?'gue, ne':TOK[snd]),c,det:{test:p=>set.has(p)},w}); });
 const MORE={
  au:[['🎁','cad[eau]'],['💧','[eau]'],['🪣','s[eau]'],['🚩','drap[eau]'],['🦕','dinos[au]re'],['🍂','[au]tomne'],['🐫','cham[eau]'],['🛋️','f[au]teuil'],['🧦','ch[au]ssette']],
  oi:[['🥤','b[oi]sson'],['🫛','p[oi]s'],['3️⃣','tr[oi]s'],['📦','b[oi]te'],['⚫','n[oi]r'],['🥜','n[oi]x'],['🌰','n[oi]sette'],['🛁','baign[oi]re'],['☝️','d[oi]gt'],['🐦','m[oi]neau'],['🧳','v[oy]age'],['🗓️','m[oi]s'],['🪵','b[oi]s']],
@@ -5052,7 +5056,7 @@ function famPage(f){
   root.innerHTML=back(0,'← Les lettres')+`<div class="mx-head"><h2>${FL(f)}</h2><p>Touche pour écouter. Compare bien !</p></div>`+L.map((g,gi)=>`<div class="sn-card sn-var" style="--c:${g.c}"><button class="sn-hint" data-h="${gi}"><span>🔊 <b>${g.l}</b></span> <small>${g.mn}</small></button><div class="sn-words">${g.w.map((w,i)=>`<button data-g="${gi}" data-i="${i}"><i>${w.e}</i><span class="sn-w">${hl(w.m,g.c)}</span></button>`).join('')}</div></div>`).join('')+`<button class="mx-go" id="snS">🧺 Classe les mots</button><h3 class="sn-oth">Une autre lettre</h3><div class="sn-chips" id="snC">${fams.filter(x=>x!==f).map(x=>`<button data-f="${x}" style="--c:${P().find(g=>g.fam===x).c}">${FL(x)}</button>`).join('')}</div>`;
   root.querySelector('#snB').onclick=learn; window.scrollTo(0,0);
   root.onclick=e=>{ const h=e.target.closest('[data-h]'); if(h) return seq(intro(L[+h.dataset.h]));
-    const w=e.target.closest('[data-g]'); if(w){ const x=L[+w.dataset.g].w[+w.dataset.i]; seq([{t:x.p,l:'fr'}]); w.classList.add('on'); setTimeout(()=>w.classList.remove('on'),1200); return; }
+    const w=e.target.closest('[data-g]'); if(w){ const gg=L[+w.dataset.g], x=gg.w[+w.dataset.i]; seq(gg.tok?[{t:gg.tok,l:'fr',pause:400},{t:x.p,l:'fr'}]:[{t:x.p,l:'fr'}]); w.classList.add('on'); setTimeout(()=>w.classList.remove('on'),1200); return; }
     const c=e.target.closest('#snC button'); if(c) return famPage(c.dataset.f); if(e.target.closest('#snS')) sortEx(f); };
 }
 function sortEx(f){
