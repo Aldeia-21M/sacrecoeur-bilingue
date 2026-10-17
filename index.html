@@ -803,6 +803,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "6.4", desc: "Séparateur de milliers dans Mon nombre" },
     { v: "6.3", desc: "Mon nombre jusqu’à 99 999" },
     { v: "6.2", desc: "Mon calcul : flèches ▲ ▼ lisibles, gros boutons" },
     { v: "6.1", desc: "Colonnes : le glissement ne change plus de page" },
@@ -1145,6 +1146,7 @@ const shuf=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(M
 const DESC={u:'<b>1 à 9</b> : les unités',und:'<b>und</b> = « et » : relie l’unité et la dizaine',zw:'<b>zwanzig</b> : le 20',zig:'<b>-zig</b> : les dizaines (30, 40… 90)',zehn:'<b>zehn</b> : 10, et les nombres de 13 à 19',hund:'<b>hundert</b> : les centaines',taus:'<b>tausend</b> : 1000',sp:'<b>à retenir par cœur</b> (11 et 12)',faint:'<b>(ein)</b> : on peut le dire ou non'};
 const CC=['#7048e8','#ae3ec9','#339af0','#f08c00','#2f9e44'], CN=['diz. de mille','milliers','centaines','dizaines','unités'];
 const st={d:[0,0,0,4,2],mode:'see',hideNum:false,tries:0,done:false,b:null};
+const fm=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'’');
 const num=()=>st.d.reduce((a,x)=>a*10+x,0);
 const parts=n=>{ if(n===0) return [['null','u']]; if(n<1000||n===1000) return numParts(n); const t=Math.floor(n/1000), r=n%1000; let p=(t===1?[['(ein)','faint']]:below100(t,false)).concat([['tausend','taus']]); return r?p.concat(numParts(r)):p; };
 const sayOf=w=>({'(ein)':'ein','sech':'sechs','sieb':'sieben'})[w]||w;
@@ -1167,7 +1169,7 @@ function paint(){
   const hideW=st.mode==='write'||st.mode==='build';
   B.innerHTML=`<p class="mn-p">Tourne les chiffres avec ▲ ▼ (jusqu’à 99 999), puis choisis comment t’exercer.</p>
   <div class="mn-pick">${[0,1,2,3,4].map(k=>`<div class="mn-col" style="--c:${CC[k]}"><small>${CN[k]}</small><button class="mn-ar" data-k="${k}" data-d="1" aria-label="plus">▲</button><div class="mn-dg">${st.d[k]}</div><button class="mn-ar" data-k="${k}" data-d="-1" aria-label="moins">▼</button></div>`).join('')}</div>
-  <div class="mn-num ${st.hideNum&&st.mode==='write'?'hid':''}" id="mnNum">${n}</div>
+  <div class="mn-num ${st.hideNum&&st.mode==='write'?'hid':''}" id="mnNum">${fm(n)}</div>
   <div class="mn-word" ${hideW?'hidden':''}><button class="mn-w" id="mnW" data-say="${esc(full(n))}" data-lang="de">${wordH(n)}</button>
    <div class="mn-leg">${used.map(c=>`<div><span class="gp g-${c}">${c==='u'?'1 2 3':c==='faint'?'(ein)':'…'}</span> ${DESC[c]}</div>`).join('')}</div></div>
   <div class="mn-btns"><button class="mn-b" data-m="hear">🔊 Écouter</button><button class="mn-b" data-m="slow">🐢 Morceau par morceau</button></div>
@@ -1193,7 +1195,7 @@ function ex(){
 }
 function drawBuild(){
   const E=B.querySelector('#mnEx'), b=st.b, n=num();
-  E.innerHTML=`<p class="mn-p">Touche les morceaux dans le bon ordre pour écrire <b>${n}</b> en allemand.</p>
+  E.innerHTML=`<p class="mn-p">Touche les morceaux dans le bon ordre pour écrire <b>${fm(n)}</b> en allemand.</p>
   <div class="mn-built">${b.got.map(i=>spanH(b.p[i])).join('')||'<small>…</small>'}</div>
   <div class="mn-tiles">${b.order.filter(i=>!b.got.includes(i)).map(i=>`<button class="mn-t" data-i="${i}" data-say="${esc(sayOf(b.p[i][0]))}" data-lang="de"><span class="gp g-${b.p[i][1]}">${b.p[i][0]}</span></button>`).join('')}</div>
   <div class="mn-fb" id="mnFb"></div>${b.got.length?'<button class="mn-go sec" id="mnR">↺ Recommencer</button>':''}`;
