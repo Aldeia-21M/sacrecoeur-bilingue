@@ -61,7 +61,11 @@ const LB = '_lobby', FRESH = 75000;
 async function lobby(url, t) {
   const me = url.searchParams.get('p') || ''; if (!PID.test(me)) return json({ error: 'pid' }, 400);
   const s = st(), c = (url.searchParams.get('c') || '').toUpperCase(), e = { t };
+  if (url.searchParams.get('bye')) { await s.delete('_lb/' + me); return json({ ok: 1 }); }
   if (CODE.test(c)) e.c = c;
+  // Présence « famille » facultative : empreinte du code famille (jamais le code) + pseudo, seulement si le joueur l'a choisi.
+  const ft = url.searchParams.get('f') || '', fn = clean(url.searchParams.get('n') || '').slice(0, 14);
+  if (/^[0-9a-f]{16}$/.test(ft) && fn) { e.f = ft; e.n = fn; }
   await s.setJSON('_lb/' + me, e);
   const d = { seen: {} }, { blobs } = await s.list({ prefix: '_lb/' });
   await Promise.all(blobs.map(async b => { const v = await s.get(b.key, { type: 'json' }); if (!v) return; if (v.t < t - FRESH * 2) { await s.delete(b.key); return; } d.seen[b.key.slice(4)] = v; }));
@@ -73,7 +77,8 @@ async function lobby(url, t) {
     const h = r.players.find(p => p.id === r.host) || r.players[0] || {};
     open.push({ c: k, nm: h.name || 'Un joueur', av: h.av || '🙂', n: r.players.length });
   }
-  return json({ online: live.length, open: open.slice(0, 4), now: t });
+  const fam = e.f ? live.filter(x => x.f === e.f && x.n && x !== d.seen[me]).map(x => x.n).slice(0, 12) : [];
+  return json({ online: live.length, open: open.slice(0, 4), fam, now: t });
 }
 export default async (req) => {
   const s = st(), t = Date.now(), url = new URL(req.url);

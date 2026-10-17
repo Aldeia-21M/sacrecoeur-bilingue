@@ -555,6 +555,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .u-bd{display:grid;gap:2px;justify-items:center;text-align:center;padding:8px 5px;border-radius:12px;background:#f1f3f9;border:2px solid transparent;filter:grayscale(1);opacity:.55}
 .u-bd span{font-size:1.7rem}.u-bd b{font-size:.78rem;line-height:1.15}.u-bd small{font-size:.68rem;color:#6b7385;line-height:1.15}
 .u-bd.on{filter:none;opacity:1;background:#fff8e1;border-color:#ffd43b}
+.u-chk{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-weight:700;cursor:pointer}.u-chk input{width:22px;height:22px;flex:none;margin-top:2px}.u-chk small{display:block;font-weight:500;color:#6b7385;font-size:.8rem;line-height:1.35}.u-chk input:disabled+span{opacity:.6}
 .u-note{font-size:.8rem;color:#6b7385;line-height:1.35}.u-note.warn{color:#c2570c;font-weight:700}
 .u-empty{padding:18px 8px;text-align:center;color:#6b7385}
 .u-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.u-kpis div{background:#f1f5ff;border-radius:12px;padding:9px 4px;text-align:center;display:grid;gap:2px}.u-kpis b{font-size:1.25rem;color:#1f5fd6}.u-kpis small{font-size:.7rem;color:#5b6478;line-height:1.1}
@@ -634,6 +635,7 @@ body.has-who{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 
 #onbar{position:fixed;left:10px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:54;max-width:calc(100vw - 100px)}#onbar[hidden]{display:none}body.gp-play #onbar,body.gp-play #onMenu{display:none}
 body.has-on #whoPill{bottom:calc(46px + env(safe-area-inset-bottom,0px))}body.has-on.has-who{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}body.has-on:not(.has-who){padding-bottom:calc(52px + env(safe-area-inset-bottom,0px))}
+#onMenu .on-fam{margin:6px 0;font-size:13px}#onMenu .on-fam.dim{color:#6b7385}
 #onbar .ob-b{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #8fd9c3;border-radius:999px;background:rgba(255,255,255,.96);color:#0b5f6e;font-weight:600;font-size:12px;font-family:inherit;padding:4px 10px 4px 8px;min-height:30px;cursor:pointer;box-shadow:0 2px 8px rgba(20,26,40,.15);white-space:nowrap}#onbar .ob-b i{font-style:normal;font-weight:800}
 .ob-d{width:8px;height:8px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 2px #c9f2d1;display:inline-block;flex:none}.ob-d.off{background:#adb5bd;box-shadow:0 0 0 2px #e4e7ec}#onbar .ob-b.hot{background:#0b7285;border-color:#0b7285;color:#fff;animation:obp 1.8s ease-in-out infinite}#onbar .ob-b.hot .ob-d{box-shadow:0 0 0 2px rgba(255,255,255,.35)}
 #onMenu{position:fixed;left:10px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:57;width:min(300px,calc(100vw - 20px));display:grid;gap:6px;padding:10px;border-radius:16px;background:#fff;border:2px solid #8fd9c3;box-shadow:0 10px 30px rgba(0,0,0,.25)}#onMenu[hidden]{display:none}#onMenu p{margin:0 0 2px}#onMenu p small{display:block;color:#6b7385}
@@ -820,6 +822,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "8.9", desc: "Mode hors ligne 48 h, pseudos famille en ligne" },
     { v: "8.8", desc: "Jeu de chiffres : bug des briques corrigé" },
     { v: "8.7", desc: "Jeu de chiffres : taille adaptée à la largeur d’écran" },
     { v: "8.6", desc: "Jeu de chiffres : lettres de comparaison plus grandes" },
@@ -5526,6 +5529,11 @@ function famCard(){
   <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier</button></div>
   <p class="u-note">Code famille · ${st} · Sur un autre appareil : <b>Famille → J’ai déjà un code famille</b>.</p>
   <p class="u-note">📌 Cet appareil se souvient de la famille et s’y reconnecte tout seul.</p><div class="u-sv"><button type="button" class="u-b" data-act="sylk">🔗 Copier le lien de connexion</button></div>`; }
+function connCard(){ const O=window.DLON, off=O.off();
+  return `<h4 class="u-h" style="margin-top:0">🌐 Connexion</h4>
+  <button type="button" class="u-b${off?' pr':''}" data-act="offtg" aria-pressed="${!!off}">✈️ Mode hors ligne${off?' : activé':''}</button>
+  <p class="u-note">${off?`Tu n’apparais pas en ligne et le salon est fermé. Retour automatique en ligne <b>${esc(O.until())}</b> (48 h).`:'Activé, il coupe le signal « en ligne » et le salon. Tous les jeux sur cet appareil restent disponibles. Il s’éteint tout seul après 48 h.'}</p>
+  <label class="u-chk"><input type="checkbox" id="uShow" ${O.shown()?'checked':''} ${O.famOk()?'':'disabled'}> <span>👪 Afficher mon pseudo aux membres de ma famille quand je suis en ligne<small>${O.famOk()?'Seuls ceux qui ont ton code famille le voient. Les autres visiteurs ne voient jamais de nom.':'Disponible avec un code famille.'}</small></span></label>`; }
 function famBottom(){ const s=D.sync;
   return `<details class="u-tipd"><summary>ℹ️ Comment ça marche ?</summary>${NOTICE}</details>
   ${s?`<div class="u-sv"><button type="button" class="u-b" data-act="sysync">🔄 Synchroniser</button><button type="button" class="u-b" data-act="syoff">Quitter la famille sur cet appareil</button></div>`:''}`; }
@@ -5621,6 +5629,7 @@ function tabPro(){
   ${D.profiles.length<8?'<button type="button" class="u-pt add" data-new="1"><span class="u-av big">＋</span><b>Ajouter</b><small>un joueur</small></button>':''}</div>
   ${D.profiles.length>1?`<h4 class="u-h">🏁 Classement de la semaine</h4><div class="u-rk">${ranks.map((p,i)=>`<div><span>${med[i]||i+1}</span><span class="u-av" style="--pc:${p.col}">${avH(p.av)}</span><b>${esc(p.name)}</b><em>${weekPts(p)} pts</em></div>`).join('')}</div>`:''}
   <div class="u-card">${famCard()}</div>
+  <div class="u-card">${connCard()}</div>
   <details class="u-more"${warn||V.code||V.msg?' open':''}><summary>⚙️ Sauvegarde et aide${warn?' <i class="u-warn">⚠️</i>':''}</summary>
   <h4 class="u-h">💾 Sauvegarde dans un fichier <small>facultatif</small></h4>
   <p class="u-note">${D.sync?'En plus du code famille, tu peux garder un fichier de secours.':'Sans code famille, les joueurs sont gardés <b>dans cet appareil</b> seulement.'} ${storeOk?'':'<b style="color:#c92a2a">⚠️ La mémoire du navigateur est désactivée (navigation privée ?) : rien ne sera conservé.</b> '}</p>
@@ -5656,6 +5665,7 @@ function render(){
   const body=!D.profiles.length?tabPro():V.tab==='def'?tabDef(p):V.tab==='evo'?tabEvo(p):tabPro();
   const sc=P.scrollTop; P.innerHTML=head+tabs+`<div class="u-body">${body}</div><div class="setgrab" id="ugrab" aria-label="Fermer"><i></i></div>`; P.scrollTop=sc;
 }
+P.addEventListener('change',e=>{ if(e.target.id==='uShow'){ window.DLON.setShown(e.target.checked); render(); } });
 P.addEventListener('input',e=>{ if(e.target.id==='fName'&&V.form){ V.form.name=e.target.value; const n=$('#pvN'); if(n) n.textContent=e.target.value.trim()||'Ton prénom'; } });
 P.addEventListener('click',async e=>{
   const t=e.target.closest('button'); if(!t) return;
@@ -5670,6 +5680,7 @@ P.addEventListener('click',async e=>{
   if(t.dataset.col){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.col=t.dataset.col; render(); return; }
   if(t.dataset.gr&&V.form){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.gr=t.dataset.gr; render(); return; }
   const a=t.dataset.act; if(!a) return;
+  if(a==='offtg'){ window.DLON.setOff(!window.DLON.off()); render(); return; }
   if(a==='fcancel'){ V.form=null; V.msg=''; render(); return; }
   if(a==='fnew'){ const nm=(($('#fFam')||{}).value||'').trim(); D.fam=nm; D.famMt=Date.now(); D.sync={code:genCode(),last:0}; save(); V.msg=''; startForm(null); render(); toast('✅ Famille créée : ajoute un premier joueur',{ms:2600}); sync(false); return; }
   if(a==='solo'){ V.msg=''; startForm(null); render(); return; }
@@ -5723,6 +5734,17 @@ function hook(){
   const m0=window.DLmore; if(m0) window.DLmore=function(host,items){ const r=m0.apply(this,arguments); if(host&&items&&items.length) onEnd(); return r; };
 }
 function swapCi(pl,i,k){ if(k<0||pl[i].ci===k) return; const j=pl.findIndex((x,n)=>n!==i&&x.ci===k); if(j>=0) pl[j].ci=pl[i].ci; pl[i].ci=k; }
+window.DLON=(function(){ const H48=48*36e5; let tg=null;
+  const g=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } }, st=(k,v)=>{ try{ if(v==null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} };
+  const o={ off(){ const t=+g('dl-off')||0; if(t&&t<Date.now()){ st('dl-off',null); return 0; } return t; },
+    setOff(b){ st('dl-off',b?String(Date.now()+H48):null); o.changed(); },
+    shown(){ return g('dl-shown')==='1'; }, setShown(b){ st('dl-shown',b?'1':'0'); o.changed(); },
+    famOk(){ return !!(D.sync&&D.sync.code); },
+    /* empreinte du code famille : le code lui-même n’est jamais envoyé au salon */
+    async tag(){ const c=D.sync&&D.sync.code; if(!c) return ''; if(tg&&tg.c===c) return tg.t; let t=''; try{ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('dl-lobby:'+c)); t=[...new Uint8Array(b)].slice(0,8).map(x=>x.toString(16).padStart(2,'0')).join(''); }catch(e){} tg={c,t}; return t; },
+    until(){ const t=o.off(); return t?new Date(t).toLocaleString('fr-CH',{weekday:'short',hour:'2-digit',minute:'2-digit'}):''; },
+    changed(){} };
+  return o; })();
 window.DLU={
   active:act, open:openP, gr:()=>{ const p=act(); return p?p.gr:null; }, id:()=>{ const p=act(); return p?p.id:null; },
   /* classe changée en jeu : mémorisée dans le profil du joueur (par prénom, ou profil actif si un seul joueur) */
@@ -5826,16 +5848,20 @@ function lobH(){ const L=S.lob, o=L.open||[]; if(!(L.online>0)&&!o.length) retur
   return `${o.length?`<div class="sl-ask"><b>📣 Des joueurs t’attendent !</b>${o.map(x=>`<button type="button" data-j="${x.c}"><span>${avH(x.av)}</span> <b>${esc(x.nm)}</b> · ${x.n} joueur${x.n>1?'s':''}<em>Rejoindre</em></button>`).join('')}</div>`:''}
   ${L.online>1?`<p class="sl-on">🟢 ${L.online-1} autre${L.online>2?'s':''} joueur${L.online>2?'s':''} en ligne</p>`:''}`; }
 function lobbyRefresh(){ const el=document.getElementById('slLob'); if(el) el.innerHTML=lobH(); onbar(); }
-function onbar(){ const el=document.getElementById('onbar'); if(!el||!S.lob.ok) return; const L=S.lob, o=(L.open||[])[0], oth=Math.max(0,(L.online||1)-1), inRoom=!!S.code;
+function onbar(){ const el=document.getElementById('onbar'); if(!el) return;
+  if(DLON.off()){ el.hidden=false; document.body.classList.add('has-on'); el.innerHTML='<button type="button" class="ob-b" aria-haspopup="true" aria-label="Mode hors ligne activé"><span class="ob-d off"></span>✈️ Hors ligne · <i>Repasser en ligne ›</i></button>'; const m=document.getElementById('onMenu'); if(m&&!m.hidden) onMenu(true); return; }
+  if(!S.lob.ok) return; const L=S.lob, o=(L.open||[])[0], oth=Math.max(0,(L.online||1)-1), inRoom=!!S.code;
   el.hidden=false; document.body.classList.add('has-on');
   const txt=inRoom?'Retour au salon ›':o?'Rejoindre le salon ›':'Jouez ensemble !';
   el.innerHTML=`<button type="button" class="ob-b${o&&!inRoom?' hot':''}" aria-haspopup="true" aria-label="${oth} joueur${oth>1?'s':''} en ligne. ${txt}"><span class="ob-d${oth?'':' off'}"></span>${oth?`<b>${oth+1}</b> en ligne · `:'Salon · '}<i>${txt}</i></button>`;
   const m=document.getElementById('onMenu'); if(m&&!m.hidden) onMenu(true); }
 function onMenu(show){ let m=document.getElementById('onMenu'); if(!show){ if(m) m.hidden=true; return; }
-  if(!m){ m=document.createElement('div'); m.id='onMenu'; document.body.appendChild(m); m.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; m.hidden=true; const a=b.dataset.a; if(a==='back') goJoin(null); else if(a==='new') goJoin('NEW'); else if(a) goJoin(a); }; }
-  const L=S.lob, o=L.open||[], oth=Math.max(0,(L.online||1)-1);
+  if(!m){ m=document.createElement('div'); m.id='onMenu'; document.body.appendChild(m); m.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; m.hidden=true; const a=b.dataset.a; if(a==='back') goJoin(null); else if(a==='new') goJoin('NEW'); else if(a==='on') DLON.setOff(false); else if(a==='off') DLON.setOff(true); else if(a) goJoin(a); }; }
+  if(DLON.off()){ m.innerHTML=`<p><b>✈️ Mode hors ligne</b><small>Retour automatique en ligne ${esc(DLON.until())}</small></p><button type="button" class="hot" data-a="on">🌐 Repasser en ligne</button>`; m.hidden=false; return; }
+  const L=S.lob, o=L.open||[], oth=Math.max(0,(L.online||1)-1), fam=L.fam||[];
   m.innerHTML=`<p><b>${oth?`🟢 ${oth+1} joueurs en ligne (toi compris)`:'Personne d’autre en ligne pour l’instant'}</b><small>Salon à distance · bêta</small></p>`+
-    (S.code?'<button type="button" data-a="back">🌐 Retour à mon salon</button>':o.map(x=>`<button type="button" class="hot" data-a="${x.c}">🌐 Rejoindre le salon de ${esc(x.nm)} <small>${x.n} joueur${x.n>1?'s':''}</small></button>`).join('')+'<button type="button" data-a="new">➕ Créer un salon</button>');
+    (fam.length?`<p class="on-fam">👪 Dans ta famille : ${fam.map(n=>`<b>${esc(n)}</b>`).join(', ')}</p>`:(DLON.famOk()&&!DLON.shown()?'<p class="on-fam dim">Pour que ta famille te voie : 🏠 Famille → « Afficher mon pseudo ».</p>':''))+
+    (S.code?'<button type="button" data-a="back">🌐 Retour à mon salon</button>':o.map(x=>`<button type="button" class="hot" data-a="${x.c}">🌐 Rejoindre le salon de ${esc(x.nm)} <small>${x.n} joueur${x.n>1?'s':''}</small></button>`).join('')+'<button type="button" data-a="new">➕ Créer un salon</button>')+'<button type="button" data-a="off">✈️ Passer hors ligne</button>';
   m.hidden=false; }
 (function(){ const el=document.getElementById('onbar'); if(el) el.onclick=e=>{ if(!e.target.closest('button')) return; const m=document.getElementById('onMenu'); onMenu(!(m&&!m.hidden)); }; document.addEventListener('click',e=>{ const m=document.getElementById('onMenu'); if(m&&!m.hidden&&!e.target.closest('#onMenu,#onbar')) m.hidden=true; }); document.addEventListener('keydown',e=>{ if(e.key==='Escape') onMenu(false); }); })();
 function goJoin(c){ window.__salonPending=c||null; const b=document.querySelector('.sec-b[data-s="fa"]'); if(b) b.click(); setTimeout(()=>H.openGame('salon'),150); }
@@ -5844,10 +5870,12 @@ function banner(){ let el=document.getElementById('salonBan'); if(!el) return; c
   if(!el){ el=document.createElement('div'); el.id='salonBan'; el.setAttribute('role','status'); document.body.appendChild(el);
     el.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const c=el.dataset.c; if(b.dataset.x){ S.dis[c]=1; el.remove(); return; } S.dis[c]=1; el.remove(); goJoin(c); }; }
   el.dataset.c=o.c; el.innerHTML=`<span class="bn-i">${avH(o.av)}</span><span class="bn-t"><b>${esc(o.nm)}</b> cherche des joueurs !<small>Grand Quiz à distance (bêta)</small></span><button type="button" class="bn-j">Rejoindre</button><button type="button" data-x="1" class="bn-x" aria-label="Fermer">✕</button>`; }
-async function lobbyPing(){ if(document.hidden||location.protocol==='file:'||/#test/.test(location.hash)) return; S.lastPing=Date.now();
+async function lobbyPing(){ if(document.hidden||location.protocol==='file:'||/#test/.test(location.hash)||DLON.off()) return; S.lastPing=Date.now();
   try{ const m=me(); let q='lobby=1&p='+encodeURIComponent(anonId()); const r=S.room;
     if(root()&&r&&r.phase==='lobby'&&S.openSalon&&m&&r.players.some(x=>x.id===m.id)) q+='&c='+r.code;
-    const j=await (await fetch(API+'?'+q,{cache:'no-store'})).json(); if(j&&j.open){ S.lob=j; S.lob.ok=1; lobbyRefresh(); banner(); } }catch(e){} }
+    if(DLON.shown()&&DLON.famOk()){ const pr=window.DLU&&DLU.active(); const tg=await DLON.tag(); if(pr&&tg) q+='&f='+tg+'&n='+encodeURIComponent(pr.name); }
+    const j=await (await fetch(API+'?'+q,{cache:'no-store'})).json(); if(DLON.off()) return; if(j&&j.open){ S.lob=j; S.lob.ok=1; lobbyRefresh(); banner(); } }catch(e){} }
+DLON.changed=()=>{ if(DLON.off()){ S.lob={}; try{ fetch(API+'?lobby=1&bye=1&p='+encodeURIComponent(anonId()),{cache:'no-store',keepalive:true}).catch(()=>{}); }catch(e){} banner(); onbar(); } else { onbar(); lobbyPing(); } if(root()&&!S.code) paint(); };
 setInterval(lobbyPing,25000); setTimeout(lobbyPing,2500); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) lobbyPing(); else banner(); });
 
 /* écrans */
@@ -5856,7 +5884,8 @@ function paint(){ const R=root(); if(!R) return; const r=S.room;
   if(!S.code||!r) R.innerHTML=homeH(); else if(r.phase==='lobby') R.innerHTML=lobbyH(r); else if(r.phase==='vote') R.innerHTML=voteH(r); else if(r.phase==='play') R.innerHTML=playH(r); else if(r.phase==='game') R.innerHTML='<h2 class="g-h">🎲 Partie en cours</h2><p class="g-p">Une partie se joue en ce moment.</p><button class="g-ghost" data-s="leave">👋 Quitter le salon</button>'; else R.innerHTML=endH(r);
   bind(R); tick(); if(r&&r.phase==='lobby'&&Date.now()-S.lastPing>6000) lobbyPing(); if(!S.code) lobbyRefresh(); if(r&&r.phase==='end') endExtras(r); }
 const BETA='<span class="sl-beta">BÊTA</span>';
-function homeH(){ const m=me(), g=guest();
+function homeH(){ if(DLON.off()) return `<h2 class="g-h">✈️ Mode hors ligne</h2><p class="g-p">Le salon à distance est fermé. Tu peux toujours jouer à tous les jeux sur cet appareil. Retour automatique en ligne ${esc(DLON.until())}.</p><button class="g-big" data-s="onl">🌐 Repasser en ligne</button>`;
+  const m=me(), g=guest();
   return `<h2 class="g-h">🌐 Salon à distance ${BETA}</h2>
   <p class="g-p">Joue <b>en direct</b> avec d’autres joueurs, chacun sur son appareil : on <b>vote</b> pour le thème, puis chacun répond <b>à tour de rôle</b> aux questions. Pas de chat : que des questions et des points !</p>
   ${S.msg?`<p class="sl-msg">${S.msg}</p>`:''}
@@ -5914,6 +5943,7 @@ function bind(R){
     if(b.dataset.gr){ R.querySelectorAll('#slGr button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return; }
     if(b.dataset.game){ const j=await api({a:'start',game:b.dataset.game,x:+b.dataset.x}); if(j.error){ const G=(window.DLNET||{})[b.dataset.game]||{}; S.msg=j.error==='joueurs'?(G.min===G.max?`⚠️ Ce jeu se joue à ${G.min} : il faut exactement ${G.min} joueurs présents dans le salon.`:`⚠️ Il faut de ${G.min||2} à ${G.max||4} joueurs présents dans le salon.`):'⚠️ Impossible de lancer ('+esc(j.error)+').'; paint(); } return; }
     const s=b.dataset.s;
+    if(s==='onl'){ DLON.setOff(false); return; }
     if(s==='chg'){ try{ localStorage.removeItem('dl-salon-guest'); }catch(x){} paint(); return; }
     if(s==='create'||s==='join'){ ensureMe(R); const m=me(); if(!m){ S.msg='⚠️ Écris ton prénom ou ton pseudo.'; paint(); return; }
       S.msg=''; if(s==='create'){ await createRoom(m); }
