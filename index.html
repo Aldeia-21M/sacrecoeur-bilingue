@@ -232,6 +232,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .ch-dcol{display:flex;flex-direction:column;align-items:center;gap:2px}.ch-dcol small{font-weight:800;color:#1f5fd6;font-size:13px;min-height:1.2em}.ch-d{cursor:pointer;font:inherit;width:68px;height:68px}.ch-d.used{opacity:.3}.ch-d.sel{outline:4px solid #f59f00;outline-offset:2px}.ch-d:disabled{cursor:default}.ch-side{display:grid;gap:8px;justify-items:center}.ch-die{display:flex;align-items:center;gap:12px;justify-content:center;min-height:76px;flex-wrap:wrap}.ch-dbtn{min-height:64px;padding:0 22px;border-radius:18px;border:3px solid var(--pc,#1f5fd6);background:color-mix(in srgb,var(--pc,#1f5fd6) 18%,#fff);font-weight:900;font-size:20px;font-family:inherit;cursor:pointer;color:#1d2433}
 .bn-cards{display:grid;gap:10px;margin:10px 0}.bn-cards.n3{grid-template-columns:repeat(3,1fr)}.bn-cards.n4{grid-template-columns:repeat(2,1fr)}.bn-card{display:flex;flex-direction:column;gap:6px;align-items:stretch}.bn-face{min-height:120px;border-radius:18px;border:3px solid rgba(29,36,51,.2);background:#fff;font-family:inherit;font-weight:900;font-size:clamp(15px,4.4vw,24px);color:#1d2433;cursor:pointer;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow-wrap:anywhere;hyphens:auto;touch-action:manipulation}.bn-face:disabled{cursor:default}.bn-face .bn-v{font-size:1.5em;color:#7048e8;min-height:1.2em}.bn-face.ok{background:#d3f9d8;border-color:#2f9e44}.bn-face.ko{background:#ffe3e3;border-color:#e03131}.bn-hear{min-height:44px;border-radius:12px;border:2px solid rgba(29,36,51,.15);background:#fff0b8;font-size:20px;cursor:pointer}@media(max-width:420px){.bn-cards.n3{grid-template-columns:1fr}.bn-face{min-height:84px;flex-direction:row;gap:14px}.bn-card{flex-direction:row}.bn-card .bn-face{flex:1}.bn-hear{width:56px}}
 .c4-board{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:8px;border-radius:20px;background:#1f5fd6;border:4px solid #174aa8;max-width:520px;margin:8px auto}.c4-col{display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation}.c4-col:disabled{cursor:default}.c4-col:not(:disabled):active .c4-cell:not(.on){background:#a5d8ff}.c4-cell{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:50%;background:#fff;font-size:clamp(12px,4vw,22px);line-height:1;box-shadow:inset 0 3px 0 rgba(0,0,0,.18)}.c4-cell.on{background:var(--pc);border:3px solid rgba(255,255,255,.85);animation:c4drop .3s ease-out}.c4-cell.win{outline:4px solid #ffd43b;outline-offset:-1px;animation:chpulse .6s infinite alternate}@keyframes c4drop{from{transform:translateY(-40px);opacity:.3}}
+.bt-wrap{max-width:520px;margin:8px auto}.bt-grid{display:grid;grid-template-columns:28px repeat(var(--n),1fr);gap:3px;padding:8px;border-radius:18px;background:#a5d8ff;border:4px solid #339af0}.bt-h{display:flex;align-items:center;justify-content:center;font-weight:900;color:#1c4a7a;font-size:14px}.bt-c{aspect-ratio:1;border-radius:8px;border:2px solid #74c0fc;background:#e7f5ff;font-size:clamp(14px,4.6vw,24px);padding:0;cursor:pointer;touch-action:manipulation;line-height:1}.bt-c:disabled{cursor:default}.bt-c:not(:disabled):active{background:#fff3bf}.bt-c.m{background:#d0ebff;border-color:#a5d8ff}.bt-c.h{background:#ffe3e3;border-color:#e03131}.bt-c.s{background:#ffd8a8;border-color:#e8590c}
 .h-track{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .h-lane{display:grid;grid-template-columns:minmax(70px,26%) 1fr;gap:8px;align-items:center;padding:6px 8px;border-radius:16px;background:#fff;border:3px solid rgba(29,36,51,.14)}
 .h-lane.act{border-color:var(--pc);background:#fffbe0}
@@ -810,6 +811,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "7.3", desc: "Bataille navale BÊTA" },
     { v: "7.2", desc: "Puissance 4 des questions BÊTA" },
     { v: "7.1", desc: "Bataille de chiffres BÊTA" },
     { v: "7.0", desc: "Petits chevaux BÊTA, deux dés" },
@@ -1903,6 +1905,7 @@ const GROUPS=[
   {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
+  {id:'navale',ic:'🚢',t:'Bataille navale (BÊTA)',d:'Réponds pour tirer · cases lues en allemand · 1–4',c:'#d9ecfb'},
   {id:'puissance4',ic:'🔴',t:'Puissance 4 (BÊTA)',d:'Réponds pour poser un jeton · 1–2',c:'#ffe3e3'},
   {id:'cartes',ic:'🃏',t:'Bataille de chiffres (BÊTA)',d:'Trouve la carte la plus grande · 2–4',c:'#e9defa'},
   {id:'chevaux',ic:'🐴',t:'Petits chevaux (BÊTA)',d:'Dé, 6 pour sortir, cases ⭐ questions · 2–4',c:'#ffe8cc'},
@@ -1924,7 +1927,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1934,7 +1937,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -1967,7 +1970,7 @@ function openGame(id){
   document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
-  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
+  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(id==='navale') navale(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
 }
 root.querySelector('#gBack').onclick=showHub;
@@ -2469,6 +2472,92 @@ function startPuissance4(cfg){
       const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>afterAnswer(ok); };
   }
   boardEl.onclick=e=>{ const col=e.target.closest('.c4-col'); if(!col||col.disabled||S.phase!=='drop'||P(S.turn).npc) return; dropIn(+col.dataset.c); };
+  turn();
+}
+/* ================= BATAILLE NAVALE ================= */
+function btPlace(N,sizes){
+  for(let tries=0;tries<500;tries++){
+    const occ=new Set(), ships=[]; let ok=true;
+    for(const sz of sizes){ let placed=false;
+      for(let k=0;k<80&&!placed;k++){ const hz=Math.random()<.5, r=rnd(hz?N:N-sz+1), c=rnd(hz?N-sz+1:N), cells=[...Array(sz).keys()].map(i=>hz?[r,c+i]:[r+i,c]);
+        if(cells.some(([a,b])=>occ.has(a+','+b))) continue;
+        cells.forEach(([a,b])=>{ for(let da=-1;da<=1;da++) for(let db=-1;db<=1;db++) occ.add((a+da)+','+(b+db)); }); ships.push({cells,hits:0}); placed=true; }
+      if(!placed){ ok=false; break; } }
+    if(ok) return ships; }
+  return null;
+}
+function btShot(ships,shots,r,c){
+  const k=r+','+c; if(shots[k]) return null;
+  const sh=ships.find(s=>s.cells.some(([a,b])=>a===r&&b===c));
+  if(!sh){ shots[k]='m'; return {hit:false}; }
+  sh.hits++; shots[k]='h'; const sunk=sh.hits===sh.cells.length; if(sunk) sh.cells.forEach(([a,b])=>shots[a+','+b]='s'); return {hit:true,sunk,ship:sh};
+}
+T2.bt={btPlace,btShot};
+function navale(){
+  playerSetup({title:'🚢 Bataille navale',npc:true,intro:'Une flotte est cachée dans la mer. À ton tour, réponds à une question : bonne réponse = tu tires un coup de canon sur une case. <b>Touché</b> = tu retires ! <b>Coulé</b> = bonus. Entends la case en allemand : « C, vier ». Le joueur qui a le plus de points quand toute la flotte est coulée gagne. Chaque joueur choisit sa classe.',min:1,max:4,defN:2,perGrade:true,
+    extra:{label:'Taille de la mer',opts:[[6,'6 × 6 (rapide)'],[8,'8 × 8']],def:6}},startNavale);
+}
+function startNavale(cfg){
+  const N=cfg.x||6, sizes=N===6?[3,2,2]:[4,3,3,2,2], n=cfg.players.length, LET='ABCDEFGH'.slice(0,N);
+  const ships=btPlace(N,sizes), shots={}, S={cfg,N,ships,shots,turn:0,scores:cfg.players.map(()=>0),phase:'q',busy:false,over:false}; T2.btg=S;
+  const P=i=>cfg.players[i];
+  body.innerHTML=`<div class="h-bar"><div id="bInfo" class="h-info"></div><button class="g-ghost" id="bQuit">↩ Quitter</button></div>
+    <div class="g-msg" id="bMsg"></div>
+    <div class="bt-wrap"><div class="bt-grid" id="bGrid" style="--n:${N}"><i class="bt-corner"></i>${[...LET].map(l=>`<b class="bt-h">${l}</b>`).join('')}${[...Array(N).keys()].map(r=>`<b class="bt-h">${r+1}</b>`+[...Array(N).keys()].map(c=>`<button class="bt-c" data-r="${r}" data-c="${c}" aria-label="${LET[c]}${r+1}"></button>`).join('')).join('')}</div></div>
+    <div class="h-qbox" id="bQ"></div>`;
+  const msg=t=>body.querySelector('#bMsg').innerHTML='<span>'+t+'</span>', grid=body.querySelector('#bGrid'), box=body.querySelector('#bQ');
+  body.querySelector('#bQuit').onclick=()=>navale();
+  const coordSay=(r,c)=>LET[c]+', '+numWord(r+1), coordTxt=(r,c)=>`<b>${LET[c]}${r+1}</b> (${LET[c]}, ${numWord(r+1)})`;
+  function paint(){
+    grid.querySelectorAll('.bt-c').forEach(b=>{ const k=b.dataset.r+','+b.dataset.c, v=shots[k]; b.className='bt-c'+(v?' '+v:''); b.textContent=v==='m'?'💧':v==='h'?'💥':v==='s'?'🚢':''; b.disabled=!!v||!(S.phase==='shoot'&&!P(S.turn).npc); });
+    body.querySelector('#bInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn&&!S.over)+`<b class="h-sc">${S.scores[i]}</b>`).join('');
+  }
+  const left=()=>ships.filter(s=>s.hits<s.cells.length).length;
+  async function shoot(r,c){
+    S.phase='anim'; paint(); const p=P(S.turn); const res=btShot(ships,shots,r,c); if(!res) { S.phase='shoot'; paint(); return; }
+    say(coordSay(r,c),'de'); paint();
+    if(res.hit){ S.scores[S.turn]+=res.sunk?3:1; paint(); msg(res.sunk?`🚢 <b>Coulé !</b> ${coordTxt(r,c)} — +3 points pour ${p.emoji} <b>${esc(p.name)}</b>.`:`💥 <b>Touché !</b> ${coordTxt(r,c)} — +1 point. ${p.emoji} <b>${esc(p.name)}</b> retire !`); }
+    else msg(`💧 À l’eau… ${coordTxt(r,c)}`);
+    await sleep(FAST?20:1400);
+    if(!left()) return finish();
+    if(res.hit){ S.phase='shoot'; paint(); if(p.npc) return npcShoot(); msg(`${p.emoji} <b>${esc(p.name)}</b>, tire encore !`); return; }
+    S.turn=(S.turn+1)%n; turn();
+  }
+  function npcShoot(){
+    sleep(FAST?20:1000).then(()=>{ const hits=[]; for(const k in shots) if(shots[k]==='h') hits.push(k.split(',').map(Number)); let cand=[];
+      hits.forEach(([r,c])=>[[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{ const rr=r+a, cc=c+b; if(rr>=0&&rr<N&&cc>=0&&cc<N&&!shots[rr+','+cc]) cand.push([rr,cc]); }));
+      if(!cand.length) for(let r=0;r<N;r++) for(let c=0;c<N;c++) if(!shots[r+','+c]&&(r+c)%2===0) cand.push([r,c]);
+      if(!cand.length) for(let r=0;r<N;r++) for(let c=0;c<N;c++) if(!shots[r+','+c]) cand.push([r,c]);
+      const [r,c]=cand[rnd(cand.length)]; shoot(r,c); });
+  }
+  function turn(){
+    const p=P(S.turn); S.phase='q'; paint(); box.style.setProperty('--pc',p.color); box.hidden=false;
+    const after=ok=>{
+      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> rate son tir…`); sleep(FAST?20:900).then(()=>{ S.turn=(S.turn+1)%n; turn(); }); return; }
+      box.hidden=true; S.phase='shoot'; paint();
+      if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> vise…`); return npcShoot(); }
+      msg(`✅ Bien joué ! ${p.emoji} <b>${esc(p.name)}</b>, touche une case pour tirer.`); };
+    if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+      sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); return; }
+    msg(`${p.emoji} <b>${esc(p.name)}</b> : réponds pour tirer !`);
+    const q=makeQuestion(cfg.topics,p.gr);
+    box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
+      <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
+      <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
+    D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
+    if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
+    let ans=false;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+      box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
+      const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux tirer !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Pas de tir ce tour.`;
+      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
+      const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>after(ok); };
+  }
+  function finish(){ S.over=true; paint();
+    const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
+    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:'Toute la flotte est coulée !<br>'+cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>startNavale(cfg)); }
+  grid.onclick=e=>{ const b=e.target.closest('.bt-c'); if(!b||b.disabled||S.phase!=='shoot'||P(S.turn).npc) return; shoot(+b.dataset.r,+b.dataset.c); };
   turn();
 }
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
