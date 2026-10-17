@@ -233,6 +233,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .bn-cards{display:grid;gap:10px;margin:10px 0}.bn-cards.n3{grid-template-columns:repeat(3,1fr)}.bn-cards.n4{grid-template-columns:repeat(2,1fr)}.bn-card{display:flex;flex-direction:column;gap:6px;align-items:stretch}.bn-face{min-height:120px;border-radius:18px;border:3px solid rgba(29,36,51,.2);background:#fff;font-family:inherit;font-weight:900;font-size:clamp(15px,4.4vw,24px);color:#1d2433;cursor:pointer;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow-wrap:anywhere;hyphens:auto;touch-action:manipulation}.bn-face:disabled{cursor:default}.bn-face .bn-v{font-size:1.5em;color:#7048e8;min-height:1.2em}.bn-face.ok{background:#d3f9d8;border-color:#2f9e44}.bn-face.ko{background:#ffe3e3;border-color:#e03131}.bn-hear{min-height:44px;border-radius:12px;border:2px solid rgba(29,36,51,.15);background:#fff0b8;font-size:20px;cursor:pointer}@media(max-width:420px){.bn-cards.n3{grid-template-columns:1fr}.bn-face{min-height:84px;flex-direction:row;gap:14px}.bn-card{flex-direction:row}.bn-card .bn-face{flex:1}.bn-hear{width:56px}}
 .c4-board{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:8px;border-radius:20px;background:#1f5fd6;border:4px solid #174aa8;max-width:520px;margin:8px auto}.c4-col{display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation}.c4-col:disabled{cursor:default}.c4-col:not(:disabled):active .c4-cell:not(.on){background:#a5d8ff}.c4-cell{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:50%;background:#fff;font-size:clamp(12px,4vw,22px);line-height:1;box-shadow:inset 0 3px 0 rgba(0,0,0,.18)}.c4-cell.on{background:var(--pc);border:3px solid rgba(255,255,255,.85);animation:c4drop .3s ease-out}.c4-cell.win{outline:4px solid #ffd43b;outline-offset:-1px;animation:chpulse .6s infinite alternate}@keyframes c4drop{from{transform:translateY(-40px);opacity:.3}}
 .bt-wrap{max-width:520px;margin:8px auto}.bt-grid{display:grid;grid-template-columns:28px repeat(var(--n),1fr);gap:3px;padding:8px;border-radius:18px;background:#a5d8ff;border:4px solid #339af0}.bt-h{display:flex;align-items:center;justify-content:center;font-weight:900;color:#1c4a7a;font-size:14px}.bt-c{aspect-ratio:1;border-radius:8px;border:2px solid #74c0fc;background:#e7f5ff;font-size:clamp(14px,4.6vw,24px);padding:0;cursor:pointer;touch-action:manipulation;line-height:1}.bt-c:disabled{cursor:default}.bt-c:not(:disabled):active{background:#fff3bf}.bt-c.m{background:#d0ebff;border-color:#a5d8ff}.bt-c.h{background:#ffe3e3;border-color:#e03131}.bt-c.s{background:#ffd8a8;border-color:#e8590c}
+.pd-top{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:center;margin:8px 0}.pd-svg{width:100%;max-height:170px}.pd-clue{display:grid;gap:8px}.pd-clue small{color:#5b6478;font-weight:700}.pd-hint{font-size:clamp(18px,5vw,26px);font-weight:900;color:#1d2433}.pd-word{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin:10px 0}.pd-art{font-weight:900;font-size:clamp(18px,5vw,26px);color:#1f5fd6;margin-right:6px}.pd-s{display:flex;align-items:center;justify-content:center;width:clamp(26px,7.4vw,40px);height:clamp(34px,9vw,50px);border-bottom:5px solid #1d2433;font-style:normal;font-weight:900;font-size:clamp(20px,6vw,32px);color:#1d2433}.pd-s.on{color:#2f9e44;border-bottom-color:#2f9e44}.pd-s.dash{border-bottom:0}.pd-kb{display:grid;gap:6px;margin-top:10px}.pd-r{display:flex;gap:5px;justify-content:center}.pd-r button{flex:1;max-width:46px;min-height:50px;border-radius:10px;border:2px solid #ced4da;background:#fff;font-size:20px;font-weight:800;font-family:inherit;padding:0;cursor:pointer;color:#1d2433;touch-action:manipulation}.pd-r button.ok{background:#d3f9d8;border-color:#2f9e44}.pd-r button.ko{background:#ffe3e3;border-color:#e03131;opacity:.6}.pd-r button:disabled{cursor:default}
 .h-track{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .h-lane{display:grid;grid-template-columns:minmax(70px,26%) 1fr;gap:8px;align-items:center;padding:6px 8px;border-radius:16px;background:#fff;border:3px solid rgba(29,36,51,.14)}
 .h-lane.act{border-color:var(--pc);background:#fffbe0}
@@ -811,6 +812,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "7.4", desc: "Pendu BÊTA (allemand, français)" },
     { v: "7.3", desc: "Bataille navale BÊTA" },
     { v: "7.2", desc: "Puissance 4 des questions BÊTA" },
     { v: "7.1", desc: "Bataille de chiffres BÊTA" },
@@ -1905,6 +1907,7 @@ const GROUPS=[
   {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
+  {id:'pendu',ic:'🔤',t:'Pendu (BÊTA)',d:'Devine le mot lettre par lettre · 1–4',c:'#fff0b8'},
   {id:'navale',ic:'🚢',t:'Bataille navale (BÊTA)',d:'Réponds pour tirer · cases lues en allemand · 1–4',c:'#d9ecfb'},
   {id:'puissance4',ic:'🔴',t:'Puissance 4 (BÊTA)',d:'Réponds pour poser un jeton · 1–2',c:'#ffe3e3'},
   {id:'cartes',ic:'🃏',t:'Bataille de chiffres (BÊTA)',d:'Trouve la carte la plus grande · 2–4',c:'#e9defa'},
@@ -1927,7 +1930,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1937,7 +1940,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -1970,7 +1973,7 @@ function openGame(id){
   document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
-  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(id==='navale') navale(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
+  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(id==='navale') navale(); else if(id==='pendu') pendu(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
 }
 root.querySelector('#gBack').onclick=showHub;
@@ -2559,6 +2562,70 @@ function startNavale(cfg){
     endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:'Toute la flotte est coulée !<br>'+cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>startNavale(cfg)); }
   grid.onclick=e=>{ const b=e.target.closest('.bt-c'); if(!b||b.disabled||S.phase!=='shoot'||P(S.turn).npc) return; shoot(+b.dataset.r,+b.dataset.c); };
   turn();
+}
+/* ================= PENDU ================= */
+const PD_ART=/^(der|die|das|ein|eine|le|la|les|l[’']|un|une|des)\s*/i;
+function pdWord(it,mode){
+  if(!it||it.calc||it.conj) return null;
+  const src=mode===0?it.de:it.fr, hint=mode===0?it.fr:it.de; if(!src||!hint) return null;
+  const m=src.match(PD_ART), art=m?m[0].trim():'', w=src.replace(PD_ART,'').trim();
+  if(!/^[A-Za-zÀ-ÿß\-]{3,15}$/.test(w)) return null;
+  return {word:w,art,hint,lang:mode===0?'de':'fr',hintLang:mode===0?'fr':'de'};
+}
+const pdBase=(c,mode)=>mode===1?c.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''):c.toLowerCase();
+function pdGuess(S,ch){ const w=S.w.word; let n=0; [...w].forEach((c,i)=>{ if(pdBase(c,S.mode)===ch&&!S.shown[i]){ S.shown[i]=true; n++; } }); return n; }
+T2.pd={pdWord,pdBase,pdGuess};
+function pendu(){
+  playerSetup({title:'🔤 Pendu',npc:true,intro:'Devine le mot lettre par lettre. Chaque mauvaise lettre dessine un trait du pendu : tu as <b>7 erreurs</b>. Le mot est donné en indice dans l’autre langue. Chaque lettre trouvée rapporte 1 point, et celui qui trouve la dernière lettre gagne 3 points de plus.',min:1,max:4,defN:1,
+    extra:{label:'Quel mot deviner ?',opts:[[0,'🇩🇪 Mot allemand (indice français)'],[1,'🇫🇷 Mot français (indice allemand)']],def:0}},startPendu);
+}
+function startPendu(cfg){
+  const mode=cfg.x||0, n=cfg.players.length, ROUNDS=4;
+  let pool=pickItems(new Set(cfg.topics),cfg.grade,60).map(it=>pdWord(it,mode)).filter(Boolean);
+  const maxLen=cfg.grade==='1H'?8:cfg.grade==='4H'?11:15; const short=pool.filter(w=>w.word.length<=maxLen); if(short.length>=ROUNDS) pool=short;
+  const seen=new Set(); pool=pool.filter(w=>!seen.has(w.word.toLowerCase())&&seen.add(w.word.toLowerCase())); if(pool.length<ROUNDS){ pool=pool.concat(pool,pool); }
+  const words=shuffle(pool).slice(0,ROUNDS);
+  const S={cfg,mode,words,round:0,turn:0,scores:cfg.players.map(()=>0),w:null,shown:[],used:{},err:0,busy:false,over:false}; T2.pdg=S;
+  const P=i=>cfg.players[i], MAX=7;
+  const ROWS=mode===0?['qwertzuiopü','asdfghjklöä','yxcvbnmß']:['azertyuiop','qsdfghjklm','wxcvbn'];
+  const man=e=>{ const st=[`<path d="M10 190h120M40 190V15h90v25"/>`,`<circle cx="130" cy="58" r="18"/>`,`<path d="M130 76v55"/>`,`<path d="M130 90l-25 25"/>`,`<path d="M130 90l25 25"/>`,`<path d="M130 131l-22 35"/>`,`<path d="M130 131l22 35"/>`]; return `<svg viewBox="0 0 170 200" class="pd-svg"><g fill="none" stroke="#1d2433" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">${st.slice(0,e).join('')}</g></svg>`; };
+  body.innerHTML=`<div class="h-bar"><div id="pInfo" class="h-info"></div><button class="g-ghost" id="pQuit">↩ Quitter</button></div>
+    <div class="g-msg" id="pMsg"></div><div class="pd-top"><div id="pMan"></div><div class="pd-clue"><small id="pRound"></small><div class="pd-hint" id="pHint"></div><button class="g-ghost" id="pHear">🔊 Écouter l’indice</button></div></div>
+    <div class="pd-word" id="pWord"></div>
+    <div class="pd-kb" id="pKb">${ROWS.map(r=>`<div class="pd-r">${[...r].map(c=>`<button data-l="${c}">${c}</button>`).join('')}</div>`).join('')}</div>`;
+  const msg=t=>body.querySelector('#pMsg').innerHTML='<span>'+t+'</span>';
+  body.querySelector('#pQuit').onclick=()=>pendu();
+  body.querySelector('#pHear').onclick=()=>say(S.w.hint,S.w.hintLang);
+  function paint(){
+    body.querySelector('#pMan').innerHTML=man(S.err);
+    body.querySelector('#pWord').innerHTML=(S.w.art?`<span class="pd-art">${esc(S.w.art)}</span>`:'')+[...S.w.word].map((c,i)=>c==='-'?'<i class="pd-s dash">-</i>':`<i class="pd-s${S.shown[i]?' on':''}">${S.shown[i]?esc(c.toUpperCase()):''}</i>`).join('');
+    body.querySelectorAll('#pKb button').forEach(b=>{ const u=S.used[b.dataset.l]; b.className=u?(u==='ok'?'ok':'ko'):''; b.disabled=!!u||S.over||S.busy||P(S.turn).npc; });
+    body.querySelector('#pInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn&&!S.over)+`<b class="h-sc">${S.scores[i]}</b>`).join('');
+  }
+  function newWord(){
+    if(S.round>=ROUNDS) return finish();
+    S.w=words[S.round]; S.shown=[...S.w.word].map(c=>c==='-'); S.used={}; S.err=0; S.busy=false;
+    body.querySelector('#pRound').textContent=`Mot ${S.round+1} / ${ROUNDS}`; body.querySelector('#pHint').innerHTML=`<span>${S.w.hintLang==='fr'?'🇫🇷':'🇩🇪'}</span> ${esc(S.w.hint)}`;
+    paint(); const p=P(S.turn); msg(`${p.emoji} <b>${esc(p.name)}</b>, choisis une lettre.`); if(p.npc) npcPlay(); if(S.w.hintLang==='de'&&!FAST) setTimeout(()=>say(S.w.hint,'de'),300);
+  }
+  const done=()=>S.shown.every(Boolean);
+  async function guess(ch){
+    if(S.busy||S.over||S.used[ch]) return; S.busy=true; const p=P(S.turn), k=pdBase(ch,mode);
+    const found=pdGuess(S,k); S.used[ch]=found?'ok':'ko'; if(mode===1&&found){ [...ROWS.join('')].forEach(c=>{ if(pdBase(c,1)===k) S.used[c]='ok'; }); }
+    if(found){ S.scores[S.turn]+=found; paint(); msg(`✅ Il y a <b>${found}</b> « ${ch.toUpperCase()} » ! +${found} point${found>1?'s':''} pour ${p.emoji} <b>${esc(p.name)}</b>.`); }
+    else { S.err++; paint(); msg(`❌ Pas de « ${ch.toUpperCase()} »… ${S.err} erreur${S.err>1?'s':''} sur ${MAX}.`); }
+    await sleep(FAST?10:900);
+    if(done()){ S.scores[S.turn]+=3; paint(); S.over=true; msg(`🎉 Mot trouvé : <b>${esc((S.w.art?S.w.art+' ':'')+S.w.word)}</b> ! +3 points pour ${p.emoji} <b>${esc(p.name)}</b>.`); say((S.w.art?S.w.art+' ':'')+S.w.word,S.w.lang); return next(); }
+    if(S.err>=MAX){ S.over=true; S.shown=S.shown.map(()=>true); paint(); msg(`💀 Perdu ! Le mot était : <b>${esc((S.w.art?S.w.art+' ':'')+S.w.word)}</b>.`); say((S.w.art?S.w.art+' ':'')+S.w.word,S.w.lang); return next(); }
+    if(!found&&n>1) S.turn=(S.turn+1)%n; S.busy=false; paint();
+    const q=P(S.turn); msg(`${q.emoji} <b>${esc(q.name)}</b>${found?', rejoue !':', à toi !'}`); if(q.npc) npcPlay();
+  }
+  async function next(){ await sleep(FAST?20:2600); S.round++; S.turn=(S.turn+1)%n; S.over=false; newWord(); }
+  function npcPlay(){ sleep(FAST?10:1100).then(()=>{ const order=(mode===0?'enisratdhulcgmobwfkzvpjyx':'esaitnrulodcmpvqgfbhjxyzkw').split('').filter(c=>!S.used[c]); const ch=order[Math.floor(Math.random()*Math.min(order.length,6))]; if(ch&&!S.over) guess(ch); }); }
+  body.querySelector('#pKb').onclick=e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; guess(b.dataset.l); };
+  function finish(){ S.over=true; const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
+    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>startPendu(cfg)); }
+  newWord();
 }
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
