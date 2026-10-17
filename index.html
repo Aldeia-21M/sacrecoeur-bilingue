@@ -225,6 +225,10 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .h-lcell.ok::after{content:attr(data-em);position:absolute;right:4px;bottom:2px;font-size:22px}
 .h-lcell.shake{animation:gshake .4s;border-color:#e03131;background:#ffe3e3}
 @keyframes gshake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.ch-wrap{display:grid;gap:10px;margin-top:6px}.ch-board{position:relative;display:grid;grid-template-columns:repeat(11,1fr);grid-template-rows:repeat(11,1fr);gap:2px;aspect-ratio:1;width:min(100%,560px);margin:0 auto;padding:6px;border-radius:22px;background:#fffdf3;border:4px solid rgba(29,36,51,.15);box-sizing:border-box}
+.ch-c{border-radius:50%;background:transparent;display:block;min-width:0}.ch-c.loop{background:#fff;border:2px solid #ced4da;border-radius:10px}.ch-c.start{background:color-mix(in srgb,var(--pc,#999) 35%,#fff);border-color:var(--pc,#999)}.ch-c.star{background:#fff3bf;border-color:#f59f00;position:relative}.ch-c.star::after{content:"⭐";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,2.6vw,16px)}.ch-c.home{background:color-mix(in srgb,var(--pc) 40%,#fff);border:2px solid var(--pc);border-radius:10px}.ch-c.yard{background:color-mix(in srgb,var(--pc) 25%,#fff);border:3px dashed var(--pc)}.ch-c.mid{background:#e9ecef;border-radius:12px}.ch-c.mid::after{content:"🏆";display:flex;align-items:center;justify-content:center;height:100%;font-size:clamp(10px,3vw,20px)}
+.ch-toks{position:absolute;inset:6px;pointer-events:none}.ch-tok{position:absolute;width:calc(100%/11);height:calc(100%/11);padding:0;border:0;background:none;pointer-events:none;transition:left .15s linear,top .15s linear}.ch-tok span{display:flex;align-items:center;justify-content:center;width:86%;height:86%;margin:7%;border-radius:50%;background:var(--pc);border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25);font-size:clamp(10px,3.4vw,22px);line-height:1}.ch-tok.go{pointer-events:auto;cursor:pointer;z-index:3}.ch-tok.go span{animation:chpulse .7s infinite alternate;outline:3px solid #fff;outline-offset:1px}@keyframes chpulse{to{transform:scale(1.22)}}
+.ch-side{display:grid;gap:8px;justify-items:center}.ch-die{display:flex;align-items:center;gap:12px;justify-content:center;min-height:76px;flex-wrap:wrap}.ch-dbtn{min-height:64px;padding:0 22px;border-radius:18px;border:3px solid var(--pc,#1f5fd6);background:color-mix(in srgb,var(--pc,#1f5fd6) 18%,#fff);font-weight:900;font-size:20px;font-family:inherit;cursor:pointer;color:#1d2433}.ch-dface{display:flex;flex-direction:column;align-items:center;justify-content:center;width:84px;height:84px;border-radius:18px;background:#fff;border:4px solid #1d2433;box-shadow:0 4px 0 rgba(0,0,0,.2)}.ch-dface b{font-size:40px;line-height:1}.ch-dface span{font-size:13px;font-weight:800;color:#1f5fd6}
 .h-track{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
 .h-lane{display:grid;grid-template-columns:minmax(70px,26%) 1fr;gap:8px;align-items:center;padding:6px 8px;border-radius:16px;background:#fff;border:3px solid rgba(29,36,51,.14)}
 .h-lane.act{border-color:var(--pc);background:#fffbe0}
@@ -803,6 +807,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "7.0", desc: "Petits chevaux BÊTA (tablette)" },
     { v: "6.8", desc: "Bouton Quitter le jeu" },
     { v: "6.7", desc: "Bouton Passer aux briques" },
     { v: "6.6", desc: "Clavier à l’écran pour écrire les nombres" },
@@ -1893,6 +1898,7 @@ const GROUPS=[
   {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
+  {id:'chevaux',ic:'🐴',t:'Petits chevaux (BÊTA)',d:'Dé, 6 pour sortir, cases ⭐ questions · 2–4',c:'#ffe8cc'},
   {id:'memory',ic:'🃏',t:'Memory',d:'Paires français ↔ allemand · 1–4',c:'#d9ecfb'},
   {id:'loto',ic:'🎧',t:'Loto',d:'Écoute et touche la bonne case · 1–6',c:'#fff0b8'},
   {id:'domino',ic:'🎴',t:'Dominos',d:'Image, français, allemand · seul ou à deux',c:'#fde0ec'}]],
@@ -1911,7 +1917,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1921,7 +1927,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -1954,7 +1960,7 @@ function openGame(id){
   document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
-  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
+  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
 }
 root.querySelector('#gBack').onclick=showHub;
@@ -2196,6 +2202,124 @@ function startRace(cfg){
   function winRace(){ const p=cfg.players[R.turn];
     endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Tu franchis la ligne d’arrivée en premier !',color:p.color},()=>startRace(cfg)); }
   ask();
+}
+/* ================= PETITS CHEVAUX ================= */
+const CH={
+ LOOP:[[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[4,0],[5,0],[6,0],[6,1],[6,2],[6,3],[6,4],[7,4],[8,4],[9,4],[10,4],[10,5],[10,6],[9,6],[8,6],[7,6],[6,6],[6,7],[6,8],[6,9],[6,10],[5,10],[4,10],[4,9],[4,8],[4,7],[4,6],[3,6],[2,6],[1,6],[0,6],[0,5]],
+ START:[0,10,20,30],
+ HOME:[[[1,5],[2,5],[3,5],[4,5]],[[5,1],[5,2],[5,3],[5,4]],[[9,5],[8,5],[7,5],[6,5]],[[5,9],[5,8],[5,7],[5,6]]],
+ YARD:[[[0,0],[1,0],[0,1],[1,1]],[[9,0],[10,0],[9,1],[10,1]],[[9,9],[10,9],[9,10],[10,10]],[[0,9],[1,9],[0,10],[1,10]]],
+ STARS:[4,14,24,34],
+ SEATS:{2:[0,2],3:[0,1,2],4:[0,1,2,3]}
+};
+const chAbs=(seat,pos)=>(CH.START[seat]+pos)%40;
+const chCell=(seat,pos,hi)=>pos<0?CH.YARD[seat][hi]:pos>=40?CH.HOME[seat][pos-40]:CH.LOOP[chAbs(seat,pos)];
+function chLegal(S,pi,die){
+  const hs=S.h[pi], out=[];
+  hs.forEach((pos,hi)=>{ let to; if(pos<0){ if(die!==6) return; to=0; } else { to=pos+die; if(to>43) return; }
+    if(hs.some((q,j)=>j!==hi&&q===to)) return; out.push({hi,to}); });
+  return out;
+}
+function chApply(S,pi,m){
+  S.h[pi][m.hi]=m.to; let hit=null;
+  if(m.to<=39){ const a=chAbs(S.seat[pi],m.to);
+    S.h.forEach((o,pj)=>{ if(pj===pi) return; o.forEach((q,hj)=>{ if(q>=0&&q<=39&&chAbs(S.seat[pj],q)===a){ o[hj]=-1; hit={pj,hj}; } }); }); }
+  return hit;
+}
+const chWon=(S,pi)=>S.h[pi].every(p=>p>=40);
+const chOnStar=(S,pi,pos)=>pos>=0&&pos<=39&&CH.STARS.includes(chAbs(S.seat[pi],pos));
+function chPick(S,pi,moves){   // choix de l'ordinateur : capture > maison > sortir > avancer le plus loin
+  const sc=m=>{ let s=S.h[pi][m.hi]+1; if(m.to>=40) s+=60; if(S.h[pi][m.hi]<0) s+=40;
+    if(m.to<=39){ const a=chAbs(S.seat[pi],m.to); if(S.h.some((o,pj)=>pj!==pi&&o.some(q=>q>=0&&q<=39&&chAbs(S.seat[pj],q)===a))) s+=100; } return s; };
+  return moves.slice().sort((a,b)=>sc(b)-sc(a))[0];
+}
+T2.chLogic={CH,chLegal,chApply,chWon,chPick,chAbs};
+function chevaux(){
+  playerSetup({title:'🐴 Petits chevaux',npc:true,intro:'Lance le dé : il faut un <b>6</b> (sechs) pour sortir un cheval. Fais le tour du plateau et rentre tes chevaux à la maison. Si tu tombes sur un cheval adverse, il retourne à l’écurie ! Sur une case <b>⭐</b>, réponds à une question : bonne réponse = tu rejoues. Chaque joueur choisit sa classe.',min:2,max:4,defN:2,perGrade:true,
+    extra:{label:'Chevaux par joueur',opts:[[2,'2 chevaux (rapide)'],[4,'4 chevaux']],def:2}},startChevaux);
+}
+function startChevaux(cfg){
+  const n=cfg.players.length, seat=CH.SEATS[n], NH=cfg.x||2;
+  const S={cfg,seat,h:cfg.players.map(()=>Array(NH).fill(-1)),turn:0,die:0,phase:'roll',bonus:false,tries:0,busy:false,legal:[],NH}; T2.chev=S;
+  const cell=(c,r,cls,style)=>`<i class="ch-c ${cls||''}" style="grid-column:${c+1};grid-row:${r+1};${style||''}"></i>`;
+  let cells='';
+  CH.LOOP.forEach(([c,r],i)=>{ const si=CH.START.indexOf(i), star=CH.STARS.includes(i); const own=si>=0?seat.indexOf(si):-1;
+    cells+=cell(c,r,'loop'+(star?' star':'')+(si>=0?' start':''),own>=0?`--pc:${cfg.players[own].color}`:''); });
+  seat.forEach((s,pi)=>{ const col=cfg.players[pi].color;
+    CH.HOME[s].forEach(([c,r])=>{ cells+=cell(c,r,'home',`--pc:${col}`); });
+    CH.YARD[s].forEach(([c,r],k)=>{ if(k<NH) cells+=cell(c,r,'yard',`--pc:${col}`); }); });
+  cells+=cell(5,5,'mid','');
+  body.innerHTML=`<div class="h-bar"><div id="chInfo" class="h-info"></div><button class="g-ghost" id="chQuit">↩ Quitter</button></div>
+    <div class="ch-wrap"><div class="ch-board" id="chBoard">${cells}<div class="ch-toks" id="chToks"></div></div>
+    <div class="ch-side"><div class="ch-die" id="chDie"><button class="ch-dbtn" id="chRoll">🎲 Lancer le dé</button><div class="ch-dface" id="chFace" hidden></div></div>
+    <div class="g-msg" id="chMsg"></div></div></div><div class="h-qbox" id="chQ" hidden></div>`;
+  const toks=body.querySelector('#chToks'), msg=t=>body.querySelector('#chMsg').innerHTML='<span>'+t+'</span>', face=body.querySelector('#chFace'), rollB=body.querySelector('#chRoll');
+  body.querySelector('#chQuit').onclick=()=>chevaux();
+  const P=pi=>cfg.players[pi];
+  function paint(){
+    toks.innerHTML=S.h.map((hs,pi)=>hs.map((pos,hi)=>{ const [c,r]=chCell(seat[pi],pos,hi), go=S.phase==='move'&&S.turn===pi&&S.legal.some(m=>m.hi===hi);
+      return `<button class="ch-tok${go?' go':''}${S.turn===pi?' mine':''}" data-pi="${pi}" data-hi="${hi}" style="left:${c*100/11}%;top:${r*100/11}%;--pc:${P(pi).color}" aria-label="cheval de ${esc(P(pi).name)}"><span>🐴</span></button>`; }).join('')).join('');
+    body.querySelector('#chInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn)+`<b class="h-sc">${S.h[i].filter(x=>x>=40).length}/${NH}</b>`).join('');
+    rollB.hidden=S.phase!=='roll'||P(S.turn).npc; rollB.style.setProperty('--pc',P(S.turn).color);
+  }
+  function showDie(v){ face.hidden=false; face.innerHTML=`<b>${v}</b><span>${numWord(v)}</span>`; }
+  async function rollDie(){
+    if(S.busy||S.phase!=='roll') return; S.busy=true; const p=P(S.turn);
+    if(!FAST){ for(let k=0;k<7;k++){ showDie(1+rnd(6)); await sleep(70); } }
+    S.die=1+rnd(6); showDie(S.die); say(numWord(S.die),'de');
+    S.legal=chLegal(S,S.turn,S.die); S.phase='move'; S.busy=false; paint();
+    if(!S.legal.length){
+      const stuck=S.h[S.turn].every(x=>x<0);
+      if(stuck&&S.tries<2&&S.die!==6){ S.tries++; msg(`${p.emoji} <b>${esc(p.name)}</b> : ${S.die} (${numWord(S.die)}). Il faut un <b>6</b> pour sortir. Essai ${S.tries+1}/3…`); S.phase='roll'; paint(); if(p.npc) setTimeout(rollDie,FAST?20:900); return; }
+      msg(`${p.emoji} <b>${esc(p.name)}</b> : ${S.die} (${numWord(S.die)}). Aucun cheval ne peut avancer…`); await sleep(FAST?20:1400); return nextTurn(false);
+    }
+    if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> a fait ${S.die} (${numWord(S.die)}).`); await sleep(FAST?20:900); return doMove(chPick(S,S.turn,S.legal)); }
+    if(S.legal.length===1){ msg(`${p.emoji} <b>${esc(p.name)}</b> : ${S.die} (${numWord(S.die)}). Un seul coup possible !`); await sleep(FAST?20:900); return doMove(S.legal[0]); }
+    msg(`${p.emoji} <b>${esc(p.name)}</b> : ${S.die} (${numWord(S.die)}). Touche le cheval à avancer !`);
+  }
+  async function doMove(m){
+    if(S.busy) return; S.busy=true; const pi=S.turn, p=P(pi), from=S.h[pi][m.hi]; S.phase='anim'; S.legal=[]; paint();
+    if(from>=0){ for(let q=from+1;q<=m.to;q++){ S.h[pi][m.hi]=q; paint(); await sleep(FAST?0:150); } }
+    const hit=chApply(S,pi,m); paint();
+    if(hit){ msg(`💥 <b>${esc(p.name)}</b> renvoie un cheval de <b>${esc(P(hit.pj).name)}</b> à l’écurie !`); await sleep(FAST?20:1300); }
+    else if(m.to>=40) { msg(`🏠 Un cheval de <b>${esc(p.name)}</b> est à la maison !`); await sleep(FAST?20:900); }
+    S.busy=false;
+    if(chWon(S,pi)) return win(pi);
+    if(chOnStar(S,pi,m.to)) return question(pi);
+    nextTurn(S.die===6);
+  }
+  function nextTurn(bonus){
+    if(!bonus) S.turn=(S.turn+1)%n; else msg(`${P(S.turn).emoji} <b>${esc(P(S.turn).name)}</b> rejoue !`);
+    S.phase='roll'; S.tries=0; S.legal=[]; S.busy=false; paint();
+    if(P(S.turn).npc) setTimeout(rollDie,FAST?20:(bonus?1200:900));
+    else if(!bonus) msg(`${P(S.turn).emoji} <b>${esc(P(S.turn).name)}</b>, à toi de lancer le dé !`);
+  }
+  function question(pi){
+    const p=P(pi), box=body.querySelector('#chQ'); S.phase='q'; box.hidden=false; box.style.setProperty('--pc',p.color);
+    const done=ok=>{ box.hidden=true; box.innerHTML=''; nextTurn(ok||S.die===6); };
+    if(p.npc){ box.innerHTML=`<div class="g-qtop"><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+      sleep(FAST?20:1400).then(async()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il rejoue.`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; await sleep(FAST?20:1500); done(ok); }); return; }
+    const q=makeQuestion(cfg.topics,p.gr);
+    box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div>
+      <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
+      <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
+    D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
+    if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
+    if(!FAST) box.scrollIntoView({behavior:'smooth',block:'nearest'});
+    let ans=false;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+      box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
+      const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu rejoues !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}`;
+      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
+      const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>done(ok); };
+  }
+  function win(pi){ const p=P(pi); S.phase='over';
+    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`Tous les chevaux de <b>${esc(p.name)}</b> sont rentrés à la maison !`+(n>2?'<br>'+cfg.players.map((x,i)=>`${x.emoji} ${esc(x.name)} : <b>${S.h[i].filter(y=>y>=40).length}/${NH}</b>`).join('<br>'):''),color:p.color},()=>startChevaux(cfg)); }
+  toks.onclick=e=>{ const b=e.target.closest('.ch-tok.go'); if(!b||S.busy||S.phase!=='move'||P(S.turn).npc) return; const m=S.legal.find(x=>x.hi===+b.dataset.hi); if(m) doMove(m); };
+  rollB.onclick=rollDie;
+  msg(`${P(0).emoji} <b>${esc(P(0).name)}</b>, lance le dé ! Il faut un 6 pour sortir un cheval.`); paint();
+  if(P(0).npc) setTimeout(rollDie,600);
 }
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
