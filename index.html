@@ -647,6 +647,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .sn-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.sn-opts button{min-height:104px;border-radius:20px;border:4px solid rgba(29,36,51,.18);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:4px}
 .sn-opts button.ok{background:#bfeebf;border-color:#2f9e44}.sn-opts button.ko{background:#ffc9c9;border-color:#e03131;opacity:.55}
 .sn-og{font-size:clamp(24px,7.4vw,34px);font-weight:900;color:var(--c);text-align:center;line-height:1.1}.sn-oe{font-size:44px;line-height:1}.sn-oe.big{font-size:64px}.sn-ow{font-size:15px;font-weight:700}
+.sn-var{margin-bottom:14px}.sn-var .sn-words button{min-width:0}.sn-var .sn-w{font-size:clamp(15px,4.2vw,20px);overflow-wrap:anywhere;min-width:0}.sn-sub{text-align:center;font-weight:700;color:#4a5164;margin:4px 0}.sn-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin-top:12px}.sn-cols button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;padding:8px;border-radius:18px;border:3px solid var(--c);background:#fff;cursor:pointer;font-family:inherit}.sn-cols b{font-size:1.15rem;color:var(--c)}.sn-cols span{font-size:.78rem;color:#4a5164;word-break:break-word}.sn-cols button.ok{background:color-mix(in srgb,var(--c) 18%,#fff)}.sn-cols button.ko{background:#ffe3e3;opacity:.5}
 .sn-menu button.sn-ex{background:#ffe3e3;min-height:120px}.sn-menu button.wide{grid-column:1/-1;min-height:110px;background:#dff4dc}.sn-txt p{font-size:clamp(24px,6.6vw,34px);line-height:1.6;margin:8px 0;font-weight:700;color:#1d2433;cursor:pointer}.sn-leg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px}.sn-leg span{background:color-mix(in srgb,var(--c) 16%,#fff);color:var(--c);font-weight:900;border-radius:10px;padding:2px 10px}
 .sn-oth{margin:18px 2px 8px;font-size:18px}.sn-chips{display:flex;flex-wrap:wrap;gap:8px}.sn-chips button{min-width:58px;min-height:48px;padding:4px 14px;border-radius:14px;border:3px solid var(--c);background:#fff;color:var(--c);font-weight:900;font-size:18px;cursor:pointer}
 </style>
@@ -742,6 +743,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "4.7", desc: "Lettres pièges : tri des mots par lettre" },
     { v: "4.6", desc: "Lecture : lettre X, lettres pièges, plus de sons" },
     { v: "4.5", desc: "Lecture : les sons et textes à lire (4H)" }
   ] },
@@ -4954,7 +4956,7 @@ const ADD={
 const X0='Ici, le x se prononce comme dans', XM='Ici, le x ne se prononce pas, comme dans';
 const EXD=[
  ['xks','x = ks','x','ks','x',X0,'taxi',[['🚕','ta[x]i'],['🥊','bo[x]e'],['🥤','mi[x]eur'],['📝','te[x]te'],['🎷','sa[x]ophone'],['💎','lu[x]e'],['🧭','e[x]plorer'],['🏔️','e[x]pédition'],['⭐','e[x]tra'],['🙏','e[x]cuse'],['🧑‍🔬','e[x]pert'],['📖','le[x]ique'],['🏷️','ta[x]e'],['📌','fi[x]er']]],
- ['xgz','x = gz','x','gz','x',X0,'examen',[['📝','e[x]amen'],['📋','e[x]emple'],['🎯','e[x]act'],['🏋️','e[x]ercice'],['🌟','e[x]ister'],['☝️','e[x]iger'],['🏝️','e[x]otique'],['🔷','he[x]agone'],['😮','e[x]agérer'],['🚪','e[x]il']]],
+ ['xgz','x = gs','x','gz','x',X0,'examen',[['📝','e[x]amen'],['📋','e[x]emple'],['🎯','e[x]act'],['🏋️','e[x]ercice'],['🌟','e[x]ister'],['☝️','e[x]iger'],['🏝️','e[x]otique'],['🔷','he[x]agone'],['😮','e[x]agérer'],['🚪','e[x]il'],['🎼','[x]ylophone']]],
  ['xs','x = s','x','s','x',X0,'six',[['6️⃣','si[x]'],['🔟','di[x]'],['🕰️','soi[x]ante'],['🏙️','Bru[x]elles'],['🏛️','Au[x]erre']]],
  ['xz','x = z','x','z','x',X0,'deuxième',[['2️⃣','deu[x]ième'],['6️⃣','si[x]ième'],['🔟','di[x]ième'],['1️⃣8️⃣','di[x]-huit'],['1️⃣9️⃣','di[x]-neuf']]],
  ['xmu','x = muet','x','mu','x',XM,'deux',[['2️⃣','deu[x]'],['🏷️','pri[x]'],['🗣️','voi[x]'],['😄','heureu[x]'],['👴','vieu[x]'],['🧸','dou[x]'],['😒','jalou[x]'],['🙅','fau[x]'],['🤔','choi[x]'],['✝️','croi[x]'],['🕊️','pai[x]'],['🥜','noi[x]'],['😃','joyeu[x]'],['😨','peureu[x]']]],
@@ -5028,19 +5030,53 @@ let stars=0; try{ stars=+localStorage.getItem('dl-pt-stars')||0; }catch(e){}
 const addStars=n=>{ try{ localStorage.setItem('dl-pt-stars',String((+localStorage.getItem('dl-pt-stars')||0)+n)); }catch(e){} };
 
 function menu(){
-  try{ speechSynthesis.cancel(); }catch(e){}
+  try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null;
   root.innerHTML=`<div class="mx-head"><h2>📖 Lecture</h2><p>Les sons : chaque groupe de lettres fait un son. <b>4H</b></p></div>
   <div class="sn-menu"><button data-a="learn"><i>🔊</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="exl" class="sn-ex"><i>⚠️</i><span>Lettres pièges</span></button><button data-a="exq" class="sn-ex"><i>🎯</i><span>Entraîne-toi aux pièges</span></button><button data-a="read" class="wide"><i>📚</i><span>Lis un texte</span></button></div>`;
   root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ({learn:()=>{EX=false;learn();},quiz:()=>{EX=false;quiz();},exl:()=>{EX=true;learn();},exq:()=>{EX=true;quiz();},read})[b.dataset.a](); };
 }
 function back(f,txt){ return `<button class="g-ghost sn-back" id="snB">${txt||'← Menu'}</button>`; }
+const FL=f=>f==='en'?'um · en':f;
 function learn(){
-  const pg=P();
-  const btn=g=>`<button data-i="${G.indexOf(g)}" style="--c:${g.c}"><b>${g.l}</b><span>${g.s}</span></button>`;
-  const body=EX?Object.keys(EXFN).filter((k,n,a)=>a.indexOf(k)===n).map(k=>{ const L=pg.filter(g=>(g.fam===k)||(k==='um'&&g.fam==='en')); return k==='um'?'':`<h3 class="sn-oth">${EXFN[k]}</h3><div class="sn-grid">${(k==='en'?pg.filter(g=>g.fam==='en'):L).map(btn).join('')}</div>`; }).join(''):`<div class="sn-grid">${pg.map(btn).join('')}</div>`;
-  root.innerHTML=back()+`<div class="mx-head"><h2>${EX?'⚠️ Lettres pièges':'🔊 Découvre les sons'}</h2><p>${EX?'Une même lettre peut faire plusieurs sons. Compare !':'Touche un son pour l’entendre.'}</p></div>${body}`;
+  root.onclick=null; const pg=P();
+  if(EX){ const fams=[...new Set(pg.map(g=>g.fam))];
+    root.innerHTML=back()+`<div class="mx-head"><h2>⚠️ Lettres pièges</h2><p>Choisis une lettre : tu verras tous ses sons côte à côte.</p></div><div class="sn-grid">${fams.map(f=>{ const L=pg.filter(g=>g.fam===f); return `<button data-f="${f}" style="--c:${L[0].c}"><b>${FL(f)}</b><span>${L.map(g=>g.l.split(' = ')[1]).join(' · ')}</span></button>`; }).join('')}</div>`;
+    root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+    root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(b) famPage(b.dataset.f); }; return; }
+  root.innerHTML=back()+`<div class="mx-head"><h2>🔊 Découvre les sons</h2><p>Touche un son pour l’entendre.</p></div><div class="sn-grid">${pg.map(g=>`<button data-i="${G.indexOf(g)}" style="--c:${g.c}"><b>${g.l}</b><span>${g.s}</span></button>`).join('')}</div>`;
   root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
-  root.onclick=e=>{ const b=e.target.closest('.sn-grid button'); if(b) detail(G[+b.dataset.i]); };
+  root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(b) detail(G[+b.dataset.i]); };
+}
+function famPage(f){
+  const L=P().filter(g=>g.fam===f); const fams=[...new Set(P().map(g=>g.fam))];
+  root.innerHTML=back(0,'← Les lettres')+`<div class="mx-head"><h2>${FL(f)}</h2><p>Touche pour écouter. Compare bien !</p></div>`+L.map((g,gi)=>`<div class="sn-card sn-var" style="--c:${g.c}"><button class="sn-hint" data-h="${gi}"><span>🔊 <b>${g.l}</b></span> <small>${g.mn}</small></button><div class="sn-words">${g.w.map((w,i)=>`<button data-g="${gi}" data-i="${i}"><i>${w.e}</i><span class="sn-w">${hl(w.m,g.c)}</span></button>`).join('')}</div></div>`).join('')+`<button class="mx-go" id="snS">🧺 Classe les mots</button><h3 class="sn-oth">Une autre lettre</h3><div class="sn-chips" id="snC">${fams.filter(x=>x!==f).map(x=>`<button data-f="${x}" style="--c:${P().find(g=>g.fam===x).c}">${FL(x)}</button>`).join('')}</div>`;
+  root.querySelector('#snB').onclick=learn; window.scrollTo(0,0);
+  root.onclick=e=>{ const h=e.target.closest('[data-h]'); if(h) return seq(intro(L[+h.dataset.h]));
+    const w=e.target.closest('[data-g]'); if(w){ const x=L[+w.dataset.g].w[+w.dataset.i]; seq([{t:x.p,l:'fr'}]); w.classList.add('on'); setTimeout(()=>w.classList.remove('on'),1200); return; }
+    const c=e.target.closest('#snC button'); if(c) return famPage(c.dataset.f); if(e.target.closest('#snS')) sortEx(f); };
+}
+function sortEx(f){
+  root.onclick=null; const L=P().filter(g=>g.fam===f);
+  let pool=[]; L.forEach(g=>shuf(g.w).slice(0,3).forEach(w=>pool.push(w))); pool=shuf(pool).slice(0,8);
+  const S={i:0,ok:0,first:true,locked:false,done:L.map(()=>[])};
+  const dots=()=>pool.map((_,k)=>`<i class="${k<S.i?'ok':k===S.i?'cur':''}"></i>`).join('');
+  function show(){
+    if(S.i>=pool.length) return end(); const w=pool[S.i]; S.first=true; S.locked=false; const right=L.indexOf(w.g);
+    root.innerHTML=back(0,'← '+FL(f))+`<div class="sn-card q"><div class="pt-dots">${dots()}</div><p class="sn-sub">Écoute le mot : dans quelle colonne ?</p><div class="sn-pic">${w.e}</div><div class="sn-wd big">${hl(w.m,'#495057')}</div><button class="sn-ask" id="snA">🔊 <span>Écouter le mot</span></button>
+      <div class="sn-cols" id="snO">${L.map((g,k)=>`<button data-k="${k}" style="--c:${g.c}"><b>${g.l}</b><span>${S.done[k].map(x=>x.p).join(' · ')}</span></button>`).join('')}</div></div>`;
+    root.querySelector('#snB').onclick=()=>famPage(f); window.scrollTo(0,0);
+    const h=()=>seq([{t:w.p,l:'fr'}]); root.querySelector('#snA').onclick=h; if(!FAST) setTimeout(h,250);
+    window.DLctx={opts:()=>root.querySelectorAll('#snO button'),correct:right};
+    root.querySelector('#snO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const k=+b.dataset.k;
+      if(k===right){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.done[k].push(w); S.i++; DLverdict(true,[{t:w.p}]); await sleep(FAST?50:2000); show(); }
+      else { S.first=false; b.classList.add('ko'); b.disabled=true; DLverdict(false,[{t:w.p}],false,{wrong:{t:'ce son',l:'fr'}}); } };
+  }
+  function end(){
+    const st=S.ok>=pool.length-1?3:S.ok>=pool.length/2?2:1; addStars(st);
+    root.innerHTML=`<div class="sn-card"><div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>Bravo !</h3><button class="mx-go big" id="snAg">▶ Encore !</button><button class="g-ghost" id="snM" style="margin-top:10px">← ${FL(f)}</button></div></div>`;
+    say('Bravo ! Tu as gagné des étoiles !'); root.querySelector('#snAg').onclick=()=>sortEx(f); root.querySelector('#snM').onclick=()=>famPage(f);
+  }
+  show();
 }
 function detail(g){
   root.innerHTML=back(0,'← Tous les sons')+`<div class="sn-card" style="--c:${g.c}"><div class="sn-big">${g.l.split(' · ').map(x=>`<span>${x}</span>`).join('')}</div>
