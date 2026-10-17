@@ -625,6 +625,47 @@ body.has-on #whoPill{bottom:calc(46px + env(safe-area-inset-bottom,0px))}body.ha
 #dock #onbar .ob-b:only-child{border-radius:0}
 body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
 #onMenu{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+.pt-ph{text-align:center;font-weight:800;font-size:20px;padding:6px 10px;border-radius:999px;margin:0 auto 8px;width:max-content}.pt-ph.fr{background:#dbe7ff;color:#1f3f9a}.pt-ph.de{background:#fff0b8;color:#7a5200}
+.pt-prog{height:12px;border-radius:99px;background:#e2e7ef;overflow:hidden}.pt-prog i{display:block;height:100%;background:#2f9e44;border-radius:99px;transition:width .3s}.pt-pc{text-align:center;margin:4px 0 8px;font-weight:700;color:#4a5568}
+.pt-big{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;min-height:230px;border-radius:26px;border:4px solid rgba(29,36,51,.18);background:#fff;cursor:pointer;padding:10px}
+.pt-L{font-size:clamp(84px,26vw,130px);font-weight:800;line-height:1;color:#1d2433}.pt-I{font-size:clamp(60px,18vw,88px);line-height:1}.pt-big .pt-things{margin:0}.pt-big .pt-things.sm{font-size:clamp(22px,6.2vw,30px);letter-spacing:0}
+.pt-lsw{text-align:center;font-size:26px;margin:10px 0}
+.pt-lsn{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:10px}.pt-lsn button{min-height:72px;border-radius:20px;border:3px solid #1f5fd6;background:#fff;color:#1f5fd6;font-size:40px;font-weight:800;cursor:pointer}.pt-lsn button.go{background:#1f5fd6;color:#fff}.pt-lsn button:disabled{opacity:.35}
+#p-sons{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
+.sn-menu{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sn-menu button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:150px;border-radius:24px;border:3px solid rgba(29,36,51,.15);background:#fff0b8;font-size:20px;font-weight:800;cursor:pointer}.sn-menu button:nth-child(2){background:#d9ecfb}.sn-menu i{font-style:normal;font-size:56px}
+.sn-back{margin:4px 0 8px}
+.sn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sn-grid button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:96px;border-radius:20px;border:3px solid var(--c);background:#fff;cursor:pointer;padding:6px}.sn-grid b{font-size:clamp(20px,6vw,28px);color:var(--c);line-height:1.1;text-align:center}.sn-grid span{font-size:14px;color:#4a5568;font-weight:700}
+.sn-card{padding:12px;border-radius:22px;border:3px solid var(--c,#1971c2);background:#fff}
+.sn-big{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:6px 0 10px}.sn-big span{font-size:clamp(54px,18vw,86px);font-weight:900;line-height:1.05;color:var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);border-radius:20px;padding:2px 18px}.sn-big.sm span{font-size:clamp(40px,13vw,60px)}
+.sn-hint{display:flex;flex-direction:column;align-items:center;width:100%;border:2px solid var(--c);border-radius:18px;background:#fff;padding:8px;font-size:22px;cursor:pointer}.sn-hint small{font-size:15px;color:#4a5568}.sn-hint b{color:var(--c);font-size:1.3em}
+.sn-words{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.sn-words button{min-width:0;overflow:hidden;display:flex;align-items:center;gap:10px;min-height:78px;border-radius:18px;border:3px solid rgba(29,36,51,.15);background:#fffdf5;padding:6px 10px;cursor:pointer;text-align:left}.sn-words button.on{border-color:var(--c);background:#fff3c4}.sn-words i{font-style:normal;font-size:38px}
+.sn-w,.sn-wd{font-size:clamp(18px,4.8vw,24px);font-weight:700;color:#1d2433}.sn-m{font-size:1.38em;font-weight:900;color:var(--c);background:color-mix(in srgb,var(--c) 16%,#fff);border-radius:8px;padding:0 3px;margin:0 1px}
+.sn-m0{font-size:1em}
+.sn-pic{font-size:78px;text-align:center;line-height:1.1}.sn-wd{text-align:center;font-size:clamp(28px,8vw,40px);margin:4px 0 8px}.sn-wd.big{font-size:clamp(34px,10vw,52px);margin:12px 0}
+.sn-snd{text-align:center;font-size:22px;font-weight:800;margin-bottom:8px}
+.sn-ask{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:54px;padding:6px 12px;border-radius:999px;border:2px solid #1f5fd6;background:#fff;color:#1f5fd6;font-weight:800;font-size:18px;cursor:pointer}
+.sn-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.sn-opts button{min-height:104px;border-radius:20px;border:4px solid rgba(29,36,51,.18);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:4px}
+.sn-opts button.ok{background:#bfeebf;border-color:#2f9e44}.sn-opts button.ko{background:#ffc9c9;border-color:#e03131;opacity:.55}
+.sn-og{font-size:clamp(24px,7.4vw,34px);font-weight:900;color:var(--c);text-align:center;line-height:1.1}.sn-oe{font-size:44px;line-height:1}.sn-oe.big{font-size:64px}.sn-ow{font-size:15px;font-weight:700}
+#p-genre{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
+.gn-prog{text-align:center;font-weight:800;color:#2b8a3e;margin:2px 0 10px}
+.gn-grid button small{font-size:.72rem;color:#4a5164;font-weight:700}.gn-grid button b{font-size:1.9rem}
+.gn-chips{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gn-chip{position:relative;display:flex;align-items:center;gap:8px;min-height:68px;padding:8px 10px;border-radius:18px;border:3px solid var(--c);background:#fff;cursor:pointer;font-family:inherit;text-align:left}.gn-chip.on{background:color-mix(in srgb,var(--c) 14%,#fff)}
+.gn-e{font-size:30px}.gn-t{display:flex;flex-direction:column;font-size:clamp(17px,4.6vw,21px);font-weight:800;color:#1d2433;line-height:1.15;min-width:0;overflow-wrap:anywhere}.gn-t small{font-size:.75em;color:#4a5164;font-weight:600}
+.gn-a{font-style:normal;font-weight:900;border-radius:8px;padding:0 5px;margin-right:2px}.gn-a.m{background:#d0ebff;color:#1864ab}.gn-a.f{background:#ffdeeb;color:#a61e4d}
+.gn-chip em{position:absolute;right:8px;top:4px;font-style:normal;color:#2f9e44;font-weight:900}
+.gn-lab{text-align:center;margin:4px 0 8px;color:#4a5164;font-weight:700}
+.gn-top{display:flex;gap:8px;align-items:center}.gn-w{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;border:0;background:#fff0b8;border-radius:20px;padding:10px 12px;cursor:pointer;font-family:inherit;min-height:84px}.gn-w i{font-style:normal;font-size:44px}.gn-w b{font-size:clamp(26px,7.5vw,36px);color:#1d2433}
+.gn-i{width:52px;min-height:52px;border-radius:50%;border:2px solid #1971c2;background:#e7f1ff;font-size:24px;cursor:pointer;flex:none}
+.gn-q{margin:14px 0 6px;color:#1d2433;font-size:1.05rem}
+.gn-cells{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gn-cells button{min-height:62px;border-radius:16px;border:3px solid rgba(29,36,51,.2);background:#fff;font:800 clamp(16px,4.4vw,19px) inherit;font-family:inherit;color:#1d2433;cursor:pointer}
+.gn-cells button.ok{background:#b2f2bb;border-color:#2f9e44}.gn-cells button.ko{background:#ffc9c9;border-color:#e03131}.gn-cells button:disabled{cursor:default}
+.gn-why{margin:12px 2px 0;padding:10px 12px;border-radius:14px;background:#fff4e6;color:#5c3b00;font-weight:600;line-height:1.4}.gn-why.info{background:#e7f1ff;color:#123a6b}.gn-why.good{background:#d3f9d8;color:#0b5d1e}
+.gn-rec{display:flex;align-items:center;gap:10px;padding:8px 10px;margin:6px 0;border-radius:14px;background:#fff;border:2px solid rgba(29,36,51,.12);font-weight:700;text-align:left}.gn-rec i{font-style:normal;font-size:26px}.gn-rec span{flex:1}.gn-rec.ok{border-color:#2f9e44;background:#f3fbf4}.gn-rec.mid{border-color:#f08c00;background:#fff9ec}
+.gn-rule{background:#fff;border:3px solid var(--c);border-radius:20px;padding:12px;margin:10px 0;cursor:pointer}.gn-rule h4{margin:0 0 4px;color:var(--c)}.gn-rule p{margin:2px 0;color:#1d2433}.gn-rule .ex{font-weight:800;font-size:1.1rem}
+.sn-var{margin-bottom:14px}.sn-var .sn-words button{min-width:0}.sn-var .sn-w{font-size:clamp(15px,4.2vw,20px);overflow-wrap:anywhere;min-width:0}.sn-sub{text-align:center;font-weight:700;color:#4a5164;margin:4px 0}.sn-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin-top:12px}.sn-cols button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;padding:8px;border-radius:18px;border:3px solid var(--c);background:#fff;cursor:pointer;font-family:inherit}.sn-cols b{font-size:1.15rem;color:var(--c)}.sn-cols span{font-size:.78rem;color:#4a5164;word-break:break-word}.sn-cols button.ok{background:color-mix(in srgb,var(--c) 18%,#fff)}.sn-cols button.ko{background:#ffe3e3;opacity:.5}
+.sn-menu button.sn-ex{background:#ffe3e3;min-height:120px}.sn-menu button.wide{grid-column:1/-1;min-height:110px;background:#dff4dc}.sn-txt p{font-size:clamp(24px,6.6vw,34px);line-height:1.6;margin:8px 0;font-weight:700;color:#1d2433;cursor:pointer}.sn-leg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px}.sn-leg span{background:color-mix(in srgb,var(--c) 16%,#fff);color:var(--c);font-weight:900;border-radius:10px;padding:2px 10px}
+.sn-oth{margin:18px 2px 8px;font-size:18px}.sn-chips{display:flex;flex-wrap:wrap;gap:8px}.sn-chips button{min-width:58px;min-height:48px;padding:4px 14px;border-radius:14px;border:3px solid var(--c);background:#fff;color:var(--c);font-weight:900;font-size:18px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -701,6 +742,8 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 <section class="page" data-sec="de" id="p-wort" data-label="🗣️ Wortschatz"></section>
 <section class="page" data-sec="fr" id="p-conj" data-label="📘 Conjugaison"></section>
 <section class="page" data-sec="fr" id="p-ortho" data-label="✏️ Orthographe"></section>
+<section class="page" data-sec="fr" id="p-sons" data-label="📖 Lecture"></section>
+<section class="page" data-sec="fr" id="p-genre" data-label="🏷️ Genre"></section>
 <section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><div class="gk-nav"><button class="gk-open on" id="gkCo"><b>🖍️</b>Colorie la phrase</button><button class="gk-open" id="gkBtn"><b>📘</b>Apprendre les règles</button><button class="gk-open" id="gkTr"><b>🏋️</b>M’entraîner aux règles</button></div><div id="p-gramS" hidden></div><div id="p-gramT"></div></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
@@ -716,7 +759,15 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 <script>
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
+  { date: "2026-10-17", versions: [
+    { v: "4.8", desc: "Genre : lexique, règles, manches, mots réussis" },
+    { v: "4.7", desc: "Lettres pièges : tri des mots par lettre" },
+    { v: "4.6", desc: "Lecture : lettre X, lettres pièges, plus de sons" },
+    { v: "4.5", desc: "Lecture : les sons et textes à lire (4H)" }
+  ] },
   { date: "2026-10-11", versions: [
+    { v: "4.4", desc: "PoutchouPoutchou : bulle silencieuse qui disparaît" },
+    { v: "4.3", desc: "Petits : alphabet et compter, français puis allemand" },
     { v: "4.2", desc: "Joueur et en ligne réunis en une carte" },
     { v: "4.1", desc: "Pastille en ligne sous l’avatar, menu salon" },
     { v: "4.0", desc: "Choix rapide des joueurs de la famille" },
@@ -3881,6 +3932,7 @@ const OKF=['Bravo !','Super !','Génial !'], OKD=['Bravo!','Super!','Toll!'];
 
 /* ---- menu ---- */
 const MENU=[
+ ['📖 J’apprends',[['abc','🔤','L’alphabet'],['cnt10','🔢','Compter jusqu’à 10'],['cnt20','🔟','Compter de 11 à 20']]],
  ['🔢 Les nombres',[['count','🔢','Compter 1 à 10'],['count20','🔟','Compter jusqu’à 20'],['hear','👂','Écouter un nombre'],['add','➕','Petites additions'],['sub','➖','Enlever'],['more','⚖️','Plus ou moins'],['bigger','📏','Le plus grand'],['next','⏭️','Avant · après'],['pattern','🔁','Les suites']]],
  ['🎨 Couleurs et formes',[['color','🎨','Les couleurs'],['shape','🔺','Les formes']]],
  ['🧠 Je réfléchis',[['odd','🕵️','L’intrus'],['sizes','🐘','Grand · petit'],['syll','👏','Les syllabes'],['rhyme','🎵','Les rimes']]],
@@ -3964,7 +4016,7 @@ function frame(inner){
   root.querySelector('#ptB').onclick=menu; window.scrollTo(0,0);
 }
 function ptMore(id){ const all=[]; MENU.forEach(([t,l])=>l.forEach(([i,ic,tx])=>{ if(i!==id) all.push({ic,t:tx,go:()=>play(i)}); })); return shuffle(all).slice(0,8); }
-function play(id){ if(id==='memory') return memory(); rounds(id); }
+function play(id){ if(id==='memory') return memory(); if(LESSONS[id]) return lesson(id); rounds(id); }
 function rounds(id){
   const S={i:0,ok:0,first:true,total:8}; T.S=S;
   const dots=()=>Array.from({length:S.total},(_,k)=>`<i class="${k<S.i?'ok':k===S.i?'cur':''}"></i>`).join('');
@@ -3998,6 +4050,46 @@ function rounds(id){
   }
   next();
 }
+/* ---- leçons guidées : d'abord en français, puis en allemand ---- */
+const ABC={
+ fr:[['a','abeille','🐝'],['bé','ballon','🎈'],['cé','chat','🐱'],['dé','dauphin','🐬'],['eu','éléphant','🐘'],['effe','fleur','🌸'],['gé','gâteau','🎂'],['ache','hibou','🦉'],['i','île','🏝️'],['gi','jus','🧃'],['ka','koala','🐨'],['elle','lune','🌙'],['emme','maison','🏠'],['enne','nuage','☁️'],['o','orange','🍊'],['pé','pomme','🍎'],['ku','quille','🎳'],['erre','renard','🦊'],['esse','soleil','☀️'],['té','tortue','🐢'],['u','usine','🏭'],['vé','vache','🐮'],['double vé','wagon','🚃'],['ixe','xylophone','🎼'],['i grec','yaourt','🥛'],['zède','zèbre','🦓']],
+ de:[['a','Apfel','🍎'],['be','Baum','🌳'],['ze','Clown','🤡'],['de','Delfin','🐬'],['e','Elefant','🐘'],['eff','Fisch','🐟'],['ge','Giraffe','🦒'],['ha','Haus','🏠'],['i','Igel','🦔'],['jot','Jacke','🧥'],['ka','Katze','🐱'],['ell','Löwe','🦁'],['emm','Maus','🐭'],['enn','Nase','👃'],['o','Ohr','👂'],['pe','Pizza','🍕'],['ku','Quadrat','🟦'],['err','Rakete','🚀'],['ess','Sonne','☀️'],['te','Tiger','🐯'],['u','Uhr','🕐'],['fau','Vogel','🐦'],['we','Wolke','☁️'],['iks','Xylofon','🎼'],['üpsilon','Yoga','🧘'],['zett','Zebra','🦓']]
+};
+const NF=['un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf','vingt'];
+const ND=['eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn','zwanzig'];
+const LESSONS={abc:{t:'L’alphabet'},cnt10:{t:'Compter jusqu’à 10',lo:1,hi:10},cnt20:{t:'Compter de 11 à 20',lo:11,hi:20}};
+function lesson(id){
+  const D=LESSONS[id], isA=id==='abc', th=pick(THINGS)[0];
+  const total=isA?26:D.hi-D.lo+1; const S={ph:0,i:0}; T.les=S;
+  const seq=(L,k)=>{ const f=L==='de'?'de':'fr';
+    if(isA){ const a=ABC[f][k], c=String.fromCharCode(65+k); return [{t:a[0],l:f,pause:450},{t:(f==='de'?c+' wie ':c+' comme ')+a[1],l:f}]; }
+    const n=D.lo+k; return [{t:(f==='de'?ND:NF)[n-1],l:f}]; };
+  const say=()=>{ const L=S.ph?'de':'fr'; const q=seq(L,S.i); if(window.DLspeakSeq) DLspeakSeq(q); else q.forEach(x=>sp(x.t,x.l)); };
+  function view(){
+    const L=S.ph?'de':'fr', k=S.i; let big,sub;
+    if(isA){ const a=ABC[L][k], c=String.fromCharCode(65+k); big=`<span class="pt-L">${c} ${c.toLowerCase()}</span><span class="pt-I">${a[2]}</span>`; sub=`<b>${c}</b> ${L==='de'?'wie':'comme'} <b>${a[1]}</b>`; }
+    else { const n=D.lo+k; big=`<span class="pt-L">${n}</span><div class="pt-things${n>10?' sm':''}">${things(th,n)}</div>`; sub=`<b>${(L==='de'?ND:NF)[n-1]}</b>`; }
+    frame(`<div class="pt-ph ${L}">${L==='fr'?'🇫🇷 En français':'🇩🇪 Auf Deutsch'}</div><div class="pt-prog"><i style="width:${Math.round((k+1)/total*100)}%"></i></div><p class="pt-pc">${k+1} / ${total}</p>
+      <button class="pt-big" id="lsBig" aria-label="Écouter">${big}</button><div class="pt-lsw">${sub}</div>
+      <div class="pt-lsn"><button id="lsP" ${k===0?'disabled':''} aria-label="Précédent">‹</button><button id="lsH" aria-label="Écouter">🔊</button><button id="lsN" class="go" aria-label="Suivant">›</button></div>`);
+    root.querySelector('#lsBig').onclick=root.querySelector('#lsH').onclick=say;
+    root.querySelector('#lsP').onclick=()=>{ if(S.i>0){ S.i--; view(); } };
+    root.querySelector('#lsN').onclick=()=>{ if(S.i<total-1){ S.i++; view(); } else if(!S.ph) bridge(); else done(); };
+    setTimeout(say,FAST?0:200);
+  }
+  function bridge(){
+    frame(`<div class="pt-end"><div class="st">🇩🇪</div><h3>Bravo !</h3><p class="pt-pc">Maintenant, on le dit en allemand !<br>Jetzt auf Deutsch!</p><button class="mx-go big" id="lsGo">▶ Los geht’s !</button></div>`);
+    sp('Bravo ! Maintenant, on le dit en allemand !','fr'); root.querySelector('#lsGo').onclick=()=>{ S.ph=1; S.i=0; view(); };
+  }
+  function done(){
+    addStars(2);
+    frame(`<div class="pt-end"><div class="st">⭐⭐</div><h3>Super gemacht !</h3><button class="mx-go big" id="lsAg">▶ Encore !</button></div>`);
+    sp('Super gemacht ! Bravo !','de'); root.querySelector('#lsAg').onclick=()=>lesson(id);
+    DLmore(root.querySelector('.pt-end'),ptMore(id),'Ou joue à autre chose :');
+  }
+  view();
+}
+
 function memory(){
   const pick=shuffle(ANI).slice(0,6); const cards=shuffle(pick.concat(pick).map((a,i)=>({a,i,open:false,done:false})));
   let first=null,busy=false,found=0,tries=0; T.mem={cards};
@@ -4089,7 +4181,7 @@ function show(t,speak){ clearTimeout(ah); T.textContent=t; P.hidden=false; nudge
 fab.onclick=()=>{ if(P.hidden) show('Coucou ! Je suis PoutchouPoutchou. Qu’est-ce qu’il te faut ?',false); else P.hidden=true; };
 P.querySelector('.pc-x').onclick=P.querySelector('#pcBy').onclick=()=>{ P.hidden=true; };
 document.addEventListener('pointerdown',e=>{ if(!P.hidden&&!P.contains(e.target)&&!fab.contains(e.target)) P.hidden=true; },true);
-nudge.onclick=()=>{ nudge.hidden=true; show('Besoin d’un coup de pouce ? Appuie sur l’ampoule !',true); };
+nudge.onclick=()=>{ nudge.hidden=true; show('Besoin d’un coup de pouce ? Appuie sur l’ampoule !',false); autoHide(5000); };
 function push(t){ nudge.textContent=t; nudge.hidden=false; clearTimeout(push.t); push.t=setTimeout(()=>{nudge.hidden=true;},7000); }
 const vis=el=>el&&el.offsetParent!==null;
 /* répéter la question */
@@ -4098,15 +4190,15 @@ P.querySelector('#pcRe').onclick=()=>{
   if(vis(ptS)&&ptq){ const L=ptq.L||'fr'; const k=ptq.ask?ptq.ask[L]:ptq[L]; if(window.DLspeakSeq&&ptq.ask) DLspeakSeq([{t:ptq.ask[L],l:L,pause:900},{t:ptq.key[L],l:L}]); else say(k,L); T.textContent='Écoute bien !'; autoHide(1500); return; }
   const q=[...document.querySelectorAll('.sr-q,.g-q')].find(vis);
   if(q){ T.textContent='Je relis !'; autoHide(1800); say(q.textContent.replace(/\s+/g,' ').trim()); const h=[...document.querySelectorAll('.mx-hear,.g-listen')].find(vis); if(h) setTimeout(()=>h.click(),200); }
-  else { T.textContent='Choisis un jeu, et je t’aiderai !'; say('Choisis un jeu, et je t’aiderai !'); }
+  else { T.textContent='Choisis un jeu, et je t’aiderai !'; autoHide(3500); }
 };
 /* coup de pouce : j'enlève une mauvaise réponse */
 P.querySelector('#pcHi').onclick=()=>{
   const c=window.DLctx; let done=false;
   if(c&&c.opts){ const bs=[...c.opts()].filter(b=>b.isConnected&&vis(b)); const live=bs.filter((b,i)=>!b.disabled&&!b.classList.contains('pc-elim'));
     const wrong=bs.map((b,i)=>({b,i})).filter(x=>x.i!==c.correct&&!x.b.disabled&&!x.b.classList.contains('pc-elim')&&!x.b.classList.contains('ko'));
-    if(wrong.length&&live.length>2){ pick(wrong).b.classList.add('pc-elim'); done=true; T.textContent='J’ai caché une mauvaise réponse. Tu y es presque !'; say('J’ai caché une mauvaise réponse. Tu y es presque !'); autoHide(2600); } }
-  if(!done){ const t=pick(['Lis bien la question jusqu’au bout, puis réfléchis.','Prends ton temps. Tu peux y arriver !','Si tu hésites, écarte les réponses qui ne vont pas.','Écoute encore une fois, avec tes oreilles de détective !']); T.textContent=t; say(t); autoHide(3500); }
+    if(wrong.length&&live.length>2){ pick(wrong).b.classList.add('pc-elim'); done=true; T.textContent='J’ai caché une mauvaise réponse. Tu y es presque !'; autoHide(3000); } }
+  if(!done){ const t=pick(['Lis bien la question jusqu’au bout, puis réfléchis.','Prends ton temps. Tu peux y arriver !','Si tu hésites, écarte les réponses qui ne vont pas.','Écoute encore une fois, avec tes oreilles de détective !']); T.textContent=t; autoHide(4000); }
 };
 /* musique douce : générée par le navigateur, aucun fichier, libre de droit */
 let AC=null,master=null,mt=null,playing=false;
@@ -4125,7 +4217,7 @@ function music(on){ const b=P.querySelector('#pcMu');
 P.querySelector('#pcMu').onclick=()=>music(!playing);
 /* il observe et propose une pause */
 let wrong=0,lastPause=Date.now();
-function suggestPause(why){ lastPause=Date.now(); wrong=0; P.querySelector('#pcMu').classList.add('glow'); P.querySelector('#pcGa').classList.add('glow'); show(why,true); }
+function suggestPause(why){ lastPause=Date.now(); wrong=0; P.querySelector('#pcMu').classList.add('glow'); P.querySelector('#pcGa').classList.add('glow'); show(why,false); autoHide(7000); }
 window.PCev=function(ok){
   if(ok){ wrong=0; fab.classList.remove('hop'); void fab.offsetWidth; fab.classList.add('hop'); return; }
   wrong++; if(wrong===2&&P.hidden) push('Besoin d’un coup de pouce ? 💡');
@@ -4151,7 +4243,7 @@ function bubbles(){
   clock=setInterval(()=>{ left--; Tm.textContent=left; if(left<=0){ clearInterval(spawn); clearInterval(clock); end(); } },1000);
   function end(){ if(!gOv) return; const e=document.createElement('div'); e.className='gend'; const msg=score>=25?'Wow, tu es rapide !':score>=12?'Joli travail !':'Bien joué !';
     e.innerHTML=`<div><img src="${IMG_B}" alt=""><br>${msg}<br>Tu as éclaté <b>${score}</b> bulles.<br><button id="gA">🫧 Encore</button><button id="gB">📚 On y retourne !</button></div>`;
-    gOv.appendChild(e); say(msg+' On retourne travailler ?'); e.querySelector('#gA').onclick=()=>{ close(); bubbles(); }; e.querySelector('#gB').onclick=close; }
+    gOv.appendChild(e); e.querySelector('#gA').onclick=()=>{ close(); bubbles(); }; e.querySelector('#gB').onclick=close; }
 }
 P.querySelector('#pcGa').onclick=bubbles;
 window.__pc={show,music,suggestPause,P,bubbles};
@@ -4818,6 +4910,372 @@ window.DLG.salon=function(){ body.innerHTML='<div id="slRoot" class="sl"></div>'
   tick(); };
 /* lien d'invitation ?salon=CODE */
 try{ const c=(new URLSearchParams(location.search).get('salon')||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5); if(c.length===5){ window.__salonPending=c; setTimeout(()=>{ const b=document.querySelector('.sec-b[data-s="fa"]'); if(b) b.click(); setTimeout(()=>H.openGame('salon'),150); },700); } }catch(e){}
+})();
+</script>
+<script>
+/* ===== Les sons (dès la 4H) : associer les lettres à leur son ===== */
+(function(){
+'use strict';
+const root=document.getElementById('p-sons'); if(!root) return;
+const rnd=n=>Math.floor(Math.random()*n), pick=a=>a[rnd(a.length)], shuf=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rnd(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const FAST=/#test/.test(location.hash);
+const say=(t)=>{ try{ if(window.speak) speak(t,'fr'); }catch(e){} };
+const seq=(a)=>{ try{ if(window.DLspeakSeq) DLspeakSeq(a); else say(a.map(x=>x.t).join(' ... ')); }catch(e){} };
+/* g : label, say (le son), mn (pour le retenir), det (repérer le son dans un mot), words [emoji, mot avec [son] marqué] */
+const G=[
+ {id:'au',l:'au · eau · o · ô',s:'ô',mn:'comme dans « haut »',c:'#e8590c',det:/au|eau|ô|o$/,w:[['🚗','[au]to'],['🟡','j[au]ne'],['🔥','ch[au]d'],['🐂','t[au]r[eau]'],['🎂','gât[eau]'],['⛵','bat[eau]'],['🏰','chât[eau]']]},
+ {id:'oi',l:'oi',s:'oua',mn:'comme dans « waouh ! »',c:'#1971c2',det:/oi|oî|oy/,w:[['🐦','[oi]seau'],['🐟','p[oi]sson'],['⭐','ét[oi]le'],['👑','r[oi]'],['🍐','p[oi]re'],['🪞','mir[oi]r'],['🚙','v[oi]ture']]},
+ {id:'ou',l:'ou',s:'ou',mn:'comme dans « ouf ! »',c:'#2f9e44',det:/ou/,w:[['🦉','hib[ou]'],['🥬','ch[ou]'],['🐺','l[ou]p'],['🐭','s[ou]ris'],['🐔','p[ou]le'],['🧸','j[ou]et'],['🛞','r[ou]e'],['👄','b[ou]che']]},
+ {id:'on',l:'on',s:'on',mn:'comme dans « bonbon »',c:'#c2255c',det:/on|om/,w:[['🏠','mais[on]'],['🎈','ball[on]'],['🍋','citr[on]'],['🚚','cami[on]'],['🐷','coch[on]'],['🍈','mel[on]'],['🍬','b[on]b[on]']]},
+ {id:'an',l:'an · en',s:'an',mn:'comme dans « banc »',c:'#f08c00',det:/an|en|am|em/,w:[['🦷','d[en]t'],['🍊','or[an]ge'],['🍌','b[an]ane'],['⛺','t[en]te'],['💨','v[en]t'],['🧒','[en]f[an]t'],['👼','[an]ge']]},
+ {id:'in',l:'in · ain · ein · ien · oin',s:'in',mn:'comme dans « vin »',c:'#7048e8',det:/in|ain|ein|im|ym|ien|oin/,w:[['🐰','lap[in]'],['🍞','p[ain]'],['✋','m[ain]'],['🎄','sap[in]'],['🚆','tr[ain]'],['🎨','p[ein]ture']]},
+ {id:'ch',l:'ch',s:'ch',mn:'comme dans « chut ! »',c:'#0c8599',det:/ch/,w:[['🐴','[ch]eval'],['🐱','[ch]at'],['🐶','[ch]ien'],['🪑','[ch]aise'],['🎩','[ch]apeau'],['🐮','va[ch]e'],['👟','[ch]aussure']]},
+ {id:'eu',l:'eu · œu',s:'eu',mn:'comme dans « peu »',c:'#d6336c',det:/eu|œu/,w:[['🌸','fl[eu]r'],['🔵','bl[eu]'],['🔥','f[eu]'],['2️⃣','d[eu]x'],['🥚','[œu]f'],['❤️','c[œu]r'],['🕐','h[eu]re'],['🎲','j[eu]']]},
+ {id:'ai',l:'ai · ei · ê · è',s:'è',mn:'comme dans « lait »',c:'#5c940d',det:/ai|aî|ei|ê|è|ett|et$|elle|erre|el$/,w:[['🥛','l[ai]t'],['🧹','bal[ai]'],['❄️','n[ei]ge'],['🍓','fr[ai]se'],['🐋','bal[ei]ne'],['🪑','ch[ai]se']]},
+ {id:'ph',l:'f · ph',s:'f',mn:'comme dans « photo »',c:'#e03131',det:/ph|f/,w:[['📷','[ph]oto'],['🐬','dau[ph]in'],['☎️','télé[ph]one'],['🦭','[ph]oque'],['🔤','al[ph]abet'],['🐘','élé[ph]ant']]},
+ {id:'gn',l:'gn',s:'gne',mn:'comme dans « vigne »',c:'#1864ab',det:/gn/,w:[['⛰️','monta[gn]e'],['🍄','champi[gn]on'],['🕷️','arai[gn]ée'],['🍇','vi[gn]e'],['🧅','o[gn]on']]},
+ {id:'qu',l:'qu · k · ca · co · cu',s:'k',mn:'comme dans « quatre »',c:'#9c36b5',det:/q|k|c(?![eiéèyh])/,w:[['4️⃣','[qu]atre'],['🎭','mas[qu]e'],['🎳','[qu]ille'],['🦟','mousti[qu]e'],['🎪','cir[qu]e'],['🦜','perro[qu]et']]},
+ {id:'ill',l:'ill · ail · eil',s:'ye',mn:'comme dans « fille »',c:'#087f5b',det:/ill|ail|eil|euil|ouil/,w:[['👧','f[ill]e'],['🐝','abe[ill]e'],['🍾','boute[ill]e'],['🐚','coqu[ill]e'],['🐛','chen[ill]e'],['🐸','grenou[ill]e']]},
+ {id:'c',l:'s · ce · ci · ç · ss · sc',s:'s',mn:'comme dans « cerise »',c:'#e67700',det:/c[eiéèy]|ç|ss|^s|[bcdfghjklmnpqrtvwxz]s|tion|sion/,w:[['🍒','[c]erise'],['🍋','[c]itron'],['🍦','gla[c]e'],['🌤️','[c]iel'],['5️⃣','[c]inq'],['🎬','[c]inéma']]},
+ {id:'g',l:'j · ge · gi',s:'j',mn:'comme dans « girafe »',c:'#3b5bdb',det:/g[eiéèy]|j/,w:[['🦒','[g]irafe'],['🧀','froma[ge]'],['☁️','nua[ge]'],['🕯️','bou[gi]e'],['🦺','[gi]let']]}
+];
+G.push(
+ {id:'u',l:'u · û',s:'u',mn:'comme dans « lune »',c:'#0b7285',det:{test:w=>/(^|[^oaeéqœg])u($|[^i])|û/.test(w)},w:[['🌙','l[u]ne'],['🌷','t[u]lipe'],['🧱','m[u]r'],['🏭','[u]sine'],['🛣️','r[u]e'],['🍂','ch[u]te'],['🚀','f[u]sée'],['🧃','j[u]s'],['🐢','tort[u]e'],['🎵','m[u]sique'],['🚌','b[u]s'],['🩳','j[u]pe'],['🧊','c[u]be'],['💨','f[u]mée'],['🎀','r[u]ban']]},
+ {id:'ui',l:'ui',s:'ui',mn:'comme dans « nuit »',c:'#a61e4d',det:/ui/,w:[['🌙','n[ui]t'],['🍎','fr[ui]t'],['8️⃣','h[ui]t'],['🌧️','pl[ui]e'],['🍳','c[ui]sine'],['🫒','h[ui]le'],['👨','l[ui]'],['🕳️','p[ui]ts'],['🔊','br[ui]t'],['🧰','ét[ui]'],['🐟','tr[ui]te'],['🏠','t[ui]le'],['👞','c[ui]r']]},
+ {id:'ee',l:'é · er · ez',s:'é',mn:'comme dans « bébé »',c:'#2b8a3e',det:/é|er$|ez$|ed$|ier/,w:[['🏫','[é]cole'],['☕','caf[é]'],['👃','n[ez]'],['☀️','[é]t[é]'],['🚲','v[é]lo'],['👶','b[é]b[é]'],['🧚','f[ée]'],['🔑','cl[é]'],['💃','dans[er]'],['🎮','jou[er]'],['🍽️','mang[ez]'],['⚽','[é]quipe'],['🦶','pi[ed]'],['📓','cahi[er]'],['🪜','escali[er]'],['🍎','pommi[er]']]},
+ {id:'tion',l:'tion · sion · ti',s:'sion',mn:'comme dans « attention »',c:'#e8590c',det:/tion|sion|tie|tiel|tial|tien/,w:[['🌍','na[tion]'],['👀','atten[tion]'],['➕','addi[tion]'],['💡','solu[tion]'],['🛝','récréa[tion]'],['🚉','sta[tion]'],['🍰','por[tion]'],['😢','émo[tion]'],['🎬','ac[tion]'],['🧪','inven[tion]'],['📺','télévi[sion]'],['🚀','mi[ssion]'],['✏️','correc[tion]'],['🧩','collec[tion]']]},
+ {id:'gu',l:'gu',s:'gue',mn:'comme dans « guitare »',c:'#364fc7',det:/gu|g(?![eiéèyn])/,w:[['🎸','[gu]itare'],['🐝','[gu]êpe'],['💍','ba[gu]e'],['🥖','ba[gu]ette'],['👅','lan[gu]e'],['⚔️','[gu]erre'],['🧭','[gu]ide'],['🌊','va[gu]e'],['😴','fati[gu]e'],['💬','dialo[gu]e'],['🐆','[gu]épard'],['🎄','[gu]irlande']]}
+);
+G.push(
+ {id:'z',l:'z',s:'z',mn:'comme dans « zèbre »',c:'#15aabf',det:{test:w=>/z/.test(w)||/[aeiouyéèê]s[aeiouyéèê]/.test(w)},w:[['🦓','[z]èbre'],['0️⃣','[z]éro'],['🦁','[z]oo'],['🔀','zig[z]ag'],['🗺️','[z]one'],['🤐','[z]ip'],['🔥','ga[z]'],['🌹','ro[s]e'],['🏺','va[s]e'],['💎','topa[z]e'],['1️⃣2️⃣','dou[z]e']]},
+ {id:'un',l:'un · um',s:'un',mn:'comme dans « brun »',c:'#845ef7',det:/un|um/,w:[['🟤','br[un]'],['1️⃣','[un]'],['🗓️','l[un]di'],['👤','chac[un]'],['🚫','auc[un]'],['🌸','parf[um]'],['🙇','h[um]ble']]}
+);
+const ADD={
+ au:[['🏍️','mot[o]'],['🎹','pian[o]'],['🎲','domin[o]'],['🖊️','styl[o]'],['🍖','c[ô]te'],['🏨','h[ô]tel'],['😂','dr[ô]le'],['🥩','r[ô]ti'],['⏰','t[ô]t'],['🧊','p[ô]le']],
+ oi:[['🪿','[oi]e'],['🍷','b[oi]re'],['🎡','f[oi]re'],['🗄️','arm[oi]re'],['🗃️','tir[oi]r'],['📖','hist[oi]re'],['🏆','vict[oi]re'],['🌆','s[oi]r'],['🌶️','p[oi]vre'],['🤧','mouch[oi]r']],
+ ou:[['🐜','f[ou]rmi'],['🍲','s[ou]pe'],['🔩','cl[ou]'],['🎱','b[ou]le'],['👋','c[ou]c[ou]']],
+ on:[['🌑','[om]bre'],['🔢','n[om]bre'],['💣','b[om]be'],['🧑‍🚒','p[om]pier'],['🎺','tr[om]pette'],['🔟','[on]ze'],['🧔','[on]cle'],['🐑','mout[on]'],['👖','pantal[on]'],['🐈','chat[on]'],['🐉','drag[on]']],
+ an:[['🦵','j[am]be'],['🪔','l[am]pe'],['🔌','[am]poule'],['🏕️','c[am]p'],['🌾','ch[am]p'],['🛏️','ch[am]bre'],['🥁','t[am]bour'],['🩸','s[an]g'],['🐌','l[en]t'],['💰','arg[en]t'],['🚪','[en]trée'],['🪵','pl[an]che']],
+ in:[['📮','t[im]bre'],['🧩','s[im]ple'],['🖨️','[im]primante'],['❗','[im]portant'],['🔣','s[ym]bole'],['🎀','c[ein]ture'],['🛑','fr[ein]'],['🈵','pl[ein]'],['👍','b[ien]'],['🚫','r[ien]'],['🎻','music[ien]'],['🧑‍⚕️','médec[in]'],['📅','dem[ain]'],['🍏','s[ain]'],['🔗','l[ien]']],
+ ch:[['🚶','mar[ch]e'],['🪰','mou[ch]e'],['💖','[ch]er'],['👕','[ch]emise'],['🦉','[ch]ouette'],['🏠','[ch]eminée']],
+ eu:[['📍','li[eu]'],['👦','j[eu]ne'],['👀','y[eu]x'],['🎤','chant[eu]r'],['🎭','act[eu]r'],['💻','ordinat[eu]r'],['🌈','coul[eu]r'],['🖼️','[œu]vre']],
+ ai:[['🐟','fil[et]'],['🩰','ball[et]'],['🔑','secr[et]'],['🧢','bonn[et]'],['👸','b[e]lle'],['🌍','t[e]rre'],['🥃','v[e]rre'],['🧂','s[e]l'],['👩','[e]lle'],['🚫','jam[ai]s'],['🏰','pal[ai]s'],['✅','vr[ai]']],
+ ph:[['🍴','[f]ourchette'],['🌾','[f]arine'],['🍟','[f]rite'],['🏈','[f]ootball'],['🧵','[f]il'],['🪟','[f]enêtre'],['💇','coi[ff]eur'],['👨‍🍳','che[f]'],['🫗','cara[f]e']],
+ gn:[['🧑‍🌾','ga[gn]er'],['🧑‍🏫','ensei[gn]er'],['👊','co[gn]er']],
+ qu:[['🚚','[c]amion'],['🎁','[c]adeau'],['🥕','[c]arotte'],['🩳','[c]ulotte'],['🪢','[c]orde'],['🥤','[c]ola'],['🦀','[c]rabe'],['🤡','[c]lown'],['🦘','[k]angourou'],['🐨','[k]oala'],['🥝','[k]iwi'],['⚖️','[k]ilo'],['🎿','s[k]i'],['🥋','[k]araté'],['🎸','ro[ck]'],['🏑','ho[ck]ey'],['🎫','ti[ck]et'],['🏷️','sti[ck]er']],
+ ill:[['☀️','sol[eil]'],['⏰','rév[eil]'],['👂','or[eill]e'],['🗣️','cons[eil]'],['🐿️','écur[euil]'],['🎃','citr[ouill]e'],['🌫️','br[ouill]ard'],['🤝','acc[ueil]'],['🎟️','b[ill]et'],['🦶','chev[ill]e'],['🦍','gor[ill]e'],['🦋','pap[ill]on']],
+ c:[['🔬','[sc]ience'],['🎭','[sc]ène'],['🏊','pi[sc]ine'],['🛗','a[sc]enseur'],['🪚','[sc]ie'],['⬇️','de[sc]endre'],['🎒','[s]ac'],['🥗','[s]alade'],['🌲','[s]apin'],['🍯','[s]irop'],['🍬','[s]ucre'],['🐍','[s]erpent'],['🏖️','[s]able'],['🧙','[s]orcière'],['7️⃣','[s]ept'],['🐟','poi[ss]on'],['🛋️','cou[ss]in'],['🧹','bro[ss]e']],
+ g:[['🌻','[j]ardin'],['🌸','[j]oli'],['🗓️','[j]eudi'],['📰','[j]ournal'],['📆','[j]uin'],['🎆','[j]uillet'],['🌴','[j]ungle'],['🤹','[j]ongleur'],['🤸','[gy]mnastique'],['🍊','oran[ge]']],
+ tion:[['🤒','pa[ti]ence'],['🔍','minu[ti]e'],['🗳️','démocra[ti]e'],['❗','essen[ti]el'],['🔤','ini[ti]ale']],
+ u:[['🧱','m[û]r'],['✅','s[û]r'],['🪈','fl[û]te'],['1️⃣','[u]ne'],['🪨','d[u]r'],['🫵','t[u]']]
+};
+/* ===== Lettres pièges : une même lettre, plusieurs sons ===== */
+const X0='Ici, le x se prononce comme dans', XM='Ici, le x ne se prononce pas, comme dans';
+const EXD=[
+ ['xks','x = ks','x','ks','x',X0,'taxi',[['🚕','ta[x]i'],['🥊','bo[x]e'],['🥤','mi[x]eur'],['📝','te[x]te'],['🎷','sa[x]ophone'],['💎','lu[x]e'],['🧭','e[x]plorer'],['🏔️','e[x]pédition'],['⭐','e[x]tra'],['🙏','e[x]cuse'],['🧑‍🔬','e[x]pert'],['📖','le[x]ique'],['🏷️','ta[x]e'],['📌','fi[x]er']]],
+ ['xgz','x = gs','x','gz','x',X0,'examen',[['📝','e[x]amen'],['📋','e[x]emple'],['🎯','e[x]act'],['🏋️','e[x]ercice'],['🌟','e[x]ister'],['☝️','e[x]iger'],['🏝️','e[x]otique'],['🔷','he[x]agone'],['😮','e[x]agérer'],['🚪','e[x]il'],['🎼','[x]ylophone']]],
+ ['xs','x = s','x','s','x',X0,'six',[['6️⃣','si[x]'],['🔟','di[x]'],['🕰️','soi[x]ante'],['🏙️','Bru[x]elles'],['🏛️','Au[x]erre']]],
+ ['xz','x = z','x','z','x',X0,'deuxième',[['2️⃣','deu[x]ième'],['6️⃣','si[x]ième'],['🔟','di[x]ième'],['1️⃣8️⃣','di[x]-huit'],['1️⃣9️⃣','di[x]-neuf']]],
+ ['xmu','x = muet','x','mu','x',XM,'deux',[['2️⃣','deu[x]'],['🏷️','pri[x]'],['🗣️','voi[x]'],['😄','heureu[x]'],['👴','vieu[x]'],['🧸','dou[x]'],['😒','jalou[x]'],['🙅','fau[x]'],['🤔','choi[x]'],['✝️','croi[x]'],['🕊️','pai[x]'],['🥜','noi[x]'],['😃','joyeu[x]'],['😨','peureu[x]']]],
+ ['sss','s = s','s','s','s','Ici, le s se prononce comme dans','soleil',[['☀️','[s]oleil'],['🎒','[s]ac'],['🥗','[s]alade'],['🌲','[s]apin'],['🍯','[s]irop'],['🍬','[s]ucre'],['🧂','[s]el'],['🎭','ma[s]que'],['🐟','poi[ss]on'],['🛋️','cou[ss]in'],['🧹','bro[ss]e']]],
+ ['ssz','s = z','s','z','s','Ici, entre deux voyelles, le s se prononce z, comme dans','rose',[['🌹','ro[s]e'],['🏠','mai[s]on'],['🪑','chai[s]e'],['🍓','frai[s]e'],['🐦','oi[s]eau'],['⛪','égli[s]e'],['🏺','va[s]e'],['👕','chemi[s]e'],['🎶','mu[s]ique'],['🧑‍🤝‍🧑','cou[s]in'],['😊','plai[s]ir'],['🙂','vi[s]age'],['☠️','poi[s]on']]],
+ ['ssm','s = muet','s','mu','s','Ici, le s ne se prononce pas, comme dans','bras',[['💪','bra[s]'],['🔙','do[s]'],['🐘','gro[s]'],['🧶','tapi[s]'],['🌍','pay[s]'],['⏳','temp[s]'],['🍽️','repa[s]'],['🐻','our[s]'],['🚫','jamai[s]'],['🗓️','moi[s]'],['🪵','boi[s]'],['🐱','chat[s]'],['🍬','bonbon[s]']]],
+ ['ck','c = k','c','k','c','Ici, le c se prononce comme dans','camion',[['🚚','[c]amion'],['🎁','[c]adeau'],['🥕','[c]arotte'],['🩳','[c]ulotte'],['🪢','[c]orde'],['🥤','[c]ola'],['🦀','[c]rabe'],['🤡','[c]lown'],['🏫','é[c]ole'],['🧊','[c]ube']]],
+ ['cs','c = s','c','s','c','Ici, le c se prononce comme dans','cerise',[['🍒','[c]erise'],['🍋','[c]itron'],['🌤️','[c]iel'],['🎬','[c]inéma'],['5️⃣','[c]inq'],['🧾','re[ç]u'],['🧒','gar[ç]on'],['🧊','gla[ç]on'],['📖','le[ç]on'],['🧱','ma[ç]on'],['🎪','[c]irque']]],
+ ['cm','c = muet','c','mu','c','Ici, le c ne se prononce pas, comme dans','blanc',[['⚪','blan[c]'],['🪑','ban[c]'],['🫃','estoma[c]'],['🐖','por[c]'],['🌳','tron[c]']]],
+ ['gg','g = g','g','g','g','Ici, le g se prononce comme dans','gare',[['🚉','[g]are'],['🧽','[g]omme'],['🧤','[g]ant'],['🌍','[g]lobe'],['🧁','[g]âteau'],['🧇','[g]aufre'],['🎸','[g]uitare'],['🫗','[g]ourde']]],
+ ['gj','g = j','g','j','g','Ici, le g se prononce j, comme dans','girafe',[['🦒','[g]irafe'],['🦺','[g]ilet'],['😊','[g]entil'],['🦵','[g]enou'],['🍊','oran[g]e'],['🧀','froma[g]e'],['🖼️','ima[g]e'],['🤸','[g]ymnastique'],['☁️','nua[g]e']]],
+ ['gm','g = muet','g','mu','g','Ici, le g ne se prononce pas, comme dans','long',[['📏','lon[g]'],['🩸','san[g]'],['👊','poin[g]'],['🐟','haren[g]'],['🏘️','bour[g]'],['📊','ran[g]'],['🏞️','éta[n][g]'.replace('[n]','n')],['☝️','doi[gt]']]],
+ ['tt','t = t','t','t','t','Ici, le t se prononce comme dans','tomate',[['🍅','[t]omate'],['🐯','[t]igre'],['🪑','[t]able'],['🐢','[t]ortue'],['🌷','[t]ulipe'],['☕','[t]asse']]],
+ ['ts','t = s','t','s','t','Ici, ti se prononce si, comme dans','patience',[['⏳','pa[t]ience'],['🔤','ini[t]iale'],['❗','essen[t]iel'],['🗳️','démocra[t]ie'],['🔍','minu[t]ie']]],
+ ['tm','t = muet','t','mu','t','Ici, le t ne se prononce pas, comme dans','chat',[['🐱','cha[t]'],['🛏️','li[t]'],['🎬','débu[t]'],['🐀','ra[t]'],['🌙','nui[t]'],['🍎','frui[t]'],['🥛','lai[t]'],['⛰️','hau[t]'],['🟢','ver[t]'],['💬','mo[t]']]],
+ ['yi','y = i','y','i','y','Ici, le y se prononce i, comme dans','stylo',[['🖊️','st[y]lo'],['🦢','c[y]gne'],['👘','p[y]jama'],['🏋️','g[y]m'],['🐍','p[y]thon'],['🖥️','s[y]stème'],['🔣','s[y]mbole']]],
+ ['yj','y = ye','y','ye','y','Ici, le y se prononce ye, comme dans','yaourt',[['🥣','[y]aourt'],['🪀','[y]oyo'],['🧘','[y]oga'],['👀','[y]eux'],['🖍️','cra[y]on'],['🌞','ra[y]on'],['🧳','vo[y]age']]],
+ ['ena','ent = an','ent','an','ent','Ici, ent se prononce an, comme dans','dent',[['🦷','d[ent]'],['💨','v[ent]'],['🐍','serp[ent]'],['😊','cont[ent]'],['🐌','l[ent]em[ent]'],['🎁','prés[ent]'],['🏢','appartem[ent]'],['🔁','souv[ent]']]],
+ ['enm','ent = muet','ent','mu','ent','Ici, avec ils ou elles, ent ne se prononce pas, comme dans','ils chantent',[['🎤','ils chant[ent]'],['🍽️','ils mang[ent]'],['⚽','elles jou[ent]'],['🏃','ils cour[ent]'],['😴','ils dorm[ent]'],['🎨','elles dessin[ent]'],['🗣️','ils parl[ent]'],['🏊','elles nag[ent]']]],
+ ['chc','ch = ch','ch','ch','ch','Ici, ch se prononce comme dans','cheval',[['🐴','[ch]eval'],['🐶','[ch]ien'],['💇','[ch]eveux'],['🎩','[ch]apeau'],['🐮','va[ch]e'],['🍫','[ch]ocolat']]],
+ ['chk','ch = k','ch','k','ch','Ici, ch se prononce k, comme dans','orchestre',[['🎻','or[ch]estre'],['🎶','[ch]orale'],['🔊','é[ch]o'],['⏱️','[ch]ronomètre'],['🌺','or[ch]idée'],['⚙️','te[ch]nique'],['🎤','[ch]œur']]],
+ ['gnn','gn = gne','gn','ny','gn','Ici, gn se prononce comme dans','vigne',[['🍇','vi[gn]e'],['⛰️','monta[gn]e'],['🍄','champi[gn]on'],['🕷️','arai[gn]ée'],['🧅','o[gn]on'],['📏','li[gn]e'],['🪧','si[gn]e']]],
+ ['gng','gn = g + n','gn','g','gn','Ici, on entend g puis n, comme dans','gnou',[['🐃','[gn]ou'],['🧙','[gn]ome'],['🩺','dia[gn]ostic'],['💧','sta[gn]ant']]],
+ ['ily','ill = ye','ill','ye','ill','Ici, ill se prononce ye, comme dans','fille',[['👧','f[ill]e'],['👨‍👩‍👧','fam[ill]e'],['🔮','b[ill]e'],['🦍','gor[ill]e'],['🐚','coqu[ill]e'],['🦶','chev[ill]e'],['✨','br[ill]ant'],['🎟️','b[ill]et']]],
+ ['ili','ill = il','ill','il','ill','Ici, ill se prononce il, comme dans','ville',[['🏙️','v[ill]e'],['🔢','m[ill]e'],['🏘️','v[ill]age'],['🧘','tranqu[ill]e']]],
+ ['num','um = om','um','om','um','Ici, um se prononce om, comme dans','album',[['📀','alb[um]'],['🔝','maxim[um]'],['🔻','minim[um]'],['🐠','aquari[um]'],['🏆','podi[um]'],['🗣️','for[um]']]],
+ ['nen','en = in','en','in','en','Ici, en se prononce in, comme dans','moyen',[['⚖️','moy[en]'],['🧑‍💼','citoy[en]'],['🎒','lycé[en]'],['🇪🇺','europé[en]']]]
+];
+const EXFN={x:'La lettre X',s:'La lettre S',c:'La lettre C',g:'La lettre G',t:'La lettre T',y:'La lettre Y',ent:'La fin « ent »',ch:'Les lettres CH',gn:'Les lettres GN',ill:'Les lettres ILL',um:'Autres sons',en:'Autres sons'};
+const EXPAL=['#e03131','#1971c2','#2f9e44','#f08c00','#7048e8','#0c8599','#d6336c','#5c940d'];
+const TOK={ks:'ikss',gz:'égz',s:'sss',z:'zzz',k:'ke',g:'gue',j:'je',t:'te',i:'i',ye:'ye',an:'an',ch:'che',ny:'gne',il:'il',om:'om',in:'in'};
+const EXSP=(id,snd,pre,exw)=>{ if(snd==='mu') return [{t:pre,l:'fr',pause:300},{t:exw,l:'fr'}];
+  const base=id==='gng'?'Ici, on entend':pre.replace(/ se prononce.*$/,' fait'); const tok=id==='gng'?'gue, ne':TOK[snd];
+  return [{t:base,l:'fr',pause:250},{t:tok,l:'fr',pause:400},{t:'comme dans',l:'fr',pause:250},{t:exw,l:'fr'}]; };
+const exc={};
+EXD.forEach(([id,l,fam,snd,lt,pre,exw,w])=>{ const set=new Set(w.map(x=>x[1].replace(/[\[\]]/g,''))); exc[fam]=(exc[fam]||0); const c=EXPAL[(exc[fam]++)%8];
+  G.push({id,l,s:exw,ex:true,fam:(fam==='um'?'en':fam),snd,let:lt,mn:(snd==='mu'?'on ne l’entend pas : « ':'comme dans « ')+exw+' »',sp:EXSP(id,snd,pre,exw),tok:snd==='mu'?null:(id==='gng'?'gue, ne':TOK[snd]),c,det:{test:p=>set.has(p)},w}); });
+const MORE={
+ au:[['🎁','cad[eau]'],['💧','[eau]'],['🪣','s[eau]'],['🚩','drap[eau]'],['🦕','dinos[au]re'],['🍂','[au]tomne'],['🐫','cham[eau]'],['🛋️','f[au]teuil'],['🧦','ch[au]ssette']],
+ oi:[['🥤','b[oi]sson'],['🫛','p[oi]s'],['3️⃣','tr[oi]s'],['📦','b[oi]te'],['⚫','n[oi]r'],['🥜','n[oi]x'],['🌰','n[oi]sette'],['🛁','baign[oi]re'],['☝️','d[oi]gt'],['🐦','m[oi]neau'],['🧳','v[oy]age'],['🗓️','m[oi]s'],['🪵','b[oi]s']],
+ ou:[['🐻','[ou]rs'],['🎃','c[ou]rge'],['🔴','r[ou]ge'],['🪆','p[ou]pée'],['👍','p[ou]ce'],['🌞','j[ou]r'],['🐙','p[ou]lpe'],['🛣️','r[ou]te'],['🗼','t[ou]r'],['🛋️','c[ou]ssin']],
+ on:[['🌉','p[on]t'],['⌚','m[on]tre'],['🌍','m[on]de'],['👦','garç[on]'],['🎵','chans[on]'],['🦁','li[on]'],['🧼','sav[on]'],['🖍️','cray[on]'],['⭕','r[on]d'],['🕊️','pige[on]']],
+ an:[['📅','[an]'],['👅','l[an]gue'],['🧤','g[an]t'],['🎠','m[an]ège'],['🌿','br[an]che'],['💎','diam[an]t'],['🌪️','t[em]pête'],['⏳','t[em]ps'],['🚧','ch[an]tier'],['🧥','m[an]teau'],['🐍','serp[en]t'],['🎤','ch[an]ter']],
+ in:[['🍷','v[in]'],['🐒','s[in]ge'],['🍇','rais[in]'],['🌲','p[in]'],['🏁','f[in]'],['🌅','mat[in]'],['🛁','b[ain]'],['👸','pr[in]cesse'],['🧷','ép[in]gle'],['🧺','l[in]ge'],['🛤️','chem[in]'],['🔭','l[oin]'],['🪙','c[oin]'],['📍','p[oin]t'],['🩺','s[oin]'],['🌾','f[oin]'],['➖','m[oin]s'],['🆘','bes[oin]'],['👀','tém[oin]'],['👊','p[oin]g'],['📌','p[oin]te'],['👍','b[ien]'],['0️⃣','r[ien]'],['🎸','music[ien]'],['👴','anc[ien]'],['🇮🇹','ital[ien]'],['🔧','mécanic[ien]'],['🔗','l[ien]']],
+ ch:[['🔔','clo[ch]e'],['🚿','dou[ch]e'],['🛒','[ch]ariot'],['🍫','[ch]ocolat'],['🧣','é[ch]arpe'],['🤫','[ch]ut'],['👨‍🍳','[ch]ef'],['💇','[ch]eveux'],['🐐','[ch]èvre']],
+ eu:[['🐂','b[œu]f'],['😨','p[eu]r'],['9️⃣','n[eu]f'],['😀','h[eu]reux'],['🌧️','pl[eu]t'],['🐙','pi[eu]vre'],['👭','s[œu]r'],['👨‍⚕️','doct[eu]r']],
+ ai:[['🕊️','p[ai]x'],['🩱','m[ai]llot'],['🏞️','pl[ai]ne'],['🩸','v[ei]ne'],['📅','sem[ai]ne'],['🥰','[ai]mer'],['👸','r[ei]ne'],['😘','b[ai]ser'],['🎉','f[ê]te'],['🤕','t[ê]te'],['🌲','for[ê]t'],['🎣','p[ê]che'],['🌳','ch[ê]ne'],['🐗','b[ê]te'],['👩','m[è]re'],['👨','p[è]re'],['👦','fr[è]re'],['🧑‍🎓','él[è]ve'],['🍽️','assi[ett]e'],['🕶️','lun[ett]es'],['🚲','bicycl[ett]e']],
+ ph:[['💊','[ph]armacie'],['🗺️','géogra[ph]ie'],['🎙️','micro[ph]one'],['🎷','saxo[ph]one'],['💬','[ph]rase'],['🏆','tro[ph]ée'],['🎼','xylo[ph]one'],['📝','paragra[ph]e']],
+ gn:[['🐑','a[gn]eau'],['🌾','campa[gn]e'],['🇩🇪','Allema[gn]e'],['🇪🇸','Espa[gn]e'],['🍾','champa[gn]e'],['📏','li[gn]e'],['🪧','si[gn]e'],['🪮','pei[gn]e'],['🤝','poi[gn]ée'],['🐕','compa[gn]on']],
+ qu:[['🧱','bri[qu]e'],['💐','bou[qu]et'],['📦','pa[qu]et'],['🏪','bouti[qu]e'],['❓','[qu]estion'],['🎾','ra[qu]ette'],['🎵','musi[qu]e'],['🏦','ban[qu]e']],
+ ill:[['👨‍👩‍👧','fam[ill]e'],['🍃','feu[ill]e'],['🪨','ca[ill]ou'],['🥄','cu[ill]ère'],['🌾','pa[ill]e'],['🔮','b[ill]e'],['✨','br[ill]ant'],['👗','ha[b][ill]er'],['👷','trava[ill]er'],['🍲','bou[ill]on'],['🏅','méda[ill]e'],['💼','trav[ail]'],['🧄','[ail]'],['🔍','dét[ail]'],['🪭','évent[ail]'],['🚪','port[ail]'],['🪸','cor[ail]'],['🐄','bét[ail]'],['🪟','vitr[ail]'],['🚢','gouvern[ail]'],['🎃','épouvant[ail]'],['☀️','sol[eil]'],['⏰','rév[eil]'],['👂','or[eil]le'],['😴','somm[eil]'],['🥇','m[eil]leur'],['💡','cons[eil]'],['📷','appar[eil]'],['✨','merv[eil]le'],['🧺','corb[eil]le'],['🍒','gros[eil]le'],['🐿️','écur[euil]']],
+ c:[['💯','[c]ent'],['👮','poli[c]e'],['🧵','fi[c]elle'],['⭕','[c]ercle'],['🎯','[c]ible'],['🚀','espa[c]e'],['🌱','ra[c]ine'],['🖌️','pin[c]eau'],['🥫','sau[c]e'],['✂️','[c]iseaux'],['🚲','bi[c]yclette'],['🦢','[c]ygne'],['📖','le[ç]on'],['🧱','ma[ç]on'],['🏠','fa[ç]ade'],['🧾','re[ç]u'],['🇫🇷','fran[ç]ais'],['🧊','gla[ç]on'],['🍵','ta[ss]e'],['🏫','cla[ss]e'],['💆','ma[ss]age'],['🏊','ba[ss]in'],['🍰','de[ss]ert']],
+ g:[['🧊','[g]el'],['⛈️','ora[ge]'],['📄','pa[ge]'],['🧳','voya[ge]'],['🦵','[ge]nou'],['😊','[ge]ntil'],['🖼️','ima[ge]'],['😋','man[ge]r'],['🙂','visa[ge]']]
+};
+MORE.ill=MORE.ill.map(x=>x[1]==='ha[b][ill]er'?['👗','ha[b]i[ll]er'.replace(/\[b\]i\[ll\]/,'bi[ll]')]:x);
+Object.keys(ADD).forEach(k=>{ MORE[k]=(MORE[k]||[]).concat(ADD[k]); });
+const GP=new Set(); G.filter(g=>!g.ex).forEach(g=>g.w.forEach(x=>GP.add(x[1].replace(/[\[\]]/g,''))));
+G.forEach(g=>{ const seen=new Set(g.w.map(x=>x[1].replace(/[\[\]]/g,''))); (MORE[g.id]||[]).forEach(x=>{ const k=x[1].replace(/[\[\]]/g,''); if(!seen.has(k)&&(g.ex||!GP.has(k))){ seen.add(k); GP.add(k); g.w.push(x); } }); });
+G.forEach(g=>g.w=g.w.map(x=>({e:x[0],m:x[1],p:x[1].replace(/[\[\]]/g,''),g})));
+let EX=false; const P=()=>G.filter(g=>!!g.ex===EX);
+const AWC={}; const aw=()=>AWC[EX]||(AWC[EX]=[].concat(...P().map(g=>g.w)).filter((w,i,a)=>a.findIndex(x=>x.p===w.p)===i));
+const vw=g=>(g.mn.match(/«\s*([^»]*?)\s*»/)||[0,g.s])[1].replace(/\s*!$/,'');
+const vs=g=>({c:'se',g:'je',eu:'eu',in:'ain',ch:'che',ph:'fe',gn:'gne',qu:'que',ai:'ai',u:'u',ui:'ui',ee:'é',tion:'sion',gu:'gue',z:'ze',un:'un'}[g.id]||({au:'au',oi:'oie',ou:'ou',on:'on',an:'an',in:'vin',ch:'chut',eu:'peu',ai:'lait',ph:'photo',gn:'vigne',qu:'quatre',ill:'ye',c:'cerise',g:'girafe'}[g.id]||vw(g)));
+const sk=w=>((w.m.match(/\[([^\]]+)\]/)||[0,''])[1]).toLowerCase();
+const byS=a=>{ const m={}; a.forEach(w=>{ (m[sk(w)]=m[sk(w)]||[]).push(w); }); return Object.values(m); };
+const pickW=a=>pick(pick(byS(a)));
+const mixW=a=>{ const L=byS(a).map(shuf), out=[]; let more=true; while(more){ more=false; shuf(L).forEach(l=>{ if(l.length){ out.push(l.shift()); more=true; } }); } return out; };
+const hl=(m,c)=>m.replace(/\[([^\]]+)\]/g,'<span class="sn-m" style="--c:'+(c||'#1971c2')+'">$1</span>');
+const clean=w=>w.p;
+const others=(g)=>P().filter(x=>x!==g);
+const clash=(w)=>P().filter(x=>x!==w.g&&x.det.test(w.p));
+const intro=g=>g.sp||[{t:vs(g),l:'fr',pause:350},{t:'comme dans',l:'fr',pause:250},{t:vw(g),l:'fr'}];
+function exOpts(g){ const same=shuf(P().filter(x=>x!==g&&x.fam===g.fam&&x.snd!==g.snd)), oth=shuf(P().filter(x=>x.fam!==g.fam&&x.snd!==g.snd)); const out=[g]; same.concat(oth).forEach(x=>{ if(out.length<3&&!out.some(y=>y.snd===x.snd)) out.push(x); }); return shuf(out); }
+let stars=0; try{ stars=+localStorage.getItem('dl-pt-stars')||0; }catch(e){}
+const addStars=n=>{ try{ localStorage.setItem('dl-pt-stars',String((+localStorage.getItem('dl-pt-stars')||0)+n)); }catch(e){} };
+
+function menu(){
+  try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null;
+  root.innerHTML=`<div class="mx-head"><h2>📖 Lecture</h2><p>Les sons : chaque groupe de lettres fait un son. <b>4H</b></p></div>
+  <div class="sn-menu"><button data-a="learn"><i>🔊</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="exl" class="sn-ex"><i>⚠️</i><span>Lettres pièges</span></button><button data-a="exq" class="sn-ex"><i>🎯</i><span>Entraîne-toi aux pièges</span></button><button data-a="read" class="wide"><i>📚</i><span>Lis un texte</span></button></div>`;
+  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ({learn:()=>{EX=false;learn();},quiz:()=>{EX=false;quiz();},exl:()=>{EX=true;learn();},exq:()=>{EX=true;quiz();},read})[b.dataset.a](); };
+}
+function back(f,txt){ return `<button class="g-ghost sn-back" id="snB">${txt||'← Menu'}</button>`; }
+const FL=f=>f==='en'?'um · en':f;
+function learn(){
+  root.onclick=null; const pg=P();
+  if(EX){ const fams=[...new Set(pg.map(g=>g.fam))];
+    root.innerHTML=back()+`<div class="mx-head"><h2>⚠️ Lettres pièges</h2><p>Choisis une lettre : tu verras tous ses sons côte à côte.</p></div><div class="sn-grid">${fams.map(f=>{ const L=pg.filter(g=>g.fam===f); return `<button data-f="${f}" style="--c:${L[0].c}"><b>${FL(f)}</b><span>${L.map(g=>g.l.split(' = ')[1]).join(' · ')}</span></button>`; }).join('')}</div>`;
+    root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+    root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(b) famPage(b.dataset.f); }; return; }
+  root.innerHTML=back()+`<div class="mx-head"><h2>🔊 Découvre les sons</h2><p>Touche un son pour l’entendre.</p></div><div class="sn-grid">${pg.map(g=>`<button data-i="${G.indexOf(g)}" style="--c:${g.c}"><b>${g.l}</b><span>${g.s}</span></button>`).join('')}</div>`;
+  root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+  root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(b) detail(G[+b.dataset.i]); };
+}
+function famPage(f){
+  const L=P().filter(g=>g.fam===f); const fams=[...new Set(P().map(g=>g.fam))];
+  root.innerHTML=back(0,'← Les lettres')+`<div class="mx-head"><h2>${FL(f)}</h2><p>Touche pour écouter. Compare bien !</p></div>`+L.map((g,gi)=>`<div class="sn-card sn-var" style="--c:${g.c}"><button class="sn-hint" data-h="${gi}"><span>🔊 <b>${g.l}</b></span> <small>${g.mn}</small></button><div class="sn-words">${g.w.map((w,i)=>`<button data-g="${gi}" data-i="${i}"><i>${w.e}</i><span class="sn-w">${hl(w.m,g.c)}</span></button>`).join('')}</div></div>`).join('')+`<button class="mx-go" id="snS">🧺 Classe les mots</button><h3 class="sn-oth">Une autre lettre</h3><div class="sn-chips" id="snC">${fams.filter(x=>x!==f).map(x=>`<button data-f="${x}" style="--c:${P().find(g=>g.fam===x).c}">${FL(x)}</button>`).join('')}</div>`;
+  root.querySelector('#snB').onclick=learn; window.scrollTo(0,0);
+  root.onclick=e=>{ const h=e.target.closest('[data-h]'); if(h) return seq(intro(L[+h.dataset.h]));
+    const w=e.target.closest('[data-g]'); if(w){ const gg=L[+w.dataset.g], x=gg.w[+w.dataset.i]; seq(gg.tok?[{t:gg.tok,l:'fr',pause:400},{t:x.p,l:'fr'}]:[{t:x.p,l:'fr'}]); w.classList.add('on'); setTimeout(()=>w.classList.remove('on'),1200); return; }
+    const c=e.target.closest('#snC button'); if(c) return famPage(c.dataset.f); if(e.target.closest('#snS')) sortEx(f); };
+}
+function sortEx(f){
+  root.onclick=null; const L=P().filter(g=>g.fam===f);
+  let pool=[]; L.forEach(g=>shuf(g.w).slice(0,3).forEach(w=>pool.push(w))); pool=shuf(pool).slice(0,8);
+  const S={i:0,ok:0,first:true,locked:false,done:L.map(()=>[])};
+  const dots=()=>pool.map((_,k)=>`<i class="${k<S.i?'ok':k===S.i?'cur':''}"></i>`).join('');
+  function show(){
+    if(S.i>=pool.length) return end(); const w=pool[S.i]; S.first=true; S.locked=false; const right=L.indexOf(w.g);
+    root.innerHTML=back(0,'← '+FL(f))+`<div class="sn-card q"><div class="pt-dots">${dots()}</div><p class="sn-sub">Écoute le mot : dans quelle colonne ?</p><div class="sn-pic">${w.e}</div><div class="sn-wd big">${hl(w.m,'#495057')}</div><button class="sn-ask" id="snA">🔊 <span>Écouter le mot</span></button>
+      <div class="sn-cols" id="snO">${L.map((g,k)=>`<button data-k="${k}" style="--c:${g.c}"><b>${g.l}</b><span>${S.done[k].map(x=>x.p).join(' · ')}</span></button>`).join('')}</div></div>`;
+    root.querySelector('#snB').onclick=()=>famPage(f); window.scrollTo(0,0);
+    const h=()=>seq([{t:w.p,l:'fr'}]); root.querySelector('#snA').onclick=h; if(!FAST) setTimeout(h,250);
+    window.DLctx={opts:()=>root.querySelectorAll('#snO button'),correct:right};
+    root.querySelector('#snO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const k=+b.dataset.k;
+      if(k===right){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.done[k].push(w); S.i++; DLverdict(true,[{t:w.p}]); await sleep(FAST?50:2000); show(); }
+      else { S.first=false; b.classList.add('ko'); b.disabled=true; DLverdict(false,[{t:w.p}],false,{wrong:{t:'ce son',l:'fr'}}); } };
+  }
+  function end(){
+    const st=S.ok>=pool.length-1?3:S.ok>=pool.length/2?2:1; addStars(st);
+    root.innerHTML=`<div class="sn-card"><div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>Bravo !</h3><button class="mx-go big" id="snAg">▶ Encore !</button><button class="g-ghost" id="snM" style="margin-top:10px">← ${FL(f)}</button></div></div>`;
+    say('Bravo ! Tu as gagné des étoiles !'); root.querySelector('#snAg').onclick=()=>sortEx(f); root.querySelector('#snM').onclick=()=>famPage(f);
+  }
+  show();
+}
+function detail(g){
+  root.innerHTML=back(0,'← Tous les sons')+`<div class="sn-card" style="--c:${g.c}"><div class="sn-big">${g.l.split(' · ').map(x=>`<span>${x}</span>`).join('')}</div>
+   <button class="sn-hint" id="snH"><span>${g.ex?'🔊 <b>'+g.l+'</b>':'🔊 ça fait « <b>'+g.s+'</b> »'}</span> <small>${g.mn}</small></button>
+   <div class="sn-words">${(g.mx=mixW(g.w)).map((w,i)=>`<button data-i="${i}"><i>${w.e}</i><span class="sn-w">${hl(w.m,g.c)}</span></button>`).join('')}</div></div>
+   <h3 class="sn-oth">Travaille un autre son</h3><div class="sn-chips" id="snC">${G.map((x,i)=>x===g||!!x.ex!==EX?'':`<button data-i="${i}" style="--c:${x.c}">${EX?x.l:x.l.split(' · ')[0]}</button>`).join('')}</div>
+   <button class="mx-go" id="snQ2">🎯 M’entraîner</button><button class="g-ghost sn-back" id="snB2" style="margin-top:10px">← Tous les sons</button>`;
+  root.onclick=null; root.querySelector('#snC').onclick=e=>{ const b=e.target.closest('button'); if(b) detail(G[+b.dataset.i]); };
+  root.querySelector('#snQ2').onclick=quiz; root.querySelector('#snB2').onclick=learn;
+  root.querySelector('#snB').onclick=learn; window.scrollTo(0,0);
+  const hs=()=>seq(intro(g));
+  root.querySelector('#snH').onclick=hs;
+  root.querySelector('.sn-words').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const w=g.mx[+b.dataset.i]; seq(g.ex?[{t:w.p,l:'fr'}]:[{t:vs(g),l:'fr',pause:450},{t:w.p,l:'fr'}]); b.classList.add('on'); setTimeout(()=>b.classList.remove('on'),1200); };
+  if(!FAST) setTimeout(hs,250);
+}
+const MK={}; G.filter(g=>!g.ex).forEach(g=>g.w.forEach(w=>{ (w.m.match(/\[([^\]]+)\]/g)||[]).forEach(x=>{ MK[x.slice(1,-1)]=g; }); })); [['c','c'],['g','g'],['ge','g'],['gi','g'],['ain','in'],['ai','ai'],['eau','au'],['au','au'],['ill','ill'],['œu','eu'],['ou','ou']].forEach(([k,id])=>{ MK[k]=G.find(x=>x.id===id); });
+
+const TX=['Le p[oi]sson nage dans l’[eau].','Mon lap[in] mange une [c]erise.','Le [ch]at dort sur la [ch]aise.','L’[oi]seau vole vers la mont[agn]e.','Papa m[on]te dans le cami[on] r[ou]ge.','La [g]irafe man[ge] de la salade.','Le [ph]oque joue avec un ball[on].','La gren[ou][ill]e saute dans l’[eau].','L’élé[ph][an]t a un gr[an]d nez.','Tu veux du p[ain] avec du froma[ge] ?','Il f[ai]t b[eau] aujourd’hui.','J’ai d[eu]x [œu]fs dans mon sac.','La f[ill]e m[an]ge un champi[gn]on.','Le [ch]ien ab[oi]e dev[an]t la m[ai]son.','Un [qu]atre-[qu]arts au [c]itron !','La b[eau]té du f[eu] me pl[ai]t.'];
+function read(){
+  const pool=shuf(TX).slice(0,3); const used=new Set();
+  const html=pool.map(t=>t.replace(/\[([^\]]+)\]/g,(m,k)=>{ const g=MK[k]; if(g) used.add(g); return g?`<span class="sn-m" style="--c:${g.c}">${k}</span>`:k; })).map(x=>`<p>${x}</p>`).join('');
+  root.innerHTML=back()+`<div class="mx-head"><h2>📚 Lis un texte</h2><p>Les sons en couleur t’aident à lire.</p></div><div class="sn-card"><div class="sn-leg">${[...used].map(g=>`<span style="--c:${g.c}">${g.l.split(' · ')[0]}</span>`).join('')}</div><div class="sn-txt" id="snT">${html}</div>
+    <button class="sn-ask" id="snL">🔊 <span>Écouter le texte</span></button><button class="mx-go big" id="snX">🔀 Un autre texte</button></div>`;
+  root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+  const plain=pool.map(t=>t.replace(/[\[\]]/g,''));
+  root.querySelector('#snL').onclick=()=>seq(plain.map(t=>({t,l:'fr',pause:700})));
+  root.querySelector('#snX').onclick=read;
+  root.querySelector('#snT').onclick=e=>{ const p=e.target.closest('p'); if(p) say(p.textContent); };
+}
+/* ---- entraînement ---- */
+function mkQ(){
+  const t=pick(['hear','hear','has','read']);
+  if(t==='hear'){ const g=pick(P()), cf=g.w.filter(x=>!clash(x).length), w=pickW(cf.length>=3?cf:g.w);
+    const o=g.ex?exOpts(g):shuf([g].concat(shuf(others(g).filter(x=>!x.det.test(w.p))).slice(0,2)));
+    const wd=g.ex?hl(w.m,'#495057'):hl(w.m,g.c).replace(/<span class="sn-m"[^>]*>/g,'<span class="sn-m0">');
+    return {t,vis:`<div class="sn-pic">${w.e}</div><div class="sn-wd">${wd}</div>`,q:g.ex?'Que fait la lettre en couleur ?':'Quel son entends-tu dans ce mot ?',say:w.p,opts:o.map(x=>({h:`<span class="sn-og" style="--c:${x.c}">${g.ex?x.l:x.l.replace(/ · /g,'<br>')}</span>`,ok:x===g,r:x.s})),rev:[{t:w.p}]}; }
+  if(t==='has'){ const g=pick(P()); const ok=pickW(g.w); let bad;
+    if(g.ex){ const pl=aw().filter(x=>x.g.snd!==g.snd&&x.e!==ok.e&&(x.g.fam===g.fam||!x.p.includes(g.let))); bad=shuf(pl.filter(x=>x.g.fam===g.fam)).concat(shuf(pl.filter(x=>x.g.fam!==g.fam))); }
+    else bad=shuf(aw().filter(x=>x.g!==g&&!g.det.test(x.p)&&x.e!==ok.e));
+    bad=bad.filter((x,i,a)=>a.findIndex(y=>y.e===x.e||y.p===x.p)===i); const o=shuf([ok].concat(bad.slice(0,2)));
+    return {t,vis:g.ex?`<div class="sn-big sm" style="--c:${g.c}"><span>${g.l}</span></div>`:`<div class="sn-big sm" style="--c:${g.c}">${g.l.split(' · ').map(x=>`<span>${x}</span>`).join('')}</div><div class="sn-snd">ça fait « ${g.s} »</div>`,q:g.ex?'Dans quel mot la lettre fait-elle ça ?':'Quel mot contient ce son ?',say:g.ex?g.id:vs(g),opts:o.map(x=>({h:`<span class="sn-oe">${x.e}</span><span class="sn-ow">${x.p}</span>`,ok:x===ok,r:x.p})),rev:[{t:ok.p}],mw:g.ex?null:vw(g),g}; }
+  const g=pick(P()), w=pickW(g.w); const bad=shuf(aw().filter(x=>x!==w&&x.p!==w.p&&x.e!==w.e)).filter((x,i,a)=>a.findIndex(y=>y.e===x.e)===i).slice(0,2); const o=shuf([w].concat(bad));
+  return {t,vis:`<div class="sn-wd big">${hl(w.m,g.c)}</div>`,q:'Lis le mot : quelle image ?',say:w.p,opts:o.map(x=>({h:`<span class="sn-oe big">${x.e}</span>`,ok:x===w,r:x.p})),rev:[{t:w.p}],cls:'n3'};
+}
+function quiz(){
+  const S={i:0,ok:0,total:8,first:true,locked:false}; const seen=new Set();
+  const dots=()=>Array.from({length:S.total},(_,k)=>`<i class="${k<S.i?'ok':k===S.i?'cur':''}"></i>`).join('');
+  function next(){
+    if(S.i>=S.total) return end();
+    let q,n=0; do{ q=mkQ(); n++; }while(seen.has(q.say+q.t)&&n<15); seen.add(q.say+q.t); S.first=true; S.locked=false;
+    root.innerHTML=back(0,'← Menu')+`<div class="sn-card q"><div class="pt-dots">${dots()}</div>${q.vis}<button class="sn-ask" id="snA">🔊 <span>${q.q}</span></button>
+      <div class="sn-opts ${q.cls||''}" id="snO">${q.opts.map((o,k)=>`<button data-k="${k}">${o.h}</button>`).join('')}</div></div>`;
+    root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+    const h=()=>{ if(q.t==='has') seq(q.mw?[{t:q.say,l:'fr',pause:400},{t:'comme dans',l:'fr',pause:250},{t:q.mw,l:'fr',pause:500},{t:q.q,l:'fr'}]:[{t:q.q,l:'fr'}]); else if(q.t==='hear') seq([{t:q.say,l:'fr',pause:500},{t:q.q,l:'fr'}]); else seq([{t:q.q,l:'fr'}]); };
+    root.querySelector('#snA').onclick=h; if(!FAST) setTimeout(h,250);
+    window.DLctx={opts:()=>root.querySelectorAll('#snO button'),correct:q.opts.findIndex(x=>x.ok)};
+    root.querySelector('#snO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const o=q.opts[+b.dataset.k];
+      if(o.ok){ S.locked=true; b.classList.add('ok'); if(S.first) S.ok++; S.i++; DLverdict(true,q.rev); await sleep(FAST?50:2200); next(); }
+      else { S.first=false; b.classList.add('ko'); b.disabled=true; DLverdict(false,q.rev,false,{wrong:{t:q.t==='hear'?'ce son':o.r,l:'fr'}}); } };
+  }
+  function end(){
+    const st=S.ok>=7?3:S.ok>=4?2:1; addStars(st);
+    root.innerHTML=`<div class="sn-card"><div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>Bravo !</h3><button class="mx-go big" id="snAg">▶ Encore !</button><button class="g-ghost" id="snM" style="margin-top:10px">← Menu</button></div></div>`;
+    say('Bravo ! Tu as gagné des étoiles !'); root.querySelector('#snAg').onclick=quiz; root.querySelector('#snM').onclick=menu;
+  }
+  next();
+}
+window.DLsons={G,mkQ,setEX:v=>{EX=v;},P};
+menu();
+})();
+</script>
+
+<script>
+/* ===== Genre et nombre : lexique, règles, manches d'entraînement ===== */
+(function(){
+'use strict';
+const root=document.getElementById('p-genre'); if(!root) return;
+const FAST=/#test/.test(location.hash);
+const shuf=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const seq=a=>{ try{ if(window.DLspeakSeq) DLspeakSeq(a); else if(window.speak) speak(a.map(x=>x.t).join('. '),'fr'); }catch(e){} };
+const say=t=>seq([{t,l:'fr'}]);
+const RAW=[
+['pie','⚠️','Genre piège','#e03131',[['🏨','hôtel','m'],['⛈️','orage','m'],['🌳','arbre','m'],['🪜','escalier','m'],['💀','squelette','m'],['🧩','problème','m'],['💅','ongle','m'],['🦶','orteil','m'],['🦟','insecte','m'],['⚡','éclair','m'],['📌','exemple','m'],['🔥','incendie','m'],['👔','uniforme','m'],['🍑','abricot','m'],['🕰️','horloge','f'],['👂','oreille','f'],['🕷️','araignée','f'],['🍊','orange','f'],['🏝️','île','f'],['📄','page','f'],['💡','idée','f'],['🖼️','image','f'],['⭐','étoile','f'],['🌶️','épice','f'],['👥','équipe','f'],['⚓','ancre','f'],['❌','erreur','f'],['⏰','heure','f'],['✉️','enveloppe','f'],['🪧','affiche','f'],['🛣️','autoroute','f']]],
+['ani','🐾','Animaux','#e8590c',[['🐱','chat','m'],['🐶','chien','m'],['🐴','cheval','m','chevaux'],['🐦','oiseau','m','oiseaux'],['🐟','poisson','m'],['🐰','lapin','m'],['🦁','lion','m'],['🐒','singe','m'],['🐘','éléphant','m'],['🐯','tigre','m'],['🐻','ours','m','='],['🐺','loup','m'],['🦊','renard','m'],['🐌','escargot','m'],['🦋','papillon','m'],['🦆','canard','m'],['🐷','cochon','m'],['🐑','mouton','m'],['🫏','âne','m'],['🐍','serpent','m'],['🐾','animal','m','animaux'],['🐮','vache','f'],['🐔','poule','f'],['🦒','girafe','f'],['🐢','tortue','f'],['🐸','grenouille','f'],['🐝','abeille','f'],['🐭','souris','f','='],['🐐','chèvre','f'],['🐞','coccinelle','f'],['🐜','fourmi','f'],['🐋','baleine','f']]],
+['food','🍎','Nourriture','#2f9e44',[['🍞','pain','m'],['🧀','fromage','m'],['🎂','gâteau','m','gâteaux'],['🍋','citron','m'],['🍬','bonbon','m'],['🍫','chocolat','m'],['🥚','œuf','m'],['🧃','jus','m','='],['🍚','riz','m','='],['🍈','melon','m'],['🍇','raisin','m'],['🍪','biscuit','m'],['🥛','yaourt','m'],['🍯','sucre','m'],['🧈','beurre','m'],['🥦','légume','m'],['🍎','pomme','f'],['🍓','fraise','f'],['🍒','cerise','f'],['🍌','banane','f'],['🍦','glace','f'],['🥕','carotte','f'],['🍅','tomate','f'],['🥗','salade','f'],['🥧','tarte','f'],['🍲','soupe','f'],['🍕','pizza','f'],['🍐','poire','f'],['🫙','confiture','f'],['🥞','crêpe','f'],['🥜','noix','f','=']]],
+['home','🏠','Maison','#1971c2',[['🛏️','lit','m'],['🛋️','canapé','m'],['🪞','miroir','m'],['🧹','balai','m'],['🏠','toit','m'],['🧱','mur','m'],['🌻','jardin','m'],['🛋️','salon','m'],['🔪','couteau','m','couteaux'],['🥛','verre','m'],['🧺','panier','m'],['💻','ordinateur','m'],['📞','téléphone','m'],['🧊','frigo','m'],['🟫','tapis','m','='],['🏡','maison','f'],['🚪','porte','f'],['🪟','fenêtre','f'],['🪑','chaise','f'],['🍽️','table','f'],['🪔','lampe','f'],['🔑','clé','f'],['🍳','cuisine','f'],['🛌','chambre','f'],['🚿','douche','f'],['🪥','brosse','f'],['🍾','bouteille','f'],['🍴','fourchette','f'],['🍽️','assiette','f'],['🥄','cuillère','f'],['📺','télévision','f'],['🗄️','étagère','f']]],
+['school','✏️','École','#7048e8',[['📖','livre','m'],['🖊️','stylo','m'],['📓','cahier','m'],['🖍️','crayon','m'],['🎒','sac','m'],['🎒','cartable','m'],['📚','dictionnaire','m'],['🖌️','feutre','m'],['✂️','ciseau','m','ciseaux'],['🖥️','bureau','m','bureaux'],['📝','exercice','m'],['💬','mot','m'],['🛠️','travail','m','travaux'],['📏','règle','f'],['👝','trousse','f'],['🧽','gomme','f'],['🏫','classe','f'],['🎓','école','f'],['📘','leçon','f'],['🗣️','phrase','f'],['🔤','lettre','f'],['🧴','colle','f'],['⚽','récréation','f'],['👩‍🏫','maîtresse','f'],['✍️','dictée','f'],['🧮','calculatrice','f']]],
+['body','🧍','Corps','#d6336c',[['🦶','pied','m'],['💪','bras','m','='],['☝️','doigt','m'],['👃','nez','m','='],['🦵','genou','m','genoux'],['🦒','cou','m','cous'],['🙂','visage','m'],['🫃','ventre','m'],['🔙','dos','m','='],['💇','cheveu','m','cheveux'],['👁️','œil','m','yeux'],['💪','coude','m'],['🤨','front','m'],['🧔','menton','m'],['✋','main','f'],['🦵','jambe','f'],['🦷','dent','f'],['👄','bouche','f'],['🗣️','tête','f'],['👅','langue','f'],['😊','joue','f'],['🤷','épaule','f'],['🦶','cheville','f']]],
+['clo','👕','Vêtements','#0c8599',[['👖','pantalon','m'],['🧥','manteau','m','manteaux'],['🎩','chapeau','m','chapeaux'],['🧶','pull','m'],['🩳','short','m'],['🧢','bonnet','m'],['🧤','gant','m'],['🩱','maillot','m'],['👘','pyjama','m'],['📿','collier','m'],['💎','bijou','m','bijoux'],['☂️','parapluie','m'],['👞','soulier','m'],['👗','robe','f'],['👕','chemise','f'],['👟','chaussure','f'],['🩳','jupe','f'],['🧦','chaussette','f'],['🧣','écharpe','f'],['🧢','casquette','f'],['🧥','veste','f'],['🥾','botte','f'],['🪢','ceinture','f'],['👔','cravate','f'],['💍','bague','f'],['👑','couronne','f']]],
+['nat','🌦️','Nature et météo','#5c940d',[['☀️','soleil','m'],['☁️','nuage','m'],['💨','vent','m'],['🏖️','sable','m'],['🏞️','lac','m'],['🌊','fleuve','m'],['🌾','champ','m'],['🌲','bois','m','='],['🪨','caillou','m','cailloux'],['🔥','feu','m','feux'],['🌊','océan','m'],['🌋','volcan','m'],['🏜️','désert','m'],['🏰','château','m','châteaux'],['🌙','lune','f'],['⛰️','montagne','f'],['🌊','vague','f'],['🌧️','pluie','f'],['🌸','fleur','f'],['🪶','plume','f'],['🌲','forêt','f'],['🏞️','rivière','f'],['🏖️','plage','f'],['🍃','feuille','f'],['🌿','herbe','f'],['🌪️','tempête','f']]],
+['city','🚗','Transports et ville','#f08c00',[['🚲','vélo','m'],['🚚','camion','m'],['⛵','bateau','m','bateaux'],['✈️','avion','m'],['🚆','train','m'],['🚌','bus','m','='],['🚜','tracteur','m'],['🚁','hélicoptère','m'],['🚇','métro','m'],['🌉','pont','m'],['🏪','magasin','m'],['🎬','cinéma','m'],['🌳','parc','m'],['🏘️','village','m'],['🍽️','restaurant','m'],['🧺','marché','m'],['🏥','hôpital','m','hôpitaux'],['📰','journal','m','journaux'],['🚰','canal','m','canaux'],['🚗','voiture','f'],['🏍️','moto','f'],['🚉','gare','f'],['🛣️','rue','f'],['🛤️','route','f'],['🏙️','ville','f'],['⛪','église','f'],['🥖','boulangerie','f'],['🏊','piscine','f'],['💊','pharmacie','f'],['🏦','banque','f'],['📮','poste','f'],['🚑','ambulance','f'],['🚀','fusée','f']]],
+['fun','🎨','Loisirs et jeux','#364fc7',[['⚽','ballon','m'],['🎲','jeu','m','jeux'],['🧸','jouet','m'],['🧩','puzzle','m'],['🎨','dessin','m'],['🎹','piano','m'],['🥁','tambour','m'],['🎻','violon','m'],['🎞️','film','m'],['🎪','cirque','m'],['🎭','spectacle','m'],['🎁','cadeau','m','cadeaux'],['🎸','guitare','f'],['🎺','trompette','f'],['🪆','poupée','f'],['🖼️','peinture','f'],['🪈','flûte','f'],['💃','danse','f'],['🎶','musique','f'],['🎤','chanson','f'],['🛝','balançoire','f'],['🎉','fête','f'],['🚲','bicyclette','f'],['📖','histoire','f']]],
+['fam','👨‍👩‍👧','Famille et métiers','#c2255c',[['👨','papa','m'],['👦','frère','m'],['👨‍🦳','oncle','m'],['🧒','cousin','m'],['👶','bébé','m'],['👦','garçon','m'],['🤴','roi','m'],['👨‍⚕️','docteur','m'],['🥖','boulanger','m'],['👨‍🚒','pompier','m'],['📬','facteur','m'],['👨‍🍳','cuisinier','m'],['🏘️','voisin','m'],['👩','maman','f'],['👧','sœur','f'],['👩‍🦳','tante','f'],['🧒','cousine','f'],['👧','fille','f'],['👸','reine','f'],['👑','princesse','f'],['👩‍⚕️','infirmière','f'],['🏘️','voisine','f'],['👩','dame','f']]],
+['oth','🗂️','Autres mots','#868e96',[['🍽️','repas','m','='],['🌍','pays','m','='],['🗣️','voix','f','='],['🏷️','prix','m','='],['🔁','fois','f','='],['🤔','choix','m','='],['✝️','croix','f','='],['🏃','corps','m','='],['⏳','temps','m','=']]]
+];
+const seen=new Set(), TH=[], W=[];
+RAW.forEach(([id,ic,name,c,L])=>{ const t={id,ic,name,c,ws:[]}; L.forEach(([e,s,g,p])=>{ if(seen.has(s)) return; seen.add(s); const inv=p==='=', w={e,s,g,inv,irr:!!p&&!inv,p:inv?s:(p||s+'s'),th:id,i:W.length}; W.push(w); t.ws.push(w); }); TH.push(t); });
+const SPE={id:'spe',ic:'🔀',name:'Pluriels spéciaux',c:'#099268',ws:W.filter(w=>w.irr||w.inv)};
+const ALL={id:'all',ic:'🎲',name:'Tous les mots',c:'#1971c2',ws:W};
+const GRID=TH.slice(1).concat([TH[0],SPE]);
+const ST=()=>{ try{ return JSON.parse(localStorage.getItem('dl-gn-ok')||'{}'); }catch(e){ return {}; } };
+const setOK=w=>{ try{ const o=ST(); o[w.s]=1; localStorage.setItem('dl-gn-ok',JSON.stringify(o)); }catch(e){} };
+const addStars=n=>{ try{ localStorage.setItem('dl-pt-stars',String((+localStorage.getItem('dl-pt-stars')||0)+n)); }catch(e){} };
+const un=w=>(w.g==='f'?'une ':'un ')+w.s;
+const prog=t=>{ const o=ST(); return t.ws.filter(w=>o[w.s]).length; };
+const formOf=r=>r.w.inv?`${r.pl?2:1} ${r.w.s}`:(r.pl?r.w.p:r.w.s);
+const emo=r=>r.pl?r.w.e+r.w.e:r.w.e;
+const gWhy=w=>`Non : on dit « ${un(w)} », donc c’est ${w.g==='m'?'masculin':'féminin'}. (un → masculin, une → féminin)`;
+const nWhy=r=>r.w.inv?(r.pl?`Non : ici il y en a 2, donc c’est le pluriel. « ${r.w.s} » ne change pas : il finit déjà par ${r.w.s.slice(-1)}.`:`Non : ici il n’y en a qu’un, donc c’est le singulier. « ${r.w.s} » ne change pas au pluriel.`):(r.pl?`Non : on voit plusieurs ${r.w.e}. « ${r.w.p} », c’est le pluriel (des ${r.w.p}).`:`Non : il n’y en a qu’un. « ${r.w.s} », c’est le singulier (${un(r.w)}).`);
+const info=r=>`${r.w.s} : ${r.w.g==='m'?'masculin':'féminin'}. On dit « ${un(r.w)} » et au pluriel « des ${r.w.p} »${r.w.inv?' (ce mot ne change pas au pluriel)':r.w.irr?' (mot spécial)':''}.`;
+const back=(t)=>`<button class="g-ghost sn-back" id="gnB">${t||'← Menu'}</button>`;
+function menu(){
+  const o=ST(), done=W.filter(w=>o[w.s]).length;
+  root.innerHTML=`<div class="mx-head"><h2>🏷️ Genre et nombre</h2><p>Masculin ou féminin ? Un seul ou plusieurs ?</p></div><p class="gn-prog">✅ ${done} mots réussis sur ${W.length}</p>
+  <div class="sn-menu"><button data-a="learn"><i>📚</i><span>Découvre les mots</span></button><button data-a="train"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="rules" class="wide"><i>📏</i><span>Les règles</span></button></div>`;
+  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(b) ({learn:()=>themes('learn'),train:()=>themes('train'),rules})[b.dataset.a](); }; window.scrollTo(0,0);
+}
+function themes(mode){
+  const L=mode==='train'?[ALL].concat(GRID):GRID;
+  root.innerHTML=back()+`<div class="mx-head"><h2>${mode==='train'?'🎯 Entraîne-toi':'📚 Découvre les mots'}</h2><p>${mode==='train'?'Choisis un thème : une manche = 8 mots.':'Choisis un thème.'}</p></div><div class="sn-grid gn-grid">${L.map(t=>`<button data-t="${t.id}" style="--c:${t.c}"><b>${t.ic}</b><span>${t.name}</span><small>✅ ${prog(t)}/${t.ws.length}</small></button>`).join('')}</div>`;
+  root.querySelector('#gnB').onclick=menu; window.scrollTo(0,0);
+  root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const t=L.find(x=>x.id===b.dataset.t); mode==='train'?manche(t,1):themePage(t); };
+}
+function themePage(t){
+  const o=ST();
+  root.innerHTML=back('← Les thèmes')+`<div class="mx-head"><h2>${t.ic} ${t.name}</h2><p>Touche un mot pour l’entendre. <span class="gn-a m">un</span> masculin · <span class="gn-a f">une</span> féminin</p></div><div class="gn-chips">${t.ws.map((w,i)=>`<button class="gn-chip" data-i="${i}" style="--c:${t.c}"><span class="gn-e">${w.e}</span><span class="gn-t"><span><i class="gn-a ${w.g}">${w.g==='f'?'une':'un'}</i> ${w.s}</span><small>${w.inv?'des '+w.s+' (pareil)':'des '+w.p}</small></span>${o[w.s]?'<em>✅</em>':''}</button>`).join('')}</div>
+  <button class="mx-go" id="gnT" style="margin-top:14px">🎯 M’entraîner sur ce thème</button>`;
+  root.querySelector('#gnB').onclick=()=>themes('learn'); window.scrollTo(0,0);
+  root.querySelector('#gnT').onclick=()=>manche(t,1);
+  root.querySelector('.gn-chips').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const w=t.ws[+b.dataset.i]; seq([{t:un(w),l:'fr',pause:300},{t:'des '+w.p,l:'fr'}]); b.classList.add('on'); setTimeout(()=>b.classList.remove('on'),1200); };
+}
+function rules(){
+  const R=[['#1864ab','Masculin','un · le','un chat, le chat','Si on peut dire « un » ou « le », c’est masculin.'],['#a61e4d','Féminin','une · la','une vache, la vache','Si on peut dire « une » ou « la », c’est féminin.'],['#e8590c','Devant une voyelle','l’ · un / une','l’école : une école','Avec « l’ » on ne sait pas : essaie « un » ou « une » (une école, un arbre).'],['#2f9e44','Pluriel normal','+ s','des chats, des vaches','Pour dire plusieurs, on ajoute un s à la fin. On dit « les » ou « des ».'],['#7048e8','Pluriel en x','-eau · -eu · -ou → x','des bateaux, des jeux, des bijoux','Les mots en -eau et -eu prennent un x. Quelques mots en -ou aussi (bijoux, cailloux, genoux).'],['#0c8599','Pluriel en -aux','-al → -aux','un animal : des animaux','Les mots en -al deviennent -aux (animaux, journaux, chevaux).'],['#f08c00','Ça ne change pas','s · x · z à la fin','une souris : des souris','Si le mot finit déjà par s, x ou z, il ne change pas (souris, prix, nez).'],['#d6336c','Mot spécial','œil → yeux','un œil : des yeux','Quelques mots changent complètement : œil → yeux.']];
+  root.innerHTML=back()+`<div class="mx-head"><h2>📏 Les règles</h2><p>Touche une carte pour l’écouter.</p></div>${R.map((r,i)=>`<div class="gn-rule" data-i="${i}" style="--c:${r[0]}"><h4>${r[1]} · ${r[2]}</h4><p class="ex">${r[3]}</p><p>${r[4]}</p></div>`).join('')}`;
+  root.querySelector('#gnB').onclick=menu; window.scrollTo(0,0);
+  root.onclick=e=>{ const c=e.target.closest('.gn-rule'); if(c){ const r=R[+c.dataset.i]; seq([{t:r[1],l:'fr',pause:300},{t:r[3],l:'fr',pause:400},{t:r[4],l:'fr'}]); } };
+}
+function manche(t,n){
+  const o=ST(); let pool=shuf(t.ws); pool=pool.filter(w=>!o[w.s]).concat(pool.filter(w=>o[w.s]));
+  const list=pool.slice(0,8).map(w=>({w,pl:Math.random()<.5,g:false,n:false,first:true,miss:[]})); let k=0;
+  const dots=()=>list.map((_,j)=>`<i class="${j<k?'ok':j===k?'cur':''}"></i>`).join('');
+  function show(){
+    if(k>=list.length) return end(); const r=list[k];
+    root.innerHTML=back('← Les thèmes')+`<div class="sn-card q"><div class="pt-dots">${dots()}</div><p class="gn-lab">${t.ic} ${t.name} · manche ${n} · mot ${k+1}/${list.length}</p>
+      <div class="gn-top"><button class="gn-w" id="gnW"><i>${emo(r)}</i><b>${formOf(r)}</b></button><button class="gn-i" id="gnI" aria-label="Explication">💡</button></div>
+      <h4 class="gn-q">Masculin ou féminin ?</h4><div class="gn-cells" data-a="g"><button data-v="m">♂ Masculin</button><button data-v="f">♀ Féminin</button></div>
+      <h4 class="gn-q">Un seul ou plusieurs ?</h4><div class="gn-cells" data-a="n"><button data-v="s">1 Singulier</button><button data-v="p">👥 Pluriel</button></div>
+      <p class="gn-why" id="gnY" hidden></p><button class="mx-go big" id="gnN" hidden>${k+1<list.length?'Suivant ▶':'Voir mon résultat ▶'}</button></div>`;
+    root.querySelector('#gnB').onclick=()=>themes('train'); window.scrollTo(0,0);
+    const why=(txt,cls)=>{ const p=root.querySelector('#gnY'); p.hidden=false; p.className='gn-why'+(cls?' '+cls:''); p.textContent=txt; };
+    const good=a=>a==='g'?r.w.g:(r.pl?'p':'s');
+    const setCtx=()=>{ const a=!r.g?'g':!r.n?'n':null; window.DLctx=a?{opts:()=>root.querySelectorAll(`.gn-cells[data-a="${a}"] button`),correct:[...root.querySelectorAll(`.gn-cells[data-a="${a}"] button`)].findIndex(b=>b.dataset.v===good(a))}:null; }; setCtx();
+    root.querySelector('#gnW').onclick=()=>say(formOf(r)); if(!FAST) setTimeout(()=>say(formOf(r)),250);
+    root.querySelector('#gnI').onclick=()=>{ const x=info(r); why(x,'info'); say(x); };
+    root.querySelectorAll('.gn-cells').forEach(box=>box.onclick=e=>{
+      const b=e.target.closest('button'); if(!b||b.disabled) return; const a=box.dataset.a; if(r[a]) return;
+      if(b.dataset.v===good(a)){ b.classList.add('ok'); r[a]=true; box.querySelectorAll('button').forEach(x=>x.disabled=true); setCtx();
+        if(r.g&&r.n){ if(r.first) setOK(r.w); why(`✅ ${un(r.w)} → des ${r.w.p}`,'good'); root.querySelector('#gnN').hidden=false; root.querySelector('#gnN').focus&&0; if(!FAST) say(`${un(r.w)}, des ${r.w.p}`); } }
+      else { b.classList.add('ko'); b.disabled=true; r.first=false; if(!r.miss.includes(a)) r.miss.push(a); const x=a==='g'?gWhy(r.w):nWhy(r); why(x); say(x); }
+    });
+    root.querySelector('#gnN').onclick=()=>{ k++; show(); };
+  }
+  function end(){
+    const ok=list.filter(r=>r.first).length, st=ok>=7?3:ok>=4?2:1; addStars(st);
+    const tot=prog(t);
+    root.innerHTML=`<div class="sn-card"><div class="pt-end"><div class="st">${'⭐'.repeat(st)}</div><h3>${ok} / ${list.length} sans erreur</h3><p class="gn-prog">${ok===list.length?'Manche parfaite !':'Les mots en orange sont à revoir.'}</p></div>
+      ${list.map(r=>`<div class="gn-rec ${r.first?'ok':'mid'}"><i>${r.w.e}</i><span>${un(r.w)} → des ${r.w.p}</span><i>${r.first?'✅':'🟠'}</i></div>`).join('')}
+      <p class="gn-prog" style="margin-top:12px">${t.name} : ✅ ${tot}/${t.ws.length} mots réussis</p>
+      <button class="mx-go big" id="gnAg">▶ Manche suivante</button><button class="g-ghost" id="gnTh" style="margin-top:10px">← Autre thème</button><button class="g-ghost" id="gnM" style="margin-top:10px">← Menu</button></div>`;
+    say(ok===list.length?'Bravo ! Manche parfaite !':'Bravo ! Regarde les mots à revoir.'); window.scrollTo(0,0);
+    root.querySelector('#gnAg').onclick=()=>manche(t,n+1); root.querySelector('#gnTh').onclick=()=>themes('train'); root.querySelector('#gnM').onclick=menu;
+  }
+  show();
+}
+window.DLgenre={W,TH,manche,menu};
+menu();
 })();
 </script>
 </body>
