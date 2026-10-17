@@ -324,6 +324,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .mx-grade button[aria-pressed="true"]{background:#dff4dc;border-color:#2f9e44}
 .mx-grade button[data-g="6H"][aria-pressed="true"]{background:#fde0ec;border-color:#d6336c}
 .mx-box,.mx-play{padding:12px;border-radius:22px;border:3px solid var(--line);background:#fff8dc;margin-bottom:12px}
+.mx-ops{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mx-ops button{min-height:54px;border-radius:14px;border:3px solid var(--c);background:#fff;color:var(--c);font-weight:800;font-size:clamp(14px,4vw,18px);padding:4px 6px;font-family:inherit;cursor:pointer}.mx-ops button[aria-pressed="true"]{background:var(--c);color:#fff}.mx-lab small{font-weight:600;color:#6c7589}
 .mx-lab{font-weight:800;margin:4px 0 6px}.mx-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
 .mx-seg button,.mx-tabs button{min-height:48px;border-radius:14px;border:2px solid rgba(29,36,51,.16);background:#fff;font-weight:700;font-size:clamp(14px,3.9vw,18px);padding:2px 4px}
 .mx-seg button[aria-pressed="true"],.mx-tabs button[aria-pressed="true"]{background:#bfeebf;border-color:#2f9e44}
@@ -793,6 +794,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "6.0", desc: "Calcul 6H : choisir + − × ÷ séparément" },
     { v: "5.9", desc: "Colonnes : Mon calcul avec roues crantées (jusqu’à 9999)" },
     { v: "5.8", desc: "Colonnes : silencieux, glisser pour emprunter, série de 10" },
     { v: "5.7", desc: "Maths 6H : soustractions en colonnes avec emprunt" },
@@ -2678,7 +2680,7 @@ function ask(){
 'use strict';
 const root=document.getElementById('p-calc'); if(!root) return;
 const rnd=n=>Math.floor(Math.random()*n); const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
-const S={g:'4H',op4:'both',max4:20,op6:'all',tabs:new Set([2,3,4,5,6,7,8,9,10])};
+const S={g:'4H',op4:'both',max4:20,ops6:new Set(['add','sub','mul','div']),tabs:new Set([2,3,4,5,6,7,8,9,10])};
 const OPW={'+':'plus','−':'moins','×':'fois','÷':'divisé par'};
 let Q=null, run=null; window.__calc=()=>({Q,run});
 root.innerHTML=`<div class="mx-head"><h2>🧮 Le calcul</h2><p>Choisis ta classe, puis résous une série de 10 calculs.</p>
@@ -2692,17 +2694,21 @@ function paintG(){
 function paintO(){
   if(window.DLU&&DLU.id()&&S._u!==DLU.id()){ S._u=DLU.id(); const g0=DLU.gr(); if(g0==='4H'||g0==='6H'){ S.g=g0; paintG(); } }
   run=null; P.innerHTML=''; T.hidden=S.g!=='6H'; if(S.g!=='6H'){ R.hidden=true; }
-  const md=S.op6;
+  const has=(...k)=>k.some(x=>S.ops6.has(x));
   if(S.g==='4H'){
     O.innerHTML=`<div class="mx-box">${seg('o4','Quel calcul ?',[['add','➕ Addition'],['sub','➖ Soustraction'],['both','➕➖ Les deux']],S.op4)}${seg('m4','Nombres jusqu’à…',[[20,'20'],[100,'100']],S.max4)}
       <button class="mx-go" id="mxGo">▶ Commencer la série</button></div>`;
     O.querySelector('#o4').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.op4=b.dataset.v; paintO(); };
     O.querySelector('#m4').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.max4=+b.dataset.v; paintO(); };
   } else {
-    O.innerHTML=`<div class="mx-box">${seg('o6','Quel calcul ?',[['all','🔀 Tous'],['addsub','➕➖ + et −'],['mul','✖️ Multiplication'],['div','➗ Division'],['both','✖️➗ × et ÷']],S.op6,true)}
-      <div class="mx-sec" ${md==='addsub'?'hidden':''}><div class="mx-lab">Quelles tables ?</div><div class="mx-tabs" id="t6">${Array.from({length:19},(_,i)=>i+2).map(n=>`<button data-n="${n}" aria-pressed="${S.tabs.has(n)}">${n}</button>`).join('')}</div><div class="mx-quick" id="q6"><button data-r="2-10">2 à 10</button><button data-r="11-20">11 à 20 🔥</button><button data-r="2-20">Toutes</button></div></div>
+    const OPS=[['add','➕ Addition','#2f9e44'],['sub','➖ Soustraction','#e8590c'],['mul','✖️ Multiplication','#1971c2'],['div','➗ Division','#7048e8']];
+    O.innerHTML=`<div class="mx-box"><div class="mx-sec"><div class="mx-lab">Quels calculs ? <small>(touche pour choisir, tu peux en prendre plusieurs)</small></div><div class="mx-ops" id="o6">${OPS.map(([v,t,c])=>`<button data-v="${v}" style="--c:${c}" aria-pressed="${S.ops6.has(v)}">${t}</button>`).join('')}</div>
+      <div class="mx-quick" id="k6"><button data-k="add,sub,mul,div">🔀 Tous</button><button data-k="add,sub">➕➖ + et −</button><button data-k="mul,div">✖️➗ × et ÷</button></div></div>
+      <div class="mx-sec" id="tw6" ${has('mul','div')?'':'hidden'}><div class="mx-lab">Quelles tables ?</div><div class="mx-tabs" id="t6">${Array.from({length:19},(_,i)=>i+2).map(n=>`<button data-n="${n}" aria-pressed="${S.tabs.has(n)}">${n}</button>`).join('')}</div><div class="mx-quick" id="q6"><button data-r="2-10">2 à 10</button><button data-r="11-20">11 à 20 🔥</button><button data-r="2-20">Toutes</button></div></div>
       <button class="mx-go" id="mxGo">▶ Commencer la série</button></div>`;
-    O.querySelector('#o6').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.op6=b.dataset.v; paintO(); };
+    O.querySelector('#o6').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const v=b.dataset.v; if(S.ops6.has(v)){ if(S.ops6.size>1) S.ops6.delete(v); } else S.ops6.add(v);
+      O.querySelectorAll('#o6 button').forEach(x=>x.setAttribute('aria-pressed',S.ops6.has(x.dataset.v))); O.querySelector('#tw6').hidden=!has('mul','div'); };
+    O.querySelector('#k6').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.ops6=new Set(b.dataset.k.split(',')); paintO(); };
     O.querySelector('#q6').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const [lo,hi]=b.dataset.r.split('-').map(Number); S.tabs=new Set(Array.from({length:hi-lo+1},(_,i)=>lo+i)); paintO(); };
     O.querySelector('#t6').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const n=+b.dataset.n; if(S.tabs.has(n)){ if(S.tabs.size>1) S.tabs.delete(n); } else S.tabs.add(n);
       O.querySelectorAll('#t6 button').forEach(x=>x.setAttribute('aria-pressed',S.tabs.has(+x.dataset.n))); };
@@ -2719,7 +2725,7 @@ function gen(){
     if(op==='+'){ const a=N<=20?1+rnd(N-2):10+rnd(N-30), b=1+rnd(Math.min(N-a,N<=20?N:90)); return {a,b,op,res:a+b}; }
     const a=N<=20?3+rnd(N-2):20+rnd(N-19), b=1+rnd(a-1); return {a,b,op,res:a-b};
   }
-  const pool={all:['add','sub','mul','div'],addsub:['add','sub'],both:['mul','div']}[S.op6]||[S.op6], mode=pool[rnd(pool.length)];
+  const pool=[...S.ops6], mode=pool[rnd(pool.length)];
   if(mode==='add'||mode==='sub'){ const N=Math.random()<.5?100:1000;
     if(mode==='add'){ const a=10+rnd(N-30), b=1+rnd(N-a-1); return {a,b,op:'+',res:a+b}; }
     const a=20+rnd(N-19), b=1+rnd(a-1); return {a,b,op:'−',res:a-b}; }
