@@ -820,6 +820,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "8.8", desc: "Jeu de chiffres : bug des briques corrigé" },
     { v: "8.7", desc: "Jeu de chiffres : taille adaptée à la largeur d’écran" },
     { v: "8.6", desc: "Jeu de chiffres : lettres de comparaison plus grandes" },
     { v: "8.5", desc: "Jeu de chiffres : comparaison plus grande et lisible" },
@@ -1322,6 +1323,7 @@ function gmEx(){
 }
 function gmEnd(ok,typed){
   if(g.done) return; g.done=true; const n=g.list[g.i]; if(ok) g.score++; verdict(ok,n);
+  GB.querySelectorAll('[data-gbrick],[data-greveal]').forEach(x=>x.remove());
   GB.querySelector('#gmEx').innerHTML=''; GB.querySelector('.mn-num').classList.remove('hid');
   GB.querySelector('#gmFb').innerHTML=`<div class="${ok?'ok':'ko'}">${ok?'✅ Richtig !':'Voici la bonne écriture :'} ${!ok&&typed?cmpH(typed,okWords(n)[0]):''}<span class="mn-w2">${wordH(n)}</span></div><button class="mn-go" data-gnext="1">${g.i+1>=g.list.length?'🏁 Voir mon score':'Suivant ▶'}</button>`;
   GB.querySelector('.gm-top span:last-child').textContent='⭐ '+g.score;
@@ -1340,7 +1342,7 @@ GB.addEventListener('click',e=>{
   const r=q('[data-grg]'); if(r){ g.rg=+r.dataset.grg; return gmMenu(); }
   if(q('[data-gstart]')) return gmStart();
   if(q('[data-gnext]')){ g.i++; return gmRound(); }
-  if(q('[data-gbrick]')){ const p=parts(g.list[g.i]); g.t='build'; g.tries=0; g.err=0; g.b={p,order:shuf(p.map((_,i)=>i)),got:[]}; GB.querySelector('.mn-p').textContent='🧩 Assemble ce nombre en allemand.'; const br=q('[data-gbrick]'); br.remove(); GB.querySelector('#gmFb').innerHTML=''; return gmEx(); }
+  if(q('[data-gbrick]')){ if(g.done) return; const p=parts(g.list[g.i]); g.t='build'; g.tries=0; g.err=0; g.b={p,order:shuf(p.map((_,i)=>i)),got:[]}; GB.querySelector('.mn-p').textContent='🧩 Assemble ce nombre en allemand.'; const br=q('[data-gbrick]'); br.remove(); GB.querySelector('#gmFb').innerHTML=''; return gmEx(); }
   if(q('[data-greveal]')){ GB.querySelector('.mn-num').classList.remove('hid'); q('[data-greveal]').remove(); return; }
   if(q('[data-gsay]')) return say(full(g.list[g.i]));
   if(q('[data-gslow]')){ const p=parts(g.list[g.i]); try{ if(window.DLspeakSeq) DLspeakSeq(p.map(x=>({t:sayOf(x[0]),l:'de',pause:450})).concat([{t:full(g.list[g.i]),l:'de'}])); }catch(x){} return; }
