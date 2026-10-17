@@ -230,6 +230,7 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .ch-c{border-radius:50%;background:transparent;display:block;min-width:0}.ch-c.loop{background:#fff;border:2px solid #ced4da;border-radius:10px}.ch-c.start{background:color-mix(in srgb,var(--pc,#999) 35%,#fff);border-color:var(--pc,#999)}.ch-c.star{background:#fff3bf;border-color:#f59f00;position:relative}.ch-c.star::after{content:"⭐";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,2.6vw,16px)}.ch-c.home{background:color-mix(in srgb,var(--pc) 40%,#fff);border:2px solid var(--pc);border-radius:10px}.ch-c.yard{background:color-mix(in srgb,var(--pc) 25%,#fff);border:3px dashed var(--pc)}.ch-c.mid{background:#e9ecef;border-radius:12px}.ch-c.mid::after{content:"🏆";display:flex;align-items:center;justify-content:center;height:100%;font-size:clamp(10px,3vw,20px)}
 .ch-toks{position:absolute;inset:6px;pointer-events:none}.ch-tok{position:absolute;width:calc(100%/11);height:calc(100%/11);padding:0;border:0;background:none;pointer-events:none;transition:left .15s linear,top .15s linear}.ch-tok span{display:flex;align-items:center;justify-content:center;width:86%;height:86%;margin:7%;border-radius:50%;background:var(--pc);border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25);font-size:clamp(10px,3.4vw,22px);line-height:1}.ch-tok.go{pointer-events:auto;cursor:pointer;z-index:3}.ch-tok.go span{animation:chpulse .7s infinite alternate;outline:3px solid #fff;outline-offset:1px}@keyframes chpulse{to{transform:scale(1.22)}}
 .ch-dcol{display:flex;flex-direction:column;align-items:center;gap:2px}.ch-dcol small{font-weight:800;color:#1f5fd6;font-size:13px;min-height:1.2em}.ch-d{cursor:pointer;font:inherit;width:68px;height:68px}.ch-d.used{opacity:.3}.ch-d.sel{outline:4px solid #f59f00;outline-offset:2px}.ch-d:disabled{cursor:default}.ch-side{display:grid;gap:8px;justify-items:center}.ch-die{display:flex;align-items:center;gap:12px;justify-content:center;min-height:76px;flex-wrap:wrap}.ch-dbtn{min-height:64px;padding:0 22px;border-radius:18px;border:3px solid var(--pc,#1f5fd6);background:color-mix(in srgb,var(--pc,#1f5fd6) 18%,#fff);font-weight:900;font-size:20px;font-family:inherit;cursor:pointer;color:#1d2433}
+.sl-gm{display:grid;gap:8px;margin:6px 0 12px}.sl-gb{display:flex;flex-direction:column;align-items:center;gap:2px}.sl-gb small{font-size:.7em;font-weight:600;opacity:.85}
 .un-table{display:flex;gap:14px;justify-content:center;align-items:center;margin:10px 0}.un-topw{display:flex;flex-direction:column;align-items:center;gap:6px}.un-col{background:var(--cc);color:#fff;font-weight:900;border-radius:999px;padding:3px 14px;font-size:.9em;text-shadow:0 1px 2px rgba(0,0,0,.3)}
 .un-card{--cc:#555;width:74px;height:108px;border-radius:14px;border:4px solid #fff;background:var(--cc);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);font-family:inherit;padding:2px;cursor:default}
 .un-card.w{background:conic-gradient(#e03131 0 25%,#1c7ed6 0 50%,#2f9e44 0 75%,#f0a800 0)}.un-card.back{background:#1d2433;cursor:pointer}.un-card .un-v{font-size:2.1em;font-weight:900;line-height:1;text-shadow:0 2px 3px rgba(0,0,0,.4)}.un-card .un-w{font-size:.62em;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.5);word-break:break-word;line-height:1.05;text-align:center}
@@ -818,6 +819,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "8.0", desc: "Salon : moteur commun, chevaux en ligne (BÊTA)" },
     { v: "7.9", desc: "Nouveau jeu : cartes couleurs (BÊTA)" },
     { v: "7.8", desc: "Prépositions : titres en bandeau coloré" },
     { v: "7.7", desc: "Prépositions : titres de familles explicites" },
@@ -1915,7 +1917,7 @@ if(FAST) window.__g2=T2;
 /* ---------- menu ---------- */
 const GROUPS=[
  ['🎲 Jeux de société',[
-  {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'Joue en direct avec d’autres joueurs · vote + tours',c:'#d3f9d8'},
+  {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'En direct avec d’autres joueurs · quiz et chevaux',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
   {id:'moulin',ic:'⚪',t:'Moulin / Mühle (BÊTA)',d:'Aligne 3 pions, réponds, retire un pion · 2',c:'#f3d9a4'},
@@ -2264,9 +2266,10 @@ function chevaux(){
   playerSetup({title:'🐴 Petits chevaux',npc:true,intro:'Lance les <b>deux dés</b> : il faut un <b>6</b> (sechs) sur un dé pour sortir un cheval. Chaque dé fait avancer un cheval de ton choix. <b>Double</b> = tu rejoues. Fais le tour du plateau et rentre tes chevaux à la maison. Si tu tombes sur un cheval adverse, il retourne à l’écurie ! Sur une case <b>⭐</b>, réponds à une question : bonne réponse = tu rejoues. Chaque joueur choisit sa classe.',min:2,max:4,defN:2,perGrade:true,
     extra:{label:'Chevaux par joueur',opts:[[2,'2 chevaux (rapide)'],[4,'4 chevaux']],def:2}},startChevaux);
 }
-function startChevaux(cfg){
+function startChevaux(cfg,net){
   const n=cfg.players.length, seat=CH.SEATS[n], NH=cfg.x||2;
   const S={cfg,seat,h:cfg.players.map(()=>Array(NH).fill(-1)),turn:0,dice:[0,0],used:[true,true],sel:0,phase:'roll',bonus:false,played:0,tries:0,busy:false,NH}; T2.chev=S;
+  const ext=pi=>!!cfg.players[pi].npc||(!!net&&pi!==net.me), ai=pi=>!!cfg.players[pi].npc&&!net;
   const cell=(c,r,cls,style)=>`<i class="ch-c ${cls||''}" style="grid-column:${c+1};grid-row:${r+1};${style||''}"></i>`;
   let cells='';
   CH.LOOP.forEach(([c,r],i)=>{ const si=CH.START.indexOf(i), star=CH.STARS.includes(i); const own=si>=0?seat.indexOf(si):-1;
@@ -2280,19 +2283,27 @@ function startChevaux(cfg){
     <div class="ch-side"><div class="ch-die" id="chDie"><div class="ch-dcol"><button class="g-die ch-d" data-d="0" aria-label="dé 1"></button><small id="chW0"></small></div><div class="ch-dcol"><button class="g-die ch-d" data-d="1" aria-label="dé 2"></button><small id="chW1"></small></div><button class="ch-dbtn" id="chRoll">🎲 Lancer les dés</button></div>
     <div class="g-msg" id="chMsg"></div></div></div><div class="h-qbox" id="chQ" hidden></div>`;
   const toks=body.querySelector('#chToks'), msg=t=>body.querySelector('#chMsg').innerHTML='<span>'+t+'</span>', rollB=body.querySelector('#chRoll'), dEls=[...body.querySelectorAll('.ch-d')];
-  body.querySelector('#chQuit').onclick=()=>chevaux();
+  body.querySelector('#chQuit').onclick=()=>net?net.quit():chevaux();
   const P=pi=>cfg.players[pi], faces={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
   const face=(i,v)=>{ dEls[i].innerHTML=v?[...Array(9)].map((_,k)=>`<i class="${faces[v].includes(k)?'on':''}"></i>`).join(''):''; };
   const movesFor=pi=>{ const out=[]; [0,1].forEach(d=>{ if(!S.used[d]) chLegal(S,pi,S.dice[d]).forEach(m=>out.push({hi:m.hi,to:m.to,d})); }); return out; };
   function paint(){
     const mv=S.phase==='move'?movesFor(S.turn):[];
-    toks.innerHTML=S.h.map((hs,pi)=>hs.map((pos,hi)=>{ const [c,r]=chCell(seat[pi],pos,hi), go=S.phase==='move'&&S.turn===pi&&!P(pi).npc&&mv.some(m=>m.hi===hi&&m.d===S.sel);
+    toks.innerHTML=S.h.map((hs,pi)=>hs.map((pos,hi)=>{ const [c,r]=chCell(seat[pi],pos,hi), go=S.phase==='move'&&S.turn===pi&&!ext(pi)&&mv.some(m=>m.hi===hi&&m.d===S.sel);
       return `<button class="ch-tok${go?' go':''}" data-pi="${pi}" data-hi="${hi}" style="left:${c*100/11}%;top:${r*100/11}%;--pc:${P(pi).color}" aria-label="cheval de ${esc(P(pi).name)}"><span>🐴</span></button>`; }).join('')).join('');
     body.querySelector('#chInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn)+`<b class="h-sc">${S.h[i].filter(x=>x>=40).length}/${NH}</b>`).join('');
-    const showRoll=S.phase==='roll'&&!P(S.turn).npc; rollB.hidden=!showRoll; rollB.style.setProperty('--pc',P(S.turn).color);
-    dEls.forEach((el,i)=>{ el.classList.toggle('used',!!S.used[i]&&S.dice[i]>0&&S.phase!=='roll'); el.classList.toggle('sel',S.phase==='move'&&!S.used[i]&&S.sel===i&&!P(S.turn).npc&&mv.filter(m=>m.d===i).length>0&&mv.some(m=>m.d!==i)); el.disabled=!(S.phase==='move'&&!S.used[i]&&!P(S.turn).npc); });
+    const showRoll=S.phase==='roll'&&!ext(S.turn); rollB.hidden=!showRoll; rollB.style.setProperty('--pc',P(S.turn).color);
+    dEls.forEach((el,i)=>{ el.classList.toggle('used',!!S.used[i]&&S.dice[i]>0&&S.phase!=='roll'); el.classList.toggle('sel',S.phase==='move'&&!S.used[i]&&S.sel===i&&!ext(S.turn)&&mv.filter(m=>m.d===i).length>0&&mv.some(m=>m.d!==i)); el.disabled=!(S.phase==='move'&&!S.used[i]&&!ext(S.turn)); });
     [0,1].forEach(i=>body.querySelector('#chW'+i).textContent=S.dice[i]?numWord(S.dice[i]):'');
   }
+  const KEYS=['h','turn','dice','used','sel','phase','bonus','played','tries','info'];
+  const sync=(m,over,winner)=>{ if(!net) return; const s={}; KEYS.forEach(k=>{ s[k]=S[k]; }); if(over){ s.over=true; s.winner=winner; } net.push(JSON.parse(JSON.stringify(s)),S.turn,over,m||''); };
+  if(net) net.onRemote=g=>{ const s=g.s; if(!s||!body.querySelector('#chBoard')) return; const before=JSON.stringify(S.dice);
+    KEYS.forEach(k=>{ if(s[k]!==undefined) S[k]=s[k]; }); S.busy=false; face(0,S.dice[0]); face(1,S.dice[1]);
+    if(S.phase==='move'&&JSON.stringify(S.dice)!==before) say(numWord(S.dice[0])+(S.bonus?' und ':', ')+numWord(S.dice[1]),'de');
+    paint(); msg(String(g.msg||'').replace(/<(?!\/?b>)[^>]*>/g,''));
+    if(s.over) return win(s.winner);
+    if(S.turn===net.me&&S.phase==='move') step(); };
   async function rollDice(){
     if(S.busy||S.phase!=='roll') return; S.busy=true; const p=P(S.turn);
     if(!FAST){ dEls.forEach(d=>d.classList.add('rolling')); for(let k=0;k<9;k++){ face(0,1+rnd(6)); face(1,1+rnd(6)); await sleep(70); } dEls.forEach(d=>d.classList.remove('rolling')); }
@@ -2300,16 +2311,16 @@ function startChevaux(cfg){
     say(numWord(S.dice[0])+(S.bonus?' und ':', ')+numWord(S.dice[1]),'de'); S.phase='move'; S.busy=false; paint();
     const dd=`${S.dice[0]} (${numWord(S.dice[0])}) et ${S.dice[1]} (${numWord(S.dice[1])})`;
     S.info=`${p.emoji} <b>${esc(p.name)}</b> : ${dd}${S.bonus?' — <b>double !</b> Tu rejoueras.':''}`;
-    msg(S.info); if(p.npc||FAST) await sleep(FAST?10:900); else await sleep(500);
+    msg(S.info); sync(S.info); if(p.npc||FAST) await sleep(FAST?10:900); else await sleep(500);
     step();
   }
   async function step(){
     if(S.busy) return; const pi=S.turn, p=P(pi), mv=movesFor(pi);
     if(!mv.length){
-      if(S.played===0&&S.h[pi].every(x=>x<0)&&S.tries<2){ S.tries++; msg(`${S.info}<br>Il faut un <b>6</b> pour sortir un cheval. Nouvel essai (${S.tries+1}/3)…`); S.phase='roll'; paint(); if(p.npc) setTimeout(rollDice,FAST?20:1100); return; }
+      if(S.played===0&&S.h[pi].every(x=>x<0)&&S.tries<2){ S.tries++; msg(`${S.info}<br>Il faut un <b>6</b> pour sortir un cheval. Nouvel essai (${S.tries+1}/3)…`); S.phase='roll'; paint(); sync(`${S.info}<br>Pas de 6 : nouvel essai.`); if(ai(pi)) setTimeout(rollDice,FAST?20:1100); return; }
       msg(`${S.info}<br>${S.played?'Fin du tour.':'Aucun cheval ne peut avancer…'}`); await sleep(FAST?20:1300); return nextTurn(S.bonus&&S.played>0);
     }
-    if(p.npc){ await sleep(FAST?10:700); return doMove(chPick(S,pi,mv)); }
+    if(ai(pi)){ await sleep(FAST?10:700); return doMove(chPick(S,pi,mv)); }
     if(!mv.some(m=>m.d===S.sel)) S.sel=mv[0].d;
     const uniq=new Set(mv.map(m=>m.hi+'-'+m.to));
     if(uniq.size===1){ msg(`${S.info}<br>Un seul coup possible !`); paint(); await sleep(FAST?10:800); return doMove(mv[0]); }
@@ -2321,7 +2332,7 @@ function startChevaux(cfg){
     const hit=chApply(S,pi,m); paint();
     if(hit){ msg(`💥 <b>${esc(p.name)}</b> renvoie un cheval de <b>${esc(P(hit.pj).name)}</b> à l’écurie !`); await sleep(FAST?20:1300); }
     else if(m.to>=40) { msg(`🏠 Un cheval de <b>${esc(p.name)}</b> est à la maison !`); await sleep(FAST?20:900); }
-    S.busy=false;
+    S.busy=false; sync(`${p.emoji} <b>${esc(p.name)}</b> avance un cheval.`+(hit?' 💥 Un cheval est renvoyé à l’écurie !':''));
     if(chWon(S,pi)) return win(pi);
     S.phase='move';
     if(chOnStar(S,pi,m.to)) return question(pi);
@@ -2330,13 +2341,15 @@ function startChevaux(cfg){
   function nextTurn(bonus){
     if(!bonus) S.turn=(S.turn+1)%n; else msg(`${P(S.turn).emoji} <b>${esc(P(S.turn).name)}</b> rejoue !`);
     S.phase='roll'; S.tries=0; S.played=0; S.used=[true,true]; S.busy=false; paint();
-    if(P(S.turn).npc) setTimeout(rollDice,FAST?20:(bonus?1200:900));
+    if(ai(S.turn)) setTimeout(rollDice,FAST?20:(bonus?1200:900));
     else if(!bonus) msg(`${P(S.turn).emoji} <b>${esc(P(S.turn).name)}</b>, à toi de lancer les dés !`);
+    sync(`${P(S.turn).emoji} <b>${esc(P(S.turn).name)}</b>${bonus?' rejoue !':', à toi de lancer les dés !'}`);
   }
   function question(pi){
     const p=P(pi), box=body.querySelector('#chQ'); S.phase='q'; box.hidden=false; box.style.setProperty('--pc',p.color);
-    const done=ok=>{ box.hidden=true; box.innerHTML=''; if(ok) S.bonus=true; S.phase='move'; S.info=`${p.emoji} <b>${esc(p.name)}</b> : ${ok?'bonne réponse, tu rejoueras !':'on continue.'}`; step(); };
-    if(p.npc){ box.innerHTML=`<div class="g-qtop"><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+    const done=ok=>{ box.hidden=true; box.innerHTML=''; if(ok) S.bonus=true; S.phase='move'; S.info=`${p.emoji} <b>${esc(p.name)}</b> : ${ok?'bonne réponse, il rejoue !':'on continue.'}`; sync(S.info); step(); };
+    sync(`⭐ ${p.emoji} <b>${esc(p.name)}</b> répond à une question…`);
+    if(ai(pi)){ box.innerHTML=`<div class="g-qtop"><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
       sleep(FAST?20:1400).then(async()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il rejoue.`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; await sleep(FAST?20:1500); done(ok); }); return; }
     const q=makeQuestion(cfg.topics,p.gr);
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div>
@@ -2353,9 +2366,9 @@ function startChevaux(cfg){
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>done(ok); };
   }
-  function win(pi){ const p=P(pi); S.phase='over';
-    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`Tous les chevaux de <b>${esc(p.name)}</b> sont rentrés à la maison !`+(n>2?'<br>'+cfg.players.map((x,i)=>`${x.emoji} ${esc(x.name)} : <b>${S.h[i].filter(y=>y>=40).length}/${NH}</b>`).join('<br>'):''),color:p.color},()=>startChevaux(cfg)); }
-  toks.onclick=e=>{ const b=e.target.closest('.ch-tok.go'); if(!b||S.busy||S.phase!=='move'||P(S.turn).npc) return; const m=movesFor(S.turn).find(x=>x.hi===+b.dataset.hi&&x.d===S.sel); if(m) doMove(m); };
+  function win(pi){ const p=P(pi); S.phase='over'; sync(`🏆 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,true,pi);
+    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`Tous les chevaux de <b>${esc(p.name)}</b> sont rentrés à la maison !`+(n>2?'<br>'+cfg.players.map((x,i)=>`${x.emoji} ${esc(x.name)} : <b>${S.h[i].filter(y=>y>=40).length}/${NH}</b>`).join('<br>'):''),color:p.color},()=>net?net.again():startChevaux(cfg)); }
+  toks.onclick=e=>{ const b=e.target.closest('.ch-tok.go'); if(!b||S.busy||S.phase!=='move'||ext(S.turn)) return; const m=movesFor(S.turn).find(x=>x.hi===+b.dataset.hi&&x.d===S.sel); if(m) doMove(m); };
   body.querySelector('#chDie').onclick=e=>{ const d=e.target.closest('.ch-d'); if(!d||d.disabled||S.busy||S.phase!=='move') return; const i=+d.dataset.d; if(movesFor(S.turn).some(m=>m.d===i)){ S.sel=i; paint(); } };
   rollB.onclick=rollDice;
   msg(`${P(0).emoji} <b>${esc(P(0).name)}</b>, lance les dés ! Il faut un 6 pour sortir un cheval.`); paint();
@@ -2842,6 +2855,7 @@ function startMoulin(cfg){
     if(S.sel>=0&&!S.B[i]){ const m=muMoves(S,pl).find(m=>m.from===S.sel&&m.to===i); if(m) doMove(m); } };
   paint(); msg(status()); if(P(0).npc) setTimeout(npcMove,500);
 }
+window.DLNET={chevaux:{ic:'🐴',t:'Petits chevaux',min:2,max:4,xs:[[2,'2 chevaux (rapide)'],[4,'4 chevaux']],alive:()=>!!body.querySelector('#chBoard'),start:(cfg,net)=>startChevaux(Object.assign({topics:Object.keys(TOPICS),perGrade:true},cfg),net)}};
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
 
@@ -5665,9 +5679,26 @@ async function poll(){ if(!S.code||!alive()) return; const m=me(); if(!m) return
     if(r.status===404){ S.msg='⚠️ Ce salon n’existe plus (terminé ou expiré).'; leaveLocal(); return; }
     const j=await r.json(); S.err=0; if(j.now) S.off=j.now-Date.now(); if(j.room) setRoom(j.room); }catch(e){ S.err++; }
   schedule(); }
-function schedule(){ clearTimeout(S.timer); if(!S.code||!alive()) return; const ph=S.room&&S.room.phase; const d=document.hidden?6000:(ph==='play'||ph==='vote')?1400:2600; S.timer=setTimeout(poll,d); }
-const alive=()=>!!document.getElementById('slRoot');
-function setRoom(r){ setTimeout(onbar,0); if(S.room&&r.v===S.room.v&&r.phase===S.room.phase){ S.room=r; return; } S.room=r; S.v=r.v; paint(); }
+function schedule(){ clearTimeout(S.timer); if(!S.code||!alive()) return; const ph=S.room&&S.room.phase; const d=document.hidden?6000:(ph==='play'||ph==='vote'||ph==='game')?1300:2600; S.timer=setTimeout(poll,d); }
+const alive=()=>!!document.getElementById('slRoot')||S.gameOn;
+const PAL=['#e5383b','#1f5fd6','#2f9e44','#f08c00'];
+function launchGame(r){ const g=r.g, m=me(), def=(window.DLNET||{})[g.type], R=root(); const ord=g.order.map(id=>r.players.find(p=>p.id===id)), idx=g.order.indexOf(m&&m.id);
+  if(!def||idx<0||ord.some(x=>!x)){ if(R) R.innerHTML=`<h2 class="g-h">🎲 Partie en cours</h2><p class="g-p">Une partie est en train de se jouer. Tu pourras jouer à la prochaine !</p><button class="g-ghost" data-s="leave">👋 Quitter le salon</button>`; return; }
+  const net={n:g.n,me:idx,q:Promise.resolve(),onRemote:null,
+    push(s,ti,over,msg){ net.q=net.q.then(async()=>{ for(let k=0;k<4;k++){ const j=await api({a:'move',n:net.n,s,turn:g.order[ti],over:!!over,msg:msg||''}); if(j.room&&!j.error){ net.n=Math.max(net.n,j.room.g?j.room.g.n:net.n); return; } if(j.error==='tour') return; await new Promise(z=>setTimeout(z,800)); } }); },
+    async again(){ await api({a:'again'}); },
+    async quit(){ await api({a:'leave'}); S.gameOn=false; S.net=null; leaveLocal(); H.showHub(); }};
+  S.gameOn=true; S.gameKey=r.code+'|'+g.t0; S.net=net; S.def=def;
+  const cfg={players:ord.map((p,i)=>({name:p.name,emoji:p.av==='mx'?'<i class="mx"></i>':esc(p.av),color:PAL[i%4],gr:p.gr})),x:g.x,grade:'4H'};
+  def.start(cfg,net); if(g.s&&net.onRemote) net.onRemote(g); }
+function gameSync(r){ const g=r.g;
+  if(S.gameOn&&S.def&&!S.def.alive()){ S.gameOn=false; S.net=null; return; }
+  if(!S.gameOn||S.gameKey!==r.code+'|'+g.t0){ launchGame(r); return; }
+  if(g.n>S.net.n){ S.net.n=g.n; if(g.by!==(me()||{}).id&&S.net.onRemote) S.net.onRemote(g); } }
+function setRoom(r){ setTimeout(onbar,0);
+  if(r.phase==='game'&&r.g){ const prev=S.room; S.room=r; S.v=r.v; gameSync(r); return; }
+  if(S.gameOn){ const prev=S.room; S.gameOn=false; S.net=null; document.querySelectorAll('.g-ov').forEach(e=>e.remove()); const b=body; if(!document.getElementById('slRoot')) b.innerHTML='<div id="slRoot" class="sl"></div>'; if(prev&&prev.g&&!prev.g.over&&r.phase==='lobby') S.msg='⚠️ Un joueur est parti : la partie est arrêtée.'; S.room=null; }
+  if(S.room&&r.v===S.room.v&&r.phase===S.room.phase){ S.room=r; return; } S.room=r; S.v=r.v; paint(); }
 function leaveLocal(){ setTimeout(onbar,0); S.code=null; S.room=null; S.v=0; sg('dl-salon',null); S.asked={}; S.sent={}; S.endDone=null; paint(); }
 
 /* qui est en ligne ? (présence anonyme) */
@@ -5703,7 +5734,7 @@ setInterval(lobbyPing,25000); setTimeout(lobbyPing,2500); document.addEventListe
 /* écrans */
 const root=()=>document.getElementById('slRoot');
 function paint(){ const R=root(); if(!R) return; const r=S.room;
-  if(!S.code||!r) R.innerHTML=homeH(); else if(r.phase==='lobby') R.innerHTML=lobbyH(r); else if(r.phase==='vote') R.innerHTML=voteH(r); else if(r.phase==='play') R.innerHTML=playH(r); else R.innerHTML=endH(r);
+  if(!S.code||!r) R.innerHTML=homeH(); else if(r.phase==='lobby') R.innerHTML=lobbyH(r); else if(r.phase==='vote') R.innerHTML=voteH(r); else if(r.phase==='play') R.innerHTML=playH(r); else if(r.phase==='game') R.innerHTML='<h2 class="g-h">🎲 Partie en cours</h2><p class="g-p">Une partie se joue en ce moment.</p><button class="g-ghost" data-s="leave">👋 Quitter le salon</button>'; else R.innerHTML=endH(r);
   bind(R); tick(); if(r&&r.phase==='lobby'&&Date.now()-S.lastPing>6000) lobbyPing(); if(!S.code) lobbyRefresh(); if(r&&r.phase==='end') endExtras(r); }
 const BETA='<span class="sl-beta">BÊTA</span>';
 function homeH(){ const m=me(), g=guest();
@@ -5729,8 +5760,10 @@ function lobbyH(r){ const link=location.origin&&location.origin!=='null'?locatio
   <label class="sl-open"><input type="checkbox" id="slOpen" ${S.openSalon?'checked':''}> <span>📣 <b>Prévenir les joueurs en ligne</b> que je cherche à jouer<small>${S.lob.online>1?`🟢 ${S.lob.online-1} autre${S.lob.online>2?'s':''} joueur${S.lob.online>2?'s':''} en ligne en ce moment`:'Personne d’autre en ligne pour l’instant : ils verront ton salon dès qu’ils arrivent.'}</small></span></label>
   <p class="g-p">Tu peux aussi envoyer le code (ou le lien) à quelqu’un : il le tape dans <b>« Salon à distance → Rejoindre »</b>.</p>
   <h3 class="g-lab">👥 Dans le salon (${r.players.length})</h3>${playersH(r)}
-  <h3 class="g-lab">🗳️ Choisissez un thème</h3><p class="g-p g-note">Touche un thème : <b>le premier vote lance un chrono de 45 secondes</b>. La majorité gagne (au hasard en cas d’égalité, « Tout mélangé » si personne ne vote).</p>${themeCards(r,false)}
+  ${gamesH(r)}<h3 class="g-lab">🧠 Grand Quiz : choisissez un thème</h3><p class="g-p g-note">Touche un thème : <b>le premier vote lance un chrono de 45 secondes</b>. La majorité gagne (au hasard en cas d’égalité, « Tout mélangé » si personne ne vote).</p>${themeCards(r,false)}
   ${S.msg?`<p class="sl-msg">${S.msg}</p>`:''}<button class="g-ghost" data-s="leave">👋 Quitter le salon</button>`; }
+function gamesH(r){ const NG=window.DLNET||{}, ks=Object.keys(NG); if(!ks.length) return '';
+  return `<h3 class="g-lab">🎲 Jeux de plateau</h3><p class="g-p g-note">Chacun sur son appareil, à tour de rôle. Tout le monde doit être présent dans le salon avant de lancer.</p><div class="sl-gm">${ks.map(k=>NG[k].xs.map(([x,l])=>`<button class="g-big sl-gb" data-game="${k}" data-x="${x}">${NG[k].ic} ${esc(NG[k].t)} · ${esc(l)}<small>${NG[k].min}–${NG[k].max} joueurs</small></button>`).join('')).join('')}</div>`; }
 function voteH(r){ return `<h2 class="g-h">🗳️ On vote ! ${BETA}</h2>
   <div class="sl-cd"><div class="sl-bar"><i id="slBar"></i></div><b id="slSec">…</b></div>
   <p class="g-p">Touche le thème que tu veux. Quand tout le monde a voté, ça part tout de suite !</p>${themeCards(r,true)}${playersH(r)}`; }
@@ -5760,6 +5793,7 @@ function bind(R){
     if(b.dataset.j){ ensureMe(R); const m=me(); S.prefill=b.dataset.j; if(!m){ S.msg='⚠️ Écris ton prénom, puis touche Rejoindre.'; paint(); return; } S.msg=''; await joinRoom(b.dataset.j,m); return; }
     if(b.dataset.av){ R.querySelectorAll('#slAvs button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return; }
     if(b.dataset.gr){ R.querySelectorAll('#slGr button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return; }
+    if(b.dataset.game){ const j=await api({a:'start',game:b.dataset.game,x:+b.dataset.x}); if(j.error){ const G=(window.DLNET||{})[b.dataset.game]||{}; S.msg=j.error==='joueurs'?`⚠️ Il faut de ${G.min||2} à ${G.max||4} joueurs présents dans le salon.`:'⚠️ Impossible de lancer ('+esc(j.error)+').'; paint(); } return; }
     const s=b.dataset.s;
     if(s==='chg'){ try{ localStorage.removeItem('dl-salon-guest'); }catch(x){} paint(); return; }
     if(s==='create'||s==='join'){ ensureMe(R); const m=me(); if(!m){ S.msg='⚠️ Écris ton prénom ou ton pseudo.'; paint(); return; }

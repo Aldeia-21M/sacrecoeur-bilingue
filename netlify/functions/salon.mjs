@@ -3,6 +3,8 @@ import { getStore } from '@netlify/blobs';
 // Aucune donnée personnelle : pseudos, avatars, classes, points de la partie. Les salons expirent après 4 h.
 const CODE = /^[A-HJ-NP-Z2-9]{5}$/, PID = /^[A-Za-z0-9_-]{3,24}$/, AL = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const THEMES = ['mix', 'de', 'fr', 'ma'];
+// Jeux de plateau : le serveur ne connaît pas les règles, il garde l'état envoyé par le joueur dont c'est le tour.
+const GAMES = { chevaux: { min: 2, max: 4, xs: [2, 4] } };
 const ROUNDS = 3, VOTE_MS = 45000, ASK_MS = 12000, ANS_MS = 30000, REV_MS = 5500, GONE = 35000, TTL = 4 * 3600e3, MAXP = 8;
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const st = () => getStore({ name: 'salons', consistency: 'strong' });
@@ -96,7 +98,7 @@ export default async (req) => {
     let code = '', ok = false;
     for (let i = 0; i < 6 && !ok; i++) { code = Array.from({ length: 5 }, () => AL[Math.floor(Math.random() * AL.length)]).join(''); ok = !(await s.get(code, { type: 'json' })); }
     if (!ok) return json({ error: 'busy' }, 503);
-    const r = { code, v: 1, stamp: 'n', created: t, host: me, phase: 'lobby', players: [prof(Object.assign({}, b.profile, { id: me }))], seen: { [me]: t }, vote: null, theme: null, order: [], scores: {}, total: 0, turn: null };
+    const r = { code, v: 1, stamp: 'n', created: t, host: me, phase: 'lobby', players: [prof(Object.assign({}, b.profile, { id: me }))], seen: { [me]: t }, vote: null, theme: null, order: [], scores: {}, total: 0, turn: null, g: null };
     await s.setJSON(code, r); return json({ room: r, now: t });
   }
   const code = String(b.c || '').toUpperCase(); if (!CODE.test(code)) return json({ error: 'code' }, 400);
@@ -128,8 +130,17 @@ export default async (req) => {
       const u = rr.turn; if (rr.phase !== 'play' || !u || u.n !== b.n || u.pid !== me || !u.q || u.ans) { err = 'tour'; return false; }
       const k = Math.floor(+b.k), good = k === u.q.correct, sc = rr.scores[me] || (rr.scores[me] = { pts: 0, ok: 0, a: 0 });
       sc.a++; if (good) { sc.ok++; sc.pts += 10; } u.ans = { k, ok: good }; u.revealUntil = t + REV_MS; return; }
-    if (a === 'again') { if (rr.phase !== 'end') { err = 'phase'; return false; } rr.phase = 'lobby'; rr.vote = null; rr.theme = null; rr.turn = null; rr.order = []; rr.scores = {}; rr.total = 0; return; }
-    if (a === 'leave') { rr.players = rr.players.filter(x => x.id !== me); delete rr.seen[me]; if (rr.host === me && rr.players[0]) rr.host = rr.players[0].id; return; }
+    if (a === 'start') {
+      if (rr.phase !== 'lobby') { err = 'phase'; return false; }
+      const G = GAMES[b.game]; if (!G) { err = 'jeu'; return false; }
+      const ps = rr.players.filter(x => fresh(rr, x.id, t)); if (ps.length < G.min || ps.length > G.max) { err = 'joueurs'; return false; }
+      rr.phase = 'game'; rr.vote = null; rr.g = { type: b.game, x: G.xs.includes(+b.x) ? +b.x : G.xs[0], order: ps.map(x => x.id), n: 0, turn: ps[0].id, by: null, s: null, over: false, msg: '', t0: t }; return; }
+    if (a === 'move') {
+      const g = rr.g; if (rr.phase !== 'game' || !g || g.over || g.turn !== me || b.n !== g.n || !g.order.includes(String(b.turn))) { err = 'tour'; return false; }
+      const st0 = b.s; if (!st0 || typeof st0 !== 'object' || JSON.stringify(st0).length > 20000) { err = 'etat'; return false; }
+      g.s = st0; g.n++; g.by = me; g.turn = String(b.turn); g.over = !!b.over; g.msg = String(b.msg || '').slice(0, 300); return; }
+    if (a === 'again') { if (!(rr.phase === 'end' || (rr.phase === 'game' && rr.g && (rr.g.over || rr.host === me)))) { err = 'phase'; return false; } rr.phase = 'lobby'; rr.g = null; rr.vote = null; rr.theme = null; rr.turn = null; rr.order = []; rr.scores = {}; rr.total = 0; return; }
+    if (a === 'leave') { if (rr.phase === 'game') { rr.phase = 'lobby'; rr.g = null; } rr.players = rr.players.filter(x => x.id !== me); delete rr.seen[me]; if (rr.host === me && rr.players[0]) rr.host = rr.players[0].id; return; }
     err = 'action'; return false;
   });
   if (!r) return json({ error: 'absent' }, 404);
