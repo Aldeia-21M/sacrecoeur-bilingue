@@ -55,12 +55,11 @@ const okQ = q => q && typeof q === 'object' && Array.isArray(q.options) && q.opt
 const LB = '_lobby', FRESH = 75000;
 async function lobby(url, t) {
   const me = url.searchParams.get('p') || ''; if (!PID.test(me)) return json({ error: 'pid' }, 400);
-  const s = st(); let d = await s.get(LB, { type: 'json' }); if (!d || !d.seen) d = { seen: {} };
-  const c = (url.searchParams.get('c') || '').toUpperCase(), e = { t };
+  const s = st(), c = (url.searchParams.get('c') || '').toUpperCase(), e = { t };
   if (CODE.test(c)) e.c = c;
-  d.seen[me] = e;
-  for (const k of Object.keys(d.seen)) if (d.seen[k].t < t - FRESH * 2) delete d.seen[k];
-  await s.setJSON(LB, d);
+  await s.setJSON('_lb/' + me, e);
+  const d = { seen: {} }, { blobs } = await s.list({ prefix: '_lb/' });
+  await Promise.all(blobs.map(async b => { const v = await s.get(b.key, { type: 'json' }); if (!v) return; if (v.t < t - FRESH * 2) { await s.delete(b.key); return; } d.seen[b.key.slice(4)] = v; }));
   const live = Object.values(d.seen).filter(x => x.t > t - FRESH);
   const codes = [...new Set(live.map(x => x.c).filter(x => x && x !== e.c))].slice(0, 8), open = [];
   for (const k of codes) {
