@@ -803,6 +803,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "6.7", desc: "Bouton Passer aux briques" },
     { v: "6.6", desc: "Clavier à l’écran pour écrire les nombres" },
     { v: "6.5", desc: "Jeu de chiffres BÊTA, bouton S’exercer" },
     { v: "6.4", desc: "Mon nombre : séparateur, nombres au hasard" },
@@ -1193,7 +1194,7 @@ function ex(){
   const E=B.querySelector('#mnEx'), n=num();
   if(st.mode==='write'){
     E.innerHTML=`<p class="mn-p">${st.hideNum?'Écoute le nombre, puis écris-le en allemand.':'Écris ce nombre en allemand.'}</p>
-    <div class="mn-btns"><button class="mn-b" data-m="hear">🔊 Écouter</button><button class="mn-b" data-m="hidenum" aria-pressed="${st.hideNum}">🙈 Cacher le chiffre</button></div>
+    <div class="mn-btns"><button class="mn-b" data-m="hear">🔊 Écouter</button><button class="mn-b" data-m="hidenum" aria-pressed="${st.hideNum}">🙈 Cacher le chiffre</button><button class="mn-b" data-m="build">🧩 Passer aux briques</button></div>
     <input class="mn-in" id="mnIn" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="écris ici…">
     ${kbHTML()}
     <button class="mn-go" id="mnCk">✅ Vérifier</button><div class="mn-fb" id="mnFb"></div>`;
@@ -1262,7 +1263,7 @@ function gmRound(){
   <div class="gm-bar"><i style="width:${g.i/g.list.length*100}%"></i></div>
   <p class="mn-p">${g.t==='build'?'🧩 Assemble ce nombre en allemand.':g.t==='write'?'✍️ Écris ce nombre en allemand.':'👂 Écoute, puis écris le nombre en allemand.'}</p>
   <div class="mn-num ${hide?'hid':''}">${fm(n)}</div>
-  <div class="mn-btns"><button class="mn-b" data-gsay="1">🔊 Écouter</button><button class="mn-b" data-gslow="1">🐢 Morceau par morceau</button></div>
+  <div class="mn-btns"><button class="mn-b" data-gsay="1">🔊 Écouter</button><button class="mn-b" data-gslow="1">🐢 Morceau par morceau</button>${g.t!=='build'?'<button class="mn-b" data-gbrick="1" style="flex-basis:100%;background:#b2f2bb;border-color:#2f9e44">🧩 Passer aux briques</button>':''}</div>
   <div id="gmEx"></div><div class="mn-fb" id="gmFb"></div>`;
   gmEx(); if(hide) say(full(n));
 }
@@ -1292,6 +1293,7 @@ GB.addEventListener('click',e=>{
   const r=q('[data-grg]'); if(r){ g.rg=+r.dataset.grg; return gmMenu(); }
   if(q('[data-gstart]')) return gmStart();
   if(q('[data-gnext]')){ g.i++; return gmRound(); }
+  if(q('[data-gbrick]')){ const p=parts(g.list[g.i]); g.t='build'; g.tries=0; g.err=0; g.b={p,order:shuf(p.map((_,i)=>i)),got:[]}; GB.querySelector('.mn-p').textContent='🧩 Assemble ce nombre en allemand.'; const br=q('[data-gbrick]'); br.remove(); GB.querySelector('#gmFb').innerHTML=''; return gmEx(); }
   if(q('[data-gsay]')) return say(full(g.list[g.i]));
   if(q('[data-gslow]')){ const p=parts(g.list[g.i]); try{ if(window.DLspeakSeq) DLspeakSeq(p.map(x=>({t:sayOf(x[0]),l:'de',pause:450})).concat([{t:full(g.list[g.i]),l:'de'}])); }catch(x){} return; }
   if(q('[data-gck]')) return gmCheck();
