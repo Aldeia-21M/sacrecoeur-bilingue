@@ -491,7 +491,10 @@ body[data-sec="pt"] .bar nav{justify-content:flex-start}body[data-sec="pt"] .tab
 .sec-b[data-s="fa"][aria-pressed="true"]{background:#e9defa;border-color:#8f6fd6}
 body[data-sec="fa"] .bar nav{justify-content:flex-start}body[data-sec="fa"] .tab:not(.gear){flex:0 1 auto;min-width:120px;padding:5px 14px}
 .pt-gt{margin:14px 2px 6px;font-size:18px}.pt-menu+.pt-gt{margin-top:14px}.pt-things.sm{font-size:clamp(26px,7.5vw,34px)}.pt-opts button{overflow:hidden}
-#gameRoot .clk,#gameRoot .pie{width:min(42vw,160px)}#gameRoot .sr-vis{margin:2px 0 4px}
+#gameRoot .clk,#gameRoot .pie{width:min(42vw,160px)}
+/* question en jeu : pas d'éléments flottants par-dessus les réponses, image réduite pour tout voir */
+body:has(.g-ov) #whoPill,body:has(.g-ov) #pcFab,body:has(.g-ov) #pcNudge,body:has(.g-ov) #pcP,body:has(.g-ov) #dock{display:none!important}
+.g-sheet .clk,.g-sheet .pie{width:min(40vw,150px)}.g-sheet .sr-vis{margin:0 0 4px;text-align:center}.g-sheet{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}#gameRoot .sr-vis{margin:2px 0 4px}
 .cl-w{display:flex;justify-content:center;margin:8px 0 12px}.cl{display:block;font-size:clamp(34px,10vw,48px);font-weight:800;font-variant-numeric:tabular-nums;padding-left:1.1em;min-width:3.2em}
 .cl-r{display:block;text-align:right;line-height:1.2;position:relative}.cl-r i{font-style:normal;position:absolute;left:-1.05em;color:#d6336c}
 .cl-line{display:block;height:5px;border-radius:3px;background:#1d2433;margin:4px 0}.cl .mx-in{display:inline-block;min-width:2.4em}
@@ -822,6 +825,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "9.2", desc: "Question : plus rien par-dessus les réponses" },
     { v: "9.1", desc: "Pseudo famille : réaffiché tous les 8 jours" },
     { v: "9.0", desc: "Connexion : texte allégé, pseudo famille coché d’office" },
     { v: "8.9", desc: "Mode hors ligne 48 h, pseudos famille en ligne" },
