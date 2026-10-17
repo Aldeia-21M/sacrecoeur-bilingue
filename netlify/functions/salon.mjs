@@ -7,7 +7,7 @@ const THEMES = ['mix', 'de', 'fr', 'ma'];
 const GAMES = {
   chevaux: { min: 2, max: 4, xs: [2, 4] }, uno: { min: 2, max: 4, xs: [0, 1, 2] }, cartes: { min: 2, max: 4, xs: [0, 1, 2] },
   puissance4: { min: 2, max: 2, xs: [0] }, navale: { min: 2, max: 4, xs: [6, 8] }, pendu: { min: 2, max: 4, xs: [0, 1] }, moulin: { min: 2, max: 2, xs: [6, 9] },
-  race: { min: 2, max: 6, xs: [5, 8, 12] }, memory: { min: 2, max: 4, xs: [6, 10] }, loto: { min: 2, max: 6, xs: [0] } };
+  race: { min: 2, max: 6, xs: [5, 8, 12] }, memory: { min: 2, max: 4, xs: [6, 10] }, loto: { min: 2, max: 6, xs: [0] }, domino: { min: 2, max: 2, xs: [6, 7] }, duel: { min: 2, max: 2, xs: [3, 5, 8], free: true } };
 const ROUNDS = 3, VOTE_MS = 45000, ASK_MS = 12000, ANS_MS = 30000, REV_MS = 5500, GONE = 35000, TTL = 4 * 3600e3, MAXP = 8;
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const st = () => getStore({ name: 'salons', consistency: 'strong' });
@@ -137,9 +137,9 @@ export default async (req) => {
       if (rr.phase !== 'lobby') { err = 'phase'; return false; }
       const G = GAMES[b.game]; if (!G) { err = 'jeu'; return false; }
       const ps = rr.players.filter(x => fresh(rr, x.id, t)); if (ps.length < G.min || ps.length > G.max) { err = 'joueurs'; return false; }
-      rr.phase = 'game'; rr.vote = null; rr.g = { type: b.game, x: G.xs.includes(+b.x) ? +b.x : G.xs[0], order: ps.map(x => x.id), n: 0, turn: ps[0].id, by: null, s: null, over: false, msg: '', t0: t }; return; }
+      rr.phase = 'game'; rr.vote = null; rr.g = { type: b.game, x: G.xs.includes(+b.x) ? +b.x : G.xs[0], order: ps.map(x => x.id), n: 0, turn: G.free ? '*' : ps[0].id, by: null, s: null, over: false, msg: '', t0: t }; return; }
     if (a === 'move') {
-      const g = rr.g; if (rr.phase !== 'game' || !g || g.over || g.turn !== me || b.n !== g.n || !g.order.includes(String(b.turn))) { err = 'tour'; return false; }
+      const g = rr.g; if (rr.phase !== 'game' || !g || g.over || (g.turn !== me && !(g.turn === '*' && g.order.includes(me))) || b.n !== g.n || !(g.order.includes(String(b.turn)) || (g.turn === '*' && b.turn === '*'))) { err = 'tour'; return false; }
       const st0 = b.s; if (!st0 || typeof st0 !== 'object' || JSON.stringify(st0).length > 20000) { err = 'etat'; return false; }
       g.s = st0; g.n++; g.by = me; g.turn = String(b.turn); g.over = !!b.over; g.msg = String(b.msg || '').slice(0, 300); return; }
     if (a === 'again') { if (!(rr.phase === 'end' || (rr.phase === 'game' && rr.g && (rr.g.over || rr.host === me)))) { err = 'phase'; return false; } rr.phase = 'lobby'; rr.g = null; rr.vote = null; rr.theme = null; rr.turn = null; rr.order = []; rr.scores = {}; rr.total = 0; return; }
