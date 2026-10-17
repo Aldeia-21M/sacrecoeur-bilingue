@@ -693,6 +693,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .cl-wh{position:relative;flex:1;max-width:74px;height:144px;border-radius:16px;overflow:hidden;background:color-mix(in srgb,var(--c) 10%,#fff);border:3px solid var(--c)}.cl-wh::before{content:"";position:absolute;left:0;right:0;top:45px;height:48px;border-top:3px solid var(--c);border-bottom:3px solid var(--c);background:color-mix(in srgb,var(--c) 22%,transparent);pointer-events:none;z-index:1}.cl-wh::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(#fff 0,transparent 32%,transparent 68%,#fff 100%);opacity:.85;z-index:2}
 .cl-wl{height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;padding:48px 0;box-sizing:border-box;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}.cl-wl::-webkit-scrollbar{display:none}.cl-wi{height:48px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-weight:900;font-size:30px;color:var(--c);cursor:pointer}.cl-err{color:#c92a2a;font-weight:700;text-align:center;min-height:1.2em;margin:4px 0}.cl-q button:disabled{opacity:.4}#p-colonnes .cl-menu .m{background:#e5dbff}
 
+.cl-blk{margin:4px 0}.cl-rw{display:flex;gap:8px;align-items:center;justify-content:center}.cl-rw .cl-s{width:30px;flex:none}.cl-ar{flex:1;min-height:44px;border-radius:12px;border:3px solid var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c);font-size:22px;font-weight:900;font-family:inherit;cursor:pointer;margin:3px 0;touch-action:manipulation}.cl-dg{flex:1;min-height:68px;border-radius:14px;border:3px solid var(--c);background:var(--c);color:#fff;font-size:42px;font-weight:900;font-family:inherit;cursor:pointer;touch-action:manipulation}.cl-dg.empty{background:#fff;color:color-mix(in srgb,var(--c) 55%,#fff);border-style:dashed}.cl-bar{height:5px;background:#1d2433;border-radius:3px;margin:8px 0 8px 38px}.cl-big2{display:flex;flex-direction:column;gap:10px;margin-top:10px}.cl-big2 button{min-height:60px;border-radius:16px;border:3px solid rgba(29,36,51,.15);background:#fff0b8;font-weight:800;font-size:19px;font-family:inherit;cursor:pointer;color:#1d2433}.cl-big2 .ok{background:#b2f2bb;border-color:#2f9e44}.cl-big2 button:disabled{opacity:.4}
 .cl-card{touch-action:pan-y}.cl-card.lend,.cl-card.lend .cl-grid{touch-action:none}.cl-top.glow{touch-action:none}.cl-drag{position:fixed;z-index:9999;transform:translate(-50%,-50%);pointer-events:none;background:var(--c);color:#fff;font-weight:900;font-size:22px;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 .cl-up:not(:empty){animation:clin .4s ease}@keyframes clin{from{transform:translateX(-26px);opacity:0}to{transform:none;opacity:1}}
 .cl-sum{text-align:center}.cl-big{font-size:3.4rem;font-weight:900;color:#2f9e44}.cl-dots i.bad{background:#f08c00}
@@ -794,6 +795,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "6.2", desc: "Mon calcul : flèches ▲ ▼ lisibles, gros boutons" },
     { v: "6.1", desc: "Colonnes : le glissement ne change plus de page" },
     { v: "6.0", desc: "Calcul 6H : choisir + − × ÷ séparément" },
     { v: "5.9", desc: "Colonnes : Mon calcul avec roues crantées (jusqu’à 9999)" },
@@ -5581,27 +5583,27 @@ function learn(k,n,pair){
   cd.onpointerdown=e=>{ sx=e.clientX; sy=e.clientY; };
   cd.onpointerup=e=>{ if(sx===null) return; const dx=e.clientX-sx, dy=e.clientY-sy; sx=null; if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){ if(dx<0&&n<out.length-1) learn(k,n+1,pair); else if(dx>0&&n>0) learn(k,n-1,pair); } };
   }
-/* ---- Mon calcul : roues crantées (0 à 9 ou case vide), jusqu’à 9999 ---- */
-const MY={a:[4,5,8,2],b:[null,6,7,6]}, WH=48;
-const wheelH=(r,k,i)=>`<div class="cl-wh" style="--c:${COL[i]}" data-r="${r}" data-k="${k}"><div class="cl-wl">${['',0,1,2,3,4,5,6,7,8,9].map((x,j)=>`<div class="cl-wi" data-j="${j}">${x===''?'·':x}</div>`).join('')}</div></div>`;
+/* ---- Mon calcul : une flèche ▲ ▼ au-dessus et au-dessous de chaque chiffre (0 à 9 ou case vide), jusqu’à 9999 ---- */
+const MY={a:[4,5,8,2],b:[null,6,7,6]};
 function myNum(arr){ const d=arr.slice(); while(d.length&&d[0]===null) d.shift(); if(!d.length) return {n:null,err:'empty'}; if(d.some(x=>x===null)) return {n:null,err:'gap'}; return {n:+d.join(''),err:''}; }
+const stepV=(v,dir)=>{ const L=[null,0,1,2,3,4,5,6,7,8,9]; const i=L.indexOf(v); return L[(i+dir+L.length)%L.length]; };
 function custom(){
-  root.innerHTML=back()+`<div class="mx-head"><h2>🧮 Mon calcul</h2><p>Tourne les roues pour taper le calcul de ton devoir (de 0 à 9, ou une case vide à gauche). Maximum 9999.</p></div>
+  const blk=(r,sign)=>`<div class="cl-blk"><div class="cl-rw"><span class="cl-s"></span>${[0,1,2,3].map(k=>`<button class="cl-ar" data-r="${r}" data-k="${k}" data-d="1" style="--c:${COL[3-k]}" aria-label="plus">▲</button>`).join('')}</div>
+   <div class="cl-rw"><span class="cl-s">${sign}</span>${[0,1,2,3].map(k=>`<button class="cl-dg" data-r="${r}" data-k="${k}" data-d="1" style="--c:${COL[3-k]}"></button>`).join('')}</div>
+   <div class="cl-rw"><span class="cl-s"></span>${[0,1,2,3].map(k=>`<button class="cl-ar" data-r="${r}" data-k="${k}" data-d="-1" style="--c:${COL[3-k]}" aria-label="moins">▼</button>`).join('')}</div></div>`;
+  root.innerHTML=back()+`<div class="mx-head"><h2>🧮 Mon calcul</h2><p>Tape le calcul de ton devoir avec les flèches ▲ ▼ (chiffres 0 à 9, ou case vide « · » à gauche). Maximum 9999.</p></div>
   <div class="cl-card"><div class="cl-tags">${[3,2,1,0].map(i=>`<span style="--c:${COL[i]}">${NM[i]}</span>`).join('')}</div>
-  <div class="cl-wr"><span class="cl-s"></span>${[0,1,2,3].map(k=>wheelH('a',k,3-k)).join('')}</div>
-  <div class="cl-wr"><span class="cl-s">−</span>${[0,1,2,3].map(k=>wheelH('b',k,3-k)).join('')}</div>
+  ${blk('a','')}<div class="cl-bar"></div>${blk('b','−')}
   <div class="cl-eq" id="clEq"></div><p class="cl-err" id="clEr"></p>
-  <div class="cl-q"><button class="ok" id="clGo">✏️ Je m’entraîne</button><button id="clMe">📘 Montre-moi la méthode</button></div></div>`;
+  <div class="cl-big2"><button class="ok" id="clGo">✏️ Je fais le calcul</button><button id="clMe">📘 Montre-moi la méthode</button></div></div>`;
   root.querySelector('#clB').onclick=menu; window.scrollTo(0,0);
   const eq=root.querySelector('#clEq'), er=root.querySelector('#clEr'), go=root.querySelector('#clGo'), me=root.querySelector('#clMe');
   function check(){ const A=myNum(MY.a), B=myNum(MY.b); let m='';
+    root.querySelectorAll('.cl-dg').forEach(b=>{ const v=MY[b.dataset.r][+b.dataset.k]; b.textContent=v===null?'·':v; b.classList.toggle('empty',v===null); });
     if(A.err==='gap'||B.err==='gap') m='Pas de case vide au milieu d’un nombre : les cases vides se mettent à gauche.';
     else if(A.err==='empty') m='Tape le premier nombre.'; else if(B.err==='empty') m='Tape le nombre à retirer.'; else if(B.n>A.n) m='Le premier nombre doit être plus grand que celui qu’on retire.';
     eq.textContent=(A.n===null?'…':A.n)+' − '+(B.n===null?'…':B.n)+' = ?'; er.textContent=m; const ok=!m; go.disabled=me.disabled=!ok; return ok?[A.n,B.n]:null; }
-  root.querySelectorAll('.cl-wh').forEach(w=>{ const L=w.querySelector('.cl-wl'), arr=MY[w.dataset.r], k=+w.dataset.k; let t;
-    L.scrollTop=(arr[k]===null?0:arr[k]+1)*WH;
-    L.onscroll=()=>{ clearTimeout(t); t=setTimeout(()=>{ const j=Math.max(0,Math.min(10,Math.round(L.scrollTop/WH))); arr[k]=j===0?null:j-1; check(); },60); };
-    L.onclick=e=>{ const it=e.target.closest('.cl-wi'); if(it) L.scrollTo({top:+it.dataset.j*WH,behavior:'smooth'}); }; });
+  root.onclick=e=>{ const b=e.target.closest('.cl-ar,.cl-dg'); if(!b) return; const a=MY[b.dataset.r], k=+b.dataset.k; a[k]=stepV(a[k],+b.dataset.d); check(); };
   go.onclick=()=>{ const v=check(); if(v) practice({lvl:2,ex:v,my:true}); };
   me.onclick=()=>{ const v=check(); if(v) learn(0,0,v); };
   check(); }
