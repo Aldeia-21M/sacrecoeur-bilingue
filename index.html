@@ -647,6 +647,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .sn-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.sn-opts button{min-height:104px;border-radius:20px;border:4px solid rgba(29,36,51,.18);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:4px}
 .sn-opts button.ok{background:#bfeebf;border-color:#2f9e44}.sn-opts button.ko{background:#ffc9c9;border-color:#e03131;opacity:.55}
 .sn-og{font-size:clamp(24px,7.4vw,34px);font-weight:900;color:var(--c);text-align:center;line-height:1.1}.sn-oe{font-size:44px;line-height:1}.sn-oe.big{font-size:64px}.sn-ow{font-size:15px;font-weight:700}
+.sn-menu button.wide{grid-column:1/-1;min-height:110px;background:#dff4dc}.sn-txt p{font-size:clamp(24px,6.6vw,34px);line-height:1.6;margin:8px 0;font-weight:700;color:#1d2433;cursor:pointer}.sn-leg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px}.sn-leg span{background:color-mix(in srgb,var(--c) 16%,#fff);color:var(--c);font-weight:900;border-radius:10px;padding:2px 10px}
 </style>
 </head>
 <body>
@@ -723,7 +724,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 <section class="page" data-sec="de" id="p-wort" data-label="🗣️ Wortschatz"></section>
 <section class="page" data-sec="fr" id="p-conj" data-label="📘 Conjugaison"></section>
 <section class="page" data-sec="fr" id="p-ortho" data-label="✏️ Orthographe"></section>
-<section class="page" data-sec="fr" id="p-sons" data-label="🔊 Sons"></section>
+<section class="page" data-sec="fr" id="p-sons" data-label="📖 Lecture"></section>
 <section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><div class="gk-nav"><button class="gk-open on" id="gkCo"><b>🖍️</b>Colorie la phrase</button><button class="gk-open" id="gkBtn"><b>📘</b>Apprendre les règles</button><button class="gk-open" id="gkTr"><b>🏋️</b>M’entraîner aux règles</button></div><div id="p-gramS" hidden></div><div id="p-gramT"></div></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
@@ -740,7 +741,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
-    { v: "4.5", desc: "Les sons : lire et associer lettres et sons (4H)" }
+    { v: "4.5", desc: "Lecture : les sons et textes à lire (4H)" }
   ] },
   { date: "2026-10-11", versions: [
     { v: "4.4", desc: "PoutchouPoutchou : bulle silencieuse qui disparaît" },
@@ -4919,6 +4920,8 @@ const G=[
 ];
 G.forEach(g=>g.w=g.w.map(x=>({e:x[0],m:x[1],p:x[1].replace(/[\[\]]/g,''),g})));
 const ALLW=[].concat(...G.map(g=>g.w)).filter((w,i,a)=>a.findIndex(x=>x.p===w.p)===i);
+const vw=g=>(g.mn.match(/«\s*([^»]*?)\s*»/)||[0,g.s])[1].replace(/\s*!$/,'');
+const vs=g=>({au:'au',oi:'oie',ou:'ou',on:'on',an:'an',in:'vin',ch:'chut',eu:'peu',ai:'lait',ph:'photo',gn:'vigne',qu:'quatre',ill:'fille',c:'cerise',g:'girafe'}[g.id]||vw(g));
 const hl=(m,c)=>m.replace(/\[([^\]]+)\]/g,'<span class="sn-m" style="--c:'+(c||'#1971c2')+'">$1</span>');
 const clean=w=>w.p;
 const others=(g)=>G.filter(x=>x!==g);
@@ -4928,13 +4931,13 @@ const addStars=n=>{ try{ localStorage.setItem('dl-pt-stars',String((+localStorag
 
 function menu(){
   try{ speechSynthesis.cancel(); }catch(e){}
-  root.innerHTML=`<div class="mx-head"><h2>🔊 Les sons</h2><p>Pour apprendre à lire : chaque groupe de lettres fait un son. <b>4H</b></p></div>
-  <div class="sn-menu"><button data-a="learn"><i>📖</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button></div>`;
-  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; b.dataset.a==='learn'?learn():quiz(); };
+  root.innerHTML=`<div class="mx-head"><h2>📖 Lecture</h2><p>Les sons : chaque groupe de lettres fait un son. <b>4H</b></p></div>
+  <div class="sn-menu"><button data-a="learn"><i>🔊</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="read" class="wide"><i>📚</i><span>Lis un texte</span></button></div>`;
+  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ({learn,quiz,read}[b.dataset.a])(); };
 }
 function back(f,txt){ return `<button class="g-ghost sn-back" id="snB">${txt||'← Menu'}</button>`; }
 function learn(){
-  root.innerHTML=back()+`<div class="mx-head"><h2>📖 Découvre les sons</h2><p>Touche un son pour l’entendre.</p></div><div class="sn-grid">${G.map(g=>`<button data-i="${G.indexOf(g)}" style="--c:${g.c}"><b>${g.l}</b><span>${g.s}</span></button>`).join('')}</div>`;
+  root.innerHTML=back()+`<div class="mx-head"><h2>🔊 Découvre les sons</h2><p>Touche un son pour l’entendre.</p></div><div class="sn-grid">${G.map(g=>`<button data-i="${G.indexOf(g)}" style="--c:${g.c}"><b>${g.l}</b><span>${g.s}</span></button>`).join('')}</div>`;
   root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
   root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(b) detail(G[+b.dataset.i]); };
 }
@@ -4943,18 +4946,32 @@ function detail(g){
    <button class="sn-hint" id="snH"><span>🔊 ça fait « <b>${g.s}</b> »</span> <small>${g.mn}</small></button>
    <div class="sn-words">${g.w.map((w,i)=>`<button data-i="${i}"><i>${w.e}</i><span class="sn-w">${hl(w.m,g.c)}</span></button>`).join('')}</div></div>`;
   root.querySelector('#snB').onclick=learn; window.scrollTo(0,0);
-  const sg=()=>say(g.s==='ô'||g.s==='è'||g.s==='k'||g.s==='f'?g.s:g.s);
-  root.querySelector('#snH').onclick=()=>seq([{t:g.s,l:'fr',pause:500},{t:g.mn.replace(/[«»]/g,''),l:'fr'}]);
-  root.querySelector('.sn-words').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const w=g.w[+b.dataset.i]; seq([{t:g.s,l:'fr',pause:450},{t:w.p,l:'fr'}]); b.classList.add('on'); setTimeout(()=>b.classList.remove('on'),1200); };
-  if(!FAST) setTimeout(()=>seq([{t:g.s,l:'fr',pause:500},{t:g.mn.replace(/[«»]/g,''),l:'fr'}]),250);
+  const hs=()=>seq(vs(g)===vw(g)?[{t:vw(g),l:'fr'}]:[{t:vs(g),l:'fr',pause:350},{t:'comme dans',l:'fr',pause:250},{t:vw(g),l:'fr'}]);
+  root.querySelector('#snH').onclick=hs;
+  root.querySelector('.sn-words').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const w=g.w[+b.dataset.i]; seq([{t:vs(g),l:'fr',pause:450},{t:w.p,l:'fr'}]); b.classList.add('on'); setTimeout(()=>b.classList.remove('on'),1200); };
+  if(!FAST) setTimeout(hs,250);
+}
+const MK={}; G.forEach(g=>g.w.forEach(w=>{ (w.m.match(/\[([^\]]+)\]/g)||[]).forEach(x=>{ MK[x.slice(1,-1)]=g; }); })); [['c','c'],['g','g'],['ge','g'],['gi','g'],['ain','in'],['ai','ai'],['eau','au'],['au','au'],['ill','ill'],['œu','eu'],['ou','ou']].forEach(([k,id])=>{ MK[k]=G.find(x=>x.id===id); });
+
+const TX=['Le p[oi]sson nage dans l’[eau].','Mon lap[in] mange une [c]erise.','Le [ch]at dort sur la [ch]aise.','L’[oi]seau vole vers la mont[agn]e.','Papa m[on]te dans le cami[on] r[ou]ge.','La [g]irafe man[ge] de la salade.','Le [ph]oque joue avec un ball[on].','La gren[ou][ill]e saute dans l’[eau].','L’élé[ph][an]t a un gr[an]d nez.','Tu veux du p[ain] avec du froma[ge] ?','Il f[ai]t b[eau] aujourd’hui.','J’ai d[eu]x [œu]fs dans mon sac.','La f[ill]e m[an]ge un champi[gn]on.','Le [ch]ien ab[oi]e dev[an]t la m[ai]son.','Un [qu]atre-[qu]arts au [c]itron !','La b[eau]té du f[eu] me pl[ai]t.'];
+function read(){
+  const pool=shuf(TX).slice(0,3); const used=new Set();
+  const html=pool.map(t=>t.replace(/\[([^\]]+)\]/g,(m,k)=>{ const g=MK[k]; if(g) used.add(g); return g?`<span class="sn-m" style="--c:${g.c}">${k}</span>`:k; })).map(x=>`<p>${x}</p>`).join('');
+  root.innerHTML=back()+`<div class="mx-head"><h2>📚 Lis un texte</h2><p>Les sons en couleur t’aident à lire.</p></div><div class="sn-card"><div class="sn-leg">${[...used].map(g=>`<span style="--c:${g.c}">${g.l.split(' · ')[0]}</span>`).join('')}</div><div class="sn-txt" id="snT">${html}</div>
+    <button class="sn-ask" id="snL">🔊 <span>Écouter le texte</span></button><button class="mx-go big" id="snX">🔀 Un autre texte</button></div>`;
+  root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+  const plain=pool.map(t=>t.replace(/[\[\]]/g,''));
+  root.querySelector('#snL').onclick=()=>seq(plain.map(t=>({t,l:'fr',pause:700})));
+  root.querySelector('#snX').onclick=read;
+  root.querySelector('#snT').onclick=e=>{ const p=e.target.closest('p'); if(p) say(p.textContent); };
 }
 /* ---- entraînement ---- */
 function mkQ(){
   const t=pick(['hear','hear','has','read']);
   if(t==='hear'){ const g=pick(G), w=pick(g.w.filter(x=>!clash(x).length).length?g.w.filter(x=>!clash(x).length):g.w); const free=others(g).filter(x=>!x.det.test(w.p)); const o=shuf([g].concat(shuf(free).slice(0,2)));
-    return {t,vis:`<div class="sn-pic">${w.e}</div><div class="sn-wd">${hl(w.m,g.c).replace(/<span class="sn-m"[^>]*>/g,'<span class="sn-m0">')}</div>`,q:'Quel son entends-tu dans ce mot ?',say:w.p,opts:o.map(x=>({h:`<span class="sn-og" style="--c:${x.c}">${x.l.replace(/ · /g,'<br>')}</span>`,ok:x===g,r:x.s})),rev:[{t:w.p},{t:g.s}]}; }
+    return {t,vis:`<div class="sn-pic">${w.e}</div><div class="sn-wd">${hl(w.m,g.c).replace(/<span class="sn-m"[^>]*>/g,'<span class="sn-m0">')}</div>`,q:'Quel son entends-tu dans ce mot ?',say:w.p,opts:o.map(x=>({h:`<span class="sn-og" style="--c:${x.c}">${x.l.replace(/ · /g,'<br>')}</span>`,ok:x===g,r:x.s})),rev:[{t:w.p}]}; }
   if(t==='has'){ const g=pick(G); const ok=pick(g.w); const bad=shuf(ALLW.filter(x=>x.g!==g&&!g.det.test(x.p)&&x.e!==ok.e)); const o=shuf([ok].concat(bad.slice(0,2)));
-    return {t,vis:`<div class="sn-big sm" style="--c:${g.c}">${g.l.split(' · ').map(x=>`<span>${x}</span>`).join('')}</div><div class="sn-snd">ça fait « ${g.s} »</div>`,q:'Quel mot contient ce son ?',say:g.s,opts:o.map(x=>({h:`<span class="sn-oe">${x.e}</span><span class="sn-ow">${x.p}</span>`,ok:x===ok,r:x.p})),rev:[{t:ok.p}]}; }
+    return {t,vis:`<div class="sn-big sm" style="--c:${g.c}">${g.l.split(' · ').map(x=>`<span>${x}</span>`).join('')}</div><div class="sn-snd">ça fait « ${g.s} »</div>`,q:'Quel mot contient ce son ?',say:vs(g),opts:o.map(x=>({h:`<span class="sn-oe">${x.e}</span><span class="sn-ow">${x.p}</span>`,ok:x===ok,r:x.p})),rev:[{t:ok.p}],mw:vw(g)}; }
   const g=pick(G), w=pick(g.w); const bad=shuf(ALLW.filter(x=>x!==w&&x.p!==w.p&&x.e!==w.e)).filter((x,i,a)=>a.findIndex(y=>y.e===x.e)===i).slice(0,2); const o=shuf([w].concat(bad));
   return {t,vis:`<div class="sn-wd big">${hl(w.m,g.c)}</div>`,q:'Lis le mot : quelle image ?',say:w.p,opts:o.map(x=>({h:`<span class="sn-oe big">${x.e}</span>`,ok:x===w,r:x.p})),rev:[{t:w.p}],cls:'n3'};
 }
@@ -4967,7 +4984,7 @@ function quiz(){
     root.innerHTML=back(0,'← Menu')+`<div class="sn-card q"><div class="pt-dots">${dots()}</div>${q.vis}<button class="sn-ask" id="snA">🔊 <span>${q.q}</span></button>
       <div class="sn-opts ${q.cls||''}" id="snO">${q.opts.map((o,k)=>`<button data-k="${k}">${o.h}</button>`).join('')}</div></div>`;
     root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
-    const h=()=>{ if(q.t==='has') seq([{t:q.say,l:'fr',pause:400},{t:q.q,l:'fr'}]); else if(q.t==='hear') seq([{t:q.say,l:'fr',pause:500},{t:q.q,l:'fr'}]); else seq([{t:q.q,l:'fr'}]); };
+    const h=()=>{ if(q.t==='has') seq([{t:q.say,l:'fr',pause:400},{t:'comme dans',l:'fr',pause:250},{t:q.mw,l:'fr',pause:500},{t:q.q,l:'fr'}]); else if(q.t==='hear') seq([{t:q.say,l:'fr',pause:500},{t:q.q,l:'fr'}]); else seq([{t:q.q,l:'fr'}]); };
     root.querySelector('#snA').onclick=h; if(!FAST) setTimeout(h,250);
     window.DLctx={opts:()=>root.querySelectorAll('#snO button'),correct:q.opts.findIndex(x=>x.ok)};
     root.querySelector('#snO').onclick=async e=>{ const b=e.target.closest('button'); if(!b||S.locked||b.disabled) return; const o=q.opts[+b.dataset.k];
