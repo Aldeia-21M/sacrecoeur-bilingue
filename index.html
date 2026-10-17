@@ -768,7 +768,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
-    { v: "5.4", desc: "Lecture : Lis pas à pas (syllabes, lettre X)" },
+    { v: "5.4", desc: "Lecture : Lis pas à pas, 6 fiches (x, oin, ien, ill…)" },
     { v: "5.3", desc: "Poutchou plus bas ; en ligne compte tout le monde" },
     { v: "5.2", desc: "Poutchou remonté ; compteur en ligne fiable" },
     { v: "5.1", desc: "Sons on/om, an/am/em, in/im complets" },
@@ -5144,23 +5144,48 @@ const MK={}; G.filter(g=>!g.ex).forEach(g=>g.w.forEach(w=>{ (w.m.match(/\[([^\]]
 const TX=['Le p[oi]sson nage dans l’[eau].','Mon lap[in] mange une [c]erise.','Le [ch]at dort sur la [ch]aise.','L’[oi]seau vole vers la mont[agn]e.','Papa m[on]te dans le cami[on] r[ou]ge.','La [g]irafe man[ge] de la salade.','Le [ph]oque joue avec un ball[on].','La gren[ou][ill]e saute dans l’[eau].','L’élé[ph][an]t a un gr[an]d nez.','Tu veux du p[ain] avec du froma[ge] ?','Il f[ai]t b[eau] aujourd’hui.','J’ai d[eu]x [œu]fs dans mon sac.','La f[ill]e m[an]ge un champi[gn]on.','Le [ch]ien ab[oi]e dev[an]t la m[ai]son.','Un [qu]atre-[qu]arts au [c]itron !','La b[eau]té du f[eu] me pl[ai]t.'];
 
 /* ===== Lecture pas à pas : syllabes en couleur, son de la syllabe, du mot, lecture guidée ===== */
-const LP=[{t:'La lettre X',b:[
- {h:'Lis les mots.',l:['le sa·xo=kso·phone=fone de Ma·xi=ksi·me','les=lè fa·meux=meu che·vaux=vo','des=dè a·ni·maux=mo ex=èks·tra·or·di·nai=nè·res=rè','les=lè ex=èks·ploits=ploi d\'A=da·le·xi=ksi·a']},
- {h:'Lis les phrases.',l:['Hier=yère, Ro·xa=ksa·ne a fê·té ses=sè six=siss ans=an.','Les=lè e=é·xer=gzèr·ci·ces=ce de sa·xo=kso·phone=fone sont=son dif·fi·ci·les=lè.','Le bo·xeur=kseur doit=doi frap·per=pè dix=diss fois=foi sur le sac=sak.','Xa=gza·vier=vié a ter·mi·né ces=cè deux=deu e=é·xer=gzèr·ci·ces=ce de ma·thé·ma·ti·ques=tik.']}]}];
+const HR=re=>t=>t.replace(re,m=>'<mark>'+m+'</mark>');
+const LP=[
+ {t:'La lettre X',e:'✖️',H:HR(/x/gi),b:[
+  {h:'Lis les mots.',l:['le sa·xo=kso·phone=fone de Ma·xi=ksi·me','les=lè fa·meux=meu che·vaux=vo','des=dè a·ni·maux=mo ex=èks·tra·or·di·nai=nè·res=rè','les=lè ex=èks·ploits=ploi d\'A=da·le·xi=ksi·a']},
+  {h:'Lis les phrases.',l:['Hier=yère, Ro·xa=ksa·ne a fê·té ses=sè six=siss ans=an.','Les=lè e=é·xer=gzèr·ci·ces=ce de sa·xo=kso·phone=fone sont=son dif·fi·ci·les=lè.','Le bo·xeur=kseur doit=doi frap·per=pè dix=diss fois=foi sur le sac=sak.','Xa=gza·vier=vié a ter·mi·né ces=cè deux=deu e=é·xer=gzèr·ci·ces=ce de ma·thé·ma·ti·ques=tik.']}]},
+ {t:'oin',e:'🧶',H:HR(/oin|ouin/g),b:[
+  {h:'Lis les mots.',l:['un cha·peau=po poin·tu','un sham=chan·poing=poin doux=dou','l\'heure=leur des=dè soins=soin','dans=dan tous=tou les=lè coins=coin']},
+  {h:'Lis les phrases.',l:['Le che·val a be·soin d\'un=dun peu=peu de foin.','Main·te·nant=nan, le so·leil poin·te au=o loin.','Le bo·xeur=kseur ta·pe du poing=poin.','Le pin·gouin=gouin est=è moins=moin fri·leux que=keu moi.']}]},
+ {t:'ien',e:'🎩',H:HR(/ien/g),b:[
+  {h:'Lis les mots.',l:['le tien=tien','le mien=mien','Lu·cien=sien le ma·gi·cien=sien','le grand=gran mu·si·cien=sien']},
+  {h:'Lis les phrases.',l:['Le dal·ma·tien=sien est=è u·ne ra·ce=sse de chien=chien.','Sé·bas·tien=tien se=seu se·ra bien·tôt un bon gar·dien=dien de foot=fout.','Le phar·ma·cien=sien vient=vien au gui·chet=chè.','É·mi·lien=lien se dé·gui·se=zeu par·fois=foi en In·dien=dien.']}]},
+ {t:'ill',e:'🐛',H:HR(/ill/g),b:[
+  {h:'Lis les mots.',l:['le ma·quill=kiy·a·ge=je de Ca·mille=miy','u·ne gen·tille=tiy fa·mille=miy']},
+  {h:'Lis les phrases.',l:['De·main la che·nille=niy se trans·for·me·ra en pa·pill=piy·on=on.','La fille=fiy s\'ha·bille=biy pour faire=fèr un jeu de quilles=kiy.','Les grill=griy·ons=on sont ca·chés sous les myr·tilles=tiy.','Un go·rille=riy nous ob·ser·ve der·rière=ryèr la grille=griy.','La co·quille=kiy d\'es·car·got=go brille=briy sous la pluie.']}]},
+ {t:'ain · ein',e:'🍞',H:t=>t.replace(/(^|[^o])(ain|ein|aim|in)/g,(m,a,b)=>a+'<mark>'+b+'</mark>'),b:[
+  {h:'Lis les mots.',l:['du bois=boi peint=pin en bleu','u·ne faim=fin de loup']},
+  {h:'Lis les phrases.',l:['Le pou·lain=lin ga·lo·pe sur le che·min=min qui lon·ge le train=trin.','Au·jour·d\'hui=dui, Ro·main=min a plein=plin de co·pains=pin.','Ga·bin=bin se la·ve les mains=min a·vant de man·ger=jé son pain=pin.','Ro·bin=bin re·peint=pin les freins=frin de son vé·lo tout- ter·rain=rin.','Syl·vain=vin rê·ve de vo·ya·ger=jé dans des pays=péi loin·tains=tin.']}]},
+ {t:'Révision',e:'🔁',H:null,b:[
+  {h:'Lis les phrases.',l:['Le ka·ki est=è un fruit=frui qui=ki se man·ge=manj cru.','Zoé a vu un lé·zard=zar bi·zar·re=reu sur le ga·zon.','Le vé·lo d\'Ed=èd·wi=oui·ge=je est=è bien la·vé.','U·lys·se=sse des·si·ne a·vec=vèk son cray=crè·on=on blanc=blan.','L\'or·di·na·teur=teur est=è dé·jà vieux=vieu.','L\'Es·pa·gne=gneu est=è un beau=bo pays=péi.','Fa·bri·ce=sse a cas·sé son té·lé·phone=fone.']}]},
+ {t:'Mots fréquents',e:'⭐',H:null,b:[
+  {h:'Lis les mots.',l:['aus=o·si beau=bo·coup=cou tou·jours=jour','sous=sou a·vec=vèk il y=i a','c\'est=cè mais=mè quand=kan','quoi=koi en·co·re=cor ja·mais=mè','sou·vent=van puis=pui chez=ché','dé·jà voi·ci=si as·sez=sé']}]}
+];
 const LPC=['#1971c2','#e8590c','#2f9e44'];
-const PW=t=>{ const m=t.match(/^(.*?)([.,!?;:]*)$/), sy=m[1].split('·').map(x=>{ const [a,b]=x.split('='); return {s:a,say:(b||a).toLowerCase()}; }); return {sy,p:m[2],word:sy.map(x=>x.s).join('')}; };
-const LPH=t=>t.replace(/x/gi,m=>'<mark>'+m+'</mark>');
+const PW=t=>{ const m=t.match(/^(.*?)([.,!?;:\-]*)$/), sy=m[1].split('·').map(x=>{ const [a,b]=x.split('='); return {s:a,say:(b||a).toLowerCase()}; }); return {sy,p:m[2],word:sy.map(x=>x.s).join('')}; };
+
 const LPL=l=>l.split(' ').map(PW);
 let lpTok=0, lpSpd=1;
 const LPS=[{n:'🐌 Très lent',step:720,r:0.45},{n:'🐢 Lent',step:500,r:0.6},{n:'🐇 Normal',step:340,r:0.8}];
-function lineH(l){ return `<div class="lp-line"><div class="lp-text">${LPL(l).map((w,wi)=>{ const n=w.word.length, c=n>11?'xs':n>8?'sm':''; return `<div class="lp-w ${c}" data-w="${wi}"><div class="lp-sy">${w.sy.map((x,i)=>`<button class="lp-s" data-s="${i}" style="--c:${LPC[i%3]}">${LPH(x.s)}</button>`).join('')}${w.p?`<span class="lp-pu">${w.p}</span>`:''}</div><button class="lp-ear" data-e="1" aria-label="Écouter le mot">🔊</button></div>`; }).join('')}</div>
+function lineH(l,H){ return `<div class="lp-line"><div class="lp-text">${LPL(l).map((w,wi)=>{ const n=w.word.length, c=n>11?'xs':n>8?'sm':''; return `<div class="lp-w ${c}" data-w="${wi}"><div class="lp-sy">${w.sy.map((x,i)=>`<button class="lp-s" data-s="${i}" style="--c:${LPC[i%3]}">${H?H(x.s):x.s}</button>`).join('')}${w.p?`<span class="lp-pu">${w.p}</span>`:''}</div><button class="lp-ear" data-e="1" aria-label="Écouter le mot">🔊</button></div>`; }).join('')}</div>
   <div class="lp-ctl"><button data-a="say">🔊 La ligne</button><button data-a="gd">${LPS[lpSpd].n.split(' ')[0]} Pas à pas</button></div></div>`; }
 function guide(){
-  lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null; const T=LP[0], all=[].concat(...T.b.map(b=>b.l));
-  root.innerHTML=back()+`<div class="mx-head"><h2>🐢 Lis pas à pas</h2><p>${T.t} · touche une syllabe, 🔊 pour le mot, « Pas à pas » pour lire avec moi.</p></div>
+  lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null;
+  root.innerHTML=back()+`<div class="mx-head"><h2>🐢 Lis pas à pas</h2><p>Choisis une fiche : les mots sont coupés en syllabes de couleur.</p></div><div class="sn-grid">${LP.map((t,i)=>`<button data-i="${i}" style="--c:${LPC[i%3]}"><b>${t.e} ${t.t}</b><span>${t.b.reduce((n,x)=>n+x.l.length,0)} lignes</span></button>`).join('')}</div>`;
+  root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+  root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(b) lpPage(+b.dataset.i); };
+}
+function lpPage(ti){
+  lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null; const T=LP[ti], all=[].concat(...T.b.map(b=>b.l));
+  root.innerHTML=back(0,'← Les fiches')+`<div class="mx-head"><h2>🐢 ${T.t}</h2><p> touche une syllabe, 🔊 pour le mot, « Pas à pas » pour lire avec moi.</p></div>
   <div class="lp-top" id="lpSp">${LPS.map((x,i)=>`<button data-v="${i}" class="${i===lpSpd?'on':''}">${x.n}</button>`).join('')}</div><div class="lp-top"><button id="lpAll">▶️ Tout le texte, pas à pas</button><button id="lpStop" class="lp-stop">⏹️ Stop</button></div>`
-   +T.b.map(b=>`<h3 class="lp-h">${b.h}</h3>`+b.l.map(lineH).join('')).join('');
-  root.querySelector('#snB').onclick=()=>{ lpTok++; menu(); }; window.scrollTo(0,0);
+   +T.b.map(b=>`<h3 class="lp-h">${b.h}</h3>`+b.l.map(l=>lineH(l,T.H)).join('')).join('');
+  root.querySelector('#snB').onclick=()=>{ lpTok++; guide(); }; window.scrollTo(0,0);
   const lines=[...root.querySelectorAll('.lp-line')];
   const clear=()=>root.querySelectorAll('.lp-s.big,.lp-w.cur').forEach(e=>e.classList.remove('big','cur'));
   async function playLine(i,my){ const el=lines[i], ws=LPL(all[i]), st=LPS[lpSpd];
