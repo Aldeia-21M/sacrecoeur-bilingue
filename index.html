@@ -75,6 +75,14 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .td{font-weight:700;font-size:clamp(24px,6vw,34px);color:#1f5fd6;padding:2px 8px;text-align:center;width:100%}
 .tw{min-width:0;width:100%;text-align:center;padding:4px 4px;font-size:clamp(12px,3.4vw,22px);font-size:clamp(12px,3.4cqw,22px);line-height:1.6;overflow-wrap:anywhere;background:rgba(255,255,255,.85)}
 .gp{border-radius:7px;padding:0 3px}
+.mn-box{margin:16px 2px 8px;padding:14px;border-radius:22px;border:2px solid var(--line);background:#eef6ff;font-family:"Chalkboard SE","Bradley Hand","Segoe Print","Comic Sans MS",system-ui,sans-serif}.mn-box .tr-toggle{background:#a5d8ff;border-color:#339af0;box-shadow:0 4px 0 #339af0}.mn-box .tr-toggle small{color:#1c4a7a}
+.mn-p{margin:0 0 10px;color:#4a5164;font-size:clamp(15px,3.8vw,18px)}.mn-pick{display:flex;gap:8px;align-items:flex-end;justify-content:center;margin:6px 0}.mn-col{flex:1;max-width:96px;display:flex;flex-direction:column;align-items:stretch;gap:5px}.mn-col small{text-align:center;font-weight:800;font-size:.7rem;color:var(--c)}.mn-ar{min-height:44px;border-radius:12px;border:3px solid var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c);font-size:22px;font-weight:900;font-family:inherit;cursor:pointer;touch-action:manipulation}.mn-dg{display:flex;align-items:center;justify-content:center;min-height:66px;border-radius:14px;background:var(--c);color:#fff;font-size:42px;font-weight:900}.mn-k{align-self:center;min-height:60px;padding:0 12px;border-radius:14px;border:3px solid #7048e8;background:#fff;color:#7048e8;font-weight:900;font-size:18px;font-family:inherit;cursor:pointer}.mn-k[aria-pressed="true"]{background:#7048e8;color:#fff}
+.mn-num{text-align:center;font-weight:900;font-size:clamp(44px,14vw,70px);color:#1d2433;line-height:1.1;margin:8px 0 4px}.mn-num.hid{visibility:hidden}.mn-w{display:block;width:100%;border:3px solid rgba(29,36,51,.12);border-radius:18px;background:#fff;padding:10px 8px;font-family:inherit;font-size:clamp(24px,7vw,36px);font-weight:800;color:#1f5fd6;text-align:center;cursor:pointer;overflow-wrap:anywhere}.mn-w .gp,.mn-built .gp,.mn-w2 .gp{padding:2px 5px}
+.mn-leg{margin:8px 0;display:grid;gap:4px;font-size:.92rem;color:#4a5164}.mn-btns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.mn-b{flex:1 1 120px;min-height:50px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff0b8;font-weight:800;font-size:16px;font-family:inherit;cursor:pointer;color:#1d2433}.mn-b[aria-pressed="true"]{background:#b2f2bb;border-color:#2f9e44}
+.mn-in{width:100%;min-height:56px;font-size:26px;font-weight:700;padding:6px 12px;border-radius:14px;border:3px solid #339af0;font-family:inherit;margin:6px 0;text-transform:none}.mn-keys{display:flex;gap:8px;margin:4px 0}.mn-keys button{flex:1;min-height:48px;font-size:24px;font-weight:800;border-radius:12px;border:2px solid #ced4da;background:#fff;font-family:inherit;cursor:pointer}.mn-go{width:100%;min-height:56px;margin-top:8px;border-radius:16px;border:3px solid #2f9e44;background:#b2f2bb;font-weight:800;font-size:19px;font-family:inherit;cursor:pointer;color:#1d2433}.mn-go.sec{background:#fff0b8;border-color:rgba(29,36,51,.2)}
+.mn-fb{margin-top:10px}.mn-fb .ok,.mn-fb .ko{padding:10px 12px;border-radius:14px;font-weight:700;font-size:clamp(16px,4.4vw,19px);line-height:1.5}.mn-fb .ok{background:#d3f9d8;border:2px solid #2f9e44}.mn-fb .ko{background:#ffe3e3;border:2px solid #e03131}.mn-bad{color:#e03131;text-decoration:underline wavy;font-weight:900}.mn-att{font-size:1.2em;font-weight:800;word-break:break-all}.mn-w2{font-size:1.15em;font-weight:800;color:#1f5fd6;overflow-wrap:anywhere}
+.mn-built{min-height:58px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;padding:8px;border-radius:16px;background:#fff;border:3px dashed #339af0;font-size:clamp(24px,7vw,34px);font-weight:800;color:#1f5fd6}.mn-tiles{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}.mn-t{border:3px solid rgba(29,36,51,.18);border-radius:14px;background:#fff;padding:8px 12px;font-family:inherit;font-size:clamp(22px,6.4vw,30px);font-weight:800;color:#1f5fd6;cursor:pointer;touch-action:manipulation}.mn-t.shake{animation:mnsh .35s}@keyframes mnsh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
 .g-u{color:#1f5fd6}.g-und{background:#9be29b}.g-zw{background:#ffe27a}.g-zig{background:#f7b7d6}.g-zehn{background:#f6a85f}.g-hund{background:#a9d8f5}.g-taus{background:#cfa8f0}.g-sp{color:#e5383b}.g-faint{opacity:.5}
 .ck{white-space:nowrap}
 .td.hid{font-size:0}
@@ -795,6 +803,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "6.3", desc: "Allemand : Mon nombre (oral, orthographe, assembler)" },
     { v: "6.2", desc: "Mon calcul : flèches ▲ ▼ lisibles, gros boutons" },
     { v: "6.1", desc: "Colonnes : le glissement ne change plus de page" },
     { v: "6.0", desc: "Calcul 6H : choisir + − × ÷ séparément" },
@@ -1127,6 +1136,92 @@ grid.addEventListener('click',e=>{ const w=e.target.closest('.tw,.td'); if(w) w.
 document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.lv===lvl));
 render();
 paintMode();
+
+/* ---------- Mon nombre : je choisis mon propre nombre pour m’exercer à l’oral et à l’orthographe ---------- */
+(function(){
+const sec=document.getElementById('p-zahlen'); if(!sec) return;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const shuf=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const DESC={u:'<b>1 à 9</b> : les unités',und:'<b>und</b> = « et » : relie l’unité et la dizaine',zw:'<b>zwanzig</b> : le 20',zig:'<b>-zig</b> : les dizaines (30, 40… 90)',zehn:'<b>zehn</b> : 10, et les nombres de 13 à 19',hund:'<b>hundert</b> : les centaines',taus:'<b>tausend</b> : 1000',sp:'<b>à retenir par cœur</b> (11 et 12)',faint:'<b>(ein)</b> : on peut le dire ou non'};
+const CC=['#339af0','#f08c00','#2f9e44'], CN=['centaines','dizaines','unités'];
+const st={d:[0,4,2],k:false,mode:'see',hideNum:false,tries:0,done:false,b:null};
+const num=()=>st.k?1000:st.d[0]*100+st.d[1]*10+st.d[2];
+const parts=n=>n===0?[['null','u']]:numParts(n);
+const sayOf=w=>({'(ein)':'ein','sech':'sechs','sieb':'sieben'})[w]||w;
+const full=n=>speech(parts(n));
+const spanH=([w,c])=>`<span class="gp g-${c}" data-say="${esc(sayOf(w))}" data-lang="de">${w}</span>`;
+function wordH(n){ const p=parts(n), hi=p.findIndex(x=>x[1]==='hund'); const ch=hi>=0&&hi<p.length-1?[p.slice(0,hi+1),p.slice(hi+1)]:[p]; return ch.map(c=>`<span class="ck">${c.map(spanH).join('')}</span>`).join('<wbr>'); }
+const say=(t,l)=>{ try{ if(window.speak) speak(t,l||'de'); }catch(e){} };
+const verdict=(ok,n)=>{ try{ if(window.DLverdict) DLverdict(ok,[{t:full(n),l:'de'}]); }catch(e){} };
+const norm=s=>String(s).toLowerCase().replace(/ß/g,'ss').replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/[\s\-]/g,'');
+const okWords=n=>{ const w=norm(full(n)), a=[w]; if(/^ein(hundert|tausend)/.test(w)) a.push(w.slice(3)); return a; };
+function diffH(att,cor){ let i=0; while(i<att.length&&i<cor.length&&att[i]===cor[i]) i++; let j=0; while(j<att.length-i&&j<cor.length-i&&att[att.length-1-j]===cor[cor.length-1-j]) j++;
+  return esc(att.slice(0,i))+'<u class="mn-bad">'+esc(att.slice(i,att.length-j)||'_')+'</u>'+esc(att.slice(att.length-j)); }
+const box=document.createElement('div'); box.className='mn-box';
+box.innerHTML=`<button class="tr-toggle" id="mnT" aria-expanded="false"><span><span>✍️ Mon nombre</span><small>Choisis ton nombre pour t’exercer</small></span><span class="ch" aria-hidden="true">▾</span></button><div class="tr-body" id="mnB" hidden></div>`;
+sec.appendChild(box);
+const T=box.querySelector('#mnT'), B=box.querySelector('#mnB');
+T.onclick=()=>{ const open=B.hidden; B.hidden=!open; T.setAttribute('aria-expanded',open); T.querySelector('.ch').textContent=open?'▴':'▾'; T.querySelector('small').textContent=open?'Touche pour refermer':'Choisis ton nombre pour t’exercer'; if(open&&!B.firstChild) paint(); };
+function paint(){
+  const n=num(), p=parts(n), used=[...new Set(p.map(x=>x[1]))];
+  const hideW=st.mode==='write'||st.mode==='build';
+  B.innerHTML=`<p class="mn-p">Tourne les chiffres avec ▲ ▼ (jusqu’à 1000), puis choisis comment t’exercer.</p>
+  <div class="mn-pick">${[0,1,2].map(k=>`<div class="mn-col" style="--c:${CC[k]}"><small>${CN[k]}</small><button class="mn-ar" data-k="${k}" data-d="1" aria-label="plus">▲</button><div class="mn-dg">${st.k?'0':st.d[k]}</div><button class="mn-ar" data-k="${k}" data-d="-1" aria-label="moins">▼</button></div>`).join('')}<button class="mn-k" data-k1="1" aria-pressed="${st.k}">1000</button></div>
+  <div class="mn-num ${st.hideNum&&st.mode==='write'?'hid':''}" id="mnNum">${n}</div>
+  <div class="mn-word" ${hideW?'hidden':''}><button class="mn-w" id="mnW" data-say="${esc(full(n))}" data-lang="de">${wordH(n)}</button>
+   <div class="mn-leg">${used.map(c=>`<div><span class="gp g-${c}">${c==='u'?'1 2 3':c==='faint'?'(ein)':'…'}</span> ${DESC[c]}</div>`).join('')}</div></div>
+  <div class="mn-btns"><button class="mn-b" data-m="hear">🔊 Écouter</button><button class="mn-b" data-m="slow">🐢 Morceau par morceau</button></div>
+  <div class="mn-btns"><button class="mn-b" data-m="see" aria-pressed="${st.mode==='see'}">👁️ Voir</button><button class="mn-b" data-m="write" aria-pressed="${st.mode==='write'}">✍️ Écrire</button><button class="mn-b" data-m="build" aria-pressed="${st.mode==='build'}">🧩 Assembler</button></div>
+  <div id="mnEx"></div>`;
+  ex();
+}
+function ex(){
+  const E=B.querySelector('#mnEx'), n=num();
+  if(st.mode==='write'){
+    E.innerHTML=`<p class="mn-p">${st.hideNum?'Écoute le nombre, puis écris-le en allemand.':'Écris ce nombre en allemand.'}</p>
+    <div class="mn-btns"><button class="mn-b" data-m="hear">🔊 Écouter</button><button class="mn-b" data-m="hidenum" aria-pressed="${st.hideNum}">🙈 Cacher le chiffre</button></div>
+    <input class="mn-in" id="mnIn" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="écris ici…">
+    <div class="mn-keys">${['ä','ö','ü','ß'].map(c=>`<button data-ch="${c}">${c}</button>`).join('')}</div>
+    <button class="mn-go" id="mnCk">✅ Vérifier</button><div class="mn-fb" id="mnFb"></div>`;
+    const inp=E.querySelector('#mnIn'); inp.onkeydown=e=>{ if(e.key==='Enter') check(); };
+    E.querySelector('#mnCk').onclick=check;
+    E.querySelector('.mn-keys').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; inp.value+=b.dataset.ch; inp.focus(); };
+  } else if(st.mode==='build'){
+    const p=parts(n); st.b={p,order:shuf(p.map((_,i)=>i)),got:[]};
+    drawBuild();
+  } else E.innerHTML='';
+}
+function drawBuild(){
+  const E=B.querySelector('#mnEx'), b=st.b, n=num();
+  E.innerHTML=`<p class="mn-p">Touche les morceaux dans le bon ordre pour écrire <b>${n}</b> en allemand.</p>
+  <div class="mn-built">${b.got.map(i=>spanH(b.p[i])).join('')||'<small>…</small>'}</div>
+  <div class="mn-tiles">${b.order.filter(i=>!b.got.includes(i)).map(i=>`<button class="mn-t" data-i="${i}" data-say="${esc(sayOf(b.p[i][0]))}" data-lang="de"><span class="gp g-${b.p[i][1]}">${b.p[i][0]}</span></button>`).join('')}</div>
+  <div class="mn-fb" id="mnFb"></div>${b.got.length?'<button class="mn-go sec" id="mnR">↺ Recommencer</button>':''}`;
+  if(b.got.length===b.p.length){ E.querySelector('#mnFb').innerHTML=`<div class="ok">🎉 Bravo ! <b>${esc(full(n))}</b></div>`; E.querySelector('.mn-tiles').innerHTML=''; verdict(true,n); }
+  const r=E.querySelector('#mnR'); if(r) r.onclick=()=>{ b.got=[]; drawBuild(); };
+}
+function check(){
+  const n=num(), inp=B.querySelector('#mnIn'), fb=B.querySelector('#mnFb'), v=inp.value.trim(); if(!v){ fb.innerHTML='<div class="ko">Écris d’abord le nombre.</div>'; return; }
+  const a=norm(v), good=okWords(n);
+  if(good.includes(a)){ fb.innerHTML=`<div class="ok">✅ Richtig ! <span class="mn-w2">${wordH(n)}</span></div>`; st.tries=0; verdict(true,n); return; }
+  st.tries++; const cor=good[0];
+  if(st.tries<2) fb.innerHTML=`<div class="ko">Presque ! Regarde la partie soulignée :<br><span class="mn-att">${diffH(a,cor)}</span><br><small>Essaie encore (tu peux réécouter avec 🔊).</small></div>`;
+  else { fb.innerHTML=`<div class="ko">Voici la bonne écriture :<br><span class="mn-w2">${wordH(n)}</span><br><small>Ton essai : <span class="mn-att">${diffH(a,cor)}</span></small></div>`; st.tries=0; verdict(false,n); }
+}
+B.addEventListener('click',e=>{
+  const ar=e.target.closest('.mn-ar'); if(ar){ const k=+ar.dataset.k; st.k=false; st.d[k]=(st.d[k]+ +ar.dataset.d+10)%10; st.tries=0; paint(); return; }
+  if(e.target.closest('[data-k1]')){ st.k=!st.k; if(st.k) st.d=[0,0,0]; st.tries=0; paint(); return; }
+  const m=e.target.closest('[data-m]'); if(m){ const v=m.dataset.m;
+    if(v==='hear'){ say(full(num())); return; }
+    if(v==='slow'){ const p=parts(num()); try{ if(window.DLspeakSeq) DLspeakSeq(p.map(x=>({t:sayOf(x[0]),l:'de',pause:450})).concat([{t:full(num()),l:'de'}])); else say(full(num())); }catch(x){} return; }
+    if(v==='hidenum'){ st.hideNum=!st.hideNum; B.querySelector('#mnNum').classList.toggle('hid',st.hideNum); m.setAttribute('aria-pressed',st.hideNum); ex(); return; }
+    st.mode=v; st.tries=0; paint(); return; }
+  const t=e.target.closest('.mn-t'); if(t&&st.b){ const i=+t.dataset.i, b=st.b, nx=b.got.length;
+    if(b.p[i][0]===b.p[b.order.find(j=>!b.got.includes(j)&&false)||0][0]&&false){}
+    if(b.p[i][0]===b.p[nx][0]){ b.got.push(b.order.filter(j=>!b.got.includes(j)&&b.p[j][0]===b.p[nx][0])[0]); drawBuild(); }
+    else { t.classList.add('shake'); setTimeout(()=>t.classList.remove('shake'),400); const fb=B.querySelector('#mnFb'); if(fb) fb.innerHTML='<div class="ko">Pas encore celui-là ! Écoute-le avec le 🔊 et essaie un autre morceau.</div>'; } }
+});
+})();
 })();
 
 /* ---------- Entraînement : vocabulaire (maths, fournitures, calendrier) ---------- */
