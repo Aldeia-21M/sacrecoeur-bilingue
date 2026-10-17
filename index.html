@@ -425,7 +425,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cx-solh{margin:10px 2px 4px;font-weight:800}.cx-solh small{font-weight:500;color:#555}.tx-text.cx-sol{border-color:#2f9e44;cursor:pointer}.cx-sol .cw{cursor:help}
 .tx-btns{display:flex;gap:8px;margin-top:8px}.tx-btns>*{flex:1}
 /* ---- séries, défi, petits ---- */
-#p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
+#p-ortho,#p-defi,#p-histoires,#p-heure,#p-monnaie,#p-petits,#p-colonnes{font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;padding-bottom:30px}
 .sec-b[data-s="pt"][aria-pressed="true"]{background:#ffe0ef;border-color:#e64980}
 .secs .sec-b{font-size:clamp(11.5px,3.3vw,18px)}
 body[data-sec="ma"] .bar nav{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}body[data-sec="ma"] .bar nav::-webkit-scrollbar{display:none}
@@ -672,6 +672,22 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .gn-rule{background:#fff;border:3px solid var(--c);border-radius:20px;padding:12px;margin:10px 0;cursor:pointer}.gn-rule h4{margin:0 0 4px;color:var(--c)}.gn-rule p{margin:2px 0;color:#1d2433}.gn-rule .ex{font-weight:800;font-size:1.1rem}
 .sn-var{margin-bottom:14px}.sn-sum{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:4px 0 14px}.sn-sum button{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:104px;flex:1 1 104px;max-width:200px;padding:8px 10px;border-radius:16px;border:3px solid var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c);font-family:inherit;cursor:pointer}.sn-sum b{font-weight:900;font-size:clamp(20px,5.6vw,26px)}.sn-sum i{font-style:normal;font-size:1.6rem}.sn-sum .sn-w{font-weight:800;font-size:clamp(16px,4.4vw,20px)}.sn-sum small{font-weight:700;font-size:.74rem;color:#4a5164;text-align:center}.sn-var .sn-words button{min-width:0}.sn-var .sn-w{font-size:clamp(15px,4.2vw,20px);overflow-wrap:anywhere;min-width:0}.sn-sub{text-align:center;font-weight:700;color:#4a5164;margin:4px 0}.sn-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin-top:12px}.sn-cols button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;padding:8px;border-radius:18px;border:3px solid var(--c);background:#fff;cursor:pointer;font-family:inherit}.sn-cols b{font-size:1.15rem;color:var(--c)}.sn-cols span{font-size:.78rem;color:#4a5164;word-break:break-word}.sn-cols button.ok{background:color-mix(in srgb,var(--c) 18%,#fff)}.sn-cols button.ko{background:#ffe3e3;opacity:.5}
 .lp-tile{background:#e7f5ff!important}.lp-h{font-weight:900;margin:16px 0 4px;font-size:1.15rem}.lp-line{background:#fff;border:3px solid rgba(29,36,51,.12);border-radius:20px;padding:12px;margin:10px 0}.lp-text{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}.lp-w{display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:3px;border-radius:12px;max-width:100%}.lp-w.cur{background:#fff3bf}.lp-sy{display:flex;gap:3px;justify-content:center}.lp-s{border:0;border-bottom:4px solid var(--c);border-radius:10px;padding:2px 6px;font-family:inherit;font-weight:800;font-size:clamp(22px,6.4vw,32px);line-height:1.25;cursor:pointer;color:var(--c);background:color-mix(in srgb,var(--c) 15%,#fff);transition:transform .15s}.lp-w.sm .lp-s{font-size:clamp(17px,5vw,25px);padding:2px 4px}.lp-w.xs .lp-s{font-size:clamp(14px,4.2vw,20px);padding:2px 3px}.lp-s mark{background:#ffe066;color:#1d2433;border-radius:4px;padding:0 1px}.lp-s.big{transform:scale(1.45);position:relative;z-index:2;box-shadow:0 4px 12px rgba(0,0,0,.3)}.lp-ear{height:24px;border:0;border-radius:8px;background:#eef1f6;font-size:13px;cursor:pointer}.lp-pu{align-self:flex-end;font-weight:900;font-size:1.6rem;line-height:1.1}.lp-ctl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.lp-ctl button,.lp-top button{min-height:46px;padding:6px 14px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff0b8;font-weight:800;font-family:inherit;font-size:16px;cursor:pointer}.lp-top{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}.lp-top button.on{background:#b2f2bb;border-color:#2f9e44}.lp-stop{background:#ffc9c9!important}
+
+#p-colonnes{padding-bottom:100px}#p-colonnes .cl-card{margin-right:0}
+#p-colonnes .cl-menu{display:grid;grid-template-columns:1fr 1fr;gap:12px}#p-colonnes .cl-menu button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:130px;border-radius:24px;border:3px solid rgba(29,36,51,.15);background:#e7f5ff;font-size:19px;font-weight:800;cursor:pointer;font-family:inherit;color:#1d2433}#p-colonnes .cl-menu button i{font-style:normal;font-size:2.4rem}#p-colonnes .cl-menu button small{font-size:.8rem;font-weight:700;color:#4a5164}#p-colonnes .cl-menu .wide{grid-column:1/-1;min-height:100px}#p-colonnes .cl-menu .l{background:#fff0b8}#p-colonnes .cl-menu .f{background:#dff4dc}
+.cl-card{background:#fff;border:3px solid rgba(29,36,51,.12);border-radius:22px;padding:14px;margin:10px 0}.cl-eq{text-align:center;font-weight:900;font-size:clamp(24px,7vw,34px);margin:2px 0 10px;color:#1d2433}
+.cl-grid{display:grid;grid-template-columns:30px repeat(var(--m),minmax(0,1fr));max-width:min(100%,430px);margin:0 auto}.cl-s{display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#1d2433}
+.cl-c{height:54px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:clamp(28px,8vw,38px);border:1px solid #d5dbe8;background:#fff;color:var(--c);transition:background .2s}.cl-c.on{background:color-mix(in srgb,var(--c) 18%,#fff)}
+.cl-up{height:36px;font-size:clamp(16px,5vw,22px);border-style:dashed;background:#fffaf0}.cl-up:not(:empty){background:#fff3bf;color:#d9480f;border-color:#f0b400}
+.cl-top.cut{color:#adb5bd;text-decoration:line-through;text-decoration-thickness:4px}.cl-top.glow{animation:clg 1s infinite;cursor:pointer;box-shadow:inset 0 0 0 5px var(--c);background:color-mix(in srgb,var(--c) 22%,#fff)}@keyframes clg{50%{transform:scale(1.15)}}
+.cl-line{grid-column:1/-1;height:5px;background:#1d2433;margin:4px 0;border-radius:3px}.cl-res{border:2px dashed color-mix(in srgb,var(--c) 55%,#fff)}.cl-res.full{background:var(--c);color:#fff;border-style:solid}
+.cl-leg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}.cl-leg span{font-size:.78rem;font-weight:800;padding:2px 9px;border-radius:999px;color:var(--c);border:2px solid var(--c);background:color-mix(in srgb,var(--c) 12%,#fff)}
+.cl-coach{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 12px;border-radius:14px;background:#fff7d6;border:2px solid #f0c000;font-size:clamp(16px,4.4vw,19px);line-height:1.45;font-weight:600;min-height:64px}.cl-coach #clT{flex:1}.cl-ear{border:0;background:#fff;border-radius:50%;width:42px;height:42px;font-size:20px;cursor:pointer;flex:none;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.cl-pad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}.cl-pad button{min-height:58px;font-size:26px;font-weight:900;border-radius:14px;border:3px solid var(--c);background:color-mix(in srgb,var(--c) 12%,#fff);color:var(--c);font-family:inherit;cursor:pointer}
+.cl-q{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.cl-q button,.cl-nav button{flex:1 1 140px;min-height:52px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff0b8;font-weight:800;font-size:17px;font-family:inherit;cursor:pointer;color:#1d2433}.cl-q .ok,.cl-nav .go{background:#b2f2bb;border-color:#2f9e44}.cl-q .no{background:#ffd8a8;border-color:#e8590c}
+.cl-nav{display:flex;align-items:center;gap:10px;margin-top:12px}.cl-nav span{font-weight:800;color:#4a5164}.cl-nav button:disabled{opacity:.4}.cl-chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}.cl-chips button{flex:1 1 100px;padding:8px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff;font-weight:800;font-family:inherit;font-size:15px;cursor:pointer;display:flex;flex-direction:column;color:#1d2433}.cl-chips button small{font-weight:700;color:#4a5164}.cl-chips button.on{background:#d0ebff;border-color:#1971c2}
+.cl-rec{margin:8px 0;padding:10px 14px;background:#fff;border-radius:16px;border:2px solid rgba(29,36,51,.12);font-weight:600}.cl-rec summary{font-weight:800;cursor:pointer}.cl-rec li{margin:6px 0}.cl-dots{display:flex;gap:6px;justify-content:center;margin:6px 0}.cl-dots i{width:14px;height:14px;border-radius:50%;background:#dee2e6}.cl-dots i.ok{background:#2f9e44}.cl-dots i.cur{background:#f08c00}
+
 .sn-menu button.sn-ex{background:#ffe3e3;min-height:120px}.sn-menu button.wide{grid-column:1/-1;min-height:110px;background:#dff4dc}.sn-txt p{font-size:clamp(24px,6.6vw,34px);line-height:1.6;margin:8px 0;font-weight:700;color:#1d2433;cursor:pointer}.sn-leg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px}.sn-leg span{background:color-mix(in srgb,var(--c) 16%,#fff);color:var(--c);font-weight:900;border-radius:10px;padding:2px 10px}
 .sn-oth{margin:18px 2px 8px;font-size:18px}.sn-chips{display:flex;flex-wrap:wrap;gap:8px}.sn-chips button{min-width:58px;min-height:48px;padding:4px 14px;border-radius:14px;border:3px solid var(--c);background:#fff;color:var(--c);font-weight:900;font-size:18px;cursor:pointer}
 </style>
@@ -754,6 +770,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 <section class="page" data-sec="fr" id="p-genre" data-label="🏷️ Genre"></section>
 <section class="page" data-sec="fr" id="p-gram" data-label="📐 Grammaire"><div class="gk-nav"><button class="gk-open on" id="gkCo"><b>🖍️</b>Colorie la phrase</button><button class="gk-open" id="gkBtn"><b>📘</b>Apprendre les règles</button><button class="gk-open" id="gkTr"><b>🏋️</b>M’entraîner aux règles</button></div><div id="p-gramS" hidden></div><div id="p-gramT"></div></section>
 <section class="page" data-sec="ma" id="p-calc" data-label="🧮 Calcul"></section>
+<section class="page" data-sec="ma" id="p-colonnes" data-label="➖ Colonnes"></section>
 <section class="page" data-sec="ma" id="p-nombres" data-label="🔢 Nombres"></section>
 <section class="page" data-sec="ma" id="p-mesures" data-label="📏 Mesures"></section>
 <section class="page" data-sec="ma" id="p-defi" data-label="⏱️ Défi"></section>
@@ -768,6 +785,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "5.7", desc: "Maths 6H : soustractions en colonnes avec emprunt" },
     { v: "5.6", desc: "Famille : l’appareil se reconnecte tout seul" },
     { v: "5.5", desc: "Lis pas à pas : raccourcis vers les autres fiches" },
     { v: "5.4", desc: "Lecture : Lis pas à pas, 6 fiches (x, oin, ien, ill…)" },
@@ -5458,5 +5476,128 @@ window.DLgenre={W,TH,manche,menu};
 menu();
 })();
 </script>
+<script>
+/* ===== Maths : soustractions en colonnes (6H) : méthode expliquée + exercices interactifs avec emprunt ===== */
+(function(){
+'use strict';
+const root=document.getElementById('p-colonnes'); if(!root) return;
+const rnd=n=>Math.floor(Math.random()*n), pick=a=>a[rnd(a.length)];
+const FAST=/#test/.test(location.hash);
+const say=t=>{ try{ if(window.speak) speak(String(t).replace(/<[^>]+>/g,''),'fr'); }catch(e){} };
+const COL=['#1971c2','#e8590c','#2f9e44','#7048e8','#c2255c','#0c8599'];
+const NM=['unités','dizaines','centaines','unités de mille','dizaines de mille','centaines de mille'];
+const NS=['unité','dizaine','centaine','unité de mille','dizaine de mille','centaine de mille'];
+const cn=i=>`<b style="color:${COL[i]}">${NM[i]}</b>`, cs=i=>`<b style="color:${COL[i]}">${NS[i]}</b>`;
+const dg=n=>String(n).split('').reverse().map(Number);
+/* ---- moteur : calcul en colonnes avec emprunt ---- */
+function prob(a,b){ const A=dg(a),B=dg(b); return {a,b,A,B,w:A.length,lb:B.length,r:a-b}; }
+const newS=P=>({top:P.A.slice(),res:Array(P.w).fill(null),act:-1,glow:-1});
+const bb=(P,i)=>i<P.lb?P.B[i]:0;
+const lead0=(P,S,i)=>i>=P.lb&&S.top.slice(i).every(x=>x===0);
+function peek(P,S,i){ let j=i+1; while(j<P.w&&S.top[j]===0) j++; return j; }
+function lend(P,S,i){ const j=peek(P,S,i), old=S.top[j]; S.top[j]--; for(let k=j-1;k>i;k--) S.top[k]=9; const was=S.top[i]; S.top[i]+=10; return {j,zeros:j-i-1,old,was}; }
+const lendText=(P,i,L)=>L.zeros===0
+ ?`${L.was} est plus petit que ${P.B[i]} : impossible. J’emprunte 1 ${cs(i+1)} au voisin : le ${L.old} devient <b>${L.old-1}</b>, et ici ${L.was} devient <b>${L.was+10}</b> (1 ${NS[i+1]} = 10 ${NM[i]}).`
+ :`Le voisin est un 0 : il n’a rien à prêter ! Je vais chercher plus loin, au premier chiffre qui n’est pas 0 : le ${L.old} des ${cn(L.j)}. Il devient <b>${L.old-1}</b>, les 0 entre les deux deviennent <b>9</b>, et ici ${L.was} devient <b>${L.was+10}</b>.`;
+function sim(a,b){ const P=prob(a,b), S=newS(P); let bo=0,ch=0; for(let i=0;i<P.w;i++){ if(lead0(P,S,i)) break; if(S.top[i]<bb(P,i)){ const L=lend(P,S,i); bo++; if(L.zeros) ch++; } } return {bo,ch}; }
+const ri=(lo,hi)=>lo+rnd(hi-lo+1);
+const GEN={
+ 1:()=>{ for(let k=0;k<5000;k++){ const w=ri(3,4), a=ri(Math.pow(10,w-1),Math.pow(10,w)-1), lb=w-rnd(2), b=ri(Math.pow(10,lb-1),Math.pow(10,lb)-1); if(b<a&&sim(a,b).bo===0&&String(a).indexOf('0')<0) return [a,b]; } return [6871,421]; },
+ 2:()=>{ for(let k=0;k<5000;k++){ const w=ri(4,5), lb=ri(3,Math.min(4,w)), a=ri(Math.pow(10,w-1),Math.pow(10,w)-1), b=ri(Math.pow(10,lb-1),Math.pow(10,lb)-1); const s=sim(a,b); if(b<a&&String(a).indexOf('0')<0&&s.bo>=1&&s.bo<=3&&s.ch===0) return [a,b]; } return [4582,676]; },
+ 3:()=>{ for(let k=0;k<5000;k++){ const w=ri(4,5); let a=String(ri(1,9)); for(let i=1;i<w;i++) a+=(Math.random()<.6||i===w-1&&Math.random()<.4)?'0':String(ri(1,9)); a=+a; const lb=ri(3,Math.min(4,w)), b=ri(Math.pow(10,lb-1),Math.pow(10,lb)-1); if(b<a&&sim(a,b).ch>=1) return [a,b]; } return [8000,4806]; }
+};
+const FICHE=[[4582,676],[98127,5346],[8000,4806],[35124,681],[2200,654],[6871,421],[7846,6937],[1896,999]];
+/* ---- dessin de la grille ---- */
+function gridH(P,S){ const cols=[...Array(P.w).keys()].reverse();
+  const cell=(cls,txt,i,x)=>`<div class="cl-c ${cls}${S.act===i?' on':''}" style="--c:${COL[i]}" ${x||''}>${txt}</div>`;
+  const ch=i=>S.top[i]!==P.A[i];
+  return `<div class="cl-grid" style="--m:${P.w}"><div class="cl-s"></div>${cols.map(i=>cell('cl-up',ch(i)?S.top[i]:'',i)).join('')}`
+   +`<div class="cl-s"></div>${cols.map(i=>cell('cl-top'+(ch(i)?' cut':'')+(S.glow===i?' glow':''),P.A[i],i,S.glow===i?`data-j="${i}"`:'')).join('')}`
+   +`<div class="cl-s">−</div>${cols.map(i=>cell('cl-bot',i<P.lb?P.B[i]:'',i)).join('')}<div class="cl-line"></div>`
+   +`<div class="cl-s"></div>${cols.map(i=>cell('cl-res'+(S.res[i]===null?'':' full'),S.res[i]===null?'':S.res[i],i)).join('')}</div>`; }
+const legendH=P=>`<div class="cl-leg">${[...Array(P.w).keys()].reverse().map(i=>`<span style="--c:${COL[i]}">${NM[i]}</span>`).join('')}</div>`;
+const back=(f,t)=>`<button class="g-ghost sn-back" id="clB">${t||'← Menu'}</button>`;
+const eqH=P=>`<div class="cl-eq">${P.a} − ${P.b} = ?</div>`;
+/* ---- menu ---- */
+function menu(){
+  root.innerHTML=`<div class="mx-head"><h2>➖ Soustractions en colonnes</h2><p>On pose, on emprunte, on calcule. <b>6H</b></p></div>
+  <div class="cl-menu"><button data-a="learn" class="wide l"><i>📘</i><span>Apprends la méthode</span></button>
+  <button data-a="1"><i>🌱</i><span>Niveau 1</span><small>sans emprunt</small></button><button data-a="2"><i>🌿</i><span>Niveau 2</span><small>avec emprunt</small></button>
+  <button data-a="3" class="wide"><i>🌳</i><span>Niveau 3 · avec des zéros</span><small>8000 − 4806…</small></button>
+  <button data-a="fiche" class="wide f"><i>📄</i><span>Ma fiche (série 1)</span><small>les 8 calculs de la feuille</small></button></div>`;
+  root.querySelector('.cl-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const a=b.dataset.a; if(a==='learn') learn(0); else if(a==='fiche') practice({lvl:2,fiche:true,i:0}); else practice({lvl:+a}); };
+  window.scrollTo(0,0); }
+/* ---- apprendre : pas à pas ---- */
+const EXS=[[4582,676,'Avec emprunt'],[2200,654,'Avec un zéro'],[6871,421,'Sans emprunt']];
+function steps(a,b){ const P=prob(a,b), S=newS(P), out=[]; const snap=(html,act,glow)=>{ out.push({html,top:S.top.slice(),res:S.res.slice(),act,glow:glow==null?-1:glow}); };
+  snap(`On pose le calcul <b>${a} − ${b}</b> : les chiffres sont alignés à droite, ${NS[0]} sous ${NS[0]}, ${NS[1]} sous ${NS[1]}… Chaque colonne a sa couleur. On calcule en partant de la <b>droite</b>.`,-1);
+  for(let i=0;i<P.w;i++){ S.act=i; if(lead0(P,S,i)){ snap(`Il ne reste que des zéros devant : on s’arrête, le calcul est fini.`,i); break; }
+    const t=S.top[i], x=bb(P,i);
+    if(i>=P.lb) snap(`Colonne des ${cn(i)} : il n’y a plus rien à retirer, je recopie le <b>${t}</b>.`,i);
+    else if(t>=x) snap(`Colonne des ${cn(i)} : <b>${t} − ${x}</b>. ${t} est assez grand : je peux calculer.`,i);
+    else { const j=peek(P,S,i); snap(`Colonne des ${cn(i)} : <b>${t} − ${x}</b>. ${t} est plus petit que ${x} : <b>impossible !</b> Il faut emprunter au voisin.`,i,j); const L=lend(P,S,i); snap(lendText(P,i,L),i); }
+    const r=S.top[i]-bb(P,i); S.res[i]=r; snap(`<b>${S.top[i]} − ${bb(P,i)} = ${r}</b>. J’écris <b>${r}</b> sous la colonne des ${cn(i)}.`,i); }
+  S.act=-1; snap(`Le résultat est <b>${P.r}</b> ! Pour vérifier, je fais la <b>preuve</b> : ${P.r} + ${b} = ${a}. C’est juste ✔️`,-1);
+  return {P,out}; }
+function learn(k,n){
+  const [a,b]=EXS[k], {P,out}=steps(a,b); n=n||0; const st=out[n];
+  root.innerHTML=back()+`<div class="mx-head"><h2>📘 La méthode</h2><p>Touche « Suivant » pour avancer pas à pas.</p></div>
+  <div class="cl-chips">${EXS.map((x,i)=>`<button data-x="${i}" class="${i===k?'on':''}">${x[2]}<small>${x[0]} − ${x[1]}</small></button>`).join('')}</div>
+  <div class="cl-card">${eqH(P)}${gridH(P,st)}${legendH(P)}<div class="cl-coach"><button class="cl-ear" id="clE" aria-label="Écouter">🔊</button><div id="clT">${st.html}</div></div>
+  <div class="cl-nav"><button id="clP" ${n===0?'disabled':''}>◀ Avant</button><span>${n+1} / ${out.length}</span>${n<out.length-1?'<button id="clN" class="go">Suivant ▶</button>':'<button id="clG" class="go">✏️ À toi !</button>'}</div></div>`;
+  root.querySelector('#clB').onclick=menu; window.scrollTo(0,0);
+  root.querySelector('#clE').onclick=()=>say(st.html);
+  const nx=root.querySelector('#clN'); if(nx) nx.onclick=()=>learn(k,n+1); const g=root.querySelector('#clG'); if(g) g.onclick=()=>practice({lvl:2,ex:[a,b]});
+  root.querySelector('#clP').onclick=()=>learn(k,n-1);
+  root.querySelector('.cl-chips').onclick=e=>{ const c=e.target.closest('button'); if(c) learn(+c.dataset.x,0); };
+  if(!FAST) say(st.html); }
+/* ---- s’exercer : interactif ---- */
+function practice(cfg){
+  let pr; if(cfg.fiche) pr=FICHE[cfg.i]; else if(cfg.ex) pr=cfg.ex; else pr=GEN[cfg.lvl]();
+  const P=prob(pr[0],pr[1]), S=newS(P); let phase='', msg='', err=0, i0=0, tries=0, done=false;
+  const lvl=cfg.lvl||2;
+  const recap=`<details class="cl-rec"><summary>💡 Rappel de la méthode</summary><ol><li>Je commence par la <b>droite</b> (les unités).</li><li>Si le chiffre du haut est <b>plus petit</b> que celui du bas : j’<b>emprunte 1</b> au voisin de gauche. Lui perd 1, moi je gagne 10.</li><li>Si le voisin est un <b>0</b> : je vais chercher plus loin, les 0 deviennent des 9.</li><li>J’écris le résultat sous la colonne, puis je passe à la colonne suivante.</li></ol></details>`;
+  function head(){ return cfg.fiche?`<div class="cl-dots">${FICHE.map((_,k)=>`<i class="${k<cfg.i?'ok':k===cfg.i?'cur':''}"></i>`).join('')}</div>`:''; }
+  function actions(){
+    if(phase==='look') return `<div class="cl-q"><button data-a="can" class="ok">✅ Je peux calculer</button><button data-a="no" class="no">🔁 Je dois emprunter</button></div>`;
+    if(phase==='calc'){ const c=COL[S.act]; return `<div class="cl-pad" style="--c:${c}">${[1,2,3,4,5,6,7,8,9,0].map(d=>`<button data-d="${d}">${d}</button>`).join('')}</div>`; }
+    if(phase==='end') return `<div class="cl-q"><button data-a="again" class="ok">➡️ ${cfg.fiche&&cfg.i<FICHE.length-1?'Calcul suivant':cfg.fiche?'Terminé !':'Un autre calcul'}</button><button data-a="menu">← Niveaux</button></div>`;
+    return ''; }
+  function paint(){ root.innerHTML=back()+head()+`<div class="cl-card">${eqH(P)}${gridH(P,S)}${legendH(P)}<div class="cl-coach"><button class="cl-ear" id="clE" aria-label="Écouter">🔊</button><div id="clT">${msg}</div></div><div id="clA">${actions()}</div></div>${recap}`;
+    root.querySelector('#clB').onclick=menu; root.querySelector('#clE').onclick=()=>say(msg); }
+  function enter(i){ S.act=i; S.glow=-1; tries=0;
+    if(i>=P.w||lead0(P,S,i)) return finish();
+    const t=S.top[i], x=bb(P,i);
+    if(i<P.lb&&(lvl>=2||t<x)){ phase='look'; msg=`Colonne des ${cn(i)} : <b>${t} − ${x}</b>. Peux-tu calculer ?`; }
+    else { phase='calc'; msg=i<P.lb?`Colonne des ${cn(i)} : <b>${t} − ${x}</b>. Combien ça fait ?`:`Colonne des ${cn(i)} : rien à retirer, recopie le <b>${t}</b>.`; }
+    paint(); if(!FAST) say(msg); }
+  function finish(){ S.act=-1; phase='end'; done=true;
+    msg=`🎉 <b>${P.a} − ${P.b} = ${P.r}</b><br>Preuve : ${P.r} + ${P.b} = ${P.a} ✔️<br>${err===0?'⭐ Sans aucune erreur !':'👍 Bien joué, tu as été aidé '+err+' fois.'}`;
+    paint(); try{ if(window.DLverdict) DLverdict(err===0,[{t:`${P.a} moins ${P.b} égale ${P.r}`}],true); }catch(e){} }
+  function onCalc(d){ const i=S.act, exp=S.top[i]-bb(P,i);
+    if(d===exp){ S.res[i]=d; enter(i+1); return; }
+    err++; tries++;
+    if(tries===1){ msg=`Pas tout à fait. Regarde bien : <b>${S.top[i]} − ${bb(P,i)}</b>. Essaie encore !`; paint(); if(!FAST) say(msg); }
+    else { S.res[i]=exp; msg=`<b>${S.top[i]} − ${bb(P,i)} = ${exp}</b>. Je l’écris pour toi.`; paint(); if(!FAST) say(msg); setTimeout(()=>enter(i+1),FAST?10:2200); } }
+  root.onclick=e=>{
+    const j=e.target.closest('[data-j]'); if(j&&phase==='lend'){ const i=S.act, L=lend(P,S,i); S.glow=-1; phase='calc'; msg=lendText(P,i,L)+`<br>Maintenant : <b>${S.top[i]} − ${bb(P,i)}</b> ?`; paint(); if(!FAST) say(msg); return; }
+    if(phase==='lend'&&e.target.closest('.cl-grid')){ msg=`Touche le chiffre qui <b>brille</b> : c’est lui qui nous prête 1.`; const t=root.querySelector('#clT'); if(t) t.innerHTML=msg; return; }
+    const a=e.target.closest('[data-a]'); if(a){ const v=a.dataset.a, i=S.act;
+      if(v==='can'||v==='no'){ const need=S.top[i]<bb(P,i);
+        if((v==='no')===need){ if(need){ S.glow=peek(P,S,i); phase='lend'; msg=`Oui : <b>${S.top[i]} est plus petit que ${bb(P,i)}</b>, on ne peut pas. Touche le chiffre qui <b>brille</b> pour lui emprunter 1.${S.top[S.glow]>0&&S.glow>i+1?'':''}${S.glow>i+1?' <small>(le voisin est un 0 : il ne peut rien prêter, on va plus loin !)</small>':''}`; }
+          else { phase='calc'; msg=`Oui, ${S.top[i]} est assez grand. <b>${S.top[i]} − ${bb(P,i)}</b> = ?`; }
+          paint(); if(!FAST) say(msg); }
+        else { err++; msg=need?`Regarde : <b>${S.top[i]} est plus petit que ${bb(P,i)}</b>, donc on ne peut pas calculer : il faut emprunter.`:`Regarde : <b>${S.top[i]} est plus grand ou égal à ${bb(P,i)}</b> : on peut calculer directement, pas besoin d’emprunter.`; paint(); if(!FAST) say(msg); }
+        return; }
+      if(v==='again'){ if(cfg.fiche){ if(cfg.i<FICHE.length-1) practice({lvl:2,fiche:true,i:cfg.i+1}); else menu(); } else practice(cfg.ex?{lvl:2}:cfg); return; }
+      if(v==='menu'){ menu(); return; } }
+    const d=e.target.closest('[data-d]'); if(d&&phase==='calc') onCalc(+d.dataset.d); };
+  window.__clKey=d=>{ if(phase==='calc') onCalc(d); };
+  window.scrollTo(0,0); enter(0); }
+document.addEventListener('keydown',e=>{ if(root.offsetParent===null||!/^[0-9]$/.test(e.key)||e.ctrlKey||e.metaKey) return; if(window.__clKey) window.__clKey(+e.key); });
+menu();
+})();
+</script>
+
 </body>
 </html>
