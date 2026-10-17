@@ -834,6 +834,7 @@ body:has(.mx-play) #pcFab,body:has(.mx-play) #pcNudge,body:has(.vk) #pcNudge,bod
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "9.6", desc: "Révision espacée des erreurs, plus de points au hasard" },
     { v: "9.5", desc: "iOS : onglets lisibles, bulles non bloquantes" },
     { v: "9.4", desc: "Contenu : syllabes, âne, déterminants, ß retiré" },
     { v: "9.3", desc: "Salon verrouillé : rien d’extérieur ne peut s’insérer" },
@@ -3804,6 +3805,16 @@ const PROG='dl-prog'; const getProg=()=>{ try{ return JSON.parse(localStorage.ge
 const setProg=p=>{ try{ localStorage.setItem(PROG,JSON.stringify(p)); }catch(e){} };
 
 /* ---------- moteur ---------- */
+/* révision espacée : erreurs mémorisées par profil, rejouées à J+1, J+3, J+7 */
+const REV={ INT:[1,3,7],
+  key(){ const u=window.DLU&&DLU.id&&DLU.id(); return 'dl-rev-'+(u||'anon'); },
+  load(){ try{ return JSON.parse(localStorage.getItem(this.key())||'[]')||[]; }catch(e){ return []; } },
+  save(a){ try{ localStorage.setItem(this.key(),JSON.stringify(a.slice(-30))); }catch(e){} },
+  clean(q){ try{ const c=Object.assign({},q); delete c.tiles; delete c._rv; return JSON.parse(JSON.stringify(c)); }catch(e){ return null; } },
+  add(root,q,k){ const c=this.clean(q); if(!c) return; const a=this.load().filter(x=>!(x.r===root&&x.k===k)); a.push({r:root,k,q:c,s:0,d:Date.now()+864e5}); this.save(a); },
+  due(root,n){ const t=Date.now(); return this.load().filter(x=>x.r===root&&x.d<=t).slice(0,n); },
+  ok(root,k){ const a=this.load(), x=a.find(y=>y.r===root&&y.k===k); if(!x) return; x.s++; if(x.s>=this.INT.length) a.splice(a.indexOf(x),1); else x.d=Date.now()+this.INT[x.s]*864e5; this.save(a); }
+};
 function MkSeries(rootId,cfg){
   const root=document.getElementById(rootId); if(!root) return;
   const S={g:cfg.grades[0][0],act:cfg.acts?cfg.acts[0][0]:null}; const actsOf=()=>(cfg.acts||[]).filter(a=>!a[2]||a[2].includes(S.g));
@@ -3824,11 +3835,12 @@ function MkSeries(rootId,cfg){
     O.querySelector('#'+rootId+'Go').onclick=()=>start();
   }
   paintO();
-  function start(queue){ run={i:0,ok:0,total:queue?queue.length:10,res:[],typed:'',locked:false,errs:0,seen:new Set(),wrong:[],queue:queue||null,review:!!queue}; next(); }
+  function start(queue){ run={pre:queue?[]:REV.due(rootId,3),i:0,ok:0,total:queue?queue.length:10,res:[],typed:'',locked:false,errs:0,seen:new Set(),wrong:[],queue:queue||null,review:!!queue}; next(); }
   const dots=()=>`<div class="mx-dots">${Array.from({length:run.total},(_,i)=>`<i class="${i<run.i?(run.res[i]?'ok':'ko'):i===run.i?'cur':''}"></i>`).join('')}</div>`;
   const keyOf=q=>strip(q.prompt)+'|'+strip(q.vis||'').slice(0,80)+'|'+(q.answer!==undefined?q.answer:(q.options&&q.options[q.correct]));
   function newQ(){
     if(run.queue) return run.queue[run.i];
+    if(run.pre&&run.pre.length&&run.i<run.total-1){ const x=run.pre.shift(); const q=JSON.parse(JSON.stringify(x.q)); q._rv=x.k; run.seen.add(keyOf(q)); return q; }
     let q,t=0; do{ q=cfg.gen(S.g,S.act); t++; }while(run.seen.has(keyOf(q))&&t<14);
     run.seen.add(keyOf(q)); return q;
   }
@@ -3869,6 +3881,7 @@ function MkSeries(rootId,cfg){
   }
   function resolve(ok){
     if(run.fin) return; run.fin=true; run.res[run.i]=ok; if(ok) run.ok++; else run.wrong.push(Q);
+    try{ const kk=keyOf(Q); if(ok){ if(Q._rv) REV.ok(rootId,Q._rv); } else REV.add(rootId,Q,kk); }catch(e){}
     const fb=P.querySelector('#'+rootId+'Fb'); fb.hidden=false; fb.className='mx-fb '+(ok?'ok':'ko'); fb.innerHTML=ok?`✅ <b>Bravo !</b> ${Q.explain||''}`:`❌ ${Q.explain||'Pas tout à fait.'}`;
     { const aL=Q.afterLang||(Q.after?(Q.lang||'fr'):'fr'), aT=Q.after||(Q.explain&&strip(Q.explain))||'';
       if(!ok&&Q.kind==='mcq'&&run.lastK!=null&&Q.options){ const rv={t:Q.after||'',l:aL}, w=DLwrongOf(Q.options,run.lastK,Q.correct,rv), c=DLwrongOf(Q.options,Q.correct,Q.correct,rv);
@@ -5485,7 +5498,7 @@ function onAnswer(ok){
     const first=touchDay(p), d=day(p), s=secKey(), rec=wkRec(p,curMonday());
     d.a++; p.tot.a++; (d.s[s]=d.s[s]||[0,0])[0]++; (p.sec[s]=p.sec[s]||[0,0])[0]++;
     if(ok){ d.ok++; p.tot.ok++; d.s[s][1]++; p.sec[s][1]++; p.run=(p.run||0)+1; if(p.run>p.tot.mr) p.tot.mr=p.run; if(p.run>(rec.mr||0)) rec.mr=p.run; addPts(p,10); }
-    else { p.run=0; addPts(p,2); }
+    else { p.run=0; }
     if(first) dailyBonus(p);
     done(p);
   }catch(e){ if(window.console) console.warn('DLU',e); }
@@ -5641,7 +5654,7 @@ function tabDef(p){
     <div class="u-ch bonus${rec.bonus?' ok':''}"><span class="u-ci">${rec.bonus?'🌟':'🎁'}</span><div class="u-ct"><b>Les 4 défis réussis</b><small>Bonus de la semaine parfaite</small></div><span class="u-cr"><em>+${BONUS}</em></span></div></div>
   <h4 class="u-h">🏅 Mes badges <small>${nb} / ${BADGES.length}</small></h4>
   <div class="u-bds">${BADGES.map(b=>`<div class="u-bd${p.bd[b[0]]?' on':''}" title="${esc(b[3])}"><span>${b[1]}</span><b>${esc(b[2])}</b><small>${p.bd[b[0]]?fmtD(p.bd[b[0]]):esc(b[3])}</small></div>`).join('')}</div>
-  <p class="u-note">Points : <b>+10</b> par bonne réponse · <b>+2</b> pour essayer · <b>+15</b> par partie terminée · <b>+5 à +15</b> le premier jour d’activité (plus de bonus si tu viens plusieurs jours de suite) · les défis et la semaine parfaite rapportent plus.</p>`; }
+  <p class="u-note">Points : <b>+10</b> par bonne réponse · pas de point pour une mauvaise réponse (réfléchis avant de cliquer !) · <b>+15</b> par partie terminée · <b>+5 à +15</b> le premier jour d’activité (plus de bonus si tu viens plusieurs jours de suite) · les défis et la semaine parfaite rapportent plus.</p>`; }
 const fmtD=k=>{ const [y,m,d]=k.split('-'); return d+'.'+m+'.'+y.slice(2); };
 
 /* onglet Évolution */
