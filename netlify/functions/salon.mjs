@@ -12,7 +12,51 @@ const ROUNDS = 3, VOTE_MS = 45000, ASK_MS = 12000, ANS_MS = 30000, REV_MS = 5500
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const st = () => getStore({ name: 'salons', consistency: 'strong' });
 const clean = s => String(s || '').replace(/[<>&"'`]/g, '').trim().slice(0, 14);
-const prof = p => ({ id: String(p.id), name: clean(p.name) || 'Joueur', av: String(p.av || '🙂').slice(0, 8), col: /^#[0-9a-f]{6}$/i.test(p.col || '') ? p.col : '#1f5fd6', gr: ['1H', '4H', '6H'].includes(p.gr) ? p.gr : '4H' });
+/* Liste blanche : seules ces balises et attributs passent, tout le reste est supprimé (aucun lien, image, script, style, formulaire). */
+const SAFE_TAGS = new Set(['span','div','b','i','u','small','br','svg','g','circle','ellipse','text','line','rect','path','polygon','polyline']);
+const SAFE_CLS = new Set(['big','seq','sr-vis','emo','clk','note','n20','n10','n50','coin','si','gm-s','shopl','shop','blank','cl-w','cl','cl-r','cl-line','purse','gm-bl','rect','pie','gm-t','br']);
+const SAFE_ATTR = { viewbox:'viewBox', role:'role', 'aria-label':'aria-label', cx:'cx', cy:'cy', r:'r', rx:'rx', ry:'ry', fill:'fill', stroke:'stroke', 'stroke-width':'stroke-width', x:'x', y:'y', 'text-anchor':'text-anchor', 'font-size':'font-size', 'font-weight':'font-weight', x1:'x1', y1:'y1', x2:'x2', y2:'y2', 'stroke-linecap':'stroke-linecap', 'stroke-linejoin':'stroke-linejoin', width:'width', height:'height', d:'d', points:'points', class:'class' };
+const okVal = (k, v) => k === 'd' ? /^[MmLlHhVvCcSsQqTtAaZz0-9 .,\-]{0,700}$/.test(v)
+  : k === 'aria-label' ? /^[\p{L}\p{N} .,’\-]{0,60}$/u.test(v)
+  : k === 'role' ? v === 'img'
+  : k === 'class' ? v.split(/\s+/).filter(Boolean).every(c => SAFE_CLS.has(c))
+  : /^[\w .,#%:\-+]{0,300}$/.test(v);
+function safeHTML(h, only) {
+  const allow = only ? new Set(only) : SAFE_TAGS, s = String(h == null ? '' : h).slice(0, 12000).replace(/<(script|style)\b[\s\S]*?<\/\1\s*>/gi, '');
+  const re = /<(\/?)([a-zA-Z][a-zA-Z0-9]*)((?:[^>"']|"[^"]*"|'[^']*')*)>/g;
+  const txt = t => t.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  let out = '', last = 0, m;
+  while ((m = re.exec(s))) {
+    out += txt(s.slice(last, m.index)); last = re.lastIndex;
+    const tag = m[2].toLowerCase(); if (!allow.has(tag)) continue;
+    if (m[1]) { out += '</' + (tag === 'svg' ? 'svg' : tag) + '>'; continue; }
+    let at = '';
+    if (!only) for (const a of m[3].matchAll(/([a-zA-Z][\w:-]*)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) {
+      const k = SAFE_ATTR[a[1].toLowerCase()]; if (!k) continue; const v = (a[2] !== undefined ? a[2] : a[3]).trim();
+      if (okVal(k, v)) at += ' ' + k + '="' + v.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"';
+    }
+    out += '<' + tag + at + (/\/\s*$/.test(m[3]) ? '/>' : '>');
+  }
+  return out + txt(s.slice(last));
+}
+const stripTxt = (t, n) => String(t == null ? '' : t).replace(/[<>&"'`\\]/g, '').slice(0, n || 80);
+
+const noAngle = (t, n) => String(t == null ? '' : t).replace(/[<>`\\]/g, '').slice(0, n || 80);
+const lang = l => (l === 'de' ? 'de' : 'fr');
+const qClean = q => ({ prompt: safeHTML(q.prompt), audio: q.audio && typeof q.audio === 'object' ? { t: noAngle(q.audio.t, 240), l: lang(q.audio.l) } : null,
+  options: q.options.map(o => noAngle(o, 90)), correct: q.correct, reveal: q.reveal && typeof q.reveal === 'object' ? { t: noAngle(q.reveal.t, 240), l: lang(q.reveal.l) } : null,
+  shown: noAngle(q.shown, 140), cat: /^[a-z]{2,20}$/.test(String(q.cat || '')) ? q.cat : 'mix' });
+// état de jeu : on ne garde que des nombres, booléens et textes nettoyés ; clés suspectes refusées
+const deepClean = (x, d = 0) => {
+  if (d > 8) return null;
+  if (typeof x === 'string') return safeHTML(x).slice(0, 4000);
+  if (typeof x === 'number') return Number.isFinite(x) ? x : 0;
+  if (typeof x === 'boolean' || x === null) return x;
+  if (Array.isArray(x)) return x.slice(0, 600).map(v => deepClean(v, d + 1));
+  if (x && typeof x === 'object') { const o = {}; for (const k of Object.keys(x).slice(0, 80)) { if (!/^[\w-]{1,32}$/.test(k) || k === '__proto__' || k === 'constructor' || k === 'prototype') continue; o[k] = deepClean(x[k], d + 1); } return o; }
+  return null;
+};
+const prof = p => ({ id: String(p.id), name: clean(p.name) || 'Joueur', av: /^[^<>&"'`\\]{1,8}$/.test(String(p.av || '')) ? String(p.av) : '🙂', col: /^#[0-9a-f]{6}$/i.test(p.col || '') ? p.col : '#1f5fd6', gr: ['1H', '4H', '6H'].includes(p.gr) ? p.gr : '4H' });
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const fresh = (r, id, t) => (r.seen[id] || 0) > t - GONE;
 const driver = (r, t) => { const p = r.players.find(x => fresh(r, x.id, t)); return p ? p.id : null; };
@@ -133,7 +177,7 @@ export default async (req) => {
       return; }
     if (a === 'ask') {
       const u = rr.turn; if (rr.phase !== 'play' || !u || u.n !== b.n || u.pid !== me || u.q || u.ans || !okQ(b.q)) { err = 'tour'; return false; }
-      u.q = b.q; u.deadline = t + ANS_MS; return; }
+      u.q = qClean(b.q); u.deadline = t + ANS_MS; return; }
     if (a === 'answer') {
       const u = rr.turn; if (rr.phase !== 'play' || !u || u.n !== b.n || u.pid !== me || !u.q || u.ans) { err = 'tour'; return false; }
       const k = Math.floor(+b.k), good = k === u.q.correct, sc = rr.scores[me] || (rr.scores[me] = { pts: 0, ok: 0, a: 0 });
@@ -146,7 +190,7 @@ export default async (req) => {
     if (a === 'move') {
       const g = rr.g; if (rr.phase !== 'game' || !g || g.over || (g.turn !== me && !(g.turn === '*' && g.order.includes(me))) || b.n !== g.n || !(g.order.includes(String(b.turn)) || (g.turn === '*' && b.turn === '*'))) { err = 'tour'; return false; }
       const st0 = b.s; if (!st0 || typeof st0 !== 'object' || JSON.stringify(st0).length > 20000) { err = 'etat'; return false; }
-      g.s = st0; g.n++; g.by = me; g.turn = String(b.turn); g.over = !!b.over; g.msg = String(b.msg || '').slice(0, 300); return; }
+      g.s = deepClean(st0); g.n++; g.by = me; g.turn = String(b.turn); g.over = !!b.over; g.msg = safeHTML(String(b.msg || '').slice(0, 300), ['b', 'i', 'br']); return; }
     if (a === 'again') { if (!(rr.phase === 'end' || (rr.phase === 'game' && rr.g && (rr.g.over || rr.host === me)))) { err = 'phase'; return false; } rr.phase = 'lobby'; rr.g = null; rr.vote = null; rr.theme = null; rr.turn = null; rr.order = []; rr.scores = {}; rr.total = 0; return; }
     if (a === 'leave') { if (rr.phase === 'game') { rr.phase = 'lobby'; rr.g = null; } rr.players = rr.players.filter(x => x.id !== me); delete rr.seen[me]; if (rr.host === me && rr.players[0]) rr.host = rr.players[0].id; return; }
     err = 'action'; return false;
