@@ -230,6 +230,11 @@ main{max-width:1100px;margin:0 auto;padding:8px 6px 24px}
 .ch-c{border-radius:50%;background:transparent;display:block;min-width:0}.ch-c.loop{background:#fff;border:2px solid #ced4da;border-radius:10px}.ch-c.start{background:color-mix(in srgb,var(--pc,#999) 35%,#fff);border-color:var(--pc,#999)}.ch-c.star{background:#fff3bf;border-color:#f59f00;position:relative}.ch-c.star::after{content:"⭐";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,2.6vw,16px)}.ch-c.home{background:color-mix(in srgb,var(--pc) 40%,#fff);border:2px solid var(--pc);border-radius:10px}.ch-c.yard{background:color-mix(in srgb,var(--pc) 25%,#fff);border:3px dashed var(--pc)}.ch-c.mid{background:#e9ecef;border-radius:12px}.ch-c.mid::after{content:"🏆";display:flex;align-items:center;justify-content:center;height:100%;font-size:clamp(10px,3vw,20px)}
 .ch-toks{position:absolute;inset:6px;pointer-events:none}.ch-tok{position:absolute;width:calc(100%/11);height:calc(100%/11);padding:0;border:0;background:none;pointer-events:none;transition:left .15s linear,top .15s linear}.ch-tok span{display:flex;align-items:center;justify-content:center;width:86%;height:86%;margin:7%;border-radius:50%;background:var(--pc);border:2px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25);font-size:clamp(10px,3.4vw,22px);line-height:1}.ch-tok.go{pointer-events:auto;cursor:pointer;z-index:3}.ch-tok.go span{animation:chpulse .7s infinite alternate;outline:3px solid #fff;outline-offset:1px}@keyframes chpulse{to{transform:scale(1.22)}}
 .ch-dcol{display:flex;flex-direction:column;align-items:center;gap:2px}.ch-dcol small{font-weight:800;color:#1f5fd6;font-size:13px;min-height:1.2em}.ch-d{cursor:pointer;font:inherit;width:68px;height:68px}.ch-d.used{opacity:.3}.ch-d.sel{outline:4px solid #f59f00;outline-offset:2px}.ch-d:disabled{cursor:default}.ch-side{display:grid;gap:8px;justify-items:center}.ch-die{display:flex;align-items:center;gap:12px;justify-content:center;min-height:76px;flex-wrap:wrap}.ch-dbtn{min-height:64px;padding:0 22px;border-radius:18px;border:3px solid var(--pc,#1f5fd6);background:color-mix(in srgb,var(--pc,#1f5fd6) 18%,#fff);font-weight:900;font-size:20px;font-family:inherit;cursor:pointer;color:#1d2433}
+.un-table{display:flex;gap:14px;justify-content:center;align-items:center;margin:10px 0}.un-topw{display:flex;flex-direction:column;align-items:center;gap:6px}.un-col{background:var(--cc);color:#fff;font-weight:900;border-radius:999px;padding:3px 14px;font-size:.9em;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.un-card{--cc:#555;width:74px;height:108px;border-radius:14px;border:4px solid #fff;background:var(--cc);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);font-family:inherit;padding:2px;cursor:default}
+.un-card.w{background:conic-gradient(#e03131 0 25%,#1c7ed6 0 50%,#2f9e44 0 75%,#f0a800 0)}.un-card.back{background:#1d2433;cursor:pointer}.un-card .un-v{font-size:2.1em;font-weight:900;line-height:1;text-shadow:0 2px 3px rgba(0,0,0,.4)}.un-card .un-w{font-size:.62em;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.5);word-break:break-word;line-height:1.05;text-align:center}
+.un-hand{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}.un-hand .un-card.pl{cursor:pointer;transform:translateY(-6px);box-shadow:0 0 0 3px #ffd43b,0 4px 10px rgba(0,0,0,.4)}.un-hand .un-card.dim{opacity:.45}.un-hand .un-card:disabled{opacity:1}.un-hand .un-card.dim:disabled{opacity:.45}
+.un-msg{margin:6px 0;text-align:center;min-height:2.4em}.un-picks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}.un-pick{background:var(--cc);color:#fff;font:inherit;font-weight:900;font-size:1.1em;border:3px solid #fff;border-radius:14px;padding:16px;box-shadow:0 2px 6px rgba(0,0,0,.3);text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .bn-cards{display:grid;gap:10px;margin:10px 0}.bn-cards.n3{grid-template-columns:repeat(3,1fr)}.bn-cards.n4{grid-template-columns:repeat(2,1fr)}.bn-card{display:flex;flex-direction:column;gap:6px;align-items:stretch}.bn-face{min-height:120px;border-radius:18px;border:3px solid rgba(29,36,51,.2);background:#fff;font-family:inherit;font-weight:900;font-size:clamp(15px,4.4vw,24px);color:#1d2433;cursor:pointer;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow-wrap:anywhere;hyphens:auto;touch-action:manipulation}.bn-face:disabled{cursor:default}.bn-face .bn-v{font-size:1.5em;color:#7048e8;min-height:1.2em}.bn-face.ok{background:#d3f9d8;border-color:#2f9e44}.bn-face.ko{background:#ffe3e3;border-color:#e03131}.bn-hear{min-height:44px;border-radius:12px;border:2px solid rgba(29,36,51,.15);background:#fff0b8;font-size:20px;cursor:pointer}@media(max-width:420px){.bn-cards.n3{grid-template-columns:1fr}.bn-face{min-height:84px;flex-direction:row;gap:14px}.bn-card{flex-direction:row}.bn-card .bn-face{flex:1}.bn-hear{width:56px}}
 .c4-board{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:8px;border-radius:20px;background:#1f5fd6;border:4px solid #174aa8;max-width:520px;margin:8px auto}.c4-col{display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:none;cursor:pointer;touch-action:manipulation}.c4-col:disabled{cursor:default}.c4-col:not(:disabled):active .c4-cell:not(.on){background:#a5d8ff}.c4-cell{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:50%;background:#fff;font-size:clamp(12px,4vw,22px);line-height:1;box-shadow:inset 0 3px 0 rgba(0,0,0,.18)}.c4-cell.on{background:var(--pc);border:3px solid rgba(255,255,255,.85);animation:c4drop .3s ease-out}.c4-cell.win{outline:4px solid #ffd43b;outline-offset:-1px;animation:chpulse .6s infinite alternate}@keyframes c4drop{from{transform:translateY(-40px);opacity:.3}}
 .bt-wrap{max-width:520px;margin:8px auto}.bt-grid{display:grid;grid-template-columns:28px repeat(var(--n),1fr);gap:3px;padding:8px;border-radius:18px;background:#a5d8ff;border:4px solid #339af0}.bt-h{display:flex;align-items:center;justify-content:center;font-weight:900;color:#1c4a7a;font-size:14px}.bt-c{aspect-ratio:1;border-radius:8px;border:2px solid #74c0fc;background:#e7f5ff;font-size:clamp(14px,4.6vw,24px);padding:0;cursor:pointer;touch-action:manipulation;line-height:1}.bt-c:disabled{cursor:default}.bt-c:not(:disabled):active{background:#fff3bf}.bt-c.m{background:#d0ebff;border-color:#a5d8ff}.bt-c.h{background:#ffe3e3;border-color:#e03131}.bt-c.s{background:#ffd8a8;border-color:#e8590c}
@@ -813,6 +818,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "7.9", desc: "Nouveau jeu : cartes couleurs (BÊTA)" },
     { v: "7.8", desc: "Prépositions : titres en bandeau coloré" },
     { v: "7.7", desc: "Prépositions : titres de familles explicites" },
     { v: "7.6", desc: "Moulin (Mühle) BÊTA" },
@@ -1916,6 +1922,7 @@ const GROUPS=[
   {id:'pendu',ic:'🔤',t:'Pendu (BÊTA)',d:'Devine le mot lettre par lettre · 1–4',c:'#fff0b8'},
   {id:'navale',ic:'🚢',t:'Bataille navale (BÊTA)',d:'Réponds pour tirer · cases lues en allemand · 1–4',c:'#d9ecfb'},
   {id:'puissance4',ic:'🔴',t:'Puissance 4 (BÊTA)',d:'Réponds pour poser un jeton · 1–2',c:'#ffe3e3'},
+  {id:'uno',ic:'🌈',t:'Cartes couleurs (BÊTA)',d:'Façon Uno : même couleur ou même chiffre · 2–4',c:'#ffe0e0'},
   {id:'cartes',ic:'🃏',t:'Bataille de chiffres (BÊTA)',d:'Trouve la carte la plus grande · 2–4',c:'#e9defa'},
   {id:'chevaux',ic:'🐴',t:'Petits chevaux (BÊTA)',d:'Dé, 6 pour sortir, cases ⭐ questions · 2–4',c:'#ffe8cc'},
   {id:'memory',ic:'🃏',t:'Memory',d:'Paires français ↔ allemand · 1–4',c:'#d9ecfb'},
@@ -1936,7 +1943,7 @@ const GROUPS=[
   {id:'bataille',ic:'🏆',t:'Bataille d’équipes',d:'La maîtresse pose, les équipes répondent · 2–4',c:'#dff4dc'}]]
 ];
 function renderHub(){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','moulin','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','uno','cartes','puissance4','navale','pendu','moulin','memory','loto','domino','duel','bataille','salon'];
   const head=fam?`<h2 class="g-h">🏆 Grand Quiz</h2><p class="g-p">Un seul jeu pour toute la famille : chaque joueur choisit sa classe (<b>1H</b>, <b>4H</b> ou <b>6H</b>) et reçoit des questions de <b>toutes les matières</b> à son niveau : allemand, français, maths, heure, monnaie…</p>`
    :`<h2 class="g-h">🎲 Réviser en jouant</h2><p class="g-p">Les jeux de révision de cette rubrique. Chaque enfant choisit sa classe : <b>1H</b> (images et voix), <b>4H</b> ou <b>6H</b>. La <b>conjugaison</b> est du niveau <b>6H</b>.</p>`;
   const groups=GROUPS.map(([t,list])=>[t,fam?list.filter(g=>FAMIDS.includes(g.id)):list]).filter(([t,l])=>l.length);
@@ -1946,7 +1953,7 @@ function renderHub(){
 function showHub(){ GCUR=null; document.body.classList.remove('gp-play'); try{ speechSynthesis.cancel(); }catch(e){} view.hidden=true; hub.hidden=false; window.scrollTo(0,0); }
 let curGame=null, GCUR=null;
 function hubItems(ex){
-  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','cartes','puissance4','navale','pendu','moulin','memory','loto','domino','duel','bataille','salon'];
+  const fam=window.DLfam&&window.DLfam(), FAMIDS=['plateau','race','chevaux','uno','cartes','puissance4','navale','pendu','moulin','memory','loto','domino','duel','bataille','salon'];
   const out=[]; GROUPS.forEach(([t,l])=>l.forEach(g=>{ if(g.id!==ex&&(!fam||FAMIDS.includes(g.id))) out.push({ic:g.ic,t:g.t,go:()=>openGame(g.id)}); })); return out;
 }
 
@@ -1979,7 +1986,7 @@ function openGame(id){
   document.body.classList.remove('gp-play');
   curGame=id; hub.hidden=true; view.hidden=false; plate.hidden=id!=='plateau'; body.hidden=id==='plateau';
   if(id==='plateau') D.setTopics(window.DLsec(),window.DLgrade&&window.DLgrade());
-  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='puissance4') puissance4(); else if(id==='navale') navale(); else if(id==='pendu') pendu(); else if(id==='moulin') moulin(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
+  if(id==='memory') memory(); else if(id==='loto') loto(); else if(id==='race') race(); else if(id==='chevaux') chevaux(); else if(id==='cartes') cartes(); else if(id==='uno') unoGame(); else if(id==='puissance4') puissance4(); else if(id==='navale') navale(); else if(id==='pendu') pendu(); else if(id==='moulin') moulin(); else if(window.DLG&&window.DLG[id]) window.DLG[id]();
   window.scrollTo(0,0);
 }
 root.querySelector('#gBack').onclick=showHub;
@@ -2411,6 +2418,98 @@ function startCartes(cfg){
   }
   nextRound();
 }
+/* ================= CARTES COULEURS (façon Uno) ================= */
+const UNOC=[['r','#e03131','Rouge'],['b','#1c7ed6','Bleu'],['g','#2f9e44','Vert'],['y','#f0a800','Jaune']];
+function unDeck(){ const d=[]; UNOC.forEach(([c])=>{ d.push({c,v:'0'}); for(let v=1;v<=9;v++) d.push({c,v:''+v},{c,v:''+v}); ['S','R','D'].forEach(v=>d.push({c,v},{c,v})); }); for(let i=0;i<4;i++) d.push({c:'w',v:'W'}); return shuffle(d); }
+function unOk(card,top,col){ return card.c==='w'||card.c===col||card.v===top.v; }
+T2.un={unDeck,unOk};
+function unoGame(){
+  playerSetup({title:'🌈 Cartes couleurs',npc:true,intro:'Pose une carte de la <b>même couleur</b> ou avec le <b>même chiffre</b> que la carte du dessus. Pour poser, réponds d’abord à une question : bonne réponse = ta carte est posée, sinon tu piocheras. ⛔ passe le tour · 🔄 change le sens · <b>+2</b> : le suivant pioche 2 cartes · 🌈 tu choisis la couleur. Le premier sans carte gagne ! Si plusieurs joueurs jouent sur la même tablette, la main est cachée entre les tours.',min:2,max:4,defN:2,perGrade:true,
+    extra:{label:'Les chiffres sont écrits…',opts:[[0,'🇩🇪 En allemand'],[1,'🇫🇷 En français'],[2,'🔢 Chiffres seuls']],def:0}},startUno);
+}
+function startUno(cfg){
+  const n=cfg.players.length, mode=cfg.x||0, humans=cfg.players.filter(p=>!p.npc).length, hIdx=cfg.players.findIndex(p=>!p.npc);
+  const S={cfg,n,mode,hands:[],deck:unDeck(),disc:[],col:'r',turn:0,dir:1,busy:false,ready:false,over:false}; T2.uno=S;
+  const P=i=>cfg.players[i], nxt=(f,k)=>((f+S.dir*k)%n+n)%n, top=()=>S.disc[S.disc.length-1];
+  const colOf=c=>c==='w'?'#343a40':UNOC.find(x=>x[0]===c)[1], colName=c=>UNOC.find(x=>x[0]===c)[2];
+  function drawCards(pi,k){ for(let j=0;j<k;j++){ if(!S.deck.length){ const t=S.disc.pop(); S.deck=shuffle(S.disc); S.disc=[t]; if(!S.deck.length) return; } S.hands[pi].push(S.deck.pop()); } }
+  for(let i=0;i<n;i++){ S.hands.push([]); drawCards(i,5); }
+  { let t; do{ t=S.deck.pop(); if(!/^\d$/.test(t.v)) S.deck.unshift(t); }while(!/^\d$/.test(t.v)); S.disc.push(t); S.col=t.c; }
+  const numSay=c=>mode===0?numWord(+c.v):frNum(+c.v);
+  const face=c=>{ const sp={S:'⛔',R:'🔄',D:'+2',W:'🌈'}[c.v]; const w=(!sp&&mode<2)?numSay(c):''; return `<span class="un-v">${sp||c.v}</span>${w?`<span class="un-w">${esc(w)}</span>`:''}`; };
+  body.innerHTML=`<div class="h-bar"><div id="unInfo" class="h-info"></div><button class="g-ghost" id="unQuit">↩ Quitter</button></div>
+    <div class="un-table"><button class="un-card back" id="unDraw" aria-label="Piocher une carte"><span class="un-v">🃏</span><span class="un-w">Piocher (<b>0</b>)</span></button><div id="unTop" class="un-topw"></div></div>
+    <div class="g-fb un-msg" id="unMsg"></div><div class="h-qbox" id="unQ" hidden></div><div class="un-hand" id="unHand"></div>`;
+  body.querySelector('#unQuit').onclick=()=>unoGame();
+  const msg=h=>body.querySelector('#unMsg').innerHTML=h;
+  const view=()=>humans===1?hIdx:(!P(S.turn).npc&&S.ready?S.turn:-1);
+  function paint(){
+    body.querySelector('#unInfo').innerHTML=cfg.players.map((q,i)=>chip(q,i===S.turn)+`<b class="h-sc">${S.hands[i].length}🃏</b>`).join('');
+    const t=top(); body.querySelector('#unTop').innerHTML=`<div class="un-card ${t.c==='w'?'w':''}" style="--cc:${colOf(t.c)}">${face(t)}</div><div class="un-col" style="--cc:${colOf(S.col)}">${colName(S.col)}</div>`;
+    body.querySelector('#unDraw b').textContent=S.deck.length;
+    const hand=body.querySelector('#unHand'), v=view(), p=P(S.turn);
+    if(v<0){ hand.innerHTML=(!p.npc&&!S.ready&&!S.over)?`<button class="g-big" id="unReady">👀 ${p.emoji} ${esc(p.name)}, montre-moi mes cartes</button>`:''; return; }
+    const mine=S.turn===v&&S.ready&&!S.busy&&!S.over;
+    hand.innerHTML=S.hands[v].map((c,i)=>{ const ok=unOk(c,t,S.col); return `<button class="un-card ${c.c==='w'?'w':''}${mine&&ok?' pl':''}${mine&&!ok?' dim':''}" style="--cc:${colOf(c.c)}" data-i="${i}" ${mine?'':'disabled'}>${face(c)}</button>`; }).join('');
+  }
+  function startTurn(){ S.busy=false; S.ready=false; const p=P(S.turn);
+    if(p.npc){ S.busy=true; paint(); msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); sleep(FAST?10:1400).then(npcTurn); return; }
+    if(humans===1) S.ready=true; paint();
+    msg(humans>1&&!S.ready?`Passe la tablette à ${p.emoji} <b>${esc(p.name)}</b>.`:`${p.emoji} <b>${esc(p.name)}</b>, à toi ! Cherche une carte <b>${colName(S.col)}</b> ou avec le même symbole.`); }
+  async function commit(pi,i,color){
+    const p=P(pi), c=S.hands[pi].splice(i,1)[0]; S.disc.push(c); S.col=c.c==='w'?color:c.c; S.busy=true; paint();
+    if(/^\d$/.test(c.v)&&mode<2) say(numSay(c),mode===0?'de':'fr');
+    if(!S.hands[pi].length) return win(pi);
+    let next, note=S.hands[pi].length===1?' 🔔 <b>UNO !</b> Plus qu’une carte !':'';
+    if(c.v==='S'){ next=nxt(pi,2); note+=` ⛔ ${esc(P(nxt(pi,1)).name)} passe son tour.`; }
+    else if(c.v==='R'){ S.dir*=-1; next=n===2?pi:nxt(pi,1); note+=n===2?' 🔄 Tu rejoues !':' 🔄 Le sens change !'; }
+    else if(c.v==='D'){ const v=nxt(pi,1); drawCards(v,2); next=nxt(pi,2); note+=` ➕ ${esc(P(v).name)} pioche 2 cartes.`; }
+    else next=nxt(pi,1);
+    paint(); msg(`${p.emoji} <b>${esc(p.name)}</b> pose la carte.${c.c==='w'?' Couleur : <b>'+colName(S.col)+'</b>.':''}${note}`);
+    await sleep(FAST?10:1500); S.turn=next; startTurn(); }
+  async function penalty(pi,why){ drawCards(pi,1); paint(); msg(`${why} ${P(pi).emoji} <b>${esc(P(pi).name)}</b> pioche une carte.`); S.busy=true; await sleep(FAST?10:1400); S.turn=nxt(pi,1); startTurn(); }
+  async function npcTurn(){
+    const pi=S.turn, h=S.hands[pi], t=top(), pl=h.map((_,i)=>i).filter(i=>unOk(h[i],t,S.col));
+    if(!pl.length) return penalty(pi,'Aucune carte à poser.');
+    if(Math.random()>=.7) return penalty(pi,'❌ Mauvaise réponse.');
+    pl.sort((a,b)=>(h[a].c==='w')-(h[b].c==='w')||(/\d/.test(h[a].v)-/\d/.test(h[b].v)));
+    const i=pl[0]; let col=S.col; if(h[i].c==='w'){ const cnt={}; h.forEach(c=>{ if(c.c!=='w') cnt[c.c]=(cnt[c.c]||0)+1; }); col=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0]||'r'; }
+    commit(pi,i,col); }
+  function ask(pi,i){
+    const p=P(pi), box=body.querySelector('#unQ'), q=makeQuestion(cfg.topics,p.gr); S.q=q; S.busy=true; paint(); box.hidden=false; box.style.setProperty('--pc',p.color);
+    box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
+      <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
+      <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
+    D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
+    if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
+    if(!FAST) box.scrollIntoView({behavior:'smooth',block:'nearest'});
+    const close=()=>{ box.hidden=true; box.innerHTML=''; };
+    let ans=false;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+      box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
+      const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>La carte reste dans ta main et tu pioches.`;
+      DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
+      const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>{
+        if(!ok){ close(); return penalty(pi,'❌'); }
+        if(S.hands[pi][i].c!=='w'){ close(); return commit(pi,i); }
+        box.innerHTML=`<div class="g-q">🌈 Choisis la couleur</div><div class="un-picks">${UNOC.map(([c,hx,nm])=>`<button class="un-pick" data-c="${c}" style="--cc:${hx}">${nm}</button>`).join('')}</div>`;
+        box.querySelector('.un-picks').onclick=ev=>{ const bb=ev.target.closest('button'); if(!bb) return; close(); commit(pi,i,bb.dataset.c); }; }; };
+  }
+  body.querySelector('#unHand').onclick=e=>{
+    if(e.target.closest('#unReady')){ S.ready=true; paint(); const p=P(S.turn); msg(`${p.emoji} <b>${esc(p.name)}</b>, à toi ! Cherche une carte <b>${colName(S.col)}</b> ou avec le même symbole.`); return; }
+    const b=e.target.closest('.un-card'); if(!b||b.disabled||S.busy||!S.ready||P(S.turn).npc) return; const i=+b.dataset.i;
+    if(!unOk(S.hands[S.turn][i],top(),S.col)){ msg('🙅 Cette carte ne va pas : il faut la même couleur ou le même symbole.'); return; }
+    ask(S.turn,i); };
+  body.querySelector('#unDraw').onclick=()=>{
+    if(S.busy||!S.ready||P(S.turn).npc||S.over) return; const pi=S.turn;
+    if(S.hands[pi].some(c=>unOk(c,top(),S.col))){ msg('👆 Tu as une carte à poser, touche-la !'); return; }
+    S.busy=true; penalty(pi,'Aucune carte à poser.'); };
+  function win(pi){ S.over=true; const p=P(pi);
+    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Plus aucune carte en main !'+(n>1?'<br>'+cfg.players.map((x,i)=>`${x.emoji} ${esc(x.name)} : <b>${S.hands[i].length}</b> carte${S.hands[i].length>1?'s':''}`).join('<br>'):''),color:p.color},()=>startUno(cfg)); }
+  startTurn();
+}
+T2.startUno=startUno;
 /* ================= PUISSANCE 4 DES QUESTIONS ================= */
 const C4={W:7,H:6};
 function c4Drop(B,c,pl){ for(let r=C4.H-1;r>=0;r--){ if(!B[r][c]){ B[r][c]=pl; return r; } } return -1; }
