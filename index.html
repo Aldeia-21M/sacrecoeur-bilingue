@@ -819,6 +819,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "8.2", desc: "Salon : tous les jeux de plateau en ligne" },
     { v: "8.1", desc: "Zahlen : Jeu de chiffres avant Mon nombre" },
     { v: "8.0", desc: "Salon : moteur commun, chevaux en ligne (BÊTA)" },
     { v: "7.9", desc: "Nouveau jeu : cartes couleurs (BÊTA)" },
@@ -1918,7 +1919,7 @@ if(FAST) window.__g2=T2;
 /* ---------- menu ---------- */
 const GROUPS=[
  ['🎲 Jeux de société',[
-  {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'En direct avec d’autres joueurs · quiz et chevaux',c:'#d3f9d8'},
+  {id:'salon',ic:'🌐',t:'Salon à distance (BÊTA)',d:'En direct avec d’autres joueurs · quiz et jeux de plateau',c:'#d3f9d8'},
   {id:'plateau',ic:'🎲',t:'Jeu de plateau',d:'Deux dés, échelles, toboggans · 1–6',c:'#e9defa'},
   {id:'race',ic:'🚀',t:'Course',d:'Bonne réponse = tu avances · 2–6',c:'#dff4dc'},
   {id:'moulin',ic:'⚪',t:'Moulin / Mühle (BÊTA)',d:'Aligne 3 pions, réponds, retire un pion · 2',c:'#f3d9a4'},
@@ -2352,7 +2353,7 @@ function startChevaux(cfg,net){
     sync(`⭐ ${p.emoji} <b>${esc(p.name)}</b> répond à une question…`);
     if(ai(pi)){ box.innerHTML=`<div class="g-qtop"><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
       sleep(FAST?20:1400).then(async()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il rejoue.`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; await sleep(FAST?20:1500); done(ok); }); return; }
-    const q=makeQuestion(cfg.topics,p.gr);
+    const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
@@ -2375,6 +2376,13 @@ function startChevaux(cfg,net){
   msg(`${P(0).emoji} <b>${esc(P(0).name)}</b>, lance les dés ! Il faut un 6 pour sortir un cheval.`); paint();
   if(P(0).npc) setTimeout(rollDice,600);
 }
+/* ===== Jeux en ligne : outils communs (voir salon) ===== */
+function seeded(seed,fn){ const orig=Math.random; let a=(seed>>>0)||1; Math.random=()=>{ a=(a+0x6D2B79F5)|0; let t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }; try{ return fn(); } finally{ Math.random=orig; } }
+const cleanMsg=h=>String(h||'').replace(/<(?!\/?b>)[^>]*>/g,'');
+function netSetup(net,S,keys,alive,apply){
+  const sync=(m,ti,over,extra)=>{ if(!net) return; const st={}; keys.forEach(k=>{ st[k]=S[k]; }); if(extra) Object.assign(st,extra); net.push(JSON.parse(JSON.stringify(st)),ti===undefined?S.turn:ti,!!over,m||''); };
+  if(net) net.onRemote=g=>{ const st=g.s; if(!st||!alive()) return; keys.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; }); S.busy=false; apply(g,st,cleanMsg(g.msg)); };
+  return sync; }
 /* ================= BATAILLE DE CHIFFRES ================= */
 function frNum(n){
   const U=['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf'], T=['','','vingt','trente','quarante','cinquante','soixante','septante','huitante','nonante'];
@@ -2387,9 +2395,9 @@ function cartes(){
   playerSetup({title:'🃏 Bataille de chiffres',npc:true,intro:'Trois cartes (ou plus) sont posées. À tour de rôle, un joueur doit trouver <b>la carte la plus grande</b>. Touche 🔊 pour entendre une carte. Chaque joueur choisit sa classe, et ce que montrent les cartes : nombres allemands, nombres en français (en lettres) ou calculs.',min:2,max:4,defN:2,perGrade:true,noTopics:true,
     extra:{label:'Les cartes montrent…',opts:[[0,'🇩🇪 Nombres en allemand'],[1,'🇫🇷 Nombres en lettres'],[2,'➕ Calculs (maths)']],def:0}},startCartes);
 }
-function startCartes(cfg){
+function startCartes(cfg,net){
   const n=cfg.players.length, mode=cfg.x||0, nc=Math.max(3,n), ROUNDS=n*5;
-  const S={cfg,turn:0,round:0,scores:cfg.players.map(()=>0),cards:[],busy:false}; T2.cartes=S;
+  const S={cfg,turn:0,round:0,scores:cfg.players.map(()=>0),cards:[],busy:false,phase:'deal',pick:-1}; T2.cartes=S;
   const genNum=g=>{ const r=Math.random(); if(g==='1H') return 1+rnd(20); if(g==='6H') return r<.2?1+rnd(20):r<.55?21+rnd(79):100+rnd(900); return r<.4?1+rnd(20):21+rnd(79); };
   function deal(g){
     const set=new Map(); let guard=0;
@@ -2400,12 +2408,17 @@ function startCartes(cfg){
   }
   body.innerHTML=`<div class="h-bar"><div id="cInfo" class="h-info"></div><button class="g-ghost" id="cQuit">↩ Quitter</button></div>
     <div class="h-qbox bn-box" id="cBox"></div>`;
-  body.querySelector('#cQuit').onclick=()=>cartes();
-  const box=body.querySelector('#cBox'), P=i=>cfg.players[i];
+  body.querySelector('#cQuit').onclick=()=>net?net.quit():cartes();
+  const box=body.querySelector('#cBox'), P=i=>cfg.players[i], ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me);
+  const sync=netSetup(net,S,['turn','round','scores','cards','phase','pick'],()=>!!body.querySelector('#cBox'),(g,st,m)=>{ if(st.fin) return finish(true); if(S.round>=ROUNDS) return; if(S.phase==='wait'){ nextRound(); return; } showRound(); if(S.phase==='shown') answer(S.pick,false,true); });
   const info=()=>body.querySelector('#cInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn)+`<b class="h-sc">${S.scores[i]}</b>`).join('');
   function nextRound(){
     if(S.round>=ROUNDS) return finish();
-    S.busy=false; const p=P(S.turn); S.cards=deal(p.gr); info(); box.style.setProperty('--pc',p.color);
+    S.busy=false; const p=P(S.turn);
+    if(net&&S.turn!==net.me){ S.phase='wait'; info(); box.style.setProperty('--pc',p.color); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} prépare ses cartes…</div>`; return; }
+    S.cards=deal(p.gr); S.phase='deal'; S.pick=-1; showRound(); sync(`${p.emoji} <b>${esc(p.name)}</b> cherche la plus grande carte…`);
+  }
+  function showRound(){ const p=P(S.turn); info(); box.style.setProperty('--pc',p.color);
     const hint=mode===2?'Quel calcul donne le plus grand résultat ?':'Quelle carte est la plus grande ?';
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:#7048e8">Manche ${S.round+1} / ${ROUNDS}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${hint}</div>
@@ -2413,22 +2426,25 @@ function startCartes(cfg){
       <div class="g-fb" hidden></div><button class="g-big g-next" hidden>Suivant ▶</button>`;
     if(p.npc){ S.busy=true; sleep(FAST?20:1500).then(()=>{ const best=S.cards.reduce((a,c,i)=>c.v>S.cards[a].v?i:a,0); const ok=Math.random()<.7; let pick=best; if(!ok){ const o=S.cards.map((_,i)=>i).filter(i=>i!==best); pick=o[rnd(o.length)]; } answer(pick,true); }); }
   }
-  function answer(i,byNpc){
+  function answer(i,byNpc,remote){
     const p=P(S.turn); S.busy=true; const best=S.cards.reduce((a,c,k)=>c.v>S.cards[a].v?k:a,0), ok=i===best;
     box.querySelectorAll('.bn-face').forEach((b,k)=>{ b.disabled=true; b.classList.toggle('ok',k===best); b.classList.toggle('ko',k===i&&!ok); b.querySelector('.bn-v').textContent=S.cards[k].v; });
     const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
     const w=S.cards[best];
-    fb.innerHTML=(ok?`✅ <b>Bravo !</b> `:`❌ <b>Pas tout à fait.</b> `)+`La plus grande : <b>${esc(w.label)}</b> = ${w.v}.`+(ok?` ${byNpc?esc(p.name)+' marque':'Tu marques'} un point.`:'');
-    if(ok) S.scores[S.turn]++; info();
-    if(!byNpc||ok||true) DLverdict(ok,[{t:w.say,l:w.lang}],false,{});
-    const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>{ S.round++; S.turn=(S.turn+1)%n; nextRound(); };
+    fb.innerHTML=(ok?`✅ <b>Bravo !</b> `:`❌ <b>Pas tout à fait.</b> `)+`La plus grande : <b>${esc(w.label)}</b> = ${w.v}.`+(ok?` ${byNpc||remote?esc(p.name)+' marque':'Tu marques'} un point.`:'');
+    if(ok&&!remote) S.scores[S.turn]++; info();
+    if(!remote) DLverdict(ok,[{t:w.say,l:w.lang}],false,{});
+    const nx=box.querySelector('.g-next'); if(remote){ nx.hidden=true; return; } nx.hidden=false;
+    if(net){ S.phase='shown'; S.pick=i; sync(fb.innerHTML); }
+    nx.onclick=()=>{ const old=S.turn; S.round++; S.turn=(S.turn+1)%n; if(net){ if(S.round>=ROUNDS) sync('',old,true,{fin:1}); else { S.phase='wait'; S.cards=[]; S.pick=-1; sync(''); } } nextRound(); };
     if(byNpc&&FAST) nx.click();
   }
   box.onclick=e=>{ const h=e.target.closest('.bn-hear'); if(h){ const c=S.cards[+h.dataset.h]; if(c) say(c.say,c.lang); return; }
-    const f=e.target.closest('.bn-face'); if(!f||S.busy||f.disabled||P(S.turn).npc) return; answer(+f.dataset.i,false); };
-  function finish(){
+    const f=e.target.closest('.bn-face'); if(!f||S.busy||f.disabled||ext(S.turn)) return; answer(+f.dataset.i,false); };
+  function finish(remote){
+    if(net&&!remote) sync('',S.turn,true,{fin:1});
     const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
-    endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>startCartes(cfg));
+    endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>net?net.again():startCartes(cfg));
   }
   nextRound();
 }
@@ -2441,10 +2457,10 @@ function unoGame(){
   playerSetup({title:'🌈 Cartes couleurs',npc:true,intro:'Pose une carte de la <b>même couleur</b> ou avec le <b>même chiffre</b> que la carte du dessus. Pour poser, réponds d’abord à une question : bonne réponse = ta carte est posée, sinon tu piocheras. ⛔ passe le tour · 🔄 change le sens · <b>+2</b> : le suivant pioche 2 cartes · 🌈 tu choisis la couleur. Le premier sans carte gagne ! Si plusieurs joueurs jouent sur la même tablette, la main est cachée entre les tours.',min:2,max:4,defN:2,perGrade:true,
     extra:{label:'Les chiffres sont écrits…',opts:[[0,'🇩🇪 En allemand'],[1,'🇫🇷 En français'],[2,'🔢 Chiffres seuls']],def:0}},startUno);
 }
-function startUno(cfg){
-  const n=cfg.players.length, mode=cfg.x||0, humans=cfg.players.filter(p=>!p.npc).length, hIdx=cfg.players.findIndex(p=>!p.npc);
+function startUno(cfg,net){
+  const n=cfg.players.length, mode=cfg.x||0, humans=net?1:cfg.players.filter(p=>!p.npc).length, hIdx=net?net.me:cfg.players.findIndex(p=>!p.npc);
   const S={cfg,n,mode,hands:[],deck:unDeck(),disc:[],col:'r',turn:0,dir:1,busy:false,ready:false,over:false}; T2.uno=S;
-  const P=i=>cfg.players[i], nxt=(f,k)=>((f+S.dir*k)%n+n)%n, top=()=>S.disc[S.disc.length-1];
+  const P=i=>cfg.players[i], ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me), ai=pi=>!!P(pi).npc&&!net, nxt=(f,k)=>((f+S.dir*k)%n+n)%n, top=()=>S.disc[S.disc.length-1];
   const colOf=c=>c==='w'?'#343a40':UNOC.find(x=>x[0]===c)[1], colName=c=>UNOC.find(x=>x[0]===c)[2];
   function drawCards(pi,k){ for(let j=0;j<k;j++){ if(!S.deck.length){ const t=S.disc.pop(); S.deck=shuffle(S.disc); S.disc=[t]; if(!S.deck.length) return; } S.hands[pi].push(S.deck.pop()); } }
   for(let i=0;i<n;i++){ S.hands.push([]); drawCards(i,5); }
@@ -2454,8 +2470,9 @@ function startUno(cfg){
   body.innerHTML=`<div class="h-bar"><div id="unInfo" class="h-info"></div><button class="g-ghost" id="unQuit">↩ Quitter</button></div>
     <div class="un-table"><button class="un-card back" id="unDraw" aria-label="Piocher une carte"><span class="un-v">🃏</span><span class="un-w">Piocher (<b>0</b>)</span></button><div id="unTop" class="un-topw"></div></div>
     <div class="g-fb un-msg" id="unMsg"></div><div class="h-qbox" id="unQ" hidden></div><div class="un-hand" id="unHand"></div>`;
-  body.querySelector('#unQuit').onclick=()=>unoGame();
+  body.querySelector('#unQuit').onclick=()=>net?net.quit():unoGame();
   const msg=h=>body.querySelector('#unMsg').innerHTML=h;
+  const sync=netSetup(net,S,['hands','deck','disc','col','turn','dir'],()=>!!body.querySelector('#unHand'),(g,st,m)=>{ if(st.fin) return win(st.winner,true); if(S.turn===net.me) startTurn(m); else { S.ready=true; paint(); msg(m||''); } });
   const view=()=>humans===1?hIdx:(!P(S.turn).npc&&S.ready?S.turn:-1);
   function paint(){
     body.querySelector('#unInfo').innerHTML=cfg.players.map((q,i)=>chip(q,i===S.turn)+`<b class="h-sc">${S.hands[i].length}🃏</b>`).join('');
@@ -2466,10 +2483,11 @@ function startUno(cfg){
     const mine=S.turn===v&&S.ready&&!S.busy&&!S.over;
     hand.innerHTML=S.hands[v].map((c,i)=>{ const ok=unOk(c,t,S.col); return `<button class="un-card ${c.c==='w'?'w':''}${mine&&ok?' pl':''}${mine&&!ok?' dim':''}" style="--cc:${colOf(c.c)}" data-i="${i}" ${mine?'':'disabled'}>${face(c)}</button>`; }).join('');
   }
-  function startTurn(){ S.busy=false; S.ready=false; const p=P(S.turn);
-    if(p.npc){ S.busy=true; paint(); msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); sleep(FAST?10:1400).then(npcTurn); return; }
+  function startTurn(pre){ S.busy=false; S.ready=false; const p=P(S.turn), pf=pre?pre+'<br>':'';
+    if(ai(S.turn)){ S.busy=true; paint(); msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); sleep(FAST?10:1400).then(npcTurn); return; }
+    if(net&&S.turn!==net.me){ S.ready=true; paint(); msg(pf+`${p.emoji} <b>${esc(p.name)}</b> joue…`); return; }
     if(humans===1) S.ready=true; paint();
-    msg(humans>1&&!S.ready?`Passe la tablette à ${p.emoji} <b>${esc(p.name)}</b>.`:`${p.emoji} <b>${esc(p.name)}</b>, à toi ! Cherche une carte <b>${colName(S.col)}</b> ou avec le même symbole.`); }
+    msg(pf+(humans>1&&!S.ready?`Passe la tablette à ${p.emoji} <b>${esc(p.name)}</b>.`:`${p.emoji} <b>${esc(p.name)}</b>, à toi ! Cherche une carte <b>${colName(S.col)}</b> ou avec le même symbole.`)); }
   async function commit(pi,i,color){
     const p=P(pi), c=S.hands[pi].splice(i,1)[0]; S.disc.push(c); S.col=c.c==='w'?color:c.c; S.busy=true; paint();
     if(/^\d$/.test(c.v)&&mode<2) say(numSay(c),mode===0?'de':'fr');
@@ -2479,9 +2497,9 @@ function startUno(cfg){
     else if(c.v==='R'){ S.dir*=-1; next=n===2?pi:nxt(pi,1); note+=n===2?' 🔄 Tu rejoues !':' 🔄 Le sens change !'; }
     else if(c.v==='D'){ const v=nxt(pi,1); drawCards(v,2); next=nxt(pi,2); note+=` ➕ ${esc(P(v).name)} pioche 2 cartes.`; }
     else next=nxt(pi,1);
-    paint(); msg(`${p.emoji} <b>${esc(p.name)}</b> pose la carte.${c.c==='w'?' Couleur : <b>'+colName(S.col)+'</b>.':''}${note}`);
-    await sleep(FAST?10:1500); S.turn=next; startTurn(); }
-  async function penalty(pi,why){ drawCards(pi,1); paint(); msg(`${why} ${P(pi).emoji} <b>${esc(P(pi).name)}</b> pioche une carte.`); S.busy=true; await sleep(FAST?10:1400); S.turn=nxt(pi,1); startTurn(); }
+    const mm=`${p.emoji} <b>${esc(p.name)}</b> pose la carte.${c.c==='w'?' Couleur : <b>'+colName(S.col)+'</b>.':''}${note}`; paint(); msg(mm); S.turn=next; sync(mm);
+    await sleep(FAST?10:1500); startTurn(); }
+  async function penalty(pi,why){ drawCards(pi,1); paint(); const mm=`${why} ${P(pi).emoji} <b>${esc(P(pi).name)}</b> pioche une carte.`; msg(mm); S.busy=true; S.turn=nxt(pi,1); sync(mm); await sleep(FAST?10:1400); startTurn(); }
   async function npcTurn(){
     const pi=S.turn, h=S.hands[pi], t=top(), pl=h.map((_,i)=>i).filter(i=>unOk(h[i],t,S.col));
     if(!pl.length) return penalty(pi,'Aucune carte à poser.');
@@ -2490,7 +2508,7 @@ function startUno(cfg){
     const i=pl[0]; let col=S.col; if(h[i].c==='w'){ const cnt={}; h.forEach(c=>{ if(c.c!=='w') cnt[c.c]=(cnt[c.c]||0)+1; }); col=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0]||'r'; }
     commit(pi,i,col); }
   function ask(pi,i){
-    const p=P(pi), box=body.querySelector('#unQ'), q=makeQuestion(cfg.topics,p.gr); S.q=q; S.busy=true; paint(); box.hidden=false; box.style.setProperty('--pc',p.color);
+    const p=P(pi), box=body.querySelector('#unQ'), q=makeQuestion(cfg.topics,p.gr); S.q=q; S.busy=true; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`,pi); box.hidden=false; box.style.setProperty('--pc',p.color);
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
@@ -2512,15 +2530,15 @@ function startUno(cfg){
   }
   body.querySelector('#unHand').onclick=e=>{
     if(e.target.closest('#unReady')){ S.ready=true; paint(); const p=P(S.turn); msg(`${p.emoji} <b>${esc(p.name)}</b>, à toi ! Cherche une carte <b>${colName(S.col)}</b> ou avec le même symbole.`); return; }
-    const b=e.target.closest('.un-card'); if(!b||b.disabled||S.busy||!S.ready||P(S.turn).npc) return; const i=+b.dataset.i;
+    const b=e.target.closest('.un-card'); if(!b||b.disabled||S.busy||!S.ready||ext(S.turn)) return; const i=+b.dataset.i;
     if(!unOk(S.hands[S.turn][i],top(),S.col)){ msg('🙅 Cette carte ne va pas : il faut la même couleur ou le même symbole.'); return; }
     ask(S.turn,i); };
   body.querySelector('#unDraw').onclick=()=>{
-    if(S.busy||!S.ready||P(S.turn).npc||S.over) return; const pi=S.turn;
+    if(S.busy||!S.ready||ext(S.turn)||S.over) return; const pi=S.turn;
     if(S.hands[pi].some(c=>unOk(c,top(),S.col))){ msg('👆 Tu as une carte à poser, touche-la !'); return; }
     S.busy=true; penalty(pi,'Aucune carte à poser.'); };
-  function win(pi){ S.over=true; const p=P(pi);
-    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Plus aucune carte en main !'+(n>1?'<br>'+cfg.players.map((x,i)=>`${x.emoji} ${esc(x.name)} : <b>${S.hands[i].length}</b> carte${S.hands[i].length>1?'s':''}`).join('<br>'):''),color:p.color},()=>startUno(cfg)); }
+  function win(pi,remote){ S.over=true; const p=P(pi); if(net&&!remote) sync(`🏆 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,S.turn,true,{fin:1,winner:pi});
+    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Plus aucune carte en main !'+(n>1?'<br>'+cfg.players.map((x,i)=>`${x.emoji} ${esc(x.name)} : <b>${S.hands[i].length}</b> carte${S.hands[i].length>1?'s':''}`).join('<br>'):''),color:p.color},()=>net?net.again():startUno(cfg)); }
   startTurn();
 }
 T2.startUno=startUno;
@@ -2547,39 +2565,44 @@ T2.c4={C4,c4Drop,c4Line,c4Ai};
 function puissance4(){
   playerSetup({title:'🔴 Puissance 4',npc:true,intro:'Réponds à une question pour gagner le droit de jouer un jeton, puis choisis la colonne. Bonne réponse = tu poses un jeton ; mauvaise réponse = tu passes ton tour. Le premier qui aligne <b>4 jetons</b> gagne !',min:2,max:2,defN:2,perGrade:true},startPuissance4);
 }
-function startPuissance4(cfg){
-  const B=Array.from({length:C4.H},()=>Array(C4.W).fill(0)), S={cfg,B,turn:0,phase:'q',busy:false,over:false}; T2.c4g=S;
-  const P=i=>cfg.players[i];
+function startPuissance4(cfg,net){
+  const B=Array.from({length:C4.H},()=>Array(C4.W).fill(0)), S={cfg,B,turn:0,phase:'q',busy:false,over:false,win:null}; T2.c4g=S;
+  const P=i=>cfg.players[i], ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me), ai=pi=>!!P(pi).npc&&!net;
   body.innerHTML=`<div class="h-bar"><div id="c4Info" class="h-info"></div><button class="g-ghost" id="c4Quit">↩ Quitter</button></div>
     <div class="g-msg" id="c4Msg"></div>
     <div class="c4-board" id="c4Board">${[...Array(C4.W).keys()].map(c=>`<button class="c4-col" data-c="${c}" aria-label="colonne ${c+1}">${[...Array(C4.H).keys()].map(r=>`<i class="c4-cell" data-r="${r}"></i>`).join('')}</button>`).join('')}</div>
     <div class="h-qbox" id="c4Q"></div>`;
   const msg=t=>body.querySelector('#c4Msg').innerHTML='<span>'+t+'</span>', boardEl=body.querySelector('#c4Board'), box=body.querySelector('#c4Q');
-  body.querySelector('#c4Quit').onclick=()=>puissance4();
+  body.querySelector('#c4Quit').onclick=()=>net?net.quit():puissance4();
+  const sync=netSetup(net,S,['B','turn','phase','over','win'],()=>!!body.querySelector('#c4Board'),(g,st,m)=>{
+    if(S.B!==B){ B.splice(0,B.length,...S.B); S.B=B; }
+    if(st.fin){ const p=P(S.turn); paint(S.win); box.hidden=true; if(st.draw) return endScreen({title:'Match nul !',sub:'La grille est pleine.',color:'#7048e8'},()=>net.again()); return endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'4 jetons alignés !',color:p.color},()=>net.again()); }
+    if(S.turn===net.me&&S.phase!=='drop') turn(); else { paint(S.win); msg(m); } });
   function paint(win){
-    boardEl.querySelectorAll('.c4-col').forEach((col,c)=>{ col.disabled=!(S.phase==='drop'&&!P(S.turn).npc&&!B[0][c]);
+    boardEl.querySelectorAll('.c4-col').forEach((col,c)=>{ col.disabled=!(S.phase==='drop'&&!ext(S.turn)&&!B[0][c]);
       col.querySelectorAll('.c4-cell').forEach((el,r)=>{ const v=B[r][c]; el.style.setProperty('--pc',v?P(v-1).color:'transparent'); el.className='c4-cell'+(v?' on':'')+(win&&win.some(([a,b])=>a===r&&b===c)?' win':''); el.textContent=v?P(v-1).emoji.replace(/<[^>]*>/g,'')||'●':''; }); });
     body.querySelector('#c4Info').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn&&!S.over)).join('');
   }
   async function dropIn(c){
     const pl=S.turn+1, r=c4Drop(B,c,pl); if(r<0) return; S.phase='anim'; paint();
-    const line=c4Line(B,r,c); paint(line); await sleep(FAST?10:350);
-    if(line){ S.over=true; paint(line); const p=P(S.turn); return endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'4 jetons alignés !',color:p.color},()=>startPuissance4(cfg)); }
-    if(B[0].every(v=>v)){ S.over=true; return endScreen({title:'Match nul !',sub:'La grille est pleine.',color:'#7048e8'},()=>startPuissance4(cfg)); }
-    S.turn=1-S.turn; turn();
+    const line=c4Line(B,r,c); S.win=line||null; paint(line); await sleep(FAST?10:350);
+    if(line){ S.over=true; paint(line); const p=P(S.turn); sync(`🏆 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,S.turn,true,{fin:1}); return endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'4 jetons alignés !',color:p.color},()=>net?net.again():startPuissance4(cfg)); }
+    if(B[0].every(v=>v)){ S.over=true; sync('Match nul !',S.turn,true,{fin:1,draw:1}); return endScreen({title:'Match nul !',sub:'La grille est pleine.',color:'#7048e8'},()=>net?net.again():startPuissance4(cfg)); }
+    { const who=P(S.turn); S.turn=1-S.turn; sync(`${who.emoji} <b>${esc(who.name)}</b> pose un jeton.`); } turn();
   }
   function turn(){
     const p=P(S.turn); S.phase='q'; paint(); box.style.setProperty('--pc',p.color); box.hidden=false;
+    if(net&&S.turn!==net.me){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); return; }
     const afterAnswer=ok=>{
-      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> passe son tour…`); sleep(FAST?20:900).then(()=>{ S.turn=1-S.turn; turn(); }); return; }
-      box.hidden=true; S.phase='drop'; paint();
-      if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); sleep(FAST?20:900).then(()=>dropIn(c4Ai(B,S.turn+1))); }
+      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> passe son tour…`); sleep(FAST?20:900).then(()=>{ S.turn=1-S.turn; sync(`${p.emoji} <b>${esc(p.name)}</b> passe son tour.`); turn(); }); return; }
+      box.hidden=true; S.phase='drop'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> choisit une colonne…`);
+      if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); sleep(FAST?20:900).then(()=>dropIn(c4Ai(B,S.turn+1))); }
       else msg(`✅ Bien joué ! ${p.emoji} <b>${esc(p.name)}</b>, choisis une colonne pour poser ton jeton.`);
     };
-    if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+    if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
       sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>afterAnswer(ok)); }); return; }
     msg(`${p.emoji} <b>${esc(p.name)}</b> : réponds pour jouer !`);
-    const q=makeQuestion(cfg.topics,p.gr);
+    const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
@@ -2593,7 +2616,7 @@ function startPuissance4(cfg){
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>afterAnswer(ok); };
   }
-  boardEl.onclick=e=>{ const col=e.target.closest('.c4-col'); if(!col||col.disabled||S.phase!=='drop'||P(S.turn).npc) return; dropIn(+col.dataset.c); };
+  boardEl.onclick=e=>{ const col=e.target.closest('.c4-col'); if(!col||col.disabled||S.phase!=='drop'||ext(S.turn)) return; dropIn(+col.dataset.c); };
   turn();
 }
 /* ================= BATAILLE NAVALE ================= */
@@ -2619,19 +2642,23 @@ function navale(){
   playerSetup({title:'🚢 Bataille navale',npc:true,intro:'Une flotte est cachée dans la mer. À ton tour, réponds à une question : bonne réponse = tu tires un coup de canon sur une case. <b>Touché</b> = tu retires ! <b>Coulé</b> = bonus. Entends la case en allemand : « C, vier ». Le joueur qui a le plus de points quand toute la flotte est coulée gagne. Chaque joueur choisit sa classe.',min:1,max:4,defN:2,perGrade:true,
     extra:{label:'Taille de la mer',opts:[[6,'6 × 6 (rapide)'],[8,'8 × 8']],def:6}},startNavale);
 }
-function startNavale(cfg){
+function startNavale(cfg,net){
   const N=cfg.x||6, sizes=N===6?[3,2,2]:[4,3,3,2,2], n=cfg.players.length, LET='ABCDEFGH'.slice(0,N);
   const ships=btPlace(N,sizes), shots={}, S={cfg,N,ships,shots,turn:0,scores:cfg.players.map(()=>0),phase:'q',busy:false,over:false}; T2.btg=S;
-  const P=i=>cfg.players[i];
+  const P=i=>cfg.players[i], ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me), ai=pi=>!!P(pi).npc&&!net;
   body.innerHTML=`<div class="h-bar"><div id="bInfo" class="h-info"></div><button class="g-ghost" id="bQuit">↩ Quitter</button></div>
     <div class="g-msg" id="bMsg"></div>
     <div class="bt-wrap"><div class="bt-grid" id="bGrid" style="--n:${N}"><i class="bt-corner"></i>${[...LET].map(l=>`<b class="bt-h">${l}</b>`).join('')}${[...Array(N).keys()].map(r=>`<b class="bt-h">${r+1}</b>`+[...Array(N).keys()].map(c=>`<button class="bt-c" data-r="${r}" data-c="${c}" aria-label="${LET[c]}${r+1}"></button>`).join('')).join('')}</div></div>
     <div class="h-qbox" id="bQ"></div>`;
   const msg=t=>body.querySelector('#bMsg').innerHTML='<span>'+t+'</span>', grid=body.querySelector('#bGrid'), box=body.querySelector('#bQ');
-  body.querySelector('#bQuit').onclick=()=>navale();
+  body.querySelector('#bQuit').onclick=()=>net?net.quit():navale();
+  const sync=netSetup(net,S,['ships','shots','turn','scores','phase','over'],()=>!!body.querySelector('#bGrid'),(g,st,m)=>{
+    ships.splice(0,ships.length,...S.ships); S.ships=ships; Object.keys(shots).forEach(k=>delete shots[k]); Object.assign(shots,S.shots); S.shots=shots;
+    if(st.fin) return finish(true);
+    if(S.turn===net.me&&S.phase!=='shoot') turn(); else { paint(); msg(m); } });
   const coordSay=(r,c)=>LET[c]+', '+numWord(r+1), coordTxt=(r,c)=>`<b>${LET[c]}${r+1}</b> (${LET[c]}, ${numWord(r+1)})`;
   function paint(){
-    grid.querySelectorAll('.bt-c').forEach(b=>{ const k=b.dataset.r+','+b.dataset.c, v=shots[k]; b.className='bt-c'+(v?' '+v:''); b.textContent=v==='m'?'💧':v==='h'?'💥':v==='s'?'🚢':''; b.disabled=!!v||!(S.phase==='shoot'&&!P(S.turn).npc); });
+    grid.querySelectorAll('.bt-c').forEach(b=>{ const k=b.dataset.r+','+b.dataset.c, v=shots[k]; b.className='bt-c'+(v?' '+v:''); b.textContent=v==='m'?'💧':v==='h'?'💥':v==='s'?'🚢':''; b.disabled=!!v||!(S.phase==='shoot'&&!ext(S.turn)); });
     body.querySelector('#bInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn&&!S.over)+`<b class="h-sc">${S.scores[i]}</b>`).join('');
   }
   const left=()=>ships.filter(s=>s.hits<s.cells.length).length;
@@ -2640,10 +2667,11 @@ function startNavale(cfg){
     say(coordSay(r,c),'de'); paint();
     if(res.hit){ S.scores[S.turn]+=res.sunk?3:1; paint(); msg(res.sunk?`🚢 <b>Coulé !</b> ${coordTxt(r,c)} — +3 points pour ${p.emoji} <b>${esc(p.name)}</b>.`:`💥 <b>Touché !</b> ${coordTxt(r,c)} — +1 point. ${p.emoji} <b>${esc(p.name)}</b> retire !`); }
     else msg(`💧 À l’eau… ${coordTxt(r,c)}`);
+    const mm=body.querySelector('#bMsg').innerHTML.replace(/^<span>|<\/span>$/g,''); if(left()) sync(mm);
     await sleep(FAST?20:1400);
-    if(!left()) return finish();
-    if(res.hit){ S.phase='shoot'; paint(); if(p.npc) return npcShoot(); msg(`${p.emoji} <b>${esc(p.name)}</b>, tire encore !`); return; }
-    S.turn=(S.turn+1)%n; turn();
+    if(!left()) return finish(false,mm);
+    if(res.hit){ S.phase='shoot'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> retire !`); if(ai(S.turn)) return npcShoot(); msg(`${p.emoji} <b>${esc(p.name)}</b>, tire encore !`); return; }
+    S.turn=(S.turn+1)%n; sync(`${p.emoji} <b>${esc(p.name)}</b> a fini son tour.`); turn();
   }
   function npcShoot(){
     sleep(FAST?20:1000).then(()=>{ const hits=[]; for(const k in shots) if(shots[k]==='h') hits.push(k.split(',').map(Number)); let cand=[];
@@ -2654,15 +2682,16 @@ function startNavale(cfg){
   }
   function turn(){
     const p=P(S.turn); S.phase='q'; paint(); box.style.setProperty('--pc',p.color); box.hidden=false;
+    if(net&&S.turn!==net.me){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); return; }
     const after=ok=>{
-      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> rate son tir…`); sleep(FAST?20:900).then(()=>{ S.turn=(S.turn+1)%n; turn(); }); return; }
-      box.hidden=true; S.phase='shoot'; paint();
-      if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> vise…`); return npcShoot(); }
+      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> rate son tir…`); sleep(FAST?20:900).then(()=>{ S.turn=(S.turn+1)%n; sync(`${p.emoji} <b>${esc(p.name)}</b> rate son tir.`); turn(); }); return; }
+      box.hidden=true; S.phase='shoot'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> vise…`);
+      if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> vise…`); return npcShoot(); }
       msg(`✅ Bien joué ! ${p.emoji} <b>${esc(p.name)}</b>, touche une case pour tirer.`); };
-    if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+    if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
       sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); return; }
     msg(`${p.emoji} <b>${esc(p.name)}</b> : réponds pour tirer !`);
-    const q=makeQuestion(cfg.topics,p.gr);
+    const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
@@ -2676,10 +2705,10 @@ function startNavale(cfg){
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>after(ok); };
   }
-  function finish(){ S.over=true; paint();
+  function finish(remote,mm){ S.over=true; paint(); if(net&&!remote) sync(mm||'',S.turn,true,{fin:1});
     const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
-    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:'Toute la flotte est coulée !<br>'+cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>startNavale(cfg)); }
-  grid.onclick=e=>{ const b=e.target.closest('.bt-c'); if(!b||b.disabled||S.phase!=='shoot'||P(S.turn).npc) return; shoot(+b.dataset.r,+b.dataset.c); };
+    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:'Toute la flotte est coulée !<br>'+cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>net?net.again():startNavale(cfg)); }
+  grid.onclick=e=>{ const b=e.target.closest('.bt-c'); if(!b||b.disabled||S.phase!=='shoot'||ext(S.turn)) return; shoot(+b.dataset.r,+b.dataset.c); };
   turn();
 }
 /* ================= PENDU ================= */
@@ -2698,14 +2727,14 @@ function pendu(){
   playerSetup({title:'🔤 Pendu',npc:true,intro:'Devine le mot lettre par lettre. Chaque mauvaise lettre dessine un trait du pendu : tu as <b>7 erreurs</b>. Le mot est donné en indice dans l’autre langue. Chaque lettre trouvée rapporte 1 point, et celui qui trouve la dernière lettre gagne 3 points de plus.',min:1,max:4,defN:1,
     extra:{label:'Quel mot deviner ?',opts:[[0,'🇩🇪 Mot allemand (indice français)'],[1,'🇫🇷 Mot français (indice allemand)']],def:0}},startPendu);
 }
-function startPendu(cfg){
+function startPendu(cfg,net){
   const mode=cfg.x||0, n=cfg.players.length, ROUNDS=4;
   let pool=pickItems(new Set(cfg.topics),cfg.grade,60).map(it=>pdWord(it,mode)).filter(Boolean);
   const maxLen=cfg.grade==='1H'?8:cfg.grade==='4H'?11:15; const short=pool.filter(w=>w.word.length<=maxLen); if(short.length>=ROUNDS) pool=short;
   const seen=new Set(); pool=pool.filter(w=>!seen.has(w.word.toLowerCase())&&seen.add(w.word.toLowerCase())); if(pool.length<ROUNDS){ pool=pool.concat(pool,pool); }
   const words=shuffle(pool).slice(0,ROUNDS);
   const S={cfg,mode,words,round:0,turn:0,scores:cfg.players.map(()=>0),w:null,shown:[],used:{},err:0,busy:false,over:false}; T2.pdg=S;
-  const P=i=>cfg.players[i], MAX=7;
+  const P=i=>cfg.players[i], MAX=7, ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me), ai=pi=>!!P(pi).npc&&!net;
   const ROWS=mode===0?['qwertzuiopü','asdfghjklöä','yxcvbnmß']:['azertyuiop','qsdfghjklm','wxcvbn'];
   const man=e=>{ const st=[`<path d="M10 190h120M40 190V15h90v25"/>`,`<circle cx="130" cy="58" r="18"/>`,`<path d="M130 76v55"/>`,`<path d="M130 90l-25 25"/>`,`<path d="M130 90l25 25"/>`,`<path d="M130 131l-22 35"/>`,`<path d="M130 131l22 35"/>`]; return `<svg viewBox="0 0 170 200" class="pd-svg"><g fill="none" stroke="#1d2433" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">${st.slice(0,e).join('')}</g></svg>`; };
   body.innerHTML=`<div class="h-bar"><div id="pInfo" class="h-info"></div><button class="g-ghost" id="pQuit">↩ Quitter</button></div>
@@ -2713,19 +2742,21 @@ function startPendu(cfg){
     <div class="pd-word" id="pWord"></div>
     <div class="pd-kb" id="pKb">${ROWS.map(r=>`<div class="pd-r">${[...r].map(c=>`<button data-l="${c}">${c}</button>`).join('')}</div>`).join('')}</div>`;
   const msg=t=>body.querySelector('#pMsg').innerHTML='<span>'+t+'</span>';
-  body.querySelector('#pQuit').onclick=()=>pendu();
+  body.querySelector('#pQuit').onclick=()=>net?net.quit():pendu();
+  const head=()=>{ body.querySelector('#pRound').textContent=`Mot ${S.round+1} / ${ROUNDS}`; body.querySelector('#pHint').innerHTML=`<span>${S.w.hintLang==='fr'?'🇫🇷':'🇩🇪'}</span> ${esc(S.w.hint)}`; };
+  const sync=netSetup(net,S,['round','turn','scores','shown','used','err','over'],()=>!!body.querySelector('#pKb'),(g,st,m)=>{ if(st.fin) return finish(true); S.w=words[S.round]; if(!S.w) return; head(); paint(); msg(m); });
   body.querySelector('#pHear').onclick=()=>say(S.w.hint,S.w.hintLang);
   function paint(){
     body.querySelector('#pMan').innerHTML=man(S.err);
     body.querySelector('#pWord').innerHTML=(S.w.art?`<span class="pd-art">${esc(S.w.art)}</span>`:'')+[...S.w.word].map((c,i)=>c==='-'?'<i class="pd-s dash">-</i>':`<i class="pd-s${S.shown[i]?' on':''}">${S.shown[i]?esc(c.toUpperCase()):''}</i>`).join('');
-    body.querySelectorAll('#pKb button').forEach(b=>{ const u=S.used[b.dataset.l]; b.className=u?(u==='ok'?'ok':'ko'):''; b.disabled=!!u||S.over||S.busy||P(S.turn).npc; });
+    body.querySelectorAll('#pKb button').forEach(b=>{ const u=S.used[b.dataset.l]; b.className=u?(u==='ok'?'ok':'ko'):''; b.disabled=!!u||S.over||S.busy||ext(S.turn); });
     body.querySelector('#pInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn&&!S.over)+`<b class="h-sc">${S.scores[i]}</b>`).join('');
   }
   function newWord(){
     if(S.round>=ROUNDS) return finish();
     S.w=words[S.round]; S.shown=[...S.w.word].map(c=>c==='-'); S.used={}; S.err=0; S.busy=false;
-    body.querySelector('#pRound').textContent=`Mot ${S.round+1} / ${ROUNDS}`; body.querySelector('#pHint').innerHTML=`<span>${S.w.hintLang==='fr'?'🇫🇷':'🇩🇪'}</span> ${esc(S.w.hint)}`;
-    paint(); const p=P(S.turn); msg(`${p.emoji} <b>${esc(p.name)}</b>, choisis une lettre.`); if(p.npc) npcPlay(); if(S.w.hintLang==='de'&&!FAST) setTimeout(()=>say(S.w.hint,'de'),300);
+    head();
+    paint(); const p=P(S.turn); msg(`${p.emoji} <b>${esc(p.name)}</b>, choisis une lettre.`); sync(`${p.emoji} <b>${esc(p.name)}</b>, choisis une lettre.`); if(ai(S.turn)) npcPlay(); if(S.w.hintLang==='de'&&!FAST) setTimeout(()=>say(S.w.hint,'de'),300);
   }
   const done=()=>S.shown.every(Boolean);
   async function guess(ch){
@@ -2733,17 +2764,18 @@ function startPendu(cfg){
     const found=pdGuess(S,k); S.used[ch]=found?'ok':'ko'; if(mode===1&&found){ [...ROWS.join('')].forEach(c=>{ if(pdBase(c,1)===k) S.used[c]='ok'; }); }
     if(found){ S.scores[S.turn]+=found; paint(); msg(`✅ Il y a <b>${found}</b> « ${ch.toUpperCase()} » ! +${found} point${found>1?'s':''} pour ${p.emoji} <b>${esc(p.name)}</b>.`); }
     else { S.err++; paint(); msg(`❌ Pas de « ${ch.toUpperCase()} »… ${S.err} erreur${S.err>1?'s':''} sur ${MAX}.`); }
+    sync(body.querySelector('#pMsg').innerHTML.replace(/^<span>|<\/span>$/g,''));
     await sleep(FAST?10:900);
-    if(done()){ S.scores[S.turn]+=3; paint(); S.over=true; msg(`🎉 Mot trouvé : <b>${esc((S.w.art?S.w.art+' ':'')+S.w.word)}</b> ! +3 points pour ${p.emoji} <b>${esc(p.name)}</b>.`); say((S.w.art?S.w.art+' ':'')+S.w.word,S.w.lang); return next(); }
-    if(S.err>=MAX){ S.over=true; S.shown=S.shown.map(()=>true); paint(); msg(`💀 Perdu ! Le mot était : <b>${esc((S.w.art?S.w.art+' ':'')+S.w.word)}</b>.`); say((S.w.art?S.w.art+' ':'')+S.w.word,S.w.lang); return next(); }
+    if(done()){ S.scores[S.turn]+=3; paint(); S.over=true; msg(`🎉 Mot trouvé : <b>${esc((S.w.art?S.w.art+' ':'')+S.w.word)}</b> ! +3 points pour ${p.emoji} <b>${esc(p.name)}</b>.`); say((S.w.art?S.w.art+' ':'')+S.w.word,S.w.lang); sync(body.querySelector('#pMsg').innerHTML.replace(/^<span>|<\/span>$/g,'')); return next(); }
+    if(S.err>=MAX){ S.over=true; S.shown=S.shown.map(()=>true); paint(); msg(`💀 Perdu ! Le mot était : <b>${esc((S.w.art?S.w.art+' ':'')+S.w.word)}</b>.`); say((S.w.art?S.w.art+' ':'')+S.w.word,S.w.lang); sync(body.querySelector('#pMsg').innerHTML.replace(/^<span>|<\/span>$/g,'')); return next(); }
     if(!found&&n>1) S.turn=(S.turn+1)%n; S.busy=false; paint();
-    const q=P(S.turn); msg(`${q.emoji} <b>${esc(q.name)}</b>${found?', rejoue !':', à toi !'}`); if(q.npc) npcPlay();
+    const q=P(S.turn); msg(`${q.emoji} <b>${esc(q.name)}</b>${found?', rejoue !':', à toi !'}`); sync(`${q.emoji} <b>${esc(q.name)}</b>${found?', rejoue !':', à toi !'}`); if(ai(S.turn)) npcPlay();
   }
   async function next(){ await sleep(FAST?20:2600); S.round++; S.turn=(S.turn+1)%n; S.over=false; newWord(); }
   function npcPlay(){ sleep(FAST?10:1100).then(()=>{ const order=(mode===0?'enisratdhulcgmobwfkzvpjyx':'esaitnrulodcmpvqgfbhjxyzkw').split('').filter(c=>!S.used[c]); const ch=order[Math.floor(Math.random()*Math.min(order.length,6))]; if(ch&&!S.over) guess(ch); }); }
   body.querySelector('#pKb').onclick=e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; guess(b.dataset.l); };
-  function finish(){ S.over=true; const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
-    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>startPendu(cfg)); }
+  function finish(remote){ S.over=true; if(net&&!remote) sync('',S.turn,true,{fin:1}); const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
+    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>net?net.again():startPendu(cfg)); }
   newWord();
 }
 /* ================= MOULIN (MÜHLE) ================= */
@@ -2779,9 +2811,9 @@ function moulin(){
   playerSetup({title:'⚪ Moulin (Mühle)',npc:true,intro:'Pose tes pions, puis déplace-les d’un point à l’autre. <b>Aligne 3 pions</b> pour faire un <b>moulin</b> : réponds alors à une question — bonne réponse = tu retires un pion adverse ! Il faut arriver à moins de 3 pions pour perdre. Avec 3 pions, tu peux <b>voler</b> n’importe où. Chaque joueur choisit sa classe.',min:2,max:2,defN:2,perGrade:true,
     extra:{label:'Pions par joueur',opts:[[6,'6 pions (rapide)'],[9,'9 pions']],def:6}},startMoulin);
 }
-function startMoulin(cfg){
+function startMoulin(cfg,net){
   const NP=cfg.x||6, S={cfg,B:Array(24).fill(0),hand:[NP,NP],turn:0,sel:-1,phase:'move',busy:false,over:false}; T2.mug=S;
-  const P=i=>cfg.players[i];
+  const P=i=>cfg.players[i], ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me), ai=pi=>!!P(pi).npc&&!net;
   const pts=MU.XY.map(([x,y],i)=>`<button class="mu-pt" data-i="${i}" style="left:${(x+0.4)*100/6.8}%;top:${(y+0.4)*100/6.8}%" aria-label="point ${i+1}"></button>`).join('');
   const lines=(()=>{ let d=''; for(let r=0;r<3;r++){ const o=r*8; d+=`M${MU.XY[o][0]} ${MU.XY[o][1]}L${MU.XY[o+2][0]} ${MU.XY[o+2][1]}L${MU.XY[o+4][0]} ${MU.XY[o+4][1]}L${MU.XY[o+6][0]} ${MU.XY[o+6][1]}Z`; } [1,3,5,7].forEach(k=>{ d+=`M${MU.XY[k][0]} ${MU.XY[k][1]}L${MU.XY[k+16][0]} ${MU.XY[k+16][1]}`; }); return d; })();
   body.innerHTML=`<div class="h-bar"><div id="mInfo" class="h-info"></div><button class="g-ghost" id="mQuit">↩ Quitter</button></div>
@@ -2789,14 +2821,18 @@ function startMoulin(cfg){
     <div class="mu-wrap"><div class="mu-board" id="mBoard"><svg viewBox="-0.4 -0.4 6.8 6.8" class="mu-svg"><path d="${lines}" fill="none" stroke="#7a5c2e" stroke-width=".09" stroke-linejoin="round"/></svg>${pts}</div></div>
     <div class="h-qbox" id="mQ" hidden></div>`;
   const msg=t=>body.querySelector('#mMsg').innerHTML='<span>'+t+'</span>', box=body.querySelector('#mQ'), bd=body.querySelector('#mBoard');
-  body.querySelector('#mQuit').onclick=()=>moulin();
+  body.querySelector('#mQuit').onclick=()=>net?net.quit():moulin();
+  const sync=netSetup(net,S,['B','hand','turn','sel','phase','over','quiet'],()=>!!body.querySelector('#mBoard'),(g,st,m)=>{
+    if(st.fin){ const r=st.res; if(!r) return endScreen({title:'Match nul !',sub:'Plus personne ne peut avancer : égalité.',color:'#7048e8'},()=>net.again()); return win(r.w,r.why,true); }
+    if(S.turn===net.me&&S.phase==='q'){ paint(); question(); return; }
+    paint(); msg(S.turn===net.me&&S.phase==='move'?status():m); });
   const tot=pl=>S.hand[pl-1]+muCount(S.B,pl);
   let targets=[];
   function paint(){
     const pl=S.turn+1; targets=[];
-    if(!S.over&&S.phase==='move'&&!P(S.turn).npc){ if(S.hand[S.turn]>0) targets=muMoves(S,pl).map(m=>m.to); else if(S.sel>=0) targets=muMoves(S,pl).filter(m=>m.from===S.sel).map(m=>m.to); }
-    const rem=S.phase==='remove'&&!P(S.turn).npc?muRemovable(S.B,3-pl):[];
-    const selectable=(!S.over&&S.phase==='move'&&!P(S.turn).npc&&S.hand[S.turn]===0)?[...new Set(muMoves(S,pl).map(m=>m.from))]:[];
+    if(!S.over&&S.phase==='move'&&!ext(S.turn)){ if(S.hand[S.turn]>0) targets=muMoves(S,pl).map(m=>m.to); else if(S.sel>=0) targets=muMoves(S,pl).filter(m=>m.from===S.sel).map(m=>m.to); }
+    const rem=S.phase==='remove'&&!ext(S.turn)?muRemovable(S.B,3-pl):[];
+    const selectable=(!S.over&&S.phase==='move'&&!ext(S.turn)&&S.hand[S.turn]===0)?[...new Set(muMoves(S,pl).map(m=>m.from))]:[];
     bd.querySelectorAll('.mu-pt').forEach(b=>{ const i=+b.dataset.i, v=S.B[i]; b.className='mu-pt'+(v?' on':'')+(S.sel===i?' sel':'')+(targets.includes(i)?' tg':'')+(rem.includes(i)?' rm':'')+(selectable.includes(i)&&S.sel!==i?' can':'');
       b.style.setProperty('--pc',v?P(v-1).color:'transparent'); b.textContent=v?P(v-1).emoji.replace(/<[^>]*>/g,'')||'●':''; });
     body.querySelector('#mInfo').innerHTML=[0,1].map(i=>chip(P(i),i===S.turn&&!S.over)+`<b class="h-sc">${S.hand[i]>0?'✋'+S.hand[i]+' + ':''}${muCount(S.B,i+1)}</b>`).join('');
@@ -2807,29 +2843,29 @@ function startMoulin(cfg){
   function nextTurn(){
     S.turn=1-S.turn; S.sel=-1; S.phase='move'; S.busy=false;
     const pl=S.turn+1; if(!muMoves(S,pl).length) return win(1-S.turn,'ne peut plus bouger');
-    paint(); msg(status()); if(P(S.turn).npc) setTimeout(npcMove,FAST?10:900);
+    paint(); msg(status()); sync(status()); if(ai(S.turn)) setTimeout(npcMove,FAST?10:900);
   }
-  function win(w,why){ S.over=true; paint(); const p=P(w); endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`${esc(P(1-w).name)} ${why}.`,color:p.color},()=>startMoulin(cfg)); }
+  function win(w,why,remote){ S.over=true; paint(); const p=P(w); if(net&&!remote) sync(`🏆 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,S.turn,true,{fin:1,res:{w,why}}); endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`${esc(P(1-w).name)} ${why}.`,color:p.color},()=>net?net.again():startMoulin(cfg)); }
   function afterMove(m){
     const pl=S.turn+1, mill=muMill(S.B,m.to,pl); paint();
     if(!mill) return nextTurn();
-    S.phase='q'; paint(); question();
+    S.phase='q'; paint(); sync(`🎯 ${P(S.turn).emoji} <b>${esc(P(S.turn).name)}</b> a fait un moulin !`); question();
   }
   function doMove(m){ if(S.busy) return; S.busy=true; const mill=muApply(S,S.turn+1,m); S.sel=-1; S.quiet=(S.quiet||0)+1; paint(); S.busy=false;
-    if(S.quiet>=70&&!mill){ S.over=true; return endScreen({title:'Match nul !',sub:'Plus personne ne peut avancer : égalité.',color:'#7048e8'},()=>startMoulin(cfg)); }
+    if(S.quiet>=70&&!mill){ S.over=true; sync('Match nul !',S.turn,true,{fin:1}); return endScreen({title:'Match nul !',sub:'Plus personne ne peut avancer : égalité.',color:'#7048e8'},()=>net?net.again():startMoulin(cfg)); }
     afterMove(m); }
   function npcMove(){ if(S.over||S.phase!=='move') return; const m=muAi(S,S.turn+1); if(!m) return win(1-S.turn,'ne peut plus bouger'); doMove(m); }
   function question(){
     const p=P(S.turn), pl=S.turn+1; box.hidden=false; box.style.setProperty('--pc',p.color);
     const after=ok=>{ box.hidden=true; box.innerHTML='';
       if(!ok){ msg(`${p.emoji} <b>${esc(p.name)}</b> n’a pas trouvé : le moulin ne rapporte rien…`); return sleep(FAST?20:1100).then(nextTurn); }
-      S.phase='remove'; paint();
-      if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> retire un pion !`); return sleep(FAST?20:1000).then(()=>removePiece(muAiRemove(S,3-pl))); }
+      S.phase='remove'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> retire un pion !`);
+      if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> retire un pion !`); return sleep(FAST?20:1000).then(()=>removePiece(muAiRemove(S,3-pl))); }
       msg(`✅ Moulin ! ${p.emoji} <b>${esc(p.name)}</b>, touche un pion adverse à retirer.`); };
-    if(p.npc){ msg(`${p.emoji} <b>${esc(p.name)}</b> a fait un moulin ! Il répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+    if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> a fait un moulin ! Il répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
       return sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); }
     msg(`🎯 <b>Moulin !</b> ${p.emoji} <b>${esc(p.name)}</b> : réponds pour retirer un pion adverse.`);
-    const q=makeQuestion(cfg.topics,p.gr);
+    const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button>`;
@@ -2848,15 +2884,22 @@ function startMoulin(cfg){
     if(tot(opp)<3) return win(S.turn,'n’a plus assez de pions');
     nextTurn();
   }
-  bd.onclick=e=>{ const b=e.target.closest('.mu-pt'); if(!b||S.busy||S.over||P(S.turn).npc) return; const i=+b.dataset.i, pl=S.turn+1;
+  bd.onclick=e=>{ const b=e.target.closest('.mu-pt'); if(!b||S.busy||S.over||ext(S.turn)) return; const i=+b.dataset.i, pl=S.turn+1;
     if(S.phase==='remove'){ if(muRemovable(S.B,3-pl).includes(i)) removePiece(i); return; }
     if(S.phase!=='move') return;
     if(S.hand[S.turn]>0){ if(!S.B[i]) doMove({from:-1,to:i}); return; }
     if(S.B[i]===pl){ if(muMoves(S,pl).some(m=>m.from===i)){ S.sel=i; paint(); } return; }
     if(S.sel>=0&&!S.B[i]){ const m=muMoves(S,pl).find(m=>m.from===S.sel&&m.to===i); if(m) doMove(m); } };
-  paint(); msg(status()); if(P(0).npc) setTimeout(npcMove,500);
+  paint(); msg(status()); if(ai(0)) setTimeout(npcMove,500);
 }
-window.DLNET={chevaux:{ic:'🐴',t:'Petits chevaux',min:2,max:4,xs:[[2,'2 chevaux (rapide)'],[4,'4 chevaux']],alive:()=>!!body.querySelector('#chBoard'),start:(cfg,net)=>startChevaux(Object.assign({topics:Object.keys(TOPICS),perGrade:true},cfg),net)}};
+const NETREG=(ic,t,min,max,xs,sel,fn)=>({ic,t,min,max,xs,alive:()=>!!body.querySelector(sel),start:(cfg,net)=>seeded(cfg.seed,()=>fn(Object.assign({topics:Object.keys(TOPICS),perGrade:true},cfg),net))});
+window.DLNET={chevaux:NETREG('🐴','Petits chevaux',2,4,[[2,'2 chevaux (rapide)'],[4,'4 chevaux']],'#chBoard',startChevaux),
+ uno:NETREG('🌈','Cartes couleurs',2,4,[[0,'chiffres en allemand'],[1,'chiffres en français'],[2,'chiffres seuls']],'#unHand',startUno),
+ cartes:NETREG('🃏','Bataille de chiffres',2,4,[[0,'nombres allemands'],[1,'nombres en lettres'],[2,'calculs']],'#cBox',startCartes),
+ puissance4:NETREG('🔴','Puissance 4',2,2,[[0,'une partie']],'#c4Board',startPuissance4),
+ navale:NETREG('🚢','Bataille navale',2,4,[[6,'mer 6×6'],[8,'mer 8×8']],'#bGrid',startNavale),
+ pendu:NETREG('🔤','Pendu',2,4,[[0,'mot allemand'],[1,'mot français']],'#pKb',startPendu),
+ moulin:NETREG('⚪','Moulin',2,2,[[6,'6 pions'],[9,'9 pions']],'#mBoard',startMoulin)};
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
 
@@ -5690,7 +5733,7 @@ function launchGame(r){ const g=r.g, m=me(), def=(window.DLNET||{})[g.type], R=r
     async again(){ await api({a:'again'}); },
     async quit(){ await api({a:'leave'}); S.gameOn=false; S.net=null; leaveLocal(); H.showHub(); }};
   S.gameOn=true; S.gameKey=r.code+'|'+g.t0; S.net=net; S.def=def;
-  const cfg={players:ord.map((p,i)=>({name:p.name,emoji:p.av==='mx'?'<i class="mx"></i>':esc(p.av),color:PAL[i%4],gr:p.gr})),x:g.x,grade:'4H'};
+  const cfg={players:ord.map((p,i)=>({name:p.name,emoji:p.av==='mx'?'<i class="mx"></i>':esc(p.av),color:PAL[i%4],gr:p.gr})),x:g.x,grade:ord[0].gr,seed:g.t0};
   def.start(cfg,net); if(g.s&&net.onRemote) net.onRemote(g); }
 function gameSync(r){ const g=r.g;
   if(S.gameOn&&S.def&&!S.def.alive()){ S.gameOn=false; S.net=null; return; }
@@ -5764,7 +5807,7 @@ function lobbyH(r){ const link=location.origin&&location.origin!=='null'?locatio
   ${gamesH(r)}<h3 class="g-lab">🧠 Grand Quiz : choisissez un thème</h3><p class="g-p g-note">Touche un thème : <b>le premier vote lance un chrono de 45 secondes</b>. La majorité gagne (au hasard en cas d’égalité, « Tout mélangé » si personne ne vote).</p>${themeCards(r,false)}
   ${S.msg?`<p class="sl-msg">${S.msg}</p>`:''}<button class="g-ghost" data-s="leave">👋 Quitter le salon</button>`; }
 function gamesH(r){ const NG=window.DLNET||{}, ks=Object.keys(NG); if(!ks.length) return '';
-  return `<h3 class="g-lab">🎲 Jeux de plateau</h3><p class="g-p g-note">Chacun sur son appareil, à tour de rôle. Tout le monde doit être présent dans le salon avant de lancer.</p><div class="sl-gm">${ks.map(k=>NG[k].xs.map(([x,l])=>`<button class="g-big sl-gb" data-game="${k}" data-x="${x}">${NG[k].ic} ${esc(NG[k].t)} · ${esc(l)}<small>${NG[k].min}–${NG[k].max} joueurs</small></button>`).join('')).join('')}</div>`; }
+  return `<h3 class="g-lab">🎲 Jeux de plateau</h3><p class="g-p g-note">Chacun sur son appareil, à tour de rôle. Tout le monde doit être présent dans le salon avant de lancer.</p><div class="sl-gm">${ks.map(k=>NG[k].xs.map(([x,l])=>`<button class="g-big sl-gb" data-game="${k}" data-x="${x}">${NG[k].ic} ${esc(NG[k].t)} · ${esc(l)}<small>${NG[k].min===NG[k].max?NG[k].min+' joueurs':NG[k].min+'–'+NG[k].max+' joueurs'}</small></button>`).join('')).join('')}</div>`; }
 function voteH(r){ return `<h2 class="g-h">🗳️ On vote ! ${BETA}</h2>
   <div class="sl-cd"><div class="sl-bar"><i id="slBar"></i></div><b id="slSec">…</b></div>
   <p class="g-p">Touche le thème que tu veux. Quand tout le monde a voté, ça part tout de suite !</p>${themeCards(r,true)}${playersH(r)}`; }
@@ -5794,7 +5837,7 @@ function bind(R){
     if(b.dataset.j){ ensureMe(R); const m=me(); S.prefill=b.dataset.j; if(!m){ S.msg='⚠️ Écris ton prénom, puis touche Rejoindre.'; paint(); return; } S.msg=''; await joinRoom(b.dataset.j,m); return; }
     if(b.dataset.av){ R.querySelectorAll('#slAvs button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return; }
     if(b.dataset.gr){ R.querySelectorAll('#slGr button').forEach(x=>x.setAttribute('aria-pressed',x===b)); return; }
-    if(b.dataset.game){ const j=await api({a:'start',game:b.dataset.game,x:+b.dataset.x}); if(j.error){ const G=(window.DLNET||{})[b.dataset.game]||{}; S.msg=j.error==='joueurs'?`⚠️ Il faut de ${G.min||2} à ${G.max||4} joueurs présents dans le salon.`:'⚠️ Impossible de lancer ('+esc(j.error)+').'; paint(); } return; }
+    if(b.dataset.game){ const j=await api({a:'start',game:b.dataset.game,x:+b.dataset.x}); if(j.error){ const G=(window.DLNET||{})[b.dataset.game]||{}; S.msg=j.error==='joueurs'?(G.min===G.max?`⚠️ Ce jeu se joue à ${G.min} : il faut exactement ${G.min} joueurs présents dans le salon.`:`⚠️ Il faut de ${G.min||2} à ${G.max||4} joueurs présents dans le salon.`):'⚠️ Impossible de lancer ('+esc(j.error)+').'; paint(); } return; }
     const s=b.dataset.s;
     if(s==='chg'){ try{ localStorage.removeItem('dl-salon-guest'); }catch(x){} paint(); return; }
     if(s==='create'||s==='join'){ ensureMe(R); const m=me(); if(!m){ S.msg='⚠️ Écris ton prénom ou ton pseudo.'; paint(); return; }

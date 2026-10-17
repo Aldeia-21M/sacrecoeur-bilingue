@@ -4,7 +4,9 @@ import { getStore } from '@netlify/blobs';
 const CODE = /^[A-HJ-NP-Z2-9]{5}$/, PID = /^[A-Za-z0-9_-]{3,24}$/, AL = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const THEMES = ['mix', 'de', 'fr', 'ma'];
 // Jeux de plateau : le serveur ne connaît pas les règles, il garde l'état envoyé par le joueur dont c'est le tour.
-const GAMES = { chevaux: { min: 2, max: 4, xs: [2, 4] } };
+const GAMES = {
+  chevaux: { min: 2, max: 4, xs: [2, 4] }, uno: { min: 2, max: 4, xs: [0, 1, 2] }, cartes: { min: 2, max: 4, xs: [0, 1, 2] },
+  puissance4: { min: 2, max: 2, xs: [0] }, navale: { min: 2, max: 4, xs: [6, 8] }, pendu: { min: 2, max: 4, xs: [0, 1] }, moulin: { min: 2, max: 2, xs: [6, 9] } };
 const ROUNDS = 3, VOTE_MS = 45000, ASK_MS = 12000, ANS_MS = 30000, REV_MS = 5500, GONE = 35000, TTL = 4 * 3600e3, MAXP = 8;
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const st = () => getStore({ name: 'salons', consistency: 'strong' });
