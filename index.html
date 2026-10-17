@@ -2112,38 +2112,41 @@ function memory(){
   playerSetup({title:'🃏 Memory',intro:'Retourne deux cartes pour retrouver un mot en français et sa traduction en allemand. Touche une carte pour l’entendre !',min:1,max:4,defN:1,
     extra:{label:'Nombre de paires',opts:[[6,'6 paires'],[10,'10 paires']],def:6}},startMemory);
 }
-function startMemory(cfg){
+function startMemory(cfg,net){
   const items=pickItems(new Set(cfg.topics),cfg.grade,cfg.x), np=items.length;
   let cards=[]; items.forEach((it,i)=>{ cards.push({pair:i,text:it.fr,lang:'fr',mute:!!it.mute}); cards.push({pair:i,text:it.de,lang:it.lang||'de'}); });
   cards=shuffle(cards);
   const S={cfg,cards,np,turn:0,scores:cfg.players.map(()=>0),moves:0,open:[],lock:false,done:0}; T2.memory=S;
+  const ext=pi=>!!net&&pi!==net.me;
   const cols=cfg.x>6?4:3, multi=cfg.players.length>1;
   body.innerHTML=`<div class="h-bar"><div id="mInfo" class="h-info"></div><button class="g-ghost" id="mQuit">↩ Quitter</button></div>
     <div class="h-mgrid c${cols}" id="mGrid">${cards.map((c,i)=>{ const L=c.text.length, fs=L>20?.62:L>12?.76:1;
       return `<button class="h-card ${c.lang}" data-i="${i}" aria-label="carte ${i+1}"><span class="bk">?</span><span class="fc" style="font-size:${fs}em">${esc(c.text)}</span></button>`; }).join('')}</div>
     <div class="g-msg" id="mMsg">Touche une carte !</div>`;
   const grid=body.querySelector('#mGrid'), btns=[...grid.children], msg=t=>body.querySelector('#mMsg').innerHTML='<span>'+t+'</span>';
-  body.querySelector('#mQuit').onclick=()=>memory();
+  body.querySelector('#mQuit').onclick=()=>net?net.quit():memory();
+  const sync=netSetup(net,S,['cards','turn','scores','moves','open','done'],()=>!!body.querySelector('#mGrid'),(g,st,m)=>{ const prevUp=cards.map(c=>!!c.up); cards.splice(0,cards.length,...S.cards); S.cards=cards; S.lock=false; cards.forEach((c,i)=>{ if(c.up&&!prevUp[i]&&!c.mute) say(c.text,c.lang); }); paint(); if(st.fin) return finish(true); msg(m||''); });
   function paint(){
     cards.forEach((c,i)=>{ const b=btns[i]; b.className='h-card '+c.lang+(c.up?' up':'')+(c.ok?' ok':''); if(c.ok) b.style.setProperty('--pc',cfg.players[c.by].color); });
     body.querySelector('#mInfo').innerHTML=multi?cfg.players.map((p,i)=>chip(p,i===S.turn)+`<b class="h-sc">${S.scores[i]}</b>`).join(''):`<span class="h-pchip act" style="--pc:${cfg.players[0].color}"><i>${cfg.players[0].emoji}</i>Essais : ${S.moves}</span><b class="h-sc">${S.done}/${np} paires</b>`;
   }
-  grid.onclick=e=>{ const b=e.target.closest('.h-card'); if(!b) return; flip(+b.dataset.i); };
+  grid.onclick=e=>{ const b=e.target.closest('.h-card'); if(!b||ext(S.turn)) return; flip(+b.dataset.i); };
   function flip(i){
     if(S.lock) return; const c=cards[i]; if(c.up||c.ok) return;
-    c.up=true; if(!c.mute) say(c.text,c.lang); S.open.push(i); paint(); if(S.open.length===2) resolve();
+    c.up=true; if(!c.mute) say(c.text,c.lang); S.open.push(i); paint(); { const pp=cfg.players[S.turn]; sync(`${pp.emoji} <b>${esc(pp.name)}</b> retourne une carte.`); } if(S.open.length===2) resolve();
   }
   async function resolve(){
-    S.lock=true; S.moves++; const [a,b]=S.open.map(i=>cards[i]); await sleep(1000);
+    S.lock=true; S.moves++; const [a,b]=S.open.map(i=>cards[i]), who=cfg.players[S.turn]; await sleep(1000);
     if(a.pair===b.pair){ a.ok=b.ok=true; a.up=b.up=false; a.by=b.by=S.turn; S.scores[S.turn]++; S.done++; msg('✅ Bravo, une paire !'); }
     else { a.up=b.up=false; msg('Pas la même paire…'); if(multi) S.turn=(S.turn+1)%cfg.players.length; }
-    S.open=[]; S.lock=false; paint();
+    S.open=[]; S.lock=false; paint(); sync(a.ok?`✅ ${who.emoji} <b>${esc(who.name)}</b> a trouvé une paire !`:'Pas la même paire…');
     if(S.done===np) finish();
   }
-  function finish(){
-    if(!multi) return endScreen({icon:'🎉',title:`Bravo ${esc(cfg.players[0].name)} ! ${cfg.players[0].emoji}`,sub:`Toutes les paires trouvées en <b>${S.moves}</b> essais.`,color:cfg.players[0].color},()=>startMemory(cfg));
+  function finish(remote){
+    if(net&&!remote) sync('',S.turn,true,{fin:1});
+    if(!multi) return endScreen({icon:'🎉',title:`Bravo ${esc(cfg.players[0].name)} ! ${cfg.players[0].emoji}`,sub:`Toutes les paires trouvées en <b>${S.moves}</b> essais.`,color:cfg.players[0].color},()=>net?net.again():startMemory(cfg));
     const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
-    endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>startMemory(cfg));
+    endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>net?net.again():startMemory(cfg));
   }
   paint();
 }
@@ -2152,16 +2155,18 @@ function startMemory(cfg){
 function loto(){
   playerSetup({title:'🎧 Loto',intro:'Écoute le mot en allemand, puis touche la bonne case. Une bonne réponse marque la case à ta couleur. Si tu te trompes, c’est au suivant !',min:1,max:6,defN:2},startLoto);
 }
-function startLoto(cfg){
+function startLoto(cfg,net){
   const items=pickItems(new Set(cfg.topics),cfg.grade,9);
-  const L={cfg,cells:items.map(it=>({it,by:-1})),turn:0,scores:cfg.players.map(()=>0),target:null,errors:0,busy:false}; T2.loto=L;
+  const L={cfg,cells:items.map(it=>({it,by:-1})),turn:0,scores:cfg.players.map(()=>0),target:null,ti:-1,errors:0,busy:false}; T2.loto=L;
+  const ext=pi=>!!net&&pi!==net.me;
   const multi=cfg.players.length>1;
   body.innerHTML=`<div class="h-bar"><div id="lInfo" class="h-info"></div><button class="g-ghost" id="lQuit">↩ Quitter</button></div>
     <div class="h-lbox"><button class="h-hear" id="lHear">🔊 Écouter le mot</button></div>
     <div class="h-lgrid" id="lGrid">${L.cells.map((c,i)=>`<button class="h-lcell" data-i="${i}"><span style="font-size:${c.it.fr.length>14?.8:1}em">${esc(c.it.fr)}</span></button>`).join('')}</div>
     <div class="g-msg" id="lMsg"></div>`;
   const msg=t=>body.querySelector('#lMsg').innerHTML='<span>'+t+'</span>', btns=[...body.querySelectorAll('.h-lcell')];
-  body.querySelector('#lQuit').onclick=()=>loto();
+  body.querySelector('#lQuit').onclick=()=>net?net.quit():loto();
+  const sync=netSetup(net,L,['cells','turn','scores','ti','errors'],()=>!!body.querySelector('#lGrid'),(g,st,m)=>{ L.target=L.ti>=0?L.cells[L.ti]:null; paint(); if(st.fin) return finish(true); const p=cfg.players[L.turn]; if(L.turn===net.me&&L.target){ msg(`${p.emoji} <b>${esc(p.name)}</b>, quelle case correspond à ce mot ?`); setTimeout(()=>say(L.target.it.de,L.target.it.lang||'de'),300); } else msg(m||''); });
   body.querySelector('#lHear').onclick=()=>L.target&&say(L.target.it.de,L.target.it.lang||'de');
   function paint(){
     L.cells.forEach((c,i)=>{ btns[i].className='h-lcell'+(c.by>=0?' ok':''); if(c.by>=0){ btns[i].style.setProperty('--pc',cfg.players[c.by].color); btns[i].dataset.em=cfg.players[c.by].emoji; } });
@@ -2170,26 +2175,28 @@ function startLoto(cfg){
   function next(){
     const left=L.cells.filter(c=>c.by<0);
     if(!left.length) return finish();
-    L.target=left[rnd(left.length)]; paint();
+    L.target=left[rnd(left.length)]; L.ti=L.cells.indexOf(L.target); paint();
     const p=cfg.players[L.turn]; msg(`${p.emoji} <b>${esc(p.name)}</b>, quelle case correspond à ce mot ?`);
     setTimeout(()=>say(L.target.it.de,L.target.it.lang||'de'),FAST?0:350);
+    sync(`${p.emoji} <b>${esc(p.name)}</b> cherche une case…`);
   }
   body.querySelector('#lGrid').onclick=async e=>{
-    const b=e.target.closest('.h-lcell'); if(!b||L.busy) return; const c=L.cells[+b.dataset.i]; if(c.by>=0||!L.target) return;
+    const b=e.target.closest('.h-lcell'); if(!b||L.busy||ext(L.turn)) return; const c=L.cells[+b.dataset.i]; if(c.by>=0||!L.target) return;
     L.busy=true; const p=cfg.players[L.turn];
     if(c===L.target){
-      c.by=L.turn; L.scores[L.turn]++; L.target=null; paint(); msg(`✅ <b>Bravo !</b> ${esc(c.it.fr)} = ${esc(c.it.de)}`); DLverdict(true,[{t:c.it.de,l:c.it.lang||'de'}]);
+      c.by=L.turn; L.scores[L.turn]++; L.target=null; L.ti=-1; paint(); msg(`✅ <b>Bravo !</b> ${esc(c.it.fr)} = ${esc(c.it.de)}`); DLverdict(true,[{t:c.it.de,l:c.it.lang||'de'}]); sync(`✅ ${p.emoji} <b>${esc(p.name)}</b> a trouvé : ${esc(c.it.fr)} = ${esc(c.it.de)}`);
       await sleep(1500); L.turn=(L.turn+1)%cfg.players.length; L.busy=false; next();
     } else {
       L.errors++; const wrongC=c; b.classList.add('shake'); msg(`❌ Ce n’est pas la bonne case…${multi?' Au suivant !':' Réécoute !'}`);
       await sleep(900); b.classList.remove('shake'); if(multi) L.turn=(L.turn+1)%cfg.players.length; L.busy=false; paint();
-      const q=cfg.players[L.turn]; msg(`${q.emoji} <b>${esc(q.name)}</b>, à toi ! Même mot.`); DLspeakSeq([{t:'Non, ça c’est :',l:'fr',pause:800},{t:wrongC.it.de,l:wrongC.it.lang||'de',pause:1300},{t:'Cherche :',l:'fr',pause:800},{t:L.target.it.de,l:L.target.it.lang||'de'}]);
+      const q=cfg.players[L.turn]; msg(`${q.emoji} <b>${esc(q.name)}</b>, à toi ! Même mot.`); sync(`❌ ${p.emoji} <b>${esc(p.name)}</b> s’est trompé. ${q.emoji} <b>${esc(q.name)}</b>, à toi !`); DLspeakSeq([{t:'Non, ça c’est :',l:'fr',pause:800},{t:wrongC.it.de,l:wrongC.it.lang||'de',pause:1300},{t:'Cherche :',l:'fr',pause:800},{t:L.target.it.de,l:L.target.it.lang||'de'}]);
     }
   };
-  function finish(){
-    if(!multi) return endScreen({icon:'🎉',title:`Bravo ${esc(cfg.players[0].name)} ! ${cfg.players[0].emoji}`,sub:`Grille complète avec <b>${L.errors}</b> erreur${L.errors>1?'s':''}.`,color:cfg.players[0].color},()=>startLoto(cfg));
+  function finish(remote){
+    if(net&&!remote) sync('',L.turn,true,{fin:1});
+    if(!multi) return endScreen({icon:'🎉',title:`Bravo ${esc(cfg.players[0].name)} ! ${cfg.players[0].emoji}`,sub:`Grille complète avec <b>${L.errors}</b> erreur${L.errors>1?'s':''}.`,color:cfg.players[0].color},()=>net?net.again():startLoto(cfg));
     const best=Math.max(...L.scores), w=cfg.players.filter((_,i)=>L.scores[i]===best);
-    endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${L.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>startLoto(cfg));
+    endScreen({title:w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`,sub:cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${L.scores[i]}</b>`).join('<br>'),color:w[0].color},()=>net?net.again():startLoto(cfg));
   }
   next();
 }
@@ -2199,26 +2206,30 @@ function race(){
   playerSetup({title:'🚀 Course',npc:true,intro:'À chaque tour, une question. Bonne réponse = tu avances d’une case. Le premier arrivé à l’arrivée gagne ! Chaque joueur choisit sa classe.',min:2,max:6,defN:2,perGrade:true,
     extra:{label:'Longueur de la course',opts:[[5,'Courte (5)'],[8,'Normale (8)'],[12,'Longue (12)']],def:8}},startRace);
 }
-function startRace(cfg){
+function startRace(cfg,net){
   const LEN=cfg.x, R={cfg,pos:cfg.players.map(()=>0),turn:0,q:null,busy:false,LEN}; T2.race=R;
+  const ext=pi=>!!cfg.players[pi].npc||(!!net&&pi!==net.me), ai=pi=>!!cfg.players[pi].npc&&!net;
   body.innerHTML=`<div class="h-bar"><div class="h-info"><b>🏁 Arrivée : ${LEN} bonnes réponses</b></div><button class="g-ghost" id="rQuit">↩ Quitter</button></div>
     <div class="h-track" id="rTrack">${cfg.players.map((p,i)=>`<div class="h-lane" data-i="${i}" style="--pc:${p.color}"><span class="nm">${p.emoji} ${esc(p.name)}<small>${p.gr}</small></span>
       <div class="rail"><div class="fill"></div><div class="tok"><i>${p.emoji}</i></div><div class="flag">🏁</div></div></div>`).join('')}</div>
     <div class="h-qbox" id="rQ"></div>`;
-  body.querySelector('#rQuit').onclick=()=>race();
+  body.querySelector('#rQuit').onclick=()=>net?net.quit():race();
   const lanes=[...body.querySelectorAll('.h-lane')];
+  const waitBox=(m)=>{ const p=cfg.players[R.turn], box=body.querySelector('#rQ'); box.style.setProperty('--pc',p.color); box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${m||p.emoji+' <b>'+esc(p.name)+'</b> répond à une question…'}</div>`; };
+  const sync=netSetup(net,R,['pos','turn'],()=>!!body.querySelector('#rTrack'),(g,st,m)=>{ if(st.fin) return winRace(true); paint(); if(R.turn===net.me) ask(); else waitBox(m); });
   function paint(){
     lanes.forEach((l,i)=>{ const pc=R.pos[i]/LEN; l.classList.toggle('act',i===R.turn);
       l.querySelector('.tok').style.left=`calc(${pc*100}% - ${pc*34}px)`; l.querySelector('.fill').style.width=`calc(${pc*100}% )`; });
   }
   function ask(){
     const p=cfg.players[R.turn]; const box=body.querySelector('#rQ'); box.style.setProperty('--pc',p.color);
-    if(p.npc){ R.busy=true; R.q=null; paint(); box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
+    if(net&&R.turn!==net.me){ paint(); waitBox(); return; }
+    if(ai(R.turn)){ R.busy=true; R.q=null; paint(); box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
       sleep(FAST?30:1500).then(async()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il avance d’une case.`:`❌ ${esc(p.name)} s’est trompé… il reste sur place.`}</div>`;
         if(ok){ R.pos[R.turn]++; paint(); } await sleep(FAST?30:1600);
         if(ok&&R.pos[R.turn]>=LEN) return winRace(); R.turn=(R.turn+1)%cfg.players.length; ask(); });
       return; }
-    const q=makeQuestion(cfg.topics,p.gr); R.q=q; R.busy=false; paint();
+    const q=makeQuestion(cfg.topics,p.gr); R.q=q; R.busy=false; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`);
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
       <div class="g-opts">${q.options.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Suivant ▶</button>`;
@@ -2233,14 +2244,14 @@ function startRace(cfg){
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances d’une case.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu restes sur place.`;
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       if(ok){ R.pos[R.turn]++; paint(); }
-      R.q=Object.assign({},q,{answered:true});
+      R.q=Object.assign({},q,{answered:true}); sync(ok?`✅ ${p.emoji} <b>${esc(p.name)}</b> avance d’une case !`:`❌ ${p.emoji} <b>${esc(p.name)}</b> reste sur place.`);
       const nx=box.querySelector('.g-next'); nx.hidden=false;
       if(ok&&R.pos[R.turn]>=LEN){ await sleep(700); return winRace(); }
-      nx.onclick=()=>{ R.turn=(R.turn+1)%cfg.players.length; ask(); };
+      nx.onclick=()=>{ R.turn=(R.turn+1)%cfg.players.length; sync(''); ask(); };
     };
   }
-  function winRace(){ const p=cfg.players[R.turn];
-    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Tu franchis la ligne d’arrivée en premier !',color:p.color},()=>startRace(cfg)); }
+  function winRace(remote){ const p=cfg.players[R.turn]; if(net&&!remote) sync(`🏁 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,R.turn,true,{fin:1});
+    endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Tu franchis la ligne d’arrivée en premier !',color:p.color},()=>net?net.again():startRace(cfg)); }
   ask();
 }
 /* ================= PETITS CHEVAUX ================= */
@@ -2909,7 +2920,10 @@ window.DLNET={chevaux:NETREG('🐴','Petits chevaux',2,4,[[2,'2 chevaux (rapide)
  puissance4:NETREG('🔴','Puissance 4',2,2,[[0,'une partie']],'#c4Board',startPuissance4),
  navale:NETREG('🚢','Bataille navale',2,4,[[6,'mer 6×6'],[8,'mer 8×8']],'#bGrid',startNavale),
  pendu:NETREG('🔤','Pendu',2,4,[[0,'mot allemand'],[1,'mot français']],'#pKb',startPendu),
- moulin:NETREG('⚪','Moulin',2,2,[[6,'6 pions'],[9,'9 pions']],'#mBoard',startMoulin)};
+ moulin:NETREG('⚪','Moulin',2,2,[[6,'6 pions'],[9,'9 pions']],'#mBoard',startMoulin),
+ race:NETREG('🚀','Course',2,6,[[5,'courte (5)'],[8,'normale (8)'],[12,'longue (12)']],'#rTrack',startRace),
+ memory:NETREG('🃏','Memory',2,4,[[6,'6 paires'],[10,'10 paires']],'#mGrid',startMemory),
+ loto:NETREG('🎧','Loto',2,6,[[0,'9 cases']],'#lGrid',startLoto)};
 window.DLH={openGame,hubItems,refreshHub:renderHub,body,showHub,playerSetup,endScreen,pickItems,chip,T:T2};
 })();
 
