@@ -4904,25 +4904,25 @@ const seq=(a)=>{ try{ if(window.DLspeakSeq) DLspeakSeq(a); else say(a.map(x=>x.t
 /* g : label, say (le son), mn (pour le retenir), det (repérer le son dans un mot), words [emoji, mot avec [son] marqué] */
 const G=[
  {id:'au',l:'au · eau',s:'ô',mn:'comme dans « haut »',c:'#e8590c',det:/au|eau/,w:[['🚗','[au]to'],['🟡','j[au]ne'],['🔥','ch[au]d'],['🐂','t[au]r[eau]'],['🎂','gât[eau]'],['⛵','bat[eau]'],['🏰','chât[eau]']]},
- {id:'oi',l:'oi',s:'oua',mn:'comme dans « waouh ! »',c:'#1971c2',det:/oi|oî/,w:[['🐦','[oi]seau'],['🐟','p[oi]sson'],['⭐','ét[oi]le'],['👑','r[oi]'],['🍐','p[oi]re'],['🪞','mir[oi]r'],['🚙','v[oi]ture']]},
+ {id:'oi',l:'oi',s:'oua',mn:'comme dans « waouh ! »',c:'#1971c2',det:/oi|oî|oy/,w:[['🐦','[oi]seau'],['🐟','p[oi]sson'],['⭐','ét[oi]le'],['👑','r[oi]'],['🍐','p[oi]re'],['🪞','mir[oi]r'],['🚙','v[oi]ture']]},
  {id:'ou',l:'ou',s:'ou',mn:'comme dans « ouf ! »',c:'#2f9e44',det:/ou/,w:[['🦉','hib[ou]'],['🥬','ch[ou]'],['🐺','l[ou]p'],['🐭','s[ou]ris'],['🐔','p[ou]le'],['🧸','j[ou]et'],['🛞','r[ou]e'],['👄','b[ou]che']]},
  {id:'on',l:'on',s:'on',mn:'comme dans « bonbon »',c:'#c2255c',det:/on|om/,w:[['🏠','mais[on]'],['🎈','ball[on]'],['🍋','citr[on]'],['🚚','cami[on]'],['🐷','coch[on]'],['🍈','mel[on]'],['🍬','b[on]b[on]']]},
  {id:'an',l:'an · en',s:'an',mn:'comme dans « banc »',c:'#f08c00',det:/an|en|am|em/,w:[['🦷','d[en]t'],['🍊','or[an]ge'],['🍌','b[an]ane'],['⛺','t[en]te'],['💨','v[en]t'],['🧒','[en]f[an]t'],['👼','[an]ge']]},
  {id:'in',l:'in · ain · ein',s:'in',mn:'comme dans « vin »',c:'#7048e8',det:/in|ain|ein|im|ym/,w:[['🐰','lap[in]'],['🍞','p[ain]'],['✋','m[ain]'],['🎄','sap[in]'],['🚆','tr[ain]'],['🎨','p[ein]ture']]},
  {id:'ch',l:'ch',s:'ch',mn:'comme dans « chut ! »',c:'#0c8599',det:/ch/,w:[['🐴','[ch]eval'],['🐱','[ch]at'],['🐶','[ch]ien'],['🪑','[ch]aise'],['🎩','[ch]apeau'],['🐮','va[ch]e'],['👟','[ch]aussure']]},
  {id:'eu',l:'eu · œu',s:'eu',mn:'comme dans « peu »',c:'#d6336c',det:/eu|œu/,w:[['🌸','fl[eu]r'],['🔵','bl[eu]'],['🔥','f[eu]'],['2️⃣','d[eu]x'],['🥚','[œu]f'],['❤️','c[œu]r'],['🕐','h[eu]re'],['🎲','j[eu]']]},
- {id:'ai',l:'ai · ei',s:'è',mn:'comme dans « lait »',c:'#5c940d',det:/ai|ei/,w:[['🥛','l[ai]t'],['🧹','bal[ai]'],['❄️','n[ei]ge'],['🍓','fr[ai]se'],['🐋','bal[ei]ne'],['🪑','ch[ai]se']]},
+ {id:'ai',l:'ai · ei',s:'è',mn:'comme dans « lait »',c:'#5c940d',det:/ai|aî|ei/,w:[['🥛','l[ai]t'],['🧹','bal[ai]'],['❄️','n[ei]ge'],['🍓','fr[ai]se'],['🐋','bal[ei]ne'],['🪑','ch[ai]se']]},
  {id:'ph',l:'ph',s:'f',mn:'comme dans « photo »',c:'#e03131',det:/ph/,w:[['📷','[ph]oto'],['🐬','dau[ph]in'],['☎️','télé[ph]one'],['🦭','[ph]oque'],['🔤','al[ph]abet'],['🐘','élé[ph]ant']]},
  {id:'gn',l:'gn',s:'gne',mn:'comme dans « vigne »',c:'#1864ab',det:/gn/,w:[['⛰️','monta[gn]e'],['🍄','champi[gn]on'],['🕷️','arai[gn]ée'],['🍇','vi[gn]e'],['🧅','o[gn]on']]},
  {id:'qu',l:'qu',s:'k',mn:'comme dans « quatre »',c:'#9c36b5',det:/qu/,w:[['4️⃣','[qu]atre'],['🎭','mas[qu]e'],['🎳','[qu]ille'],['🦟','mousti[qu]e'],['🎪','cir[qu]e'],['🦜','perro[qu]et']]},
- {id:'ill',l:'ill',s:'ille',mn:'comme dans « fille »',c:'#087f5b',det:/ill/,w:[['👧','f[ill]e'],['🐝','abe[ill]e'],['🍾','boute[ill]e'],['🐚','coqu[ill]e'],['🐛','chen[ill]e'],['🐸','grenou[ill]e']]},
- {id:'c',l:'ce · ci',s:'s',mn:'comme dans « cerise »',c:'#e67700',det:/c[eiéè]/,w:[['🍒','[c]erise'],['🍋','[c]itron'],['🍦','gla[c]e'],['🌤️','[c]iel'],['5️⃣','[c]inq'],['🎬','[c]inéma']]},
+ {id:'ill',l:'ill',s:'ye',mn:'comme dans « fille »',c:'#087f5b',det:/ill/,w:[['👧','f[ill]e'],['🐝','abe[ill]e'],['🍾','boute[ill]e'],['🐚','coqu[ill]e'],['🐛','chen[ill]e'],['🐸','grenou[ill]e']]},
+ {id:'c',l:'ce · ci',s:'s',mn:'comme dans « cerise »',c:'#e67700',det:/c[eiéèy]|ç/,w:[['🍒','[c]erise'],['🍋','[c]itron'],['🍦','gla[c]e'],['🌤️','[c]iel'],['5️⃣','[c]inq'],['🎬','[c]inéma']]},
  {id:'g',l:'ge · gi',s:'j',mn:'comme dans « girafe »',c:'#3b5bdb',det:/g[eiéè]/,w:[['🦒','[g]irafe'],['🧀','froma[ge]'],['☁️','nua[ge]'],['🕯️','bou[gi]e'],['🦺','[gi]let']]}
 ];
 const MORE={
  au:[['🎁','cad[eau]'],['💧','[eau]'],['🪣','s[eau]'],['🚩','drap[eau]'],['🦕','dinos[au]re'],['🍂','[au]tomne'],['🐫','cham[eau]'],['🛋️','f[au]teuil'],['🧦','ch[au]ssette']],
- oi:[['🥤','b[oi]sson'],['🫛','p[oi]s'],['3️⃣','tr[oi]s'],['📦','b[oi]te'],['⚫','n[oi]r'],['🥜','n[oi]x'],['🌰','n[oi]sette'],['🛁','baign[oi]re'],['☝️','d[oi]gt'],['🐦','m[oi]neau'],['🗓️','m[oi]s'],['🪵','b[oi]s']],
- ou:[['🐻','[ou]rs'],['🎃','c[ou]rge'],['🔴','r[ou]ge'],['🪆','p[ou]pée'],['👍','p[ou]ce'],['🤡','cl[ou]n'],['🌞','j[ou]r'],['🐙','p[ou]lpe'],['🛣️','r[ou]te'],['🗼','t[ou]r'],['🛋️','c[ou]ssin']],
+ oi:[['🥤','b[oi]sson'],['🫛','p[oi]s'],['3️⃣','tr[oi]s'],['📦','b[oi]te'],['⚫','n[oi]r'],['🥜','n[oi]x'],['🌰','n[oi]sette'],['🛁','baign[oi]re'],['☝️','d[oi]gt'],['🐦','m[oi]neau'],['🧳','v[oy]age'],['🗓️','m[oi]s'],['🪵','b[oi]s']],
+ ou:[['🐻','[ou]rs'],['🎃','c[ou]rge'],['🔴','r[ou]ge'],['🪆','p[ou]pée'],['👍','p[ou]ce'],['🌞','j[ou]r'],['🐙','p[ou]lpe'],['🛣️','r[ou]te'],['🗼','t[ou]r'],['🛋️','c[ou]ssin']],
  on:[['🌉','p[on]t'],['⌚','m[on]tre'],['🌍','m[on]de'],['👦','garç[on]'],['🎵','chans[on]'],['🦁','li[on]'],['🧼','sav[on]'],['🖍️','cray[on]'],['⭕','r[on]d'],['🕊️','pige[on]']],
  an:[['📅','[an]'],['👅','l[an]gue'],['🧤','g[an]t'],['🎠','m[an]ège'],['🌿','br[an]che'],['💎','diam[an]t'],['🌪️','t[em]pête'],['⏳','t[em]ps'],['🚧','ch[an]tier'],['🧥','m[an]teau'],['🐍','serp[en]t'],['🎤','ch[an]ter']],
  in:[['🍷','v[in]'],['🐒','s[in]ge'],['🍇','rais[in]'],['🌲','p[in]'],['🏁','f[in]'],['🌅','mat[in]'],['🛁','b[ain]'],['👸','pr[in]cesse'],['🧷','ép[in]gle'],['🧺','l[in]ge'],['🛤️','chem[in]']],
@@ -4941,7 +4941,7 @@ G.forEach(g=>{ const seen=new Set(g.w.map(x=>x[1].replace(/[\[\]]/g,''))); (MORE
 G.forEach(g=>g.w=g.w.map(x=>({e:x[0],m:x[1],p:x[1].replace(/[\[\]]/g,''),g})));
 const ALLW=[].concat(...G.map(g=>g.w)).filter((w,i,a)=>a.findIndex(x=>x.p===w.p)===i);
 const vw=g=>(g.mn.match(/«\s*([^»]*?)\s*»/)||[0,g.s])[1].replace(/\s*!$/,'');
-const vs=g=>({au:'au',oi:'oie',ou:'ou',on:'on',an:'an',in:'vin',ch:'chut',eu:'peu',ai:'lait',ph:'photo',gn:'vigne',qu:'quatre',ill:'fille',c:'cerise',g:'girafe'}[g.id]||vw(g));
+const vs=g=>({au:'au',oi:'oie',ou:'ou',on:'on',an:'an',in:'vin',ch:'chut',eu:'peu',ai:'lait',ph:'photo',gn:'vigne',qu:'quatre',ill:'ye',c:'cerise',g:'girafe'}[g.id]||vw(g));
 const hl=(m,c)=>m.replace(/\[([^\]]+)\]/g,'<span class="sn-m" style="--c:'+(c||'#1971c2')+'">$1</span>');
 const clean=w=>w.p;
 const others=(g)=>G.filter(x=>x!==g);
