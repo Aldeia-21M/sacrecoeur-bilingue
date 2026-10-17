@@ -671,6 +671,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 .gn-acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.gn-acc button{min-width:42px;min-height:42px;border-radius:10px;border:2px solid #adb5bd;background:#fff;font:700 18px inherit;font-family:inherit;cursor:pointer}
 .gn-rule{background:#fff;border:3px solid var(--c);border-radius:20px;padding:12px;margin:10px 0;cursor:pointer}.gn-rule h4{margin:0 0 4px;color:var(--c)}.gn-rule p{margin:2px 0;color:#1d2433}.gn-rule .ex{font-weight:800;font-size:1.1rem}
 .sn-var{margin-bottom:14px}.sn-sum{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:4px 0 14px}.sn-sum button{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:104px;flex:1 1 104px;max-width:200px;padding:8px 10px;border-radius:16px;border:3px solid var(--c);background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c);font-family:inherit;cursor:pointer}.sn-sum b{font-weight:900;font-size:clamp(20px,5.6vw,26px)}.sn-sum i{font-style:normal;font-size:1.6rem}.sn-sum .sn-w{font-weight:800;font-size:clamp(16px,4.4vw,20px)}.sn-sum small{font-weight:700;font-size:.74rem;color:#4a5164;text-align:center}.sn-var .sn-words button{min-width:0}.sn-var .sn-w{font-size:clamp(15px,4.2vw,20px);overflow-wrap:anywhere;min-width:0}.sn-sub{text-align:center;font-weight:700;color:#4a5164;margin:4px 0}.sn-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin-top:12px}.sn-cols button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;padding:8px;border-radius:18px;border:3px solid var(--c);background:#fff;cursor:pointer;font-family:inherit}.sn-cols b{font-size:1.15rem;color:var(--c)}.sn-cols span{font-size:.78rem;color:#4a5164;word-break:break-word}.sn-cols button.ok{background:color-mix(in srgb,var(--c) 18%,#fff)}.sn-cols button.ko{background:#ffe3e3;opacity:.5}
+.lp-tile{background:#e7f5ff!important}.lp-h{font-weight:900;margin:16px 0 4px;font-size:1.15rem}.lp-line{background:#fff;border:3px solid rgba(29,36,51,.12);border-radius:20px;padding:12px;margin:10px 0}.lp-text{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}.lp-w{display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:3px;border-radius:12px;max-width:100%}.lp-w.cur{background:#fff3bf}.lp-sy{display:flex;gap:3px;justify-content:center}.lp-s{border:0;border-bottom:4px solid var(--c);border-radius:10px;padding:2px 6px;font-family:inherit;font-weight:800;font-size:clamp(22px,6.4vw,32px);line-height:1.25;cursor:pointer;color:var(--c);background:color-mix(in srgb,var(--c) 15%,#fff);transition:transform .15s}.lp-w.sm .lp-s{font-size:clamp(17px,5vw,25px);padding:2px 4px}.lp-w.xs .lp-s{font-size:clamp(14px,4.2vw,20px);padding:2px 3px}.lp-s mark{background:#ffe066;color:#1d2433;border-radius:4px;padding:0 1px}.lp-s.big{transform:scale(1.45);position:relative;z-index:2;box-shadow:0 4px 12px rgba(0,0,0,.3)}.lp-ear{height:24px;border:0;border-radius:8px;background:#eef1f6;font-size:13px;cursor:pointer}.lp-pu{align-self:flex-end;font-weight:900;font-size:1.6rem;line-height:1.1}.lp-ctl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.lp-ctl button,.lp-top button{min-height:46px;padding:6px 14px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff0b8;font-weight:800;font-family:inherit;font-size:16px;cursor:pointer}.lp-top{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}.lp-top button.on{background:#b2f2bb;border-color:#2f9e44}.lp-stop{background:#ffc9c9!important}
 .sn-menu button.sn-ex{background:#ffe3e3;min-height:120px}.sn-menu button.wide{grid-column:1/-1;min-height:110px;background:#dff4dc}.sn-txt p{font-size:clamp(24px,6.6vw,34px);line-height:1.6;margin:8px 0;font-weight:700;color:#1d2433;cursor:pointer}.sn-leg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px}.sn-leg span{background:color-mix(in srgb,var(--c) 16%,#fff);color:var(--c);font-weight:900;border-radius:10px;padding:2px 10px}
 .sn-oth{margin:18px 2px 8px;font-size:18px}.sn-chips{display:flex;flex-wrap:wrap;gap:8px}.sn-chips button{min-width:58px;min-height:48px;padding:4px 14px;border-radius:14px;border:3px solid var(--c);background:#fff;color:var(--c);font-weight:900;font-size:18px;cursor:pointer}
 </style>
@@ -767,6 +768,7 @@ body.has-who,body.has-on{padding-bottom:calc(100px + env(safe-area-inset-bottom,
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "5.4", desc: "Lecture : Lis pas à pas (syllabes, lettre X)" },
     { v: "5.3", desc: "Poutchou plus bas ; en ligne compte tout le monde" },
     { v: "5.2", desc: "Poutchou remonté ; compteur en ligne fiable" },
     { v: "5.1", desc: "Sons on/om, an/am/em, in/im complets" },
@@ -857,13 +859,13 @@ let seqTok=0;
 function spoken(t,lang){ t=String(t==null?'':t);
   const W=lang==='de'?{'×':' mal ','÷':' geteilt durch ','−':' minus ','=':' gleich ','+':' plus '}:{'×':' fois ','÷':' divisé par ','−':' moins ','=':' égale ','+':' plus '};
   if(lang!=='de') t=t.replace(/\b(COD|COI|CP|GN|GV)\b/g,m=>m.split('').join(' ')); return t.replace(/[×÷−=+]/g,c=>W[c]).replace(/\s+/g,' ').trim(); }
-function mkUtt(text,lang){
+function mkUtt(text,lang,rate){
   const u = new SpeechSynthesisUtterance(spoken(text,lang));
   u.lang = lang==='de' ? 'de-DE' : 'fr-FR';
   const v = pickVoice(lang);
   if(v){ u.voice=v; u.lang=v.lang; }
   else if(voices.length){ toast(lang==='de' ? "Aucune voix allemande installée : ajoute-la dans les réglages de l’appareil (bouton 🎙️ Voix)." : "Aucune voix française installée."); }
-  u.rate = slow ? 0.55 : 0.85;
+  u.rate = rate || (slow ? 0.55 : 0.85);
   return u;
 }
 function speak(text, lang, el){
@@ -884,7 +886,7 @@ function speakSeq(items){
   let i=0;
   const next=()=>{ if(tok!==seqTok||i>=items.length) return; const it=items[i++];
     if(!it||!it.t){ setTimeout(next,(it&&it.pause)||400); return; }
-    const u=mkUtt(it.t,it.l||'fr'); let fired=false;
+    const u=mkUtt(it.t,it.l||'fr',it.r); let fired=false;
     const go=()=>{ if(fired||tok!==seqTok) return; fired=true; setTimeout(next,it.pause===undefined?500:it.pause); };
     u.onend=go; u.onerror=go; setTimeout(go,Math.max(2500,String(it.t).length*180)); try{ synth.speak(u); }catch(e){} };
   setTimeout(next,60);
@@ -5077,8 +5079,8 @@ const addStars=n=>{ try{ localStorage.setItem('dl-pt-stars',String((+localStorag
 function menu(){
   try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null;
   root.innerHTML=`<div class="mx-head"><h2>📖 Lecture</h2><p>Les sons : chaque groupe de lettres fait un son. <b>4H</b></p></div>
-  <div class="sn-menu"><button data-a="learn"><i>🔊</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="exl" class="sn-ex"><i>⚠️</i><span>Lettres pièges</span></button><button data-a="exq" class="sn-ex"><i>🎯</i><span>Entraîne-toi aux pièges</span></button><button data-a="read" class="wide"><i>📚</i><span>Lis un texte</span></button></div>`;
-  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ({learn:()=>{EX=false;learn();},quiz:()=>{EX=false;quiz();},exl:()=>{EX=true;learn();},exq:()=>{EX=true;quiz();},read})[b.dataset.a](); };
+  <div class="sn-menu"><button data-a="learn"><i>🔊</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="exl" class="sn-ex"><i>⚠️</i><span>Lettres pièges</span></button><button data-a="exq" class="sn-ex"><i>🎯</i><span>Entraîne-toi aux pièges</span></button><button data-a="lp" class="wide lp-tile"><i>🐢</i><span>Lis pas à pas</span></button><button data-a="read" class="wide"><i>📚</i><span>Lis un texte</span></button></div>`;
+  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ({learn:()=>{EX=false;learn();},quiz:()=>{EX=false;quiz();},exl:()=>{EX=true;learn();},exq:()=>{EX=true;quiz();},read,lp:guide})[b.dataset.a](); };
 }
 function back(f,txt){ return `<button class="g-ghost sn-back" id="snB">${txt||'← Menu'}</button>`; }
 const FL=f=>f==='en'?'um · en':f;
@@ -5140,6 +5142,43 @@ function detail(g){
 const MK={}; G.filter(g=>!g.ex).forEach(g=>g.w.forEach(w=>{ (w.m.match(/\[([^\]]+)\]/g)||[]).forEach(x=>{ MK[x.slice(1,-1)]=g; }); })); [['c','c'],['g','g'],['ge','g'],['gi','g'],['ain','in'],['ai','ai'],['eau','au'],['au','au'],['ill','ill'],['œu','eu'],['ou','ou']].forEach(([k,id])=>{ MK[k]=G.find(x=>x.id===id); });
 
 const TX=['Le p[oi]sson nage dans l’[eau].','Mon lap[in] mange une [c]erise.','Le [ch]at dort sur la [ch]aise.','L’[oi]seau vole vers la mont[agn]e.','Papa m[on]te dans le cami[on] r[ou]ge.','La [g]irafe man[ge] de la salade.','Le [ph]oque joue avec un ball[on].','La gren[ou][ill]e saute dans l’[eau].','L’élé[ph][an]t a un gr[an]d nez.','Tu veux du p[ain] avec du froma[ge] ?','Il f[ai]t b[eau] aujourd’hui.','J’ai d[eu]x [œu]fs dans mon sac.','La f[ill]e m[an]ge un champi[gn]on.','Le [ch]ien ab[oi]e dev[an]t la m[ai]son.','Un [qu]atre-[qu]arts au [c]itron !','La b[eau]té du f[eu] me pl[ai]t.'];
+
+/* ===== Lecture pas à pas : syllabes en couleur, son de la syllabe, du mot, lecture guidée ===== */
+const LP=[{t:'La lettre X',b:[
+ {h:'Lis les mots.',l:['le sa·xo=kso·phone=fone de Ma·xi=ksi·me','les=lè fa·meux=meu che·vaux=vo','des=dè a·ni·maux=mo ex=èks·tra·or·di·nai=nè·res=rè','les=lè ex=èks·ploits=ploi d\'A=da·le·xi=ksi·a']},
+ {h:'Lis les phrases.',l:['Hier=yère, Ro·xa=ksa·ne a fê·té ses=sè six=siss ans=an.','Les=lè e=é·xer=gzèr·ci·ces=ce de sa·xo=kso·phone=fone sont=son dif·fi·ci·les=lè.','Le bo·xeur=kseur doit=doi frap·per=pè dix=diss fois=foi sur le sac=sak.','Xa=gza·vier=vié a ter·mi·né ces=cè deux=deu e=é·xer=gzèr·ci·ces=ce de ma·thé·ma·ti·ques=tik.']}]}];
+const LPC=['#1971c2','#e8590c','#2f9e44'];
+const PW=t=>{ const m=t.match(/^(.*?)([.,!?;:]*)$/), sy=m[1].split('·').map(x=>{ const [a,b]=x.split('='); return {s:a,say:(b||a).toLowerCase()}; }); return {sy,p:m[2],word:sy.map(x=>x.s).join('')}; };
+const LPH=t=>t.replace(/x/gi,m=>'<mark>'+m+'</mark>');
+const LPL=l=>l.split(' ').map(PW);
+let lpTok=0, lpSpd=1;
+const LPS=[{n:'🐌 Très lent',step:720,r:0.45},{n:'🐢 Lent',step:500,r:0.6},{n:'🐇 Normal',step:340,r:0.8}];
+function lineH(l){ return `<div class="lp-line"><div class="lp-text">${LPL(l).map((w,wi)=>{ const n=w.word.length, c=n>11?'xs':n>8?'sm':''; return `<div class="lp-w ${c}" data-w="${wi}"><div class="lp-sy">${w.sy.map((x,i)=>`<button class="lp-s" data-s="${i}" style="--c:${LPC[i%3]}">${LPH(x.s)}</button>`).join('')}${w.p?`<span class="lp-pu">${w.p}</span>`:''}</div><button class="lp-ear" data-e="1" aria-label="Écouter le mot">🔊</button></div>`; }).join('')}</div>
+  <div class="lp-ctl"><button data-a="say">🔊 La ligne</button><button data-a="gd">${LPS[lpSpd].n.split(' ')[0]} Pas à pas</button></div></div>`; }
+function guide(){
+  lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null; const T=LP[0], all=[].concat(...T.b.map(b=>b.l));
+  root.innerHTML=back()+`<div class="mx-head"><h2>🐢 Lis pas à pas</h2><p>${T.t} · touche une syllabe, 🔊 pour le mot, « Pas à pas » pour lire avec moi.</p></div>
+  <div class="lp-top" id="lpSp">${LPS.map((x,i)=>`<button data-v="${i}" class="${i===lpSpd?'on':''}">${x.n}</button>`).join('')}</div><div class="lp-top"><button id="lpAll">▶️ Tout le texte, pas à pas</button><button id="lpStop" class="lp-stop">⏹️ Stop</button></div>`
+   +T.b.map(b=>`<h3 class="lp-h">${b.h}</h3>`+b.l.map(lineH).join('')).join('');
+  root.querySelector('#snB').onclick=()=>{ lpTok++; menu(); }; window.scrollTo(0,0);
+  const lines=[...root.querySelectorAll('.lp-line')];
+  const clear=()=>root.querySelectorAll('.lp-s.big,.lp-w.cur').forEach(e=>e.classList.remove('big','cur'));
+  async function playLine(i,my){ const el=lines[i], ws=LPL(all[i]), st=LPS[lpSpd];
+    for(let k=0;k<ws.length;k++){ if(my!==lpTok) return false; const wEl=el.querySelectorAll('.lp-w')[k], sy=[...wEl.querySelectorAll('.lp-s')];
+      wEl.classList.add('cur'); seq([{t:ws[k].word,l:'fr',r:st.r,pause:0}]);
+      for(const b of sy){ if(my!==lpTok) return false; b.classList.add('big'); await sleep(FAST?15:st.step); b.classList.remove('big'); }
+      await sleep(FAST?10:(ws[k].p?st.step:st.step*0.4)); wEl.classList.remove('cur'); }
+    return true; }
+  const run=async(from,to)=>{ const my=++lpTok; clear(); for(let i=from;i<to;i++){ lines[i].scrollIntoView({block:'center',behavior:FAST?'auto':'smooth'}); if(!await playLine(i,my)) return; await sleep(FAST?10:700); } clear(); };
+  root.onclick=e=>{ const sp=e.target.closest('#lpSp button'); if(sp){ lpSpd=+sp.dataset.v; lpTok++; clear(); root.querySelectorAll('#lpSp button').forEach(b=>b.classList.toggle('on',+b.dataset.v===lpSpd)); root.querySelectorAll('[data-a=gd]').forEach(b=>b.textContent=LPS[lpSpd].n.split(' ')[0]+' Pas à pas'); return; }
+    if(e.target.closest('#lpStop')){ lpTok++; clear(); try{ speechSynthesis.cancel(); }catch(x){} return; }
+    if(e.target.closest('#lpAll')) return run(0,lines.length);
+    const ln=e.target.closest('.lp-line'); if(!ln) return; const i=lines.indexOf(ln);
+    const a=e.target.closest('[data-a]'); if(a){ if(a.dataset.a==='gd') return run(i,i+1); lpTok++; clear(); return seq([{t:all[i].replace(/[=][^ ·.,!?]*/g,'').replace(/·/g,''),l:'fr',r:0.8,pause:0}]); }
+    const w=e.target.closest('.lp-w'); if(!w) return; lpTok++; clear(); const ws=LPL(all[i])[+w.dataset.w];
+    const sy=e.target.closest('.lp-s'); if(sy){ sy.classList.add('big'); setTimeout(()=>sy.classList.remove('big'),600); return seq([{t:ws.sy[+sy.dataset.s].say,l:'fr',r:0.7,pause:0}]); }
+    if(e.target.closest('.lp-ear')){ w.classList.add('cur'); setTimeout(()=>w.classList.remove('cur'),900); seq([{t:ws.word,l:'fr',r:0.7,pause:0}]); } };
+}
 function read(){
   const pool=shuf(TX).slice(0,3); const used=new Set();
   const html=pool.map(t=>t.replace(/\[([^\]]+)\]/g,(m,k)=>{ const g=MK[k]; if(g) used.add(g); return g?`<span class="sn-m" style="--c:${g.c}">${k}</span>`:k; })).map(x=>`<p>${x}</p>`).join('');
