@@ -4949,6 +4949,10 @@ G.forEach(g=>g.w=g.w.map(x=>({e:x[0],m:x[1],p:x[1].replace(/[\[\]]/g,''),g})));
 const ALLW=[].concat(...G.map(g=>g.w)).filter((w,i,a)=>a.findIndex(x=>x.p===w.p)===i);
 const vw=g=>(g.mn.match(/«\s*([^»]*?)\s*»/)||[0,g.s])[1].replace(/\s*!$/,'');
 const vs=g=>({c:'se',g:'je',eu:'eu',in:'ain',ch:'che',ph:'fe',gn:'gne',qu:'que',ai:'ai',u:'u',ui:'ui',ee:'é',tion:'sion',gu:'gue'}[g.id]||({au:'au',oi:'oie',ou:'ou',on:'on',an:'an',in:'vin',ch:'chut',eu:'peu',ai:'lait',ph:'photo',gn:'vigne',qu:'quatre',ill:'ye',c:'cerise',g:'girafe'}[g.id]||vw(g)));
+const sk=w=>((w.m.match(/\[([^\]]+)\]/)||[0,''])[1]).toLowerCase();
+const byS=a=>{ const m={}; a.forEach(w=>{ (m[sk(w)]=m[sk(w)]||[]).push(w); }); return Object.values(m); };
+const pickW=a=>pick(pick(byS(a)));
+const mixW=a=>{ const L=byS(a).map(shuf), out=[]; let more=true; while(more){ more=false; shuf(L).forEach(l=>{ if(l.length){ out.push(l.shift()); more=true; } }); } return out; };
 const hl=(m,c)=>m.replace(/\[([^\]]+)\]/g,'<span class="sn-m" style="--c:'+(c||'#1971c2')+'">$1</span>');
 const clean=w=>w.p;
 const others=(g)=>G.filter(x=>x!==g);
@@ -4971,7 +4975,7 @@ function learn(){
 function detail(g){
   root.innerHTML=back(0,'← Tous les sons')+`<div class="sn-card" style="--c:${g.c}"><div class="sn-big">${g.l.split(' · ').map(x=>`<span>${x}</span>`).join('')}</div>
    <button class="sn-hint" id="snH"><span>🔊 ça fait « <b>${g.s}</b> »</span> <small>${g.mn}</small></button>
-   <div class="sn-words">${g.w.map((w,i)=>`<button data-i="${i}"><i>${w.e}</i><span class="sn-w">${hl(w.m,g.c)}</span></button>`).join('')}</div></div>
+   <div class="sn-words">${(g.mx=mixW(g.w)).map((w,i)=>`<button data-i="${i}"><i>${w.e}</i><span class="sn-w">${hl(w.m,g.c)}</span></button>`).join('')}</div></div>
    <h3 class="sn-oth">Travaille un autre son</h3><div class="sn-chips" id="snC">${G.map((x,i)=>x===g?'':`<button data-i="${i}" style="--c:${x.c}">${x.l.split(' · ')[0]}</button>`).join('')}</div>
    <button class="mx-go" id="snQ2">🎯 M’entraîner</button><button class="g-ghost sn-back" id="snB2" style="margin-top:10px">← Tous les sons</button>`;
   root.querySelector('#snC').onclick=e=>{ const b=e.target.closest('button'); if(b) detail(G[+b.dataset.i]); };
@@ -4979,7 +4983,7 @@ function detail(g){
   root.querySelector('#snB').onclick=learn; window.scrollTo(0,0);
   const hs=()=>seq([{t:vs(g),l:'fr',pause:350},{t:'comme dans',l:'fr',pause:250},{t:vw(g),l:'fr'}]);
   root.querySelector('#snH').onclick=hs;
-  root.querySelector('.sn-words').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const w=g.w[+b.dataset.i]; seq([{t:vs(g),l:'fr',pause:450},{t:w.p,l:'fr'}]); b.classList.add('on'); setTimeout(()=>b.classList.remove('on'),1200); };
+  root.querySelector('.sn-words').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const w=g.mx[+b.dataset.i]; seq([{t:vs(g),l:'fr',pause:450},{t:w.p,l:'fr'}]); b.classList.add('on'); setTimeout(()=>b.classList.remove('on'),1200); };
   if(!FAST) setTimeout(hs,250);
 }
 const MK={}; G.forEach(g=>g.w.forEach(w=>{ (w.m.match(/\[([^\]]+)\]/g)||[]).forEach(x=>{ MK[x.slice(1,-1)]=g; }); })); [['c','c'],['g','g'],['ge','g'],['gi','g'],['ain','in'],['ai','ai'],['eau','au'],['au','au'],['ill','ill'],['œu','eu'],['ou','ou']].forEach(([k,id])=>{ MK[k]=G.find(x=>x.id===id); });
@@ -4999,11 +5003,11 @@ function read(){
 /* ---- entraînement ---- */
 function mkQ(){
   const t=pick(['hear','hear','has','read']);
-  if(t==='hear'){ const g=pick(G), w=pick(g.w.filter(x=>!clash(x).length).length>=3?g.w.filter(x=>!clash(x).length):g.w); const free=others(g).filter(x=>!x.det.test(w.p)); const o=shuf([g].concat(shuf(free).slice(0,2)));
+  if(t==='hear'){ const g=pick(G), w=pickW(g.w.filter(x=>!clash(x).length).length>=3?g.w.filter(x=>!clash(x).length):g.w); const free=others(g).filter(x=>!x.det.test(w.p)); const o=shuf([g].concat(shuf(free).slice(0,2)));
     return {t,vis:`<div class="sn-pic">${w.e}</div><div class="sn-wd">${hl(w.m,g.c).replace(/<span class="sn-m"[^>]*>/g,'<span class="sn-m0">')}</div>`,q:'Quel son entends-tu dans ce mot ?',say:w.p,opts:o.map(x=>({h:`<span class="sn-og" style="--c:${x.c}">${x.l.replace(/ · /g,'<br>')}</span>`,ok:x===g,r:x.s})),rev:[{t:w.p}]}; }
-  if(t==='has'){ const g=pick(G); const ok=pick(g.w); const bad=shuf(ALLW.filter(x=>x.g!==g&&!g.det.test(x.p)&&x.e!==ok.e)); const o=shuf([ok].concat(bad.slice(0,2)));
+  if(t==='has'){ const g=pick(G); const ok=pickW(g.w); const bad=shuf(ALLW.filter(x=>x.g!==g&&!g.det.test(x.p)&&x.e!==ok.e)); const o=shuf([ok].concat(bad.slice(0,2)));
     return {t,vis:`<div class="sn-big sm" style="--c:${g.c}">${g.l.split(' · ').map(x=>`<span>${x}</span>`).join('')}</div><div class="sn-snd">ça fait « ${g.s} »</div>`,q:'Quel mot contient ce son ?',say:vs(g),opts:o.map(x=>({h:`<span class="sn-oe">${x.e}</span><span class="sn-ow">${x.p}</span>`,ok:x===ok,r:x.p})),rev:[{t:ok.p}],mw:vw(g)}; }
-  const g=pick(G), w=pick(g.w); const bad=shuf(ALLW.filter(x=>x!==w&&x.p!==w.p&&x.e!==w.e)).filter((x,i,a)=>a.findIndex(y=>y.e===x.e)===i).slice(0,2); const o=shuf([w].concat(bad));
+  const g=pick(G), w=pickW(g.w); const bad=shuf(ALLW.filter(x=>x!==w&&x.p!==w.p&&x.e!==w.e)).filter((x,i,a)=>a.findIndex(y=>y.e===x.e)===i).slice(0,2); const o=shuf([w].concat(bad));
   return {t,vis:`<div class="sn-wd big">${hl(w.m,g.c)}</div>`,q:'Lis le mot : quelle image ?',say:w.p,opts:o.map(x=>({h:`<span class="sn-oe big">${x.e}</span>`,ok:x===w,r:x.p})),rev:[{t:w.p}],cls:'n3'};
 }
 function quiz(){
