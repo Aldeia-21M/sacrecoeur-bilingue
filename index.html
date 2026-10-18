@@ -757,12 +757,15 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 .bt-leg{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;font-size:.85rem;margin:6px 0}.bt-lg{padding:2px 8px;border-radius:999px;box-shadow:inset 0 0 0 3px var(--sc)}
 
 /* v10.3 fiches imprimables */
-.prt-b{display:block;margin:6px auto 10px;padding:8px 16px;border:2px solid #cbd5e1;border-radius:99px;background:#fff;font:700 .9rem inherit;cursor:pointer}
+.prt-b{padding:8px 14px;border:2px solid #cbd5e1;border-radius:99px;background:#fff;font:700 .9rem system-ui,sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.prt-in{display:block;margin:8px auto}
+.sheet+.prt-in{margin:-4px 0 10px auto}
+.prt-fl{position:absolute;right:2%;bottom:2%;z-index:5;opacity:.95}
 @media print{
  @page{size:A4;margin:10mm}
  html,body{background:#fff!important}
  header,#dock,#onbar,#whoPill,#whoModal,#salonBan,#pcFab,#pcNudge,#pcP,#pcG,.toast,.u-toast,.vox,#setbk,.prt-b,.cl-pop,.g-ov,#tabs,
- .gk-nav,.sn-menu,.cj-train,.cj-toggle,.cj-tools,.tr-h,.tr-p,.tr-ctl,.mx-go,.lvl,.cj-groups,.sn-back,.g-ghost,.page>.train,.page>.mn-box,.page>.mx-box.tr{display:none!important}
+ .gk-nav,.sn-menu,.cj-train,.cj-toggle,.cj-tools,.cj-head,.cj-vrow,.cj-gi,.cj-note,.tr-h,.tr-p,.tr-ctl,.mx-go,.lvl,.cj-groups,.sn-back,.g-ghost,.page>.train,.page>.mn-box,.page>.mx-box.tr{display:none!important}
  main{padding:0!important;margin:0!important}
  .page.on{display:block!important}
  .sheet{max-height:270mm;width:auto!important;margin:0 auto;page-break-inside:avoid}
@@ -865,6 +868,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.4", desc: "Bouton imprimer près de la fiche" },
     { v: "10.3", desc: "Fiches à imprimer, coop, seconde chance" },
     { v: "10.2", desc: "Navale : duel de flottes, tu joues aussi" },
     { v: "10.1", desc: "Poutchou auto ; questions et réponses visibles partout" },
@@ -6897,18 +6901,20 @@ menu();
 </script>
 
 <script>
-/* v10.3 — boutons « Imprimer » sur les pages fiches */
+/* v10.3 — boutons « Imprimer » placés à côté de ce qu’on imprime */
 (function(){
- const IDS=['p-zahlen','p-math','p-school','p-cal','p-wort','p-conj','p-genre','p-gram'];
- const ok={ 'p-genre':e=>e.querySelector('.gn-rule,.gn-chips'), 'p-gram':e=>{const g=e.querySelector('#p-gramS');return g&&!g.hidden&&g.children.length} };
- function sync(id){ const e=document.getElementById(id); if(!e) return;
-  const want=!ok[id]||ok[id](e), cur=e.querySelector(':scope>.prt-b');
-  if(want&&!cur){ const b=document.createElement('button'); b.type='button'; b.className='prt-b'; b.textContent='🖨️ Imprimer cette fiche (A4)'; b.onclick=()=>{ try{window.print()}catch(_){} }; e.insertBefore(b,e.firstChild); }
-  else if(!want&&cur) cur.remove(); }
- function all(){ IDS.forEach(sync); }
- let t=0; const mo=new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(all,120); });
- IDS.forEach(id=>{ const e=document.getElementById(id); if(e) mo.observe(e,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']}); });
- all();
+ const mk=(cls)=>{ const b=document.createElement('button'); b.type='button'; b.className='prt-b '+cls; b.textContent='🖨️ Imprimer'; b.title='Imprimer cette fiche (A4)'; b.onclick=e=>{ e.stopPropagation(); try{ window.print(); }catch(_){ alert('Ouvre le site dans Safari ou Chrome pour imprimer.'); } }; return b; };
+ const SHEETS=['p-zahlen','p-math','p-school','p-cal'];
+ function put(host,ref,cls,where){ if(!host||host.querySelector(':scope>.prt-b, .prt-b')&&host.querySelector('.prt-b')) return; const b=mk(cls); if(where==='in') host.appendChild(b); else ref.parentNode.insertBefore(b,ref); }
+ function sync(){
+  SHEETS.forEach(id=>{ const sh=document.querySelector('#'+id+' .sheet'); if(sh&&!(sh.nextElementSibling&&sh.nextElementSibling.classList.contains('prt-b'))) sh.after(mk('prt-in')); });
+  const g=document.getElementById('cjG'); if(g&&!document.querySelector('#p-conj .prt-b')) g.parentNode.insertBefore(mk('prt-in'),g);
+  const gn=document.getElementById('p-genre'); if(gn){ const has=gn.querySelector('.gn-rule,.gn-chips'), cur=gn.querySelector('.prt-b'); if(has&&!cur){ const h=gn.querySelector('.mx-head'); if(h) h.parentNode.insertBefore(mk('prt-in'),h.nextSibling); } else if(!has&&cur) cur.remove(); }
+  const gs=document.getElementById('p-gramS'); if(gs){ const has=!gs.hidden&&gs.children.length, cur=gs.querySelector('.prt-b'); if(has&&!cur) gs.insertBefore(mk('prt-in'),gs.firstChild); else if(!has&&cur) cur.remove(); }
+ }
+ let t=0; const mo=new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(sync,120); });
+ mo.observe(document.getElementById('main'),{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
+ sync();
 })();
 </script>
 </body>
