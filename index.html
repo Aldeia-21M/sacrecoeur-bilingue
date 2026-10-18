@@ -792,35 +792,36 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* v10.11 fiche Zahlen refaite pour l’impression */
 .pr-sheet{display:none}
 @media print{
+ #p-zahlen{container-type:inline-size}
  #p-zahlen .sheet,#p-zahlen .prt-b{display:none!important}
- #p-zahlen .pr-sheet{display:grid!important;grid-template-rows:auto 1.2fr 1fr;gap:3.5mm;height:272mm;font-family:"Comic Sans MS","Chalkboard SE","Segoe Print","Marker Felt",system-ui,sans-serif;color:#1d2433}
- .pr-sheet .ph{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto auto;gap:2mm;align-items:center}
- .pr-sheet .fl{font-size:30pt}.pr-sheet .tt{text-align:center;background:linear-gradient(#cfe6fb,#cfe6fb) center/100% 70% no-repeat;padding:1mm 4mm;border-radius:3mm}
- .pr-sheet .tt b{display:block;white-space:nowrap;font-size:22pt;line-height:1}.pr-sheet .tt span{display:inline-block;font-size:18pt;font-weight:800;background:#f9d3e8;border-radius:3mm;padding:0 4mm;margin-top:1mm}
- .pr-sheet .bb{font-size:8pt;font-weight:700;border:.4mm solid #444;border-radius:5mm;padding:1.5mm 3mm;text-align:center}.pr-sheet .bb.sq{border:0;background:#f9d3e8;border-radius:3mm}
- .pr-sheet .top{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.2fr) minmax(0,.78fr);gap:3mm;min-height:0}
-.pr-sheet .ye .r{font-size:10pt;gap:1.2mm}.pr-sheet .ye .r i{min-width:7mm}
- .pr-sheet .top .r{font-size:9.5pt;gap:1mm}.pr-sheet .top .r i{min-width:6mm}.pr-sheet .top .co{padding:1mm}.pr-sheet .top .cc{gap:1mm}.pr-sheet .top .bx{padding:2mm}.pr-sheet .top h3{font-size:11.5pt}
- .pr-sheet .bot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3mm;min-height:0}
- .pr-sheet .bx{border-radius:5mm;padding:2.5mm 3mm;display:flex;flex-direction:column;min-height:0;border:.5mm solid rgba(0,0,0,.08)}
+ #p-zahlen .pr-sheet{display:grid!important;grid-template-rows:auto 1.2fr 1fr;gap:1.842cqw;aspect-ratio:190/256;width:100%;font-family:"Comic Sans MS","Chalkboard SE","Segoe Print","Marker Felt",system-ui,sans-serif;color:#1d2433}
+ .pr-sheet .ph{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto auto;gap:1.053cqw;align-items:center}
+ .pr-sheet .fl{font-size:5.574cqw}.pr-sheet .tt{text-align:center;background:linear-gradient(#cfe6fb,#cfe6fb) center/100% 70% no-repeat;padding:0.526cqw 2.105cqw;border-radius:1.579cqw}
+ .pr-sheet .tt b{display:block;white-space:nowrap;font-size:4.088cqw;line-height:1}.pr-sheet .tt span{display:inline-block;font-size:3.344cqw;font-weight:800;background:#f9d3e8;border-radius:1.579cqw;padding:0 2.105cqw;margin-top:0.526cqw}
+ .pr-sheet .bb{font-size:1.486cqw;font-weight:700;border:0.211cqw solid #444;border-radius:2.631cqw;padding:0.789cqw 1.579cqw;text-align:center}.pr-sheet .bb.sq{border:0;background:#f9d3e8;border-radius:1.579cqw}
+ .pr-sheet .top{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.2fr) minmax(0,.78fr);gap:1.579cqw;min-height:0}
+.pr-sheet .ye .r{font-size:1.858cqw;gap:0.632cqw}.pr-sheet .ye .r i{min-width:3.684cqw}
+ .pr-sheet .top .r{font-size:1.765cqw;gap:0.526cqw}.pr-sheet .top .r i{min-width:3.158cqw}.pr-sheet .top .co{padding:0.526cqw}.pr-sheet .top .cc{gap:0.526cqw}.pr-sheet .top .bx{padding:1.053cqw}.pr-sheet .top h3{font-size:2.137cqw}
+ .pr-sheet .bot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.579cqw;min-height:0}
+ .pr-sheet .bx{border-radius:2.631cqw;padding:1.316cqw 1.579cqw;display:flex;flex-direction:column;min-height:0;border:0.263cqw solid rgba(0,0,0,.08)}
  .pr-sheet .bl{background:#dbeefd}.pr-sheet .gr{background:#e3f6e1}.pr-sheet .lv{background:#efe9fb}.pr-sheet .ye{background:#fdf1c4}.pr-sheet .pk{background:#fde3f0}
- .pr-sheet h3{margin:0 0 2mm;text-align:center;font-size:12pt;font-weight:800}
- .pr-sheet .cc{display:grid;grid-template-columns:1fr 1fr;gap:2mm;flex:1;min-height:0}
- .pr-sheet .co{background:rgba(255,255,255,.75);border-radius:3mm;padding:1.5mm 2mm;display:flex;flex-direction:column;justify-content:space-around}
- .pr-sheet .r{display:flex;gap:2mm;align-items:center;font-size:11.5pt;line-height:1.25;white-space:nowrap}
- .pr-sheet .r i{font-style:normal;font-weight:800;min-width:9mm;text-align:right}
+ .pr-sheet h3{margin:0 0 1.053cqw;text-align:center;font-size:2.230cqw;font-weight:800}
+ .pr-sheet .cc{display:grid;grid-template-columns:1fr 1fr;gap:1.053cqw;flex:1;min-height:0}
+ .pr-sheet .co{background:rgba(255,255,255,.75);border-radius:1.579cqw;padding:0.789cqw 1.053cqw;display:flex;flex-direction:column;justify-content:space-around}
+ .pr-sheet .r{display:flex;gap:1.053cqw;align-items:center;font-size:2.137cqw;line-height:1.25;white-space:nowrap}
+ .pr-sheet .r i{font-style:normal;font-weight:800;min-width:4.737cqw;text-align:right}
  .pr-sheet .k i{color:#1d4ed8}
  .pr-sheet .u{color:#1d4ed8}.pr-sheet .rd{color:#d11a2a}
- .pr-sheet .zn{background:#ffb26b;border-radius:1.5mm;padding:0 1mm}.pr-sheet .un{background:#a8e6a1;border-radius:1.5mm;padding:0 1mm}.pr-sheet .zw{background:#ffe08a;border-radius:1.5mm;padding:0 1mm}
- .pr-sheet .zg{background:#f9c0dd;border-radius:1.5mm;padding:0 1mm}.pr-sheet .hu{background:#a9d6fa;border-radius:1.5mm;padding:0 1mm}.pr-sheet .ta{background:#d3b8f5;border-radius:1.5mm;padding:0 1mm}
+ .pr-sheet .zn{background:#ffb26b;border-radius:0.789cqw;padding:0 0.526cqw}.pr-sheet .un{background:#a8e6a1;border-radius:0.789cqw;padding:0 0.526cqw}.pr-sheet .zw{background:#ffe08a;border-radius:0.789cqw;padding:0 0.526cqw}
+ .pr-sheet .zg{background:#f9c0dd;border-radius:0.789cqw;padding:0 0.526cqw}.pr-sheet .hu{background:#a9d6fa;border-radius:0.789cqw;padding:0 0.526cqw}.pr-sheet .ta{background:#d3b8f5;border-radius:0.789cqw;padding:0 0.526cqw}
  .pr-sheet .lv{justify-content:space-around}
- .pr-sheet .lg{display:grid;grid-template-columns:19mm 3mm 1fr;align-items:center;gap:1.5mm;background:rgba(255,255,255,.8);border-radius:3mm;padding:1.5mm 2mm}
- .pr-sheet .lg b{padding:1.5mm 0;border-radius:3mm;text-align:center;font-size:10pt}.pr-sheet .lg em{font-style:normal;font-weight:800}.pr-sheet .lg span{font-size:8pt;line-height:1.2}
- .pr-sheet .mt{text-align:center;font-size:26pt;line-height:1}.pr-sheet .mt small{display:block;font-size:8.5pt;font-weight:700}
+ .pr-sheet .lg{display:grid;grid-template-columns:10.000cqw 1.579cqw 1fr;align-items:center;gap:0.789cqw;background:rgba(255,255,255,.8);border-radius:1.579cqw;padding:0.789cqw 1.053cqw}
+ .pr-sheet .lg b{padding:0.789cqw 0;border-radius:1.579cqw;text-align:center;font-size:1.858cqw}.pr-sheet .lg em{font-style:normal;font-weight:800}.pr-sheet .lg span{font-size:1.486cqw;line-height:1.2}
+ .pr-sheet .mt{text-align:center;font-size:4.831cqw;line-height:1}.pr-sheet .mt small{display:block;font-size:1.579cqw;font-weight:700}
  .pr-sheet .pk{justify-content:space-around}
- .pr-sheet .eq{display:flex;gap:2mm;align-items:center;background:rgba(255,255,255,.75);border-radius:3mm;padding:1.8mm 2mm;font-size:11pt}
- .pr-sheet .eq i{font-style:normal;font-weight:800;min-width:11mm;text-align:right}.pr-sheet .eq s{text-decoration:none;font-weight:800;margin:0 .5mm}
- .pr-sheet .ft{text-align:center;font-size:11.5pt;font-weight:800;padding-top:1mm}
+ .pr-sheet .eq{display:flex;gap:1.053cqw;align-items:center;background:rgba(255,255,255,.75);border-radius:1.579cqw;padding:0.947cqw 1.053cqw;font-size:2.044cqw}
+ .pr-sheet .eq i{font-style:normal;font-weight:800;min-width:5.789cqw;text-align:right}.pr-sheet .eq s{text-decoration:none;font-weight:800;margin:0 0.263cqw}
+ .pr-sheet .ft{text-align:center;font-size:2.137cqw;font-weight:800;padding-top:0.526cqw}
 }
 </style>
 </head>
@@ -923,6 +924,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.12", desc: "Impression : fiche à l’échelle, nom du PDF par fiche" },
     { v: "10.11", desc: "Impression : fiche Zahlen pleine page" },
     { v: "10.10", desc: "Impression : un nom de fichier par fiche" },
     { v: "10.9", desc: "Impression : noms des temps de retour" },
@@ -6986,6 +6988,18 @@ menu();
  let t=0; const mo=new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(sync,120); });
  mo.observe(document.getElementById('main'),{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
  sync();
+})();
+</script>
+<script>
+/* v10.12 — le titre de l’onglet = nom du PDF : il change avec la fiche affichée */
+(function(){
+ const T0=document.title, NM={'p-zahlen':'Zahlen - nombres en allemand','p-math':'Mathematik - maths en allemand','p-school':'Schulsachen - fournitures','p-cal':'Kalender - calendrier','p-wort':'Wortschatz - vocabulaire','p-conj':'Conjugaison','p-genre':'Genre - règles','p-gram':'Grammaire - règles'};
+ function upd(){ try{
+  const pg=document.querySelector('.page.on'); if(!pg){ return; }
+  let nm=NM[pg.id]; if(!nm){ nm=(pg.dataset.label||'').replace(/^[^\wÀ-ÿ]+/,'').trim(); }
+  if(!nm){ nm=T0; } else if(pg.id==='p-conj'){ const v=document.querySelector('#cjH .cj-ban b'); if(v&&v.textContent.trim()) nm+=' - '+v.textContent.trim(); }
+  if(document.title!==nm) document.title=nm; }catch(_){} }
+ setInterval(upd,500); upd();
 })();
 </script>
 </body>
