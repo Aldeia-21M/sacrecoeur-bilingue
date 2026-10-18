@@ -578,7 +578,7 @@ body[data-sec="de"] .tab:not(.gear){flex:0 0 auto;min-width:58px;padding:5px 7px
 .u-av-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px}.u-av-g button{aspect-ratio:1;border:3px solid #e2e7f3;background:#fff;border-radius:14px;font-size:26px;cursor:pointer;display:grid;place-items:center;padding:0}.u-av-g button .mx{width:80%;height:80%}.u-av-g button[aria-pressed=true]{border-color:#1f5fd6;background:#eaf1ff}
 .u-col-g{display:flex;gap:10px;flex-wrap:wrap}.u-col-g button{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #cfd6e6;background:var(--c);cursor:pointer}.u-col-g button[aria-pressed=true]{box-shadow:0 0 0 3px #2b3350}
 .u-seg{display:flex;gap:6px}.u-seg button{flex:1;border:2px solid var(--line);background:#fff;border-radius:12px;padding:9px;font:700 15px inherit;font-family:inherit;cursor:pointer;min-height:42px}.u-seg button[aria-pressed=true]{background:#1f5fd6;color:#fff;border-color:#1f5fd6}
-.u-sv{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.u-msg{font-weight:700;color:#2b3350;background:#eef6ff;border-radius:10px;padding:8px 10px}
+.u-sv{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.u-row{flex-wrap:nowrap}.u-row .u-b{flex:1 1 0;min-width:0;padding-left:6px;padding-right:6px;white-space:nowrap;font-size:.92rem}.u-msg{font-weight:700;color:#2b3350;background:#eef6ff;border-radius:10px;padding:8px 10px}
 .u-tipd summary{cursor:pointer;color:#6b7590;font-weight:600;font-size:.88rem}
 .u-toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;z-index:140;max-width:min(92vw,460px);background:#2b3350;color:#fff;padding:10px 14px;border-radius:16px;box-shadow:0 8px 28px rgba(20,26,40,.4);transition:.28s;display:flex;gap:10px;align-items:center;font-size:.92rem;line-height:1.3;pointer-events:auto}
 .u-toast.on{opacity:1;transform:translate(-50%,0)}.u-toast b{color:#ffe066}.u-toast button{border:0;border-radius:10px;background:#ffd43b;color:#2b3350;font:800 13px inherit;font-family:inherit;padding:7px 12px;cursor:pointer;flex:none}
@@ -924,6 +924,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.14", desc: "Famille : boutons alignés, rappel avant le lien" },
     { v: "10.13", desc: "Famille : copier code, lien, adresse du site clairs" },
     { v: "10.12", desc: "Impression : fiche à l’échelle, nom du PDF par fiche" },
     { v: "10.11", desc: "Impression : fiche Zahlen pleine page" },
@@ -5793,12 +5794,12 @@ function famCard(){
   <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier le code</button></div>
   <p class="u-note">Code famille · ${st}</p>
   <p class="u-note">📌 Cet appareil se souvient de la famille et s’y reconnecte tout seul.</p>
-  <h4 class="u-h">➕ Ajouter un appareil à <u>cette</u> famille</h4>
+  <h4 class="u-h"><span>➕ Ajouter un appareil à <u>cette</u> famille</span></h4>
   <p class="u-note">Envoie ce <b>lien famille</b> aux membres de ta famille : en l’ouvrant, leur appareil rejoint ta famille (mêmes joueurs, mêmes scores). Ou donne-leur le <b>code</b> ci-dessus : <b>Famille → J’ai déjà un code famille</b>.</p>
-  <div class="u-sv"><button type="button" class="u-b pr" data-act="syshare">📤 Envoyer le lien famille</button><button type="button" class="u-b" data-act="sylk">🔗 Copier le lien famille</button></div>
-  <h4 class="u-h">👪 Faire connaître l’appli à <u>une autre</u> famille</h4>
+  <div class="u-sv u-row"><button type="button" class="u-b pr" data-act="syshare">📤 Envoyer le lien</button><button type="button" class="u-b" data-act="sylk">🔗 Copier le lien</button></div>
+  <h4 class="u-h"><span>👪 Faire connaître l’appli à <u>une autre</u> famille</span></h4>
   <p class="u-note">Donne simplement l’<b>adresse du site</b> : l’autre famille crée ensuite <b>son propre code famille</b>. Ne lui envoie pas ton lien famille, sinon elle entrerait dans la tienne.</p>
-  <div class="u-sv"><button type="button" class="u-b" data-act="syweb">🌐 Copier l’adresse du site</button></div>
+  <div class="u-sv u-row"><button type="button" class="u-b" data-act="syweb">🌐 Copier l’adresse du site</button></div>
   ${V.manual?`<div class="u-note" style="margin-top:8px"><b>Copie manuelle :</b> touche longuement le texte ci-dessous, puis « Copier ».<input id="uMan" class="u-in" readonly value="${esc(V.manual)}" style="text-transform:none;font-family:inherit;letter-spacing:0;width:100%;margin-top:4px" onfocus="this.select()"></div>`:''}`; }
 const CONF={ k:'dl-conf', get(){ try{ return Object.assign({sz:0,fnt:0,sp:0,calm:0},JSON.parse(localStorage.getItem(this.k)||'{}')); }catch(e){ return {sz:0,fnt:0,sp:0,calm:0}; } },
   set(o){ try{ localStorage.setItem(this.k,JSON.stringify(o)); }catch(e){} this.apply(); },
@@ -5972,6 +5973,7 @@ P.addEventListener('click',async e=>{
   if(a==='sysync'){ V.msg=''; sync(true); render(); return; }
   if(a==='sylk'||a==='sycp'||a==='syweb'||a==='syshare'){ const code=D.sync.code, base=location.origin+location.pathname, fam=base+'?famille='+code;
     const what=a==='sycp'?code:a==='syweb'?base:fam;
+    if(a==='sylk'||a==='syshare'){ if(!await ask('<b>🔗 Lien de la famille « '+esc(D.fam||'ma famille')+' »</b><br><small>Ce lien est un <b>accès à ta famille</b> : la personne qui l’ouvre voit tes joueurs et leurs scores, et rejoint ta famille.<br>À envoyer seulement à ta famille. Pour une autre famille, utilise « Copier l’adresse du site ».</small>',a==='syshare'?'Envoyer':'Copier')) return; }
     if(a==='syshare'){ const txt='Rejoins notre famille sur Sacré-Cœur bilingue : ouvre ce lien. (Code famille : '+code+')'; try{ if(navigator.share){ await navigator.share({title:'Notre famille – Sacré-Cœur bilingue',text:txt,url:fam}); V.msg='✅ Lien famille envoyé.'; V.manual=''; render(); return; } }catch(x){ if(x&&x.name==='AbortError') return; } }
     let ok=false; try{ await navigator.clipboard.writeText(what); ok=true; }catch(x){}
     if(!ok){ try{ const ta=document.createElement('textarea'); ta.value=what; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px'; document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,what.length); ok=document.execCommand('copy'); ta.remove(); }catch(x){} }
