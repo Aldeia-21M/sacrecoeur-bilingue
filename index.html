@@ -757,7 +757,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 .bt-leg{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;font-size:.85rem;margin:6px 0}.bt-lg{padding:2px 8px;border-radius:999px;box-shadow:inset 0 0 0 3px var(--sc)}
 
 /* v10.3 fiches imprimables */
-.prt-b{padding:8px 14px;border:2px solid #cbd5e1;border-radius:99px;background:#fff;font:700 .9rem system-ui,sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.prt-b{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;padding:8px 14px;border:2px solid #cbd5e1;border-radius:99px;background:#fff;font:700 .9rem system-ui,sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 .prt-in{display:block;margin:8px auto}
 .sheet+.prt-in{margin:-4px 0 10px auto}
 .prt-fl{position:absolute;right:2%;bottom:2%;z-index:5;opacity:.95}
@@ -868,6 +868,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.6", desc: "Imprimer : lien direct vers le navigateur" },
     { v: "10.5", desc: "Imprimer : message si bloqué sur iPhone" },
     { v: "10.4", desc: "Bouton imprimer près de la fiche" },
     { v: "10.3", desc: "Fiches à imprimer, coop, seconde chance" },
@@ -6908,7 +6909,7 @@ menu();
    try{ window.print(); }catch(_){}
    setTimeout(()=>{ if(fired) return; let n=document.getElementById('prtHelp'); if(n) n.remove(); n=document.createElement('div'); n.id='prtHelp'; n.className='noprint';
      n.style.cssText='position:fixed;left:12px;right:12px;bottom:90px;z-index:99999;background:#fff;border:2px solid #f59f00;border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(0,0,0,.3);font:600 15px system-ui,sans-serif;color:#222';
-     n.innerHTML='🖨️ Cette fenêtre ne peut pas imprimer.<br><span style="font-weight:500">Ouvre le site dans <b>Safari</b> (adresse du site → Partager → Ouvrir dans Safari), puis touche « Imprimer ». Sur iPhone/iPad : Partager → Imprimer fonctionne aussi.</span><br><button type="button" style="margin-top:8px;padding:6px 14px;border-radius:99px;border:2px solid #ccc;background:#f8f8f8;font:700 14px system-ui">OK</button>';
+     const u=location.href.split('#')[0]; n.innerHTML='🖨️ Cette fenêtre ne peut pas imprimer.<br><a href="'+u+'" target="_blank" rel="noopener" style="display:block;margin:10px 0;padding:12px;border-radius:14px;background:#1c7ed6;color:#fff;text-align:center;font:700 16px system-ui;text-decoration:none">🌐 Ouvrir dans le navigateur</a><span style="font-weight:500;font-size:13px">Puis touche « Imprimer » (ou Partager → Imprimer).</span><br><button type="button" style="margin-top:8px;padding:6px 14px;border-radius:99px;border:2px solid #ccc;background:#f8f8f8;font:700 14px system-ui">OK</button>';
      n.querySelector('button').onclick=()=>n.remove(); document.body.appendChild(n); setTimeout(()=>n.remove(),15000); },1200); }; return b; };
  const SHEETS=['p-zahlen','p-math','p-school','p-cal'];
  function put(host,ref,cls,where){ if(!host||host.querySelector(':scope>.prt-b, .prt-b')&&host.querySelector('.prt-b')) return; const b=mk(cls); if(where==='in') host.appendChild(b); else ref.parentNode.insertBefore(b,ref); }
