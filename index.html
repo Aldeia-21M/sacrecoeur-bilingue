@@ -739,6 +739,13 @@ nav#tabs .tab .lb{overflow:visible}
 .u-toast{width:max-content;max-width:min(92vw,460px);bottom:calc(84px + env(safe-area-inset-bottom,0px));padding:8px 12px;font-size:.88rem}
 @media (max-width:480px){#pcFab{width:50px;height:50px;right:8px;bottom:calc(72px + env(safe-area-inset-bottom,0px))}#pcNudge{right:64px;max-width:170px;font-size:13px}}
 body:has(.mx-play) #pcFab,body:has(.mx-play) #pcNudge,body:has(.vk) #pcNudge,body:has(#pKb) #pcNudge,body:has(.g-opts) #pcNudge,body:has(#gameRoot .clk) #pcNudge{display:none!important}
+/* ---- v9.7 Confort (DYS) ---- */
+html.cf-fnt body,html.cf-fnt button,html.cf-fnt input,html.cf-fnt select{font-family:Verdana,"Atkinson Hyperlegible","Trebuchet MS",Arial,sans-serif!important;letter-spacing:.03em;word-spacing:.1em}
+html.cf-sp .mx-play,html.cf-sp .g-ov,html.cf-sp .u-card,html.cf-sp .sr-q,html.cf-sp p{line-height:1.7!important}
+html.cf-sz1 .mx-play,html.cf-sz1 .g-ov,html.cf-sz1 .u-card,html.cf-sz1 #gameRoot{font-size:1.15em}
+html.cf-sz2 .mx-play,html.cf-sz2 .g-ov,html.cf-sz2 .u-card,html.cf-sz2 #gameRoot{font-size:1.3em}
+html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.cf-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}.cf-row .u-b{flex:1 1 auto;min-width:64px}
 </style>
 </head>
 <body>
@@ -834,6 +841,7 @@ body:has(.mx-play) #pcFab,body:has(.mx-play) #pcNudge,body:has(.vk) #pcNudge,bod
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "9.7", desc: "Confort DYS : texte, police, interligne, calme" },
     { v: "9.6", desc: "Révision espacée des erreurs, plus de points au hasard" },
     { v: "9.5", desc: "iOS : onglets lisibles, bulles non bloquantes" },
     { v: "9.4", desc: "Contenu : syllabes, âne, déterminants, ß retiré" },
@@ -4910,7 +4918,7 @@ MkSeries('p-wort',{title:'🗣️ Wortschatz · le vocabulaire',intro:'Mots, art
 const root=document.getElementById('p-defi'); if(!root) return;
 const rnd=n=>Math.floor(Math.random()*n); const FAST=/#test/.test(location.hash);
 const KEY='dl-best-defi'; const T=(window.__defi={});
-const S={tabs:new Set([2,3,4,5,6,7,8,9,10]),div:false}; let run=null,tm=null;
+const S={tabs:new Set([2,3,4,5,6,7,8,9,10]),div:false,dur:60}; let run=null,tm=null;
 const getBest=()=>{ try{ return +localStorage.getItem(KEY)||0; }catch(e){ return 0; } };
 const setBest=v=>{ try{ localStorage.setItem(KEY,String(v)); }catch(e){} };
 root.innerHTML=`<div class="mx-head"><h2>⏱️ Tables en défi <span class="cj-lvl">6H</span></h2><p>60 secondes : combien de calculs peux-tu réussir ?</p></div>
@@ -4919,38 +4927,40 @@ const O=root.querySelector('#dfO'), P=root.querySelector('#dfP');
 function paintO(){
   run=null; P.innerHTML='';
   O.innerHTML=`<div class="mx-lab">Quelles tables ?</div><div class="mx-tabs" id="dfT">${Array.from({length:19},(_,i)=>i+2).map(n=>`<button data-n="${n}" aria-pressed="${S.tabs.has(n)}">${n}</button>`).join('')}</div>
-  <div class="mx-quick" id="dfQ"><button data-r="2-10">2 à 10</button><button data-r="11-20">11 à 20 🔥</button><button data-r="2-20">Toutes</button></div><div class="mx-lab">Avec les divisions ?</div><div class="mx-seg" id="dfD"><button data-v="0" aria-pressed="${!S.div}">× seulement</button><button data-v="1" aria-pressed="${S.div}">× et ÷</button></div>
-  <p class="mx-hint">🏆 Ton record sur cet appareil : <b>${getBest()}</b></p><button class="mx-go" id="dfGo">▶ C’est parti ! (60 s)</button>`;
+  <div class="mx-quick" id="dfQ"><button data-r="2-10">2 à 10</button><button data-r="11-20">11 à 20 🔥</button><button data-r="2-20">Toutes</button></div><div class="mx-lab">Temps</div><div class="mx-seg" id="dfU">${[[30,'30 s'],[60,'60 s'],[90,'90 s'],[0,'Sans chrono']].map(([v,t])=>`<button data-v="${v}" aria-pressed="${S.dur===v}">${t}</button>`).join('')}</div><div class="mx-lab">Avec les divisions ?</div><div class="mx-seg" id="dfD"><button data-v="0" aria-pressed="${!S.div}">× seulement</button><button data-v="1" aria-pressed="${S.div}">× et ÷</button></div>
+  <p class="mx-hint">🏆 Ton record sur cet appareil : <b>${getBest()}</b></p><button class="mx-go" id="dfGo">▶ C’est parti !${S.dur?` (${S.dur} s)`:''}</button>`;
   O.querySelector('#dfT').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const n=+b.dataset.n; if(S.tabs.has(n)){ if(S.tabs.size>1) S.tabs.delete(n); } else S.tabs.add(n); paintO(); };
   O.querySelector('#dfQ').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const [lo,hi]=b.dataset.r.split('-').map(Number); S.tabs=new Set(Array.from({length:hi-lo+1},(_,i)=>lo+i)); paintO(); };
+  O.querySelector('#dfU').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.dur=+b.dataset.v; paintO(); };
   O.querySelector('#dfD').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.div=b.dataset.v==='1'; paintO(); };
   O.querySelector('#dfGo').onclick=start;
 }
 function gen(){ const t=[...S.tabs][rnd(S.tabs.size)], k=1+rnd(10);
   if(S.div&&Math.random()<.5) return {txt:`${t*k} ÷ ${t}`,ans:k}; return Math.random()<.5?{txt:`${t} × ${k}`,ans:t*k}:{txt:`${k} × ${t}`,ans:t*k}; }
 function start(){
-  run={ok:0,ko:0,left:60,typed:'',q:gen(),done:false}; T.run=run;
-  P.innerHTML=`<div class="mx-play"><div class="df-bar"><i id="dfBar"></i></div><div class="df-top"><span>⏱️ <b id="dfT2">60</b> s</span><span>✅ <b id="dfSc">0</b></span></div>
+  run={ok:0,ko:0,left:S.dur||0,tot:S.dur||0,typed:'',q:gen(),done:false}; T.run=run;
+  P.innerHTML=`<div class="mx-play"><div class="df-bar"><i id="dfBar"></i></div><div class="df-top">${S.dur?`<span>⏱️ <b id="dfT2">${S.dur}</b> s</span>`:`<button type="button" class="g-ghost" id="dfEnd">🏁 Terminer</button>`}<span>✅ <b id="dfSc">0</b></span></div>
   <div class="mx-eq"><span id="dfQ"></span><span>=</span><span class="mx-in" id="dfIn">?</span></div>
   <div class="mx-pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join('')}<button data-k="del" class="d">⌫</button><button data-k="0">0</button><button data-k="ok" class="v">✓</button></div></div>`;
   paintQ(); if(!FAST) P.scrollIntoView({behavior:'smooth',block:'nearest'});
   P.querySelector('.mx-pad').onclick=e=>{ const b=e.target.closest('button'); if(!b||run.done) return; const k=b.dataset.k;
     if(k==='del') run.typed=run.typed.slice(0,-1); else if(k==='ok'){ if(run.typed) submit(); return; } else { if(run.typed.length<3) run.typed+=k; }
-    paintIn(); if(run.typed.length>=String(run.q.ans).length) submit(); };
+    paintIn(); if(S.dur&&run.typed.length>=String(run.q.ans).length) submit(); };
+  const en=P.querySelector('#dfEnd'); if(en) en.onclick=()=>{ if(!run.done) finish(); };
   clearInterval(tm); const step=FAST?0:1000; const dec=()=>{ if(run.done) return; run.left--; paintT(); if(run.left<=0) finish(); };
-  if(!FAST) tm=setInterval(dec,1000); T.tick=dec;
+  if(!FAST&&S.dur) tm=setInterval(dec,1000); T.tick=dec;
 }
 const paintIn=()=>{ P.querySelector('#dfIn').textContent=run.typed||'?'; };
 function paintQ(){ P.querySelector('#dfQ').textContent=run.q.txt; run.typed=''; paintIn(); const i=P.querySelector('#dfIn'); i.className='mx-in'; }
-function paintT(){ P.querySelector('#dfT2').textContent=run.left; P.querySelector('#dfBar').style.width=(run.left/60*100)+'%'; }
+function paintT(){ const t=P.querySelector('#dfT2'); if(!t) return; t.textContent=run.left; P.querySelector('#dfBar').style.width=(run.left/run.tot*100)+'%'; }
 function submit(){
-  const ok=+run.typed===run.q.ans; const i=P.querySelector('#dfIn'); i.classList.add(ok?'good':'bad');
+  const ok=+run.typed===run.q.ans; const i=P.querySelector('#dfIn'); i.classList.add(ok?'good':'bad'); if(!ok) i.textContent=run.typed+' → '+run.q.ans;
   if(ok){ run.ok++; P.querySelector('#dfSc').textContent=run.ok; } else run.ko++;
-  run.q=gen(); setTimeout(()=>{ if(!run.done) paintQ(); },FAST?0:(ok?180:450));
+  run.q=gen(); setTimeout(()=>{ if(!run.done) paintQ(); },FAST?0:(ok?180:1100));
 }
 T.solve=()=>{ [...String(run.q.ans)].forEach(c=>P.querySelector('.mx-pad [data-k="'+c+'"]').click()); };
 function finish(){
-  run.done=true; clearInterval(tm); const b=getBest(), rec=run.ok>b; if(rec) setBest(run.ok);
+  run.done=true; clearInterval(tm); const b=getBest(), rec=S.dur===60&&run.ok>b; if(rec) setBest(run.ok);
   P.innerHTML=`<div class="mx-play mx-end"><div class="st">${run.ok>=25?'🏆':run.ok>=12?'⭐':'💪'}</div><h3>${run.ok} bonne${run.ok>1?'s':''} réponse${run.ok>1?'s':''}</h3>
   <p>${rec?'🎉 Nouveau record !':'Record : '+b}${run.ko?` · ${run.ko} erreur${run.ko>1?'s':''}`:''}</p>
   <button class="mx-go big" id="dfAgain">▶ Rejouer</button></div>`;
@@ -5589,6 +5599,14 @@ function famCard(){
   <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier</button></div>
   <p class="u-note">Code famille · ${st} · Sur un autre appareil : <b>Famille → J’ai déjà un code famille</b>.</p>
   <p class="u-note">📌 Cet appareil se souvient de la famille et s’y reconnecte tout seul.</p><div class="u-sv"><button type="button" class="u-b" data-act="sylk">🔗 Copier le lien de connexion</button></div>`; }
+const CONF={ k:'dl-conf', get(){ try{ return Object.assign({sz:0,fnt:0,sp:0,calm:0},JSON.parse(localStorage.getItem(this.k)||'{}')); }catch(e){ return {sz:0,fnt:0,sp:0,calm:0}; } },
+  set(o){ try{ localStorage.setItem(this.k,JSON.stringify(o)); }catch(e){} this.apply(); },
+  apply(){ const c=this.get(),h=document.documentElement.classList; h.toggle('cf-fnt',!!c.fnt); h.toggle('cf-sp',!!c.sp); h.toggle('cf-calm',!!c.calm); h.toggle('cf-sz1',c.sz===1); h.toggle('cf-sz2',c.sz===2); } };
+CONF.apply(); window.DLCONF=CONF;
+function confCard(){ const c=CONF.get(); const b=(a,t,on)=>`<button type="button" class="u-b${on?' pr':''}" data-act="${a}" aria-pressed="${!!on}">${t}</button>`;
+  return `<h4 class="u-h" style="margin-top:0">♿ Confort de lecture</h4>
+  <div class="cf-row">${b('cf-sz0','Texte normal',c.sz===0)}${b('cf-sz1','Grand',c.sz===1)}${b('cf-sz2','Très grand',c.sz===2)}</div>
+  <div class="cf-row">${b('cf-fnt','🔤 Police lisible + espacée',c.fnt)}${b('cf-sp','↕️ Interligne large',c.sp)}${b('cf-calm','🧘 Sans animations',c.calm)}</div>`; }
 function connCard(){ const O=window.DLON, off=O.off();
   return `<h4 class="u-h" style="margin-top:0">🌐 Connexion</h4>
   <button type="button" class="u-b${off?' pr':''}" data-act="offtg" aria-pressed="${!!off}">✈️ Mode hors ligne${off?' : activé':''}</button>
@@ -5689,6 +5707,7 @@ function tabPro(){
   ${D.profiles.length>1?`<h4 class="u-h">🏁 Classement de la semaine</h4><div class="u-rk">${ranks.map((p,i)=>`<div><span>${med[i]||i+1}</span><span class="u-av" style="--pc:${p.col}">${avH(p.av)}</span><b>${esc(p.name)}</b><em>${weekPts(p)} pts</em></div>`).join('')}</div>`:''}
   <div class="u-card">${famCard()}</div>
   <div class="u-card">${connCard()}</div>
+  <div class="u-card">${confCard()}</div>
   <details class="u-more"${warn||V.code||V.msg?' open':''}><summary>⚙️ Sauvegarde et aide${warn?' <i class="u-warn">⚠️</i>':''}</summary>
   <h4 class="u-h">💾 Sauvegarde dans un fichier <small>facultatif</small></h4>
   <p class="u-note">${D.sync?'En plus du code famille, tu peux garder un fichier de secours.':'Sans code famille, les joueurs sont gardés <b>dans cet appareil</b> seulement.'} ${storeOk?'':'<b style="color:#c92a2a">⚠️ La mémoire du navigateur est désactivée (navigation privée ?) : rien ne sera conservé.</b> '}</p>
@@ -5739,6 +5758,7 @@ P.addEventListener('click',async e=>{
   if(t.dataset.col){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.col=t.dataset.col; render(); return; }
   if(t.dataset.gr&&V.form){ V.form.name=($('#fName')||{}).value||V.form.name; V.form.gr=t.dataset.gr; render(); return; }
   const a=t.dataset.act; if(!a) return;
+  if(a&&a.slice(0,3)==='cf-'){ const c=CONF.get(); if(a.slice(0,5)==='cf-sz') c.sz=+a[5]; else { const k=a.slice(3); c[k]=c[k]?0:1; } CONF.set(c); render(); return; }
   if(a==='offtg'){ window.DLON.setOff(!window.DLON.off()); render(); return; }
   if(a==='fcancel'){ V.form=null; V.msg=''; render(); return; }
   if(a==='fnew'){ const nm=(($('#fFam')||{}).value||'').trim(); D.fam=nm; D.famMt=Date.now(); D.sync={code:genCode(),last:0}; save(); V.msg=''; startForm(null); render(); toast('✅ Famille créée : ajoute un premier joueur',{ms:2600}); sync(false); return; }
