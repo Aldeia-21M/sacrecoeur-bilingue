@@ -755,6 +755,21 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 .bt-c.own{background:#e7f5ff;box-shadow:inset 0 0 0 2px #1c7ed6}.bt-pick{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.bt-pick>*{flex:1 1 140px}
 .bt-ships{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}.bt-ships button{padding:8px 12px;border-radius:12px;border:3px solid #339af0;background:#fff;font-weight:900;letter-spacing:2px;color:#1c7ed6;min-height:44px}.bt-ships button.on{background:#d0ebff;border-color:#1864ab}.bt-ships button.done{opacity:.4}
 .bt-leg{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;font-size:.85rem;margin:6px 0}.bt-lg{padding:2px 8px;border-radius:999px;box-shadow:inset 0 0 0 3px var(--sc)}
+
+/* v10.3 fiches imprimables */
+.prt-b{display:block;margin:6px auto 10px;padding:8px 16px;border:2px solid #cbd5e1;border-radius:99px;background:#fff;font:700 .9rem inherit;cursor:pointer}
+@media print{
+ @page{size:A4;margin:10mm}
+ html,body{background:#fff!important}
+ header,#dock,#onbar,#whoPill,#whoModal,#salonBan,#pcFab,#pcNudge,#pcP,#pcG,.toast,.u-toast,.vox,#setbk,.prt-b,.cl-pop,.g-ov,#tabs,
+ .gk-nav,.sn-menu,.cj-train,.cj-toggle,.cj-tools,.tr-h,.tr-p,.tr-ctl,.mx-go,.lvl,.cj-groups,.sn-back,.g-ghost,.page>.train,.page>.mn-box,.page>.mx-box.tr{display:none!important}
+ main{padding:0!important;margin:0!important}
+ .page.on{display:block!important}
+ .sheet{max-height:270mm;width:auto!important;margin:0 auto;page-break-inside:avoid}
+ .sheet img{max-height:270mm;width:auto;max-width:100%}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
+ .gn-rule,.cj-card,.cj-gi,.cj-grid>*{page-break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -850,6 +865,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.3", desc: "Fiches à imprimer, coop, seconde chance" },
     { v: "10.2", desc: "Navale : duel de flottes, tu joues aussi" },
     { v: "10.1", desc: "Poutchou auto ; questions et réponses visibles partout" },
     { v: "10.0", desc: "Nouveaux thèmes : Météo, Transports, Valais" },
@@ -1681,6 +1697,7 @@ function renderSetup(){ NET=null; NX=null;
   <div class="g-sec"><div class="g-lab">Combien de joueurs ?</div><div class="g-seg" id="gN"></div></div>
   <div id="gPl"></div>
   ${setup.n<6?`<div class="g-sec"><button class="g-npc" id="gNpc" aria-pressed="${setup.npc}"><span><i class="mx"></i></span><b>Jouer avec PoutchouPoutchou</b><small>${setup.npc?'Il joue avec toi : c’est lui qui répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
+  ${setup.npc&&setup.n>=2&&setup.n<6?`<div class="g-sec"><button class="g-npc" id="gCoop" aria-pressed="${!!setup.coop}"><span>🤝</span><b>Tous ensemble contre PoutchouPoutchou</b><small>${setup.coop?'Vous formez une équipe : si l’un de vous arrive avant lui, tout le monde gagne !':'Chacun pour soi'}</small></button></div>`:''}
   <div class="g-sec"><div class="g-lab">Longueur du plateau</div><div class="g-seg" id="gLen"></div></div>
   <div class="g-sec"><div class="g-lab">Arrivée</div><div class="g-seg" id="gEx"></div><p class="g-p g-note" id="gExN"></p></div>
   <div class="g-sec"><div class="g-lab">Sujets des questions</div><div class="g-chips" id="gTp"></div></div>
@@ -1695,7 +1712,7 @@ function renderSetup(){ NET=null; NX=null;
     root.querySelector('#gExN').innerHTML=setup.exact?'<b>Pile</b> : il faut tomber <b>exactement</b> sur la dernière case. Si les dés dépassent, on <b>recule</b> du nombre de cases en trop. Plus difficile !':'<b>Directe</b> : on gagne dès que les dés dépassent la dernière case.';
     Ex.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.exact=+b.dataset.v===1; renderSetup(); }; }
   renderPlayers();
-  { const nb=root.querySelector('#gNpc'); if(nb) nb.onclick=()=>{ setup.npc=!setup.npc; renderSetup(); }; }
+  { const nb=root.querySelector('#gNpc'); if(nb) nb.onclick=()=>{ setup.npc=!setup.npc; if(!setup.npc) setup.coop=false; renderSetup(); }; const cb=root.querySelector('#gCoop'); if(cb) cb.onclick=()=>{ setup.coop=!setup.coop; renderSetup(); }; }
   const T=root.querySelector('#gTp');
   T.innerHTML=Object.keys(TOPICS).map(k=>`<button class="g-chip" data-k="${k}" aria-pressed="${setup.topics.has(k)}">${TOPICS[k].label}</button>`).join('');
   T.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const k=b.dataset.k;
@@ -1743,7 +1760,7 @@ function startGame(){
   NET=null; NX=null; NXS=null;
   const list=setup.pl.slice(0,setup.n).map((p,i)=>({name:(p.name||'').trim()||('Joueur '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[p.co][0],gr:p.gr||'4H',pos:0}));
   if(setup.npc&&list.length<6){ const used=new Set(list.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; list.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:col,gr:list[0].gr,pos:0,npc:true}); }
-  applySize(setup.len); G={players:list,cur:0,busy:false,topics:[...setup.topics],level:setup.level,over:false,tokens:[],exact:setup.exact};
+  applySize(setup.len); G={players:list,cur:0,busy:false,topics:[...setup.topics],level:setup.level,over:false,tokens:[],exact:setup.exact,coop:!!(setup.coop&&setup.npc&&list.length>2)};
   renderGame();
 }
 function renderGame(){
@@ -1850,6 +1867,10 @@ async function swapCell(p,i){
   const a=p.pos, b=tgt.q.pos; await Promise.all([glide(p,i,b),glide(tgt.q,tgt.k,a)]); await sleep(300); }
 async function advance(p,i,steps){ let dir=1,bounced=0; while(steps>0){ if(dir===1&&p.pos>=SIZE){ if(!G.exact) break; dir=-1; } await hop(p,i,dir); if(dir===-1) bounced++; steps--; } return bounced; }
 async function retreat(p,i,steps){ while(steps>0&&p.pos>0){ await hop(p,i,-1); steps--; } }
+/* après un recul ou un échange : si on tombe sur une échelle ou un toboggan, on le fait (les autres pièges ne s’enchaînent pas) */
+async function chainSlide(p,i){ const m=p.pos;
+  if(LADDERS[m]){ msg(`🪜 <b>Échelle !</b> ${p.emoji} tombe sur une échelle et monte à la case ${LADDERS[m]} !`); await sleep(500); await glide(p,i,LADDERS[m]); }
+  else if(SLIDES[m]){ msg(`🛝 <b>Toboggan !</b> ${p.emoji} tombe sur un toboggan et glisse à la case ${SLIDES[m]}…`); await sleep(500); await glide(p,i,SLIDES[m]); } }
 async function takeTurn(auto){
   if(!G||G.over||(G.busy&&auto!==true)) return;
   if(NET&&G.cur!==NET.me) return;
@@ -1870,13 +1891,13 @@ async function takeTurn(auto){
   if(LADDERS[n]){ msg(`🪜 <b>Échelle !</b> ${p.emoji} monte à la case ${LADDERS[n]} !`); await sleep(500); await glide(p,i,LADDERS[n]); }
   else if(SLIDES[n]){ msg(`🛝 <b>Toboggan !</b> ${p.emoji} glisse à la case ${SLIDES[n]}…`); await sleep(500); await glide(p,i,SLIDES[n]); }
   else if(STARS.includes(n)){ msg(`⭐ <b>Case étoile !</b> ${esc(p.name)} rejoue !`); extra=true; await sleep(900); }
-  else if(SNAILS.includes(n)){ msg(`🐌 <b>L’escargot…</b> ${p.emoji} recule de 2 cases.`); await sleep(500); await retreat(p,i,2); }
-  else if(TWIRLS.includes(n)){ msg(`🌀 <b>Tourbillon !</b> ${p.emoji} est aspiré : recule de 5 cases.`); await sleep(600); await retreat(p,i,5); }
-  else if(SWAPS.includes(n)){ await swapCell(p,i); }
+  else if(SNAILS.includes(n)){ msg(`🐌 <b>L’escargot…</b> ${p.emoji} recule de 2 cases.`); await sleep(500); await retreat(p,i,2); await chainSlide(p,i); }
+  else if(TWIRLS.includes(n)){ msg(`🌀 <b>Tourbillon !</b> ${p.emoji} est aspiré : recule de 5 cases.`); await sleep(600); await retreat(p,i,5); await chainSlide(p,i); }
+  else if(SWAPS.includes(n)){ await swapCell(p,i); await chainSlide(p,i); }
   else if(QTRAPS.includes(n)){ msg(`❓ <b>Question piège !</b> Juste : +2 cases. Faux : −4 cases.`); await sleep(900);
     const ok2=p.npc?await npcAnswer(p,'❓'):await askQuestion(p,'❓');
-    if(ok2){ msg(`✅ <b>Piège évité !</b> ${p.npc?esc(p.name)+' avance':'Tu avances'} de 2 cases.`); const bo=await advance(p,i,2); if(bo){ msg(`↩️ <b>Trop loin !</b> Il faut tomber pile sur la case ${SIZE}.`); await sleep(700); } if(p.pos>=SIZE) return win(p,i); }
-    else { msg(`💥 <b>Raté !</b> ${p.npc?esc(p.name)+' recule':'Tu recules'} de 4 cases.`); await retreat(p,i,4); } }
+    if(ok2){ msg(`✅ <b>Piège évité !</b> ${p.npc?esc(p.name)+' avance':'Tu avances'} de 2 cases.`); const bo=await advance(p,i,2); if(bo){ msg(`↩️ <b>Trop loin !</b> Il faut tomber pile sur la case ${SIZE}.`); await sleep(700); } if(p.pos>=SIZE) return win(p,i); await chainSlide(p,i); }
+    else { msg(`💥 <b>Raté !</b> ${p.npc?esc(p.name)+' recule':'Tu recules'} de 4 cases.`); await retreat(p,i,4); await chainSlide(p,i); } }
   await sleep(500); followPlayers();
   if(!extra) G.cur=(G.cur+1)%G.players.length;
   const nx=G.players[G.cur]; updateTurn(); layoutTokens();
@@ -1963,8 +1984,8 @@ function win(p,i,remote){
   G.over=true; G.busy=false; layoutTokens(); if(NET&&!remote) NSYNC(`🏆 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,{fin:1,winner:i},true); window.DLendAll=G.players.filter(x=>!x.npc).map(x=>x.name);
   const ov=document.createElement('div'); ov.className='g-ov'; ov.style.alignItems='center';
   ov.innerHTML=`<div class="g-win" style="--pc:${p.color}"><div class="cup">🏆</div>
-    <h2 class="g-h">Bravo ${esc(p.name)} ! ${p.emoji}</h2>
-    <p class="g-p">Tu as atteint la case ${SIZE} !</p>
+    ${G.coop&&!NET?(p.npc?`<h2 class="g-h">PoutchouPoutchou gagne cette fois !</h2><p class="g-p">Il était rapide… Réessayez ensemble !</p>`:`<h2 class="g-h">Bravo l’équipe ! 🤝</h2><p class="g-p">${G.players.filter(x=>!x.npc).map(x=>x.emoji+' '+esc(x.name)).join(' · ')}<br>Vous avez battu PoutchouPoutchou ensemble !</p>`):`<h2 class="g-h">Bravo ${esc(p.name)} ! ${p.emoji}</h2>
+    <p class="g-p">Tu as atteint la case ${SIZE} !</p>`}
     <button class="g-x" data-a="close" aria-label="Fermer">✕</button><button class="g-big replay" data-a="again">▶ Rejouer</button><button class="g-ghost" data-a="grade" style="margin-top:8px">🎓 Changer de classe</button><button class="g-ghost" data-a="close" style="margin-top:8px">✔ Fermer, je ne rejoue pas</button></div>`;
   if(NET){ const gb=ov.querySelector('[data-a="grade"]'); if(gb) gb.remove(); }
   document.body.appendChild(ov); DLmore(ov.querySelector('.g-win'),window.DLH.hubItems('plateau').map(it=>({ic:it.ic,t:it.t,go:()=>{ ov.remove(); conf.forEach(c=>c.remove()); it.go(); }})),'Ou joue à un autre jeu :');
@@ -2129,7 +2150,7 @@ function pickItems(topics,grade,count){
 /* écran de réglage commun */
 function playerSetup(o,done){
   GCUR=null;
-  const st={n:o.defN,npc:!!(o.npc&&o.defN===1),pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null};
+  const st={n:o.defN,npc:!!(o.npc&&o.defN===1),pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null,retry:!!o.retry,coop:false};
   if(window.DLU) DLU.pre(st,CHARS,false);
   function draw(){
     const list=st.pl.slice(0,st.n);
@@ -2138,12 +2159,15 @@ function playerSetup(o,done){
       ${o.perGrade?'':'<div class="g-sec"><div class="g-lab">Classe</div><div class="g-seg" id="hG"></div></div>'}
       <div id="hPl"></div>
       ${o.npc&&st.n<o.max?`<div class="g-sec"><button class="g-npc" id="hNpc" aria-pressed="${st.npc}"><span><i class="mx"></i></span><b>Jouer avec PoutchouPoutchou</b><small>${st.npc?'Il joue avec toi et répond à sa place':'Un compagnon de jeu, pour ne pas jouer seul'}</small></button></div>`:''}
+      ${o.retry?`<div class="g-sec"><button class="g-npc" id="hRt" aria-pressed="${st.retry}"><span>🍀</span><b>Seconde chance</b><small>${st.retry?'Après une erreur, on peut réessayer une fois avec une autre question':'Une erreur = on perd son tour'}</small></button></div>`:''}
+      ${o.coop?`<div class="g-sec"><button class="g-npc" id="hCo" aria-pressed="${st.coop}"><span>🤝</span><b>Tous ensemble contre PoutchouPoutchou</b><small>${st.coop?'Vous formez une équipe : si l’équipe gagne, tout le monde gagne !':'Chacun pour soi'}</small></button></div>`:''}
       ${o.noTopics?'':'<div class="g-sec"><div class="g-lab">Sujets des questions</div><div class="g-chips" id="hT"></div></div>'}
       ${o.extra?`<div class="g-sec"><div class="g-lab">${o.extra.label}</div><div class="g-seg" id="hX"></div></div>`:''}
       ${o.noNote?'':''}<p class="g-p g-note"><b>1H</b> : images, couleurs, formes, animaux, petits nombres (la voix lit tout). <b>4H</b> : nombres jusqu’à 100, fournitures, calendrier. <b>6H</b> : tout ça + nombres jusqu’à 999, vocabulaire de maths et conjugaison (être, avoir, aller). <b>Calcul</b> : additions et soustractions en 4H ; en 6H, les quatre opérations.</p>
       <button class="g-big" id="hGo">▶ Jouer</button>`;
     const N=body.querySelector('#hN'); let nb=''; for(let k=(o.npc?1:o.min);k<=o.max;k++) nb+=`<button data-n="${k}" aria-pressed="${k===st.n}">${k}</button>`; N.innerHTML=nb;
     N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.n=+b.dataset.n; if(o.npc&&(st.n<o.min||st.n===1)) st.npc=true; if(st.npc&&st.n>=o.max) st.npc=false; draw(); };
+    { const r=body.querySelector('#hRt'); if(r) r.onclick=()=>{ st.retry=!st.retry; draw(); }; const c=body.querySelector('#hCo'); if(c) c.onclick=()=>{ st.coop=!st.coop; if(st.coop&&st.n>=o.max) st.n=o.max-1; if(st.coop) st.npc=true; draw(); }; }
     { const nb2=body.querySelector('#hNpc'); if(nb2) nb2.onclick=()=>{ st.npc=!st.npc; if(!st.npc&&st.n<o.min) st.n=o.min; draw(); }; }
     if(!o.perGrade){ const G=body.querySelector('#hG'); G.innerHTML=['1H','4H','6H'].map(g=>`<button data-g="${g}" aria-pressed="${st.grade===g}">Classe ${g}</button>`).join('');
       G.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.grade=b.dataset.g; G.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.g===st.grade)); }; }
@@ -2169,7 +2193,7 @@ function playerSetup(o,done){
     body.querySelector('#hGo').onclick=()=>{
       const players=list.map((p,i)=>({name:(p.name||'').trim()||((o.who||'Joueur')+' '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[i][0],gr:o.perGrade?p.gr:st.grade}));
       if(o.npc&&st.npc&&players.length<o.max){ const used=new Set(players.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; players.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:col,gr:o.perGrade?players[0].gr:st.grade,npc:true}); }
-      const cfg0={players,topics:[...st.topics],grade:st.grade,x:st.x,perGrade:!!o.perGrade}; GCUR={cfg:cfg0,done,game:curGame}; done(cfg0);
+      const cfg0={players,topics:[...st.topics],grade:st.grade,x:st.x,perGrade:!!o.perGrade,retry:!!st.retry,coop:!!(o.coop&&st.coop&&st.npc)}; GCUR={cfg:cfg0,done,game:curGame}; done(cfg0);
     };
   }
   draw();
@@ -2272,13 +2296,13 @@ function startLoto(cfg,net){
 
 /* ================= COURSE ================= */
 function race(){
-  playerSetup({title:'🚀 Course',npc:true,intro:'À chaque tour, une question. Bonne réponse = tu avances d’une case. Le premier arrivé à l’arrivée gagne ! Chaque joueur choisit sa classe.',min:2,max:6,defN:2,perGrade:true,
+  playerSetup({title:'🚀 Course',npc:true,intro:'À chaque tour, une question. Bonne réponse = tu avances d’une case. Le premier arrivé à l’arrivée gagne ! Chaque joueur choisit sa classe.',min:2,max:6,defN:2,perGrade:true,coop:true,
     extra:{label:'Longueur de la course',opts:[[5,'Courte (5)'],[8,'Normale (8)'],[12,'Longue (12)']],def:8}},startRace);
 }
 function startRace(cfg,net){
-  const LEN=cfg.x, R={cfg,pos:cfg.players.map(()=>0),turn:0,q:null,busy:false,LEN}; T2.race=R;
+  const LEN=cfg.x, coop=!!cfg.coop&&!net, H=cfg.players.filter(p=>!p.npc).length, TG=coop?LEN+Math.ceil(LEN*(H-1)/2):LEN, goal=i=>coop&&!cfg.players[i].npc?TG:LEN, inc=()=>{ if(coop&&!cfg.players[R.turn].npc) cfg.players.forEach((p,i)=>{ if(!p.npc) R.pos[i]++; }); else R.pos[R.turn]++; }, R={cfg,pos:cfg.players.map(()=>0),turn:0,q:null,busy:false,LEN}; T2.race=R;
   const ext=pi=>!!cfg.players[pi].npc||(!!net&&pi!==net.me), ai=pi=>!!cfg.players[pi].npc&&!net;
-  body.innerHTML=`<div class="h-bar"><div class="h-info"><b>🏁 Arrivée : ${LEN} bonnes réponses</b></div><button class="g-ghost" id="rQuit">↩ Quitter</button></div>
+  body.innerHTML=`<div class="h-bar"><div class="h-info"><b>${coop?'🤝 Équipe : '+TG+' bonnes réponses ensemble · 🏁 PoutchouPoutchou : '+LEN:'🏁 Arrivée : '+LEN+' bonnes réponses'}</b></div><button class="g-ghost" id="rQuit">↩ Quitter</button></div>
     <div class="h-track" id="rTrack">${cfg.players.map((p,i)=>`<div class="h-lane" data-i="${i}" style="--pc:${p.color}"><span class="nm">${p.emoji} ${esc(p.name)}<small>${p.gr}</small></span>
       <div class="rail"><div class="fill"></div><div class="tok"><i>${p.emoji}</i></div><div class="flag">🏁</div></div></div>`).join('')}</div>
     <div class="h-qbox" id="rQ"></div>`;
@@ -2287,7 +2311,7 @@ function startRace(cfg,net){
   const waitBox=(m)=>{ const p=cfg.players[R.turn], box=body.querySelector('#rQ'); box.style.setProperty('--pc',p.color); box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${m||p.emoji+' <b>'+esc(p.name)+'</b> répond à une question…'}</div>`; };
   const sync=netSetup(net,R,['pos','turn'],()=>!!body.querySelector('#rTrack'),(g,st,m)=>{ if(st.fin) return winRace(true); paint(); if(R.turn===net.me) ask(); else waitBox(m); });
   function paint(){
-    lanes.forEach((l,i)=>{ const pc=R.pos[i]/LEN; l.classList.toggle('act',i===R.turn);
+    lanes.forEach((l,i)=>{ const pc=R.pos[i]/goal(i); l.classList.toggle('act',i===R.turn);
       l.querySelector('.tok').style.left=`calc(${pc*100}% - ${pc*34}px)`; l.querySelector('.fill').style.width=`calc(${pc*100}% )`; });
   }
   function ask(){
@@ -2295,8 +2319,8 @@ function startRace(cfg,net){
     if(net&&R.turn!==net.me){ paint(); waitBox(); return; }
     if(ai(R.turn)){ R.busy=true; R.q=null; paint(); box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
       npcQ(cfg,p).then(async ok=>{ box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il avance d’une case.`:`❌ ${esc(p.name)} s’est trompé… il reste sur place.`}</div>`;
-        if(ok){ R.pos[R.turn]++; paint(); } await sleep(FAST?30:1600);
-        if(ok&&R.pos[R.turn]>=LEN) return winRace(); R.turn=(R.turn+1)%cfg.players.length; ask(); });
+        if(ok){ inc(); paint(); } await sleep(FAST?30:1600);
+        if(ok&&R.pos[R.turn]>=goal(R.turn)) return winRace(); R.turn=(R.turn+1)%cfg.players.length; ask(); });
       return; }
     const q=makeQuestion(cfg.topics,p.gr); R.q=q; R.busy=false; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`);
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
@@ -2312,14 +2336,15 @@ function startRace(cfg,net){
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances d’une case.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu restes sur place.`;
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
-      if(ok){ R.pos[R.turn]++; paint(); }
+      if(ok){ inc(); paint(); }
       R.q=Object.assign({},q,{answered:true}); sync(ok?`✅ ${p.emoji} <b>${esc(p.name)}</b> avance d’une case !`:`❌ ${p.emoji} <b>${esc(p.name)}</b> reste sur place.`);
       const nx=box.querySelector('.g-next'); nx.hidden=false;
-      if(ok&&R.pos[R.turn]>=LEN){ await sleep(700); return winRace(); }
+      if(ok&&R.pos[R.turn]>=goal(R.turn)){ await sleep(700); return winRace(); }
       nx.onclick=()=>{ R.turn=(R.turn+1)%cfg.players.length; sync(''); ask(); };
     };
   }
   function winRace(remote){ const p=cfg.players[R.turn]; if(net&&!remote) sync(`🏁 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,R.turn,true,{fin:1});
+    if(coop){ const hs=cfg.players.filter(q=>!q.npc); return endScreen(p.npc?{title:'PoutchouPoutchou gagne cette fois !',sub:'Il était rapide… Réessayez ensemble !',color:p.color}:{title:'Bravo l’équipe ! 🤝',sub:hs.map(q=>q.emoji+' '+esc(q.name)).join(' · ')+'<br>Vous avez battu PoutchouPoutchou ensemble !',color:p.color},()=>startRace(cfg)); }
     endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:'Tu franchis la ligne d’arrivée en premier !',color:p.color},()=>net?net.again():startRace(cfg)); }
   ask();
 }
@@ -2586,7 +2611,7 @@ function unDeck(){ const d=[]; UNOC.forEach(([c])=>{ d.push({c,v:'0'}); for(let 
 function unOk(card,top,col){ return card.c==='w'||card.c===col||card.v===top.v; }
 T2.un={unDeck,unOk};
 function unoGame(){
-  playerSetup({title:'🌈 Cartes couleurs',npc:true,intro:'Pose une carte de la <b>même couleur</b> ou avec le <b>même chiffre</b> que la carte du dessus. Pour poser, réponds d’abord à une question : bonne réponse = ta carte est posée, sinon tu piocheras. ⛔ passe le tour · 🔄 change le sens · <b>+2</b> : le suivant pioche 2 cartes · 🌈 tu choisis la couleur. Le premier sans carte gagne ! Si plusieurs joueurs jouent sur la même tablette, la main est cachée entre les tours.',min:2,max:4,defN:2,perGrade:true,
+  playerSetup({title:'🌈 Cartes couleurs',npc:true,retry:true,intro:'Pose une carte de la <b>même couleur</b> ou avec le <b>même chiffre</b> que la carte du dessus. Pour poser, réponds d’abord à une question : bonne réponse = ta carte est posée, sinon tu piocheras. ⛔ passe le tour · 🔄 change le sens · <b>+2</b> : le suivant pioche 2 cartes · 🌈 tu choisis la couleur. Le premier sans carte gagne ! Si plusieurs joueurs jouent sur la même tablette, la main est cachée entre les tours.',min:2,max:4,defN:2,perGrade:true,
     extra:{label:'Les chiffres sont écrits…',opts:[[0,'🇩🇪 En allemand'],[1,'🇫🇷 En français'],[2,'🔢 Chiffres seuls']],def:0}},startUno);
 }
 function startUno(cfg,net){
@@ -2639,7 +2664,8 @@ function startUno(cfg,net){
     pl.sort((a,b)=>(h[a].c==='w')-(h[b].c==='w')||(/\d/.test(h[a].v)-/\d/.test(h[b].v)));
     const i=pl[0]; let col=S.col; if(h[i].c==='w'){ const cnt={}; h.forEach(c=>{ if(c.c!=='w') cnt[c.c]=(cnt[c.c]||0)+1; }); col=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0]||'r'; }
     commit(pi,i,col); }
-  function ask(pi,i){
+  function ask(pi,i,retry){
+    const chance=!!cfg.retry&&!retry;
     const p=P(pi), box=body.querySelector('#unQ'), q=makeQuestion(cfg.topics,p.gr); S.q=q; S.busy=true; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`,pi); box.hidden=false; box.style.setProperty('--pc',p.color);
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
@@ -2652,9 +2678,10 @@ function startUno(cfg,net){
     box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
-      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>La carte reste dans ta main et tu pioches.`;
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>${chance?'🍀 Tu as une seconde chance avec cette carte !':'La carte reste dans ta main et tu pioches.'}`;
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>{
+        if(!ok&&chance){ close(); return ask(pi,i,true); }
         if(!ok){ close(); return penalty(pi,'❌'); }
         if(S.hands[pi][i].c!=='w'){ close(); return commit(pi,i); }
         box.innerHTML=`<div class="g-q">🌈 Choisis la couleur</div><div class="un-picks">${UNOC.map(([c,hx,nm])=>`<button class="un-pick" data-c="${c}" style="--cc:${hx}">${nm}</button>`).join('')}</div>`;
@@ -2695,7 +2722,7 @@ function c4Ai(B,me){
 }
 T2.c4={C4,c4Drop,c4Line,c4Ai};
 function puissance4(){
-  playerSetup({title:'🔴 Puissance 4',npc:true,intro:'Réponds à une question pour gagner le droit de jouer un jeton, puis choisis la colonne. Bonne réponse = tu poses un jeton ; mauvaise réponse = tu passes ton tour. Le premier qui aligne <b>4 jetons</b> gagne !',min:2,max:2,defN:2,perGrade:true},startPuissance4);
+  playerSetup({title:'🔴 Puissance 4',npc:true,retry:true,intro:'Réponds à une question pour gagner le droit de jouer un jeton, puis choisis la colonne. Bonne réponse = tu poses un jeton ; mauvaise réponse = tu passes ton tour. Le premier qui aligne <b>4 jetons</b> gagne !',min:2,max:2,defN:2,perGrade:true},startPuissance4);
 }
 function startPuissance4(cfg,net){
   const B=Array.from({length:C4.H},()=>Array(C4.W).fill(0)), S={cfg,B,turn:0,phase:'q',busy:false,over:false,win:null}; T2.c4g=S;
@@ -2722,10 +2749,12 @@ function startPuissance4(cfg,net){
     if(B[0].every(v=>v)){ S.over=true; sync('Match nul !',S.turn,true,{fin:1,draw:1}); return endScreen({title:'Match nul !',sub:'La grille est pleine.',color:'#7048e8'},()=>net?net.again():startPuissance4(cfg)); }
     { const who=P(S.turn); S.turn=1-S.turn; sync(`${who.emoji} <b>${esc(who.name)}</b> pose un jeton.`); } turn();
   }
-  function turn(){
+  function turn(retry){
     const p=P(S.turn); S.phase='q'; paint(); box.style.setProperty('--pc',p.color); box.hidden=false;
     if(net&&S.turn!==net.me){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); return; }
+    const chance=!!cfg.retry&&!retry;
     const afterAnswer=ok=>{
+      if(!ok&&chance){ box.hidden=true; msg(`🍀 <b>Seconde chance !</b> ${p.emoji} ${esc(p.name)} essaie une autre question.`); sleep(FAST?20:900).then(()=>turn(true)); return; }
       if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> passe son tour…`); sleep(FAST?20:900).then(()=>{ S.turn=1-S.turn; sync(`${p.emoji} <b>${esc(p.name)}</b> passe son tour.`); turn(); }); return; }
       box.hidden=true; S.phase='drop'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> choisit une colonne…`);
       if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> réfléchit…`); sleep(FAST?20:900).then(()=>dropIn(c4Ai(B,S.turn+1))); }
@@ -2744,7 +2773,7 @@ function startPuissance4(cfg,net){
     box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
-      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux poser un jeton.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu passes ton tour.`;
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux poser un jeton.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>${chance?'🍀 Tu as une seconde chance !':'Tu passes ton tour.'}`;
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>afterAnswer(ok); };
   }
@@ -2792,7 +2821,7 @@ function btShot(ships,shots,r,c){
 }
 T2.bt={btPlace,btShot};
 function navale(){
-  playerSetup({title:'🚢 Bataille navale',npc:true,intro:'Une flotte est cachée dans la mer. À ton tour, réponds à une question : bonne réponse = tu tires un coup de canon sur une case. <b>Touché</b> = tu retires ! <b>Coulé</b> = bonus. Entends la case en allemand : « C, vier ». Le joueur qui a le plus de points quand toute la flotte est coulée gagne. Chaque joueur choisit sa classe.',min:1,max:4,defN:2,perGrade:true,
+  playerSetup({title:'🚢 Bataille navale',npc:true,retry:true,intro:'Une flotte est cachée dans la mer. À ton tour, réponds à une question : bonne réponse = tu tires un coup de canon sur une case. <b>Touché</b> = tu retires ! <b>Coulé</b> = bonus. Entends la case en allemand : « C, vier ». Le joueur qui a le plus de points quand toute la flotte est coulée gagne. Chaque joueur choisit sa classe.',min:1,max:4,defN:2,perGrade:true,
     extra:{label:'Taille de la mer',opts:[[6,'6 × 6 (rapide)'],[8,'8 × 8']],def:6}},startNavale);
 }
 function navPick(cfg,N,sizes,go){
@@ -2875,10 +2904,12 @@ function startNavale(cfg,net){
       if(!cand.length) for(let r=0;r<N;r++) for(let c=0;c<N;c++) if(!shots[r+','+c]) cand.push([r,c]);
       const [r,c]=cand[rnd(cand.length)]; shoot(r,c); });
   }
-  function turn(){
+  function turn(retry){
     aim(S.turn); const p=P(S.turn); S.phase='q'; paint(); box.style.setProperty('--pc',p.color); box.hidden=false;
     if(net&&S.turn!==net.me){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); return; }
+    const chance=!!cfg.retry&&!retry;
     const after=ok=>{
+      if(!ok&&chance){ box.hidden=true; msg(`🍀 <b>Seconde chance !</b> ${p.emoji} ${esc(p.name)} essaie une autre question.`); sleep(FAST?20:900).then(()=>turn(true)); return; }
       if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> rate son tir…`); sleep(FAST?20:900).then(()=>{ S.turn=nxt(S.turn); sync(`${p.emoji} <b>${esc(p.name)}</b> rate son tir.`); turn(); }); return; }
       box.hidden=true; S.phase='shoot'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> vise…`);
       if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> vise…`); return npcShoot(); }
@@ -2896,7 +2927,7 @@ function startNavale(cfg,net){
     box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
-      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux tirer !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Pas de tir ce tour.`;
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux tirer !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>${chance?'🍀 Tu as une seconde chance !':'Pas de tir ce tour.'}`;
       DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)});
       const nx=box.querySelector('.g-next'); nx.hidden=false; nx.onclick=()=>after(ok); };
   }
@@ -3295,13 +3326,13 @@ G.demain=simple('🗓️ Hier, aujourd’hui, demain','Heute = aujourd’hui · 
 
 /* ================= DUEL À DEUX ================= */
 G.duel=function(){
-  playerSetup({title:'⚔️ Duel à deux',intro:'Pose la tablette entre deux élèves. La même question s’affiche des deux côtés : le plus rapide à toucher la bonne réponse marque un point !',min:2,max:2,defN:2,
+  playerSetup({title:'⚔️ Duel à deux',intro:'Pose la tablette entre deux élèves. La même question s’affiche des deux côtés : le plus rapide à toucher la bonne réponse marque un point ! Si les classes sont différentes, la question est celle du plus petit et le plus grand doit marquer 2 points de plus.',min:2,max:2,defN:2,perGrade:true,
     extra:{label:'Premier à …',opts:[[3,'3 points'],[5,'5 points'],[8,'8 points']],def:5}},startDuel);
 };
 function startDuel(cfg,net){
-  const [A,B]=cfg.players, goal=cfg.x, mine=net?net.me:-1;
+  const [A,B]=cfg.players, mine=net?net.me:-1, RK={'1H':1,'4H':2,'6H':3}, gr0=RK[A.gr]||2, gr1=RK[B.gr]||2, qGrade=gr0<=gr1?(A.gr||cfg.grade):(B.gr||cfg.grade), GL=[cfg.x+(gr0>gr1?2:0),cfg.x+(gr1>gr0?2:0)], goal=cfg.x;
   const S={sc:[0,0],q:null,locked:[false,false],wk:[-1,-1],over:false,win:-1,r:0,turn:'*'}; T.duelS=S;
-  body.innerHTML=`<div class="h-bar"><div class="h-info"><b>Premier à ${goal}</b></div><button class="g-ghost" id="dQuit">↩ Quitter</button></div>
+  body.innerHTML=`<div class="h-bar"><div class="h-info"><b>${GL[0]===GL[1]?'Premier à '+goal:'Premier à '+GL[0]+' ('+A.emoji+') · '+GL[1]+' ('+B.emoji+')'}</b></div><button class="g-ghost" id="dQuit">↩ Quitter</button></div>
    <div class="h-duel"><div class="dh up" data-p="1" style="--pc:${B.color}"></div><div class="dmid"><span class="s" id="dS"></span><button class="g-listen" id="dL">🔊</button></div><div class="dh" data-p="0" style="--pc:${A.color}"></div></div>`;
   body.querySelector('#dQuit').onclick=()=>net?net.quit():G.duel();
   const halves=[...body.querySelectorAll('.dh')].sort((x,y)=>+x.dataset.p-+y.dataset.p);
@@ -3320,13 +3351,13 @@ function startDuel(cfg,net){
       if(S.over&&S.win>=0) bs[q.correct]&&bs[q.correct].classList.add('ok'); else if(S.over) bs[q.correct]&&bs[q.correct].classList.add('ok'); });
     if(speak&&q.audio) setTimeout(()=>say(q.audio.t,q.audio.l),FAST?0:300);
   }
-  function newQ(){ const q=makeQuestion(cfg.topics,cfg.grade); S.q={prompt:q.prompt,options:q.options.map(String),correct:q.correct,shown:q.shown||'',reveal:q.reveal||null,audio:q.audio||null,cat:q.cat}; S.locked=[false,false]; S.wk=[-1,-1]; S.over=false; S.win=-1; S.r++; render(true); }
+  function newQ(){ const q=makeQuestion(cfg.topics,qGrade); S.q={prompt:q.prompt,options:q.options.map(String),correct:q.correct,shown:q.shown||'',reveal:q.reveal||null,audio:q.audio||null,cat:q.cat}; S.locked=[false,false]; S.wk=[-1,-1]; S.over=false; S.win=-1; S.r++; render(true); }
   body.querySelector('#dL').onclick=()=>S.q&&S.q.audio&&say(S.q.audio.t,S.q.audio.l);
   let after=0;
   async function afterRound(){
     const r=S.r; if(after===r) return; after=r; await sleep(1600); if(S.r!==r||!S.over) return;
     const owner=S.win>=0?S.win:0; if(net&&owner!==mine) return;
-    if(S.win>=0&&S.sc[S.win]>=goal) return finishDuel(S.win,false);
+    if(S.win>=0&&S.sc[S.win]>=GL[S.win]) return finishDuel(S.win,false);
     newQ(); sync('Nouvelle question !'); }
   function finishDuel(pi,remote){ const p=cfg.players[pi]; if(net&&!remote) sync(`🏆 ${p.emoji} <b>${esc(p.name)}</b> a gagné !`,'*',true,{fin:1}); S.over=true;
     endScreen({title:`Bravo ${esc(p.name)} ! ${p.emoji}`,sub:`${A.emoji} ${S.sc[0]} – ${S.sc[1]} ${B.emoji}`,color:p.color},()=>net?net.again():startDuel(cfg)); }
@@ -6865,5 +6896,20 @@ menu();
 })();
 </script>
 
+<script>
+/* v10.3 — boutons « Imprimer » sur les pages fiches */
+(function(){
+ const IDS=['p-zahlen','p-math','p-school','p-cal','p-wort','p-conj','p-genre','p-gram'];
+ const ok={ 'p-genre':e=>e.querySelector('.gn-rule,.gn-chips'), 'p-gram':e=>{const g=e.querySelector('#p-gramS');return g&&!g.hidden&&g.children.length} };
+ function sync(id){ const e=document.getElementById(id); if(!e) return;
+  const want=!ok[id]||ok[id](e), cur=e.querySelector(':scope>.prt-b');
+  if(want&&!cur){ const b=document.createElement('button'); b.type='button'; b.className='prt-b'; b.textContent='🖨️ Imprimer cette fiche (A4)'; b.onclick=()=>{ try{window.print()}catch(_){} }; e.insertBefore(b,e.firstChild); }
+  else if(!want&&cur) cur.remove(); }
+ function all(){ IDS.forEach(sync); }
+ let t=0; const mo=new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(all,120); });
+ IDS.forEach(id=>{ const e=document.getElementById(id); if(e) mo.observe(e,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']}); });
+ all();
+})();
+</script>
 </body>
 </html>
