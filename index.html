@@ -770,16 +770,21 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
  .page.on{display:block!important}
  .sheet{width:min(190mm,100%)!important;max-height:272mm;margin:0 auto;page-break-inside:avoid}
  .sheet img{width:100%;height:auto}
- .cj-grid{grid-template-columns:1fr 1fr!important;gap:5mm!important;break-inside:avoid}
- .cj-card{border-width:2px!important;border-radius:5mm!important;padding:3mm!important;break-inside:avoid;page-break-inside:avoid}
- .cj-card header{margin:0 0 2mm!important}.cj-card header b{font-size:21pt!important}.cj-card header small{font-size:9pt!important}
- .cj-row{min-height:0!important;margin:2mm 0!important;font-size:18pt!important;border-radius:3mm!important}
- .cj-row .p,.cj-row .f{padding:1.6mm 3mm!important}
+ .cj-grid{grid-template-columns:1fr 1fr!important;gap:4mm!important}
+ .cj-card{border-width:2px!important;border-radius:5mm!important;padding:2.5mm!important}
+ .cj-card header{margin:0 0 2mm!important}.cj-card header b{font-size:16pt!important}.cj-card header small{font-size:9pt!important}
+ .cj-row{min-height:0!important;margin:1.6mm 0!important;font-size:14pt!important;white-space:nowrap!important;border-radius:3mm!important}
+ .cj-row .p,.cj-row .f{padding:1.4mm 2mm!important}
+ .cj-row .p{width:42%!important;font-size:.8em!important}
  .cj-all,.cj-tips{display:none!important}
  .cj-row .t,.cj-lg .t{color:#2a62c9!important}.cj-row .d,.cj-lg .d{color:#d9480f!important;font-weight:900!important}
  .cj-vh{margin:0 0 3mm!important}
  .cj-lg{margin:0 0 3mm!important;font-size:9pt!important}
- #p-conj{break-inside:avoid;page-break-after:avoid}
+ #p-conj{break-after:avoid;page-break-after:avoid}
+ body{padding:0!important;margin:0!important;min-height:0!important;height:auto!important}
+ body>*:not(main):not(script){display:none!important}
+ main{height:auto!important;min-height:0!important;overflow:visible!important}
+ .cj-grid::before{content:'Indicatif';grid-column:1/-1;font:800 14pt system-ui,sans-serif;color:#1d2433;margin:0 0 -1mm 1mm}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
  .gn-rule,.cj-card,.cj-gi,.cj-grid>*{page-break-inside:avoid}
 }
@@ -878,6 +883,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.8", desc: "Fiche verbe : une seule page garantie" },
     { v: "10.7", desc: "Imprimer : verbe sur une page, copier l’adresse" },
     { v: "10.6", desc: "Imprimer : lien direct vers le navigateur" },
     { v: "10.5", desc: "Imprimer : message si bloqué sur iPhone" },
