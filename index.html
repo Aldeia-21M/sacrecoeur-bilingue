@@ -768,8 +768,18 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
  .gk-nav,#prtHelp,.sn-menu,.cj-train,.cj-toggle,.cj-tools,.cj-head,.cj-vrow,.cj-gi,.cj-note,.tr-h,.tr-p,.tr-ctl,.mx-go,.lvl,.cj-groups,.sn-back,.g-ghost,.page>.train,.page>.mn-box,.page>.mx-box.tr{display:none!important}
  main{padding:0!important;margin:0!important}
  .page.on{display:block!important}
- .sheet{max-height:270mm;width:auto!important;margin:0 auto;page-break-inside:avoid}
- .sheet img{max-height:270mm;width:auto;max-width:100%}
+ .sheet{width:min(190mm,100%)!important;max-height:272mm;margin:0 auto;page-break-inside:avoid}
+ .sheet img{width:100%;height:auto}
+ .cj-grid{grid-template-columns:1fr 1fr!important;gap:5mm!important;break-inside:avoid}
+ .cj-card{border-width:2px!important;border-radius:5mm!important;padding:3mm!important;break-inside:avoid;page-break-inside:avoid}
+ .cj-card header{margin:0 0 2mm!important}.cj-card header b{font-size:21pt!important}.cj-card header small{font-size:9pt!important}
+ .cj-row{min-height:0!important;margin:2mm 0!important;font-size:18pt!important;border-radius:3mm!important}
+ .cj-row .p,.cj-row .f{padding:1.6mm 3mm!important}
+ .cj-all,.cj-tips{display:none!important}
+ .cj-row .t,.cj-lg .t{color:#2a62c9!important}.cj-row .d,.cj-lg .d{color:#d9480f!important;font-weight:900!important}
+ .cj-vh{margin:0 0 3mm!important}
+ .cj-lg{margin:0 0 3mm!important;font-size:9pt!important}
+ #p-conj{break-inside:avoid;page-break-after:avoid}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none!important}
  .gn-rule,.cj-card,.cj-gi,.cj-grid>*{page-break-inside:avoid}
 }
@@ -868,6 +878,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.7", desc: "Imprimer : verbe sur une page, copier l’adresse" },
     { v: "10.6", desc: "Imprimer : lien direct vers le navigateur" },
     { v: "10.5", desc: "Imprimer : message si bloqué sur iPhone" },
     { v: "10.4", desc: "Bouton imprimer près de la fiche" },
@@ -6909,8 +6920,9 @@ menu();
    try{ window.print(); }catch(_){}
    setTimeout(()=>{ if(fired) return; let n=document.getElementById('prtHelp'); if(n) n.remove(); n=document.createElement('div'); n.id='prtHelp'; n.className='noprint';
      n.style.cssText='position:fixed;left:12px;right:12px;bottom:90px;z-index:99999;background:#fff;border:2px solid #f59f00;border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(0,0,0,.3);font:600 15px system-ui,sans-serif;color:#222';
-     const u=location.href.split('#')[0]; n.innerHTML='🖨️ Cette fenêtre ne peut pas imprimer.<br><a href="'+u+'" target="_blank" rel="noopener" style="display:block;margin:10px 0;padding:12px;border-radius:14px;background:#1c7ed6;color:#fff;text-align:center;font:700 16px system-ui;text-decoration:none">🌐 Ouvrir dans le navigateur</a><span style="font-weight:500;font-size:13px">Puis touche « Imprimer » (ou Partager → Imprimer).</span><br><button type="button" style="margin-top:8px;padding:6px 14px;border-radius:99px;border:2px solid #ccc;background:#f8f8f8;font:700 14px system-ui">OK</button>';
-     n.querySelector('button').onclick=()=>n.remove(); document.body.appendChild(n); setTimeout(()=>n.remove(),15000); },1200); }; return b; };
+     const u=location.href.split('#')[0]; n.innerHTML='🖨️ Cette fenêtre ne peut pas imprimer.<br><button type="button" id="prtCp" style="display:block;width:100%;margin:10px 0;padding:12px;border-radius:14px;border:0;background:#1c7ed6;color:#fff;font:700 16px system-ui">📋 Copier l’adresse du site</button><span style="font-weight:500;font-size:13px">Colle-la ensuite dans Safari, puis touche « Imprimer » (ou Partager → Imprimer).</span><br><button type="button" id="prtOk" style="margin-top:8px;padding:6px 14px;border-radius:99px;border:2px solid #ccc;background:#f8f8f8;font:700 14px system-ui">OK</button>';
+     n.querySelector('#prtCp').onclick=async e=>{ const bt=e.currentTarget; let ok=false; try{ await navigator.clipboard.writeText(u); ok=true; }catch(_){ try{ const ta=document.createElement('textarea'); ta.value=u; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); ok=document.execCommand('copy'); ta.remove(); }catch(__){} } bt.textContent=ok?'✅ Adresse copiée !':u; };
+     n.querySelector('#prtOk').onclick=()=>n.remove(); document.body.appendChild(n); setTimeout(()=>n.remove(),30000); },1200); }; return b; };
  const SHEETS=['p-zahlen','p-math','p-school','p-cal'];
  function put(host,ref,cls,where){ if(!host||host.querySelector(':scope>.prt-b, .prt-b')&&host.querySelector('.prt-b')) return; const b=mk(cls); if(where==='in') host.appendChild(b); else ref.parentNode.insertBefore(b,ref); }
  function sync(){
