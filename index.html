@@ -764,7 +764,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 @media print{
  @page{size:A4;margin:10mm}
  html,body{background:#fff!important}
- header,#dock,#onbar,#whoPill,#whoModal,#salonBan,#pcFab,#pcNudge,#pcP,#pcG,.toast,.u-toast,.vox,#setbk,.prt-b,.cl-pop,.g-ov,#tabs,
+ body>header,#dock,#onbar,#whoPill,#whoModal,#salonBan,#pcFab,#pcNudge,#pcP,#pcG,.toast,.u-toast,.vox,#setbk,.prt-b,.cl-pop,.g-ov,#tabs,
  .gk-nav,#prtHelp,.sn-menu,.cj-train,.cj-toggle,.cj-tools,.cj-head,.cj-vrow,.cj-gi,.cj-note,.tr-h,.tr-p,.tr-ctl,.mx-go,.lvl,.cj-groups,.sn-back,.g-ghost,.page>.train,.page>.mn-box,.page>.mx-box.tr{display:none!important}
  main{padding:0!important;margin:0!important}
  .page.on{display:block!important}
@@ -772,7 +772,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
  .sheet img{width:100%;height:auto}
  .cj-grid{grid-template-columns:1fr 1fr!important;gap:4mm!important}
  .cj-card{border-width:2px!important;border-radius:5mm!important;padding:2.5mm!important}
- .cj-card header{margin:0 0 2mm!important}.cj-card header b{font-size:16pt!important}.cj-card header small{font-size:9pt!important}
+ .cj-card header{display:flex!important;margin:0 0 2mm!important}.cj-card header b{font-size:16pt!important}.cj-card header small{font-size:9pt!important}
  .cj-row{min-height:0!important;margin:1.6mm 0!important;font-size:14pt!important;white-space:nowrap!important;border-radius:3mm!important}
  .cj-row .p,.cj-row .f{padding:1.4mm 2mm!important}
  .cj-row .p{width:42%!important;font-size:.8em!important}
@@ -883,6 +883,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.9", desc: "Impression : noms des temps de retour" },
     { v: "10.8", desc: "Fiche verbe : une seule page garantie" },
     { v: "10.7", desc: "Imprimer : verbe sur une page, copier l’adresse" },
     { v: "10.6", desc: "Imprimer : lien direct vers le navigateur" },
