@@ -849,6 +849,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.0", desc: "Nouveaux thèmes : Météo, Transports, Valais" },
     { v: "9.9", desc: "Navale : placer ses bateaux, tirs distincts, questions visibles" },
     { v: "9.8", desc: "Lecture : sons au clic, syllabes qui grandissent, lent" },
     { v: "9.7", desc: "Confort DYS : texte, police, interligne, calme" },
@@ -4930,16 +4931,21 @@ function extendPools(){ if(window.__poolsExt||!window.DL||!DL.POOLS) return; win
 extendPools();
 const PHR=[['Guten Morgen !','Bonjour (le matin) !'],['Guten Tag !','Bonjour !'],['Guten Abend !','Bonsoir !'],['Gute Nacht !','Bonne nuit !'],['Auf Wiedersehen !','Au revoir !'],['Tschüss !','Salut ! (en partant)'],['Hallo !','Salut !'],['Wie geht’s ?','Comment ça va ?'],['Gut, danke.','Bien, merci.'],['Und dir ?','Et toi ?'],['Wie heisst du ?','Comment t’appelles-tu ?'],['Ich heisse Lea.','Je m’appelle Léa.'],['Wie alt bist du ?','Quel âge as-tu ?'],['Ich bin sieben Jahre alt.','J’ai sept ans.'],['Woher kommst du ?','D’où viens-tu ?'],['Ich komme aus der Schweiz.','Je viens de Suisse.'],['Wo wohnst du ?','Où habites-tu ?'],['Ich wohne im Wallis.','J’habite en Valais.'],['Ich spreche Französisch.','Je parle français.'],['Bitte.','S’il te plaît.'],['Danke schön !','Merci beaucoup !'],['Entschuldigung !','Excuse-moi !'],['Ich verstehe nicht.','Je ne comprends pas.'],['Kannst du das wiederholen ?','Peux-tu répéter ?'],['Ich habe Hunger.','J’ai faim.'],['Ich habe Durst.','J’ai soif.'],['Ich bin müde.','Je suis fatigué.'],['Wie spät ist es ?','Quelle heure est-il ?'],['Wann hast du Geburtstag ?','Quand est ton anniversaire ?'],['Ich mag Schokolade.','J’aime le chocolat.'],['Was ist das ?','Qu’est-ce que c’est ?'],['Das ist ein Hund.','C’est un chien.'],['Hast du Geschwister ?','As-tu des frères et sœurs ?'],['Ich habe einen Bruder.','J’ai un frère.'],['Ich brauche Hilfe.','J’ai besoin d’aide.'],['Das gefällt mir.','Ça me plaît.'],['Viel Spass !','Amuse-toi bien !'],['Darf ich auf die Toilette ?','Puis-je aller aux toilettes ?'],['Ich bin fertig.','J’ai fini.'],['Mir ist kalt.','J’ai froid.'],['Wie viel kostet das ?','Combien ça coûte ?'],['Ich gehe zur Schule.','Je vais à l’école.'],['Ich lese ein Buch.','Je lis un livre.'],['Ich spiele Fussball.','Je joue au football.'],['Ich trinke Wasser.','Je bois de l’eau.'],['Ich esse einen Apfel.','Je mange une pomme.'],['Wo ist die Toilette ?','Où sont les toilettes ?'],['Ich habe eine Schwester.','J’ai une sœur.'],['Meine Mutter heisst Anna.','Ma maman s’appelle Anna.'],['Es ist heiss.','Il fait chaud.'],['Es regnet.','Il pleut.'],['Die Sonne scheint.','Le soleil brille.'],['Ich male ein Bild.','Je dessine une image.'],['Wie heisst das auf Deutsch ?','Comment dit-on ça en allemand ?'],['Ich weiss es nicht.','Je ne sais pas.'],['Ja, gerne.','Oui, avec plaisir.'],['Nein, danke.','Non, merci.'],['Bis morgen !','À demain !'],['Gute Besserung !','Bon rétablissement !'],['Alles Gute zum Geburtstag !','Joyeux anniversaire !'],['Ich schreibe mit dem Bleistift.','J’écris avec le crayon.'],['Ich habe einen Hund.','J’ai un chien.'],['Wir gehen nach Hause.','Nous rentrons à la maison.'],['Kann ich bitte Wasser haben ?','Puis-je avoir de l’eau, s’il te plaît ?'],['Ich bin krank.','Je suis malade.'],['Mach die Tür zu !','Ferme la porte !'],['Hör gut zu !','Écoute bien !']];
 const PHR_EASY=PHR.slice(0,24).concat(PHR.slice(41,55));
+const THX={
+ meteo:[['☀️','le soleil','die Sonne'],['🌧️','la pluie','der Regen'],['☁️','le nuage','die Wolke'],['❄️','la neige','der Schnee'],['💨','le vent','der Wind'],['⛈️','l’orage','das Gewitter'],['⚡','l’éclair','der Blitz'],['🌈','l’arc-en-ciel','der Regenbogen'],['🌫️','le brouillard','der Nebel'],['🧊','la glace','das Eis'],['🌡️','la température','die Temperatur'],['☔','le parapluie','der Regenschirm'],['🌪️','la tempête','der Sturm'],['💧','la goutte','der Tropfen'],['🥶','il fait froid','es ist kalt'],['🥵','il fait chaud','es ist heiss'],['🌤️','il fait beau','es ist schön'],['🌦️','il pleut','es regnet'],['🌨️','il neige','es schneit'],['⛄','le bonhomme de neige','der Schneemann']],
+ transport:[['🚗','la voiture','das Auto'],['🚌','le bus','der Bus'],['🚂','le train','der Zug'],['🚲','le vélo','das Fahrrad'],['✈️','l’avion','das Flugzeug'],['🚢','le bateau','das Schiff'],['🚕','le taxi','das Taxi'],['🏍️','la moto','das Motorrad'],['🛴','la trottinette','der Roller'],['🚉','la gare','der Bahnhof'],['🚏','l’arrêt de bus','die Haltestelle'],['🚦','le feu','die Ampel'],['🛣️','la route','die Strasse'],['🚑','l’ambulance','der Krankenwagen'],['🚒','le camion de pompiers','das Feuerwehrauto'],['🚜','le tracteur','der Traktor'],['🚚','le camion','der Lastwagen'],['🚁','l’hélicoptère','der Hubschrauber'],['🚡','le téléphérique','die Seilbahn'],['🚠','la télécabine','die Gondelbahn'],['🎫','le billet','die Fahrkarte']],
+ valais:[['⛰️','la montagne','der Berg'],['🏔️','le Cervin','das Matterhorn'],['🐑','le mouton','das Schaf'],['🐄','la vache','die Kuh'],['🔔','la cloche','die Glocke'],['🧀','le fromage','der Käse'],['🍷','le vin','der Wein'],['🍇','la vigne','der Weinberg'],['🍑','l’abricot','die Aprikose'],['🏰','le château','das Schloss'],['🎿','le ski','der Ski'],['🌲','le sapin','die Tanne'],['🧊','le glacier','der Gletscher'],['🏞️','la vallée','das Tal'],['🛖','le chalet','das Chalet'],['🏘️','le village','das Dorf'],['🏙️','la ville','die Stadt'],['🥾','la randonnée','die Wanderung'],['🌊','le Rhône','die Rhone'],['📍','le Valais','das Wallis'],['📍','Sion','Sitten'],['📍','Sierre','Siders'],['📍','Brigue','Brig'],['📍','Martigny','Martinach'],['📍','Viège','Visp'],['📍','Loèche','Leuk']]
+};
 function wordsAll(g){
-  const A=[]; const V=(window.PETV&&PETV.VOC)||{}; Object.keys(V).forEach(k=>V[k].l.forEach(([e,f,d])=>A.push({e,fr:f,de:d,cat:k})));
+  const A=[]; Object.keys(THX).forEach(k=>THX[k].forEach(([e,f,d])=>A.push({e,fr:f,de:d,cat:k}))); const V=(window.PETV&&PETV.VOC)||{}; Object.keys(V).forEach(k=>V[k].l.forEach(([e,f,d])=>A.push({e,fr:f,de:d,cat:k})));
   ((window.PETV&&PETV.ANI)||[]).forEach(([e,f,d])=>A.push({e,fr:f,de:d,cat:'animal'}));
   ((window.PETV&&PETV.COLS)||[]).forEach(c=>A.push({e:c[3]||'',fr:c[0],de:c[1],cat:'color'}));
   const Pl=(window.DL&&DL.POOLS)||{}; ['school','cal'].concat(g==='6H'?['math']:[]).forEach(k=>(Pl[k]||[]).forEach(x=>A.push({e:(window.DLEMO&&DLEMO[x.de])||'',fr:x.fr,de:x.de,cat:k+(x.group||'')})));
   return A;
 }
 G.pairs=(kind,g)=>{ if(kind==='satz') return (g==='6H'?PHR:PHR_EASY).map(([de,fr])=>({fr,de})); return wordsAll(g).map(x=>({fr:x.fr,de:x.de})); };
-function genWort(g){
-  const A=wordsAll(g), w=pick(A); const same=A.filter(x=>x.cat===w.cat&&x.de!==w.de); const near=(same.length>=3?same:A.filter(x=>x.de!==w.de));
+function genWort(g,only){
+  const A=wordsAll(g), w=pick(only?A.filter(x=>x.cat===only):A); const same=A.filter(x=>x.cat===w.cat&&x.de!==w.de); const near=(same.length>=3?same:A.filter(x=>x.de!==w.de));
   const k=rnd(3); const sh=shuffle(near).slice(0,6);
   if(k===0){ const o=opts4(w.de,sh.map(x=>x.de)); return {kind:'mcq',vis:w.e?`<span class="emo">${w.e}</span>`:'',prompt:`Comment dit-on « <b>${esc(w.fr)}</b> » en allemand ?`,say:w.fr,lang:'fr',options:o,correct:o.indexOf(w.de),explain:`${esc(w.fr)} = <b>${esc(w.de)}</b>`,after:w.de,afterLang:'de'}; }
   if(k===1){ const o=opts4(w.fr,sh.map(x=>x.fr)); return {kind:'mcq',prompt:`Que veut dire « <b>${esc(w.de)}</b> » ?`,say:w.de,lang:'de',options:o,correct:o.indexOf(w.fr),explain:`${esc(w.de)} = <b>${esc(w.fr)}</b>`,after:w.de}; }
@@ -4972,9 +4978,9 @@ function genCalSeq(g){
 }
 G.calseq=genCalSeq;
 MkSeries('p-wort',{title:'🗣️ Wortschatz · le vocabulaire',intro:'Mots, articles der / die / das, phrases utiles, calendrier et heure en allemand.',
-  acts:[['wort','🗣️ Les mots'],['artikel','🎯 der / die / das'],['satz','💬 Phrases utiles'],['cal','📅 Jours et mois'],['uhr','🕐 Die Uhrzeit']],
+  acts:[['wort','🗣️ Les mots'],['artikel','🎯 der / die / das'],['satz','💬 Phrases utiles'],['cal','📅 Jours et mois'],['uhr','🕐 Die Uhrzeit'],['meteo','🌦️ Das Wetter · météo'],['transport','🚌 Verkehr · transports'],['valais','⛰️ Das Wallis · Valais']],
   grades:[['4H','4H · mots de la classe'],['6H','6H · plus de mots']],hints:{'4H':'Fournitures, calendrier, famille, corps, animaux, couleurs…','6H':'Avec le vocabulaire des maths en plus.'},
-  gen:(g,a)=>a==='artikel'?genArtikel(g):a==='satz'?genSatz(g):a==='cal'?genCalSeq(g):a==='uhr'?genClockDE(g):genWort(g)});
+  gen:(g,a)=>a==='artikel'?genArtikel(g):a==='satz'?genSatz(g):a==='cal'?genCalSeq(g):a==='uhr'?genClockDE(g):(a==='meteo'||a==='transport'||a==='valais')?genWort(g,a):genWort(g)});
 })();
 
 </script>
