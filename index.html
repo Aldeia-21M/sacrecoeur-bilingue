@@ -883,6 +883,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.10", desc: "Impression : un nom de fichier par fiche" },
     { v: "10.9", desc: "Impression : noms des temps de retour" },
     { v: "10.8", desc: "Fiche verbe : une seule page garantie" },
     { v: "10.7", desc: "Imprimer : verbe sur une page, copier l’adresse" },
@@ -6923,7 +6924,10 @@ menu();
 <script>
 /* v10.3 — boutons « Imprimer » placés à côté de ce qu’on imprime */
 (function(){
- const mk=(cls)=>{ const b=document.createElement('button'); b.type='button'; b.className='prt-b '+cls; b.textContent='🖨️ Imprimer'; b.title='Imprimer cette fiche (A4)'; b.onclick=e=>{ e.stopPropagation(); let fired=false; const f=()=>{ fired=true; }; window.addEventListener('beforeprint',f,{once:true});
+ const mk=(cls)=>{ const b=document.createElement('button'); b.type='button'; b.className='prt-b '+cls; b.textContent='🖨️ Imprimer'; b.title='Imprimer cette fiche (A4)'; b.onclick=e=>{ e.stopPropagation(); let fired=false;
+   { const T0=document.title, pg=b.closest('.page'), id=pg?pg.id:'', NM={'p-zahlen':'Zahlen - nombres en allemand','p-math':'Mathematik - maths en allemand','p-school':'Schulsachen - fournitures','p-cal':'Kalender - calendrier','p-conj':'Conjugaison','p-genre':'Genre - règles','p-gram':'Grammaire - règles'};
+     let nm=NM[id]||'Fiche'; if(id==='p-conj'){ const v=document.querySelector('#cjH .cj-ban b'); if(v) nm+=' - '+v.textContent.trim(); }
+     document.title=nm; const back=()=>{ document.title=T0; window.removeEventListener('afterprint',back); }; window.addEventListener('afterprint',back); setTimeout(back,60000); } const f=()=>{ fired=true; }; window.addEventListener('beforeprint',f,{once:true});
    try{ window.print(); }catch(_){}
    setTimeout(()=>{ if(fired) return; let n=document.getElementById('prtHelp'); if(n) n.remove(); n=document.createElement('div'); n.id='prtHelp'; n.className='noprint';
      n.style.cssText='position:fixed;left:12px;right:12px;bottom:90px;z-index:99999;background:#fff;border:2px solid #f59f00;border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(0,0,0,.3);font:600 15px system-ui,sans-serif;color:#222';
