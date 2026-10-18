@@ -749,6 +749,11 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* lecture karaoké */
 .rd-w{display:inline-block;padding:0 2px}.rd-w.cur{background:#fff3bf;border-radius:8px}.rd-s{display:inline-block;transform-origin:50% 80%;transition:transform .12s,color .12s}.rd-s.big{transform:scale(1.5);color:#d6336c;font-weight:900}
 .sn-lg{cursor:pointer;user-select:none}.rd-pop{display:inline-block;animation:rdp .5s}@keyframes rdp{50%{transform:scale(1.6)}}
+/* navale 9.9 */
+.bt-c{position:relative}.bt-c[data-by]{box-shadow:inset 0 0 0 3px var(--sc,#fff)}.bt-c[data-by]::after{content:attr(data-e);position:absolute;right:0;bottom:-1px;font-size:.7em;line-height:1}
+.bt-c.own{background:#e7f5ff;box-shadow:inset 0 0 0 2px #1c7ed6}.bt-pick{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.bt-pick>*{flex:1 1 140px}
+.bt-ships{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}.bt-ships button{padding:8px 12px;border-radius:12px;border:3px solid #339af0;background:#fff;font-weight:900;letter-spacing:2px;color:#1c7ed6;min-height:44px}.bt-ships button.on{background:#d0ebff;border-color:#1864ab}.bt-ships button.done{opacity:.4}
+.bt-leg{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;font-size:.85rem;margin:6px 0}.bt-lg{padding:2px 8px;border-radius:999px;box-shadow:inset 0 0 0 3px var(--sc)}
 </style>
 </head>
 <body>
@@ -844,6 +849,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "9.9", desc: "Navale : placer ses bateaux, tirs distincts, questions visibles" },
     { v: "9.8", desc: "Lecture : sons au clic, syllabes qui grandissent, lent" },
     { v: "9.7", desc: "Confort DYS : texte, police, interligne, calme" },
     { v: "9.6", desc: "Révision espacée des erreurs, plus de points au hasard" },
@@ -2283,7 +2289,7 @@ function startRace(cfg,net){
     const p=cfg.players[R.turn]; const box=body.querySelector('#rQ'); box.style.setProperty('--pc',p.color);
     if(net&&R.turn!==net.me){ paint(); waitBox(); return; }
     if(ai(R.turn)){ R.busy=true; R.q=null; paint(); box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
-      sleep(FAST?30:1500).then(async()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il avance d’une case.`:`❌ ${esc(p.name)} s’est trompé… il reste sur place.`}</div>`;
+      npcQ(cfg,p).then(async ok=>{ box.innerHTML=`<div class="g-qtop"><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div><div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il avance d’une case.`:`❌ ${esc(p.name)} s’est trompé… il reste sur place.`}</div>`;
         if(ok){ R.pos[R.turn]++; paint(); } await sleep(FAST?30:1600);
         if(ok&&R.pos[R.turn]>=LEN) return winRace(); R.turn=(R.turn+1)%cfg.players.length; ask(); });
       return; }
@@ -2431,7 +2437,7 @@ function startChevaux(cfg,net){
     const done=ok=>{ box.hidden=true; box.innerHTML=''; if(ok) S.bonus=true; S.phase='move'; S.info=`${p.emoji} <b>${esc(p.name)}</b> : ${ok?'bonne réponse, il rejoue !':'on continue.'}`; sync(S.info); step(); };
     sync(`⭐ ${p.emoji} <b>${esc(p.name)}</b> répond à une question…`);
     if(ai(pi)){ box.innerHTML=`<div class="g-qtop"><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div><div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
-      sleep(FAST?20:1400).then(async()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il rejoue.`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; await sleep(FAST?20:1500); done(ok); }); return; }
+      npcQ(cfg,p).then(async ok=>{ box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé ! Il rejoue.`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; await sleep(FAST?20:1500); done(ok); }); return; }
     const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">⭐ ${p.emoji} ${esc(p.name)}</span></div>
       <div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
@@ -2710,7 +2716,7 @@ function startPuissance4(cfg,net){
       else msg(`✅ Bien joué ! ${p.emoji} <b>${esc(p.name)}</b>, choisis une colonne pour poser ton jeton.`);
     };
     if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
-      sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>afterAnswer(ok)); }); return; }
+      npcQ(cfg,p).then(ok=>{ box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>afterAnswer(ok)); }); return; }
     msg(`${p.emoji} <b>${esc(p.name)}</b> : réponds pour jouer !`);
     const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
@@ -2728,6 +2734,27 @@ function startPuissance4(cfg,net){
   }
   boardEl.onclick=e=>{ const col=e.target.closest('.c4-col'); if(!col||col.disabled||S.phase!=='drop'||ext(S.turn)) return; dropIn(+col.dataset.c); };
   turn();
+}
+/* ---- le compagnon répond sous tes yeux : question + choix visibles (tous les jeux) ---- */
+async function npcQ(cfg,p){
+  const q=makeQuestion(cfg.topics,p.gr), wr=q.options.map((_,k)=>k).filter(k=>k!==q.correct);
+  const ok=!wr.length||Math.random()<.65, pick=ok?q.correct:wr[rnd(wr.length)];
+  return new Promise(async res=>{
+    const ov=document.createElement('div'); ov.className='g-ov';
+    ov.innerHTML=`<div class="g-sheet" style="--pc:${p.color}"><div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
+      <div class="g-npcsay">${p.emoji} <b>${esc(p.name)}</b> réfléchit…</div><div class="g-q">${q.prompt}</div>${q.audio?'<button class="g-listen">🔊 Écouter</button>':''}
+      <div class="g-opts">${q.options.map(o=>`<button disabled>${esc(o)}</button>`).join('')}</div><div class="g-fb" hidden></div><button class="g-big g-next" hidden>Continuer ▶</button></div>`;
+    document.body.appendChild(ov); try{ D.fitOpts(ov); }catch(e){}
+    const L=ov.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
+    if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),350);
+    await sleep(FAST?20:2200);
+    ov.querySelectorAll('.g-opts button').forEach((x,j)=>{ if(j===pick) x.classList.add(ok?'ok':'ko'); if(!ok&&j===q.correct) x.classList.add('ok'); });
+    ov.querySelector('.g-npcsay').innerHTML=`${p.emoji} <b>${esc(p.name)}</b> répond : « ${esc(q.options[pick])} »`;
+    const fb=ov.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
+    fb.innerHTML=ok?`✅ <b>Bien joué !</b> ${esc(q.shown)}`:`😅 <b>Oups, ${esc(p.name)} s’est trompé !</b> La bonne réponse : ${esc(q.shown)}`;
+    try{ say(q.reveal.t,q.reveal.l); }catch(e){}
+    const nx=ov.querySelector('.g-next'); nx.hidden=false; const go=()=>{ ov.remove(); res(ok); }; nx.onclick=go; if(FAST) setTimeout(go,20);
+  });
 }
 /* ================= BATAILLE NAVALE ================= */
 function btPlace(N,sizes){
@@ -2752,36 +2779,72 @@ function navale(){
   playerSetup({title:'🚢 Bataille navale',npc:true,intro:'Une flotte est cachée dans la mer. À ton tour, réponds à une question : bonne réponse = tu tires un coup de canon sur une case. <b>Touché</b> = tu retires ! <b>Coulé</b> = bonus. Entends la case en allemand : « C, vier ». Le joueur qui a le plus de points quand toute la flotte est coulée gagne. Chaque joueur choisit sa classe.',min:1,max:4,defN:2,perGrade:true,
     extra:{label:'Taille de la mer',opts:[[6,'6 × 6 (rapide)'],[8,'8 × 8']],def:6}},startNavale);
 }
+function navPick(cfg,N,sizes,go){
+  const LETS='ABCDEFGH'.slice(0,N), cap=cfg.players[0];
+  body.innerHTML=`<div class="h-bar"><div class="h-info"></div><button class="g-ghost" id="nQuit">↩ Quitter</button></div><div class="g-msg"><span>⚓ <b>${esc(cap.name)}</b>, comment veux-tu cacher la flotte ?<br><small>Les autres joueurs devront la trouver.</small></span></div>
+   <div class="bt-pick"><button class="g-big" id="nRnd">🎲 Flotte au hasard</button><button class="g-big" id="nMan">✋ Je place mes bateaux</button></div>`;
+  body.querySelector('#nQuit').onclick=()=>navale();
+  body.querySelector('#nRnd').onclick=()=>go(null,-1);
+  body.querySelector('#nMan').onclick=()=>{
+    const grid=[], sh=sizes.map(z=>({z,cells:null})); let sel=0, hz=true;
+    body.innerHTML=`<div class="h-bar"><div class="h-info"></div><button class="g-ghost" id="nQuit">↩ Quitter</button></div><div class="g-msg" id="nMsg"></div>
+     <div class="bt-ships" id="nSh"></div><div class="bt-pick"><button class="g-ghost" id="nRot">↔ Horizontal</button><button class="g-ghost" id="nRn">🎲 Au hasard</button><button class="g-ghost" id="nClr">↺ Tout effacer</button></div>
+     <div class="bt-wrap"><div class="bt-grid" id="nGrid" style="--n:${N}"><i class="bt-corner"></i>${[...LETS].map(l=>`<b class="bt-h">${l}</b>`).join('')}${[...Array(N).keys()].map(r=>`<b class="bt-h">${r+1}</b>`+[...Array(N).keys()].map(c=>`<button class="bt-c" data-r="${r}" data-c="${c}"></button>`).join('')).join('')}</div></div>
+     <button class="g-big" id="nOk" disabled>✅ Flotte cachée, c’est parti !</button>`;
+    const msg=t=>body.querySelector('#nMsg').innerHTML='<span>'+t+'</span>';
+    const occ=()=>{ const m={}; sh.forEach((x,i)=>x.cells&&x.cells.forEach(([a,b])=>m[a+','+b]=i)); return m; };
+    const paintP=()=>{ const m=occ(); body.querySelectorAll('#nGrid .bt-c').forEach(b=>{ const i=m[b.dataset.r+','+b.dataset.c]; b.className='bt-c'+(i!==undefined?' own':''); b.textContent=i!==undefined?'⛵':''; });
+      body.querySelector('#nSh').innerHTML=sh.map((x,i)=>`<button data-i="${i}" class="${i===sel&&!x.cells?'on':''}${x.cells?' done':''}">${'■'.repeat(x.z)}</button>`).join('');
+      const all=sh.every(x=>x.cells); body.querySelector('#nOk').disabled=!all; body.querySelector('#nRot').textContent=hz?'↔ Horizontal':'↕ Vertical';
+      msg(all?'✅ Tous les bateaux sont placés !':`Choisis un bateau (${sh.filter(x=>!x.cells).length} à placer), puis touche la case de départ. Touche un bateau pour le retirer.`); };
+    body.querySelector('#nQuit').onclick=()=>navale();
+    body.querySelector('#nSh').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const i=+b.dataset.i; if(!sh[i].cells) sel=i; paintP(); };
+    body.querySelector('#nRot').onclick=()=>{ hz=!hz; paintP(); };
+    body.querySelector('#nClr').onclick=()=>{ sh.forEach(x=>x.cells=null); sel=0; paintP(); };
+    body.querySelector('#nRn').onclick=()=>{ const f=btPlace(N,sizes); if(f) sh.forEach((x,i)=>x.cells=f[i].cells); paintP(); };
+    body.querySelector('#nGrid').onclick=e=>{ const b=e.target.closest('.bt-c'); if(!b) return; const r=+b.dataset.r, c=+b.dataset.c, m=occ(), k=m[r+','+c];
+      if(k!==undefined){ sh[k].cells=null; sel=k; return paintP(); }
+      const x=sh[sel]; if(!x||x.cells){ const f=sh.findIndex(y=>!y.cells); if(f<0) return; sel=f; return paintP(); }
+      const cells=[...Array(x.z).keys()].map(i=>hz?[r,c+i]:[r+i,c]);
+      if(cells.some(([a,b2])=>a>=N||b2>=N||m[a+','+b2]!==undefined)){ msg('❌ Ça ne rentre pas ici. Essaie une autre case ou tourne le bateau.'); return; }
+      x.cells=cells; const f=sh.findIndex(y=>!y.cells); if(f>=0) sel=f; paintP(); };
+    body.querySelector('#nOk').onclick=()=>go(sh.map(x=>({cells:x.cells,hits:0})),0);
+    paintP(); };
+}
 function startNavale(cfg,net){
   const N=cfg.x||6, sizes=N===6?[3,2,2]:[4,3,3,2,2], n=cfg.players.length, LET='ABCDEFGH'.slice(0,N);
-  const ships=btPlace(N,sizes), shots={}, S={cfg,N,ships,shots,turn:0,scores:cfg.players.map(()=>0),phase:'q',busy:false,over:false}; T2.btg=S;
+  if(!net&&!cfg._ch&&n>=2&&!cfg.players[0].npc) return navPick(cfg,N,sizes,(fl,cap)=>startNavale(Object.assign({},cfg,{_ch:1,_fl:fl,_cap:cap}),net));
+  const ships=cfg._fl||btPlace(N,sizes), shots={}, capI=cfg._cap===0?0:-1, nxt=t=>{ let k=(t+1)%n; if(k===capI) k=(k+1)%n; return k; };
+  const S={cfg,N,ships,shots,by:{},cap:capI,turn:capI===0?1:0,scores:cfg.players.map(()=>0),phase:'q',busy:false,over:false}; T2.btg=S;
   const P=i=>cfg.players[i], ext=pi=>!!P(pi).npc||(!!net&&pi!==net.me), ai=pi=>!!P(pi).npc&&!net;
   body.innerHTML=`<div class="h-bar"><div id="bInfo" class="h-info"></div><button class="g-ghost" id="bQuit">↩ Quitter</button></div>
     <div class="g-msg" id="bMsg"></div>
     <div class="bt-wrap"><div class="bt-grid" id="bGrid" style="--n:${N}"><i class="bt-corner"></i>${[...LET].map(l=>`<b class="bt-h">${l}</b>`).join('')}${[...Array(N).keys()].map(r=>`<b class="bt-h">${r+1}</b>`+[...Array(N).keys()].map(c=>`<button class="bt-c" data-r="${r}" data-c="${c}" aria-label="${LET[c]}${r+1}"></button>`).join('')).join('')}</div></div>
+    <div class="bt-leg">${cfg.players.map((p,i)=>i===capI?`<span>${p.emoji} ⚓ cache la flotte</span>`:`<span class="bt-lg" style="--sc:${p.color}">${p.emoji} ${esc(p.name)}</span>`).join('')}<span>💧 raté · 💥 touché · 🚢 coulé</span></div>
     <div class="h-qbox" id="bQ"></div>`;
   const msg=t=>body.querySelector('#bMsg').innerHTML='<span>'+t+'</span>', grid=body.querySelector('#bGrid'), box=body.querySelector('#bQ');
   body.querySelector('#bQuit').onclick=()=>net?net.quit():navale();
-  const sync=netSetup(net,S,['ships','shots','turn','scores','phase','over'],()=>!!body.querySelector('#bGrid'),(g,st,m)=>{
+  const sync=netSetup(net,S,['ships','shots','turn','scores','phase','over','by'],()=>!!body.querySelector('#bGrid'),(g,st,m)=>{
     ships.splice(0,ships.length,...S.ships); S.ships=ships; Object.keys(shots).forEach(k=>delete shots[k]); Object.assign(shots,S.shots); S.shots=shots;
     if(st.fin) return finish(true);
     if(S.turn===net.me&&S.phase!=='shoot') turn(); else { paint(); msg(m); } });
   const coordSay=(r,c)=>LET[c]+', '+numWord(r+1), coordTxt=(r,c)=>`<b>${LET[c]}${r+1}</b> (${LET[c]}, ${numWord(r+1)})`;
   function paint(){
-    grid.querySelectorAll('.bt-c').forEach(b=>{ const k=b.dataset.r+','+b.dataset.c, v=shots[k]; b.className='bt-c'+(v?' '+v:''); b.textContent=v==='m'?'💧':v==='h'?'💥':v==='s'?'🚢':''; b.disabled=!!v||!(S.phase==='shoot'&&!ext(S.turn)); });
+    grid.querySelectorAll('.bt-c').forEach(b=>{ const k=b.dataset.r+','+b.dataset.c, v=shots[k], bi=(S.by||{})[k], own=!v&&S.cap>=0&&ships.some(s=>s.cells.some(([a,c2])=>a+','+c2===k)); b.className='bt-c'+(v?' '+v:'')+(own?' own':''); b.textContent=v==='m'?'💧':v==='h'?'💥':v==='s'?'🚢':own?'⛵':'';
+      if(v&&bi!==undefined&&P(bi)){ b.dataset.by=bi; b.dataset.e=P(bi).npc?'🤖':P(bi).emoji; b.style.setProperty('--sc',P(bi).color); } else { delete b.dataset.by; delete b.dataset.e; } b.disabled=!!v||!(S.phase==='shoot'&&!ext(S.turn)); });
     body.querySelector('#bInfo').innerHTML=cfg.players.map((p,i)=>chip(p,i===S.turn&&!S.over)+`<b class="h-sc">${S.scores[i]}</b>`).join('');
   }
   const left=()=>ships.filter(s=>s.hits<s.cells.length).length;
   async function shoot(r,c){
     S.phase='anim'; paint(); const p=P(S.turn); const res=btShot(ships,shots,r,c); if(!res) { S.phase='shoot'; paint(); return; }
-    say(coordSay(r,c),'de'); paint();
+    S.by[r+','+c]=S.turn; say(coordSay(r,c),'de'); paint();
     if(res.hit){ S.scores[S.turn]+=res.sunk?3:1; paint(); msg(res.sunk?`🚢 <b>Coulé !</b> ${coordTxt(r,c)} — +3 points pour ${p.emoji} <b>${esc(p.name)}</b>.`:`💥 <b>Touché !</b> ${coordTxt(r,c)} — +1 point. ${p.emoji} <b>${esc(p.name)}</b> retire !`); }
     else msg(`💧 À l’eau… ${coordTxt(r,c)}`);
     const mm=body.querySelector('#bMsg').innerHTML.replace(/^<span>|<\/span>$/g,''); if(left()) sync(mm);
     await sleep(FAST?20:1400);
     if(!left()) return finish(false,mm);
     if(res.hit){ S.phase='shoot'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> retire !`); if(ai(S.turn)) return npcShoot(); msg(`${p.emoji} <b>${esc(p.name)}</b>, tire encore !`); return; }
-    S.turn=(S.turn+1)%n; sync(`${p.emoji} <b>${esc(p.name)}</b> a fini son tour.`); turn();
+    S.turn=nxt(S.turn); sync(`${p.emoji} <b>${esc(p.name)}</b> a fini son tour.`); turn();
   }
   function npcShoot(){
     sleep(FAST?20:1000).then(()=>{ const hits=[]; for(const k in shots) if(shots[k]==='h') hits.push(k.split(',').map(Number)); let cand=[];
@@ -2794,12 +2857,12 @@ function startNavale(cfg,net){
     const p=P(S.turn); S.phase='q'; paint(); box.style.setProperty('--pc',p.color); box.hidden=false;
     if(net&&S.turn!==net.me){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); return; }
     const after=ok=>{
-      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> rate son tir…`); sleep(FAST?20:900).then(()=>{ S.turn=(S.turn+1)%n; sync(`${p.emoji} <b>${esc(p.name)}</b> rate son tir.`); turn(); }); return; }
+      if(!ok){ box.hidden=true; msg(`${p.emoji} <b>${esc(p.name)}</b> rate son tir…`); sleep(FAST?20:900).then(()=>{ S.turn=nxt(S.turn); sync(`${p.emoji} <b>${esc(p.name)}</b> rate son tir.`); turn(); }); return; }
       box.hidden=true; S.phase='shoot'; paint(); sync(`${p.emoji} <b>${esc(p.name)}</b> vise…`);
       if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> vise…`); return npcShoot(); }
       msg(`✅ Bien joué ! ${p.emoji} <b>${esc(p.name)}</b>, touche une case pour tirer.`); };
     if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
-      sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); return; }
+      npcQ(cfg,p).then(ok=>{ box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); return; }
     msg(`${p.emoji} <b>${esc(p.name)}</b> : réponds pour tirer !`);
     const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
@@ -2817,7 +2880,7 @@ function startNavale(cfg,net){
   }
   function finish(remote,mm){ S.over=true; paint(); if(net&&!remote) sync(mm||'',S.turn,true,{fin:1});
     const best=Math.max(...S.scores), w=cfg.players.filter((_,i)=>S.scores[i]===best);
-    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:'Toute la flotte est coulée !<br>'+cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>net?net.again():startNavale(cfg)); }
+    endScreen({title:n===1?`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`:(w.length>1?'Égalité !':`Bravo ${esc(w[0].name)} ! ${w[0].emoji}`),sub:'Toute la flotte est coulée !<br>'+cfg.players.map((p,i)=>`${p.emoji} ${esc(p.name)} : <b>${S.scores[i]}</b> point${S.scores[i]>1?'s':''}`).join('<br>'),color:w[0].color},()=>net?net.again():startNavale(Object.assign({},cfg,{_ch:0,_fl:null,_cap:null}))); }
   grid.onclick=e=>{ const b=e.target.closest('.bt-c'); if(!b||b.disabled||S.phase!=='shoot'||ext(S.turn)) return; shoot(+b.dataset.r,+b.dataset.c); };
   turn();
 }
@@ -2973,7 +3036,7 @@ function startMoulin(cfg,net){
       if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> retire un pion !`); return sleep(FAST?20:1000).then(()=>removePiece(muAiRemove(S,3-pl))); }
       msg(`✅ Moulin ! ${p.emoji} <b>${esc(p.name)}</b>, touche un pion adverse à retirer.`); };
     if(ai(S.turn)){ msg(`${p.emoji} <b>${esc(p.name)}</b> a fait un moulin ! Il répond à une question…`); box.innerHTML=`<div class="g-q">${p.emoji} ${esc(p.name)} réfléchit…</div>`;
-      return sleep(FAST?20:1300).then(()=>{ const ok=Math.random()<.65; box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); }
+      return npcQ(cfg,p).then(ok=>{ box.innerHTML=`<div class="g-fb ${ok?'ok':'ko'}">${ok?`✅ ${esc(p.name)} a trouvé !`:`❌ ${esc(p.name)} s’est trompé…`}</div>`; sleep(FAST?20:1000).then(()=>after(ok)); }); }
     msg(`🎯 <b>Moulin !</b> ${p.emoji} <b>${esc(p.name)}</b> : réponds pour retirer un pion adverse.`);
     const q=makeQuestion(cfg.topics,p.gr); S.q=q;
     box.innerHTML=`<div class="g-qtop"><span class="g-badge" style="--bc:${TOPICS[q.cat].color}">${TOPICS[q.cat].badge}</span><span class="g-dn">${p.emoji} ${esc(p.name)}</span></div>
