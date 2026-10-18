@@ -849,6 +849,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.1", desc: "Poutchou auto ; questions et réponses visibles partout" },
     { v: "10.0", desc: "Nouveaux thèmes : Météo, Transports, Valais" },
     { v: "9.9", desc: "Navale : placer ses bateaux, tirs distincts, questions visibles" },
     { v: "9.8", desc: "Lecture : sons au clic, syllabes qui grandissent, lent" },
@@ -1685,7 +1686,7 @@ function renderSetup(){ NET=null; NX=null;
   <button class="g-big" id="gGo">▶ Commencer la partie</button>`;
   const N=root.querySelector('#gN');
   N.innerHTML=[1,2,3,4,5,6].map(k=>`<button data-n="${k}" aria-pressed="${k===setup.n}">${k}</button>`).join('');
-  N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.n=+b.dataset.n; renderSetup(); };
+  N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.n=+b.dataset.n; if(setup.n===1) setup.npc=true; renderSetup(); };
   { const Lg=root.querySelector('#gLen'); Lg.innerHTML=[[30,'Courte · 30'],[42,'Moyenne · 42'],[60,'Longue · 60']].map(([v,t])=>`<button data-v="${v}" aria-pressed="${setup.len===v}">${t}</button>`).join('');
     Lg.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; setup.len=+b.dataset.v; renderSetup(); };
     const Ex=root.querySelector('#gEx'); Ex.innerHTML=[[0,'⚡ Directe'],[1,'🎯 Pile']].map(([v,t])=>`<button data-v="${v}" aria-pressed="${(setup.exact?1:0)===v}">${t}</button>`).join('');
@@ -1729,15 +1730,15 @@ function renderPlayers(){
 }
 
 /* ================= PARTIE ================= */
-let NET=null, NX=null;
+let NET=null, NX=null, NXS=null;
 const NSYNC=(m,extra,over)=>{ if(NX) NX(m,undefined,!!over,extra); };
 function netGameStart(cfg,net){ NET=net; const H=window.DLH; applySize(cfg.x||60);
   G={players:cfg.players.map(p=>({name:p.name,emoji:p.emoji,color:p.color,gr:p.gr,pos:0})),cur:0,busy:false,topics:['zahlen','math','school','cal','conj','calc'],level:'easy',over:false,tokens:[],exact:false};
   const X={get pos(){ return G.players.map(p=>p.pos); },set pos(v){ G.players.forEach((p,i)=>{ p.pos=v[i]; }); },get turn(){ return G.cur; },set turn(v){ G.cur=v; },busy:false};
-  NX=H.netSetup(net,X,['pos','turn'],()=>!!document.querySelector('#gBoard'),(g,st,m)=>{ G.busy=false; if(st.fin) return win(G.players[st.winner],st.winner,true); layoutTokens(); updateTurn(); followPlayers(); msg(String(m||'')); const b=root.querySelector('#gRoll'); if(b) b.disabled=G.cur!==net.me; });
+  NXS=X; NX=H.netSetup(net,X,['pos','turn'],()=>!!document.querySelector('#gBoard'),(g,st,m)=>{ G.busy=false; if(st.fin) return win(G.players[st.winner],st.winner,true); layoutTokens(); updateTurn(); followPlayers(); msg(String(m||'')); const b=root.querySelector('#gRoll'); if(b) b.disabled=G.cur!==net.me; });
   renderGame(); }
 function startGame(){
-  NET=null; NX=null;
+  NET=null; NX=null; NXS=null;
   const list=setup.pl.slice(0,setup.n).map((p,i)=>({name:(p.name||'').trim()||('Joueur '+(i+1)),emoji:CHARS[p.ci][0],color:COLORS[p.co][0],gr:p.gr||'4H',pos:0}));
   if(setup.npc&&list.length<6){ const used=new Set(list.map(x=>x.color)); const col=(COLORS.find(c=>!used.has(c[0]))||COLORS[5])[0]; list.push({name:'PoutchouPoutchou',emoji:'<i class="mx"></i>',color:col,gr:list[0].gr,pos:0,npc:true}); }
   applySize(setup.len); G={players:list,cur:0,busy:false,topics:[...setup.topics],level:setup.level,over:false,tokens:[],exact:setup.exact};
@@ -1930,6 +1931,7 @@ function askQuestion(p,d){
     ov.querySelector('.g-opts').onclick=e=>{
       const b=e.target.closest('button'); if(!b||done) return; done=true;
       const k=+b.dataset.k, ok=k===q.correct;
+      if(NET&&NXS){ try{ NXS.qa={id:Date.now().toString(36)+Math.floor(Math.random()*1e4),by:NET.me,n:String(p.name||''),pr:String(q.prompt||''),o:q.options.map(String),k:k,c:q.correct,s:String(q.shown||'')}; }catch(e){} }
       ov.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances de <b>${d}</b> case${d>1?'s':''}.`
@@ -2125,7 +2127,7 @@ function pickItems(topics,grade,count){
 /* écran de réglage commun */
 function playerSetup(o,done){
   GCUR=null;
-  const st={n:o.defN,npc:false,pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null};
+  const st={n:o.defN,npc:!!(o.npc&&o.defN===1),pl:[0,1,2,3,4,5].map(i=>({name:'',ci:i,gr:(window.DLgrade?DLgrade():'4H')})),topics:new Set(window.DLsec?window.DLsec():Object.keys(TOPICS)),grade:(window.DLgrade?DLgrade():'4H'),x:o.extra?o.extra.def:null};
   if(window.DLU) DLU.pre(st,CHARS,false);
   function draw(){
     const list=st.pl.slice(0,st.n);
@@ -2139,7 +2141,7 @@ function playerSetup(o,done){
       ${o.noNote?'':''}<p class="g-p g-note"><b>1H</b> : images, couleurs, formes, animaux, petits nombres (la voix lit tout). <b>4H</b> : nombres jusqu’à 100, fournitures, calendrier. <b>6H</b> : tout ça + nombres jusqu’à 999, vocabulaire de maths et conjugaison (être, avoir, aller). <b>Calcul</b> : additions et soustractions en 4H ; en 6H, les quatre opérations.</p>
       <button class="g-big" id="hGo">▶ Jouer</button>`;
     const N=body.querySelector('#hN'); let nb=''; for(let k=(o.npc?1:o.min);k<=o.max;k++) nb+=`<button data-n="${k}" aria-pressed="${k===st.n}">${k}</button>`; N.innerHTML=nb;
-    N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.n=+b.dataset.n; if(o.npc&&st.n<o.min) st.npc=true; if(st.npc&&st.n>=o.max) st.npc=false; draw(); };
+    N.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.n=+b.dataset.n; if(o.npc&&(st.n<o.min||st.n===1)) st.npc=true; if(st.npc&&st.n>=o.max) st.npc=false; draw(); };
     { const nb2=body.querySelector('#hNpc'); if(nb2) nb2.onclick=()=>{ st.npc=!st.npc; if(!st.npc&&st.n<o.min) st.n=o.min; draw(); }; }
     if(!o.perGrade){ const G=body.querySelector('#hG'); G.innerHTML=['1H','4H','6H'].map(g=>`<button data-g="${g}" aria-pressed="${st.grade===g}">Classe ${g}</button>`).join('');
       G.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; st.grade=b.dataset.g; G.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.g===st.grade)); }; }
@@ -2303,7 +2305,7 @@ function startRace(cfg,net){
     if(!FAST) box.scrollIntoView({behavior:'smooth',block:'nearest'});
     box.querySelector('.g-opts').onclick=async e=>{
       const b=e.target.closest('button'); if(!b||R.busy) return; R.busy=true;
-      const k=+b.dataset.k, ok=k===q.correct;
+      const k=+b.dataset.k, ok=k===q.correct; qaPost(R,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances d’une case.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu restes sur place.`;
@@ -2384,12 +2386,13 @@ function startChevaux(cfg,net){
     dEls.forEach((el,i)=>{ el.classList.toggle('used',!!S.used[i]&&S.dice[i]>0&&S.phase!=='roll'); el.classList.toggle('sel',S.phase==='move'&&!S.used[i]&&S.sel===i&&!ext(S.turn)&&mv.filter(m=>m.d===i).length>0&&mv.some(m=>m.d!==i)); el.disabled=!(S.phase==='move'&&!S.used[i]&&!ext(S.turn)); });
     [0,1].forEach(i=>body.querySelector('#chW'+i).textContent=S.dice[i]?numWord(S.dice[i]):'');
   }
-  const KEYS=['h','turn','dice','used','sel','phase','bonus','played','tries','info'];
+  const KEYS=['h','turn','dice','used','sel','phase','bonus','played','tries','info','qa'];
   const sync=(m,over,winner)=>{ if(!net) return; const s={}; KEYS.forEach(k=>{ s[k]=S[k]; }); if(over){ s.over=true; s.winner=winner; } net.push(JSON.parse(JSON.stringify(s)),S.turn,over,m||''); };
   if(net) net.onRemote=g=>{ const s=g.s; if(!s||!body.querySelector('#chBoard')) return; const before=JSON.stringify(S.dice);
     KEYS.forEach(k=>{ if(s[k]!==undefined) S[k]=s[k]; }); S.busy=false; face(0,S.dice[0]); face(1,S.dice[1]);
     if(S.phase==='move'&&JSON.stringify(S.dice)!==before) say(numWord(S.dice[0])+(S.bonus?' und ':', ')+numWord(S.dice[1]),'de');
     paint(); msg(String(g.msg||'').replace(/<(?!\/?b>)[^>]*>/g,''));
+    if(s.qa&&s.qa.id!==S._qs&&s.qa.by!==net.me){ S._qs=s.qa.id; qaView(s.qa); }
     if(s.over) return win(s.winner);
     if(S.turn===net.me&&S.phase==='move') step(); };
   async function rollDice(){
@@ -2447,7 +2450,7 @@ function startChevaux(cfg,net){
     if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
     if(!FAST) box.scrollIntoView({behavior:'smooth',block:'nearest'});
     let ans=false;
-    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu rejoues !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}`;
@@ -2496,9 +2499,19 @@ const stripTxt = (t, n) => String(t == null ? '' : t).replace(/[<>&"'`\\]/g, '')
 function cleanHTML(h){ return safeHTML(h); }
 window.DLsafe=safeHTML;
 const cleanMsg=h=>safeHTML(String(h||''),['b','i','br']);
+/* ---- joueurs distants : on voit la question et la réponse des autres (apprendre en regardant) ---- */
+function qaPost(S,p,q,k){ try{ S.qa={id:Date.now().toString(36)+rnd(10000),by:S.turn,n:String(p.name||''),pr:String(q.prompt||''),o:q.options.map(String),k:k,c:q.correct,s:String(q.shown||'')}; }catch(e){} }
+function qaView(a){
+  if(!a||!Array.isArray(a.o)) return; const clean=window.DLsafe||(t=>esc(String(t)));
+  const ov=document.createElement('div'); ov.className='g-ov';
+  ov.innerHTML=`<div class="g-sheet"><div class="g-qtop"><span class="g-dn">👀 ${esc(a.n)} a répondu</span></div><div class="g-q">${clean(a.pr)}</div>
+    <div class="g-opts">${a.o.map((o,j)=>`<button disabled class="${j===a.c?'ok':j===a.k?'ko':''}">${esc(o)}</button>`).join('')}</div>
+    <div class="g-fb ${a.k===a.c?'ok':'ko'}">${a.k===a.c?`✅ <b>${esc(a.n)}</b> a trouvé : ${esc(a.s||a.o[a.c])}`:`❌ <b>${esc(a.n)}</b> a répondu « ${esc(a.o[a.k]||'')} ». Bonne réponse : ${esc(a.s||a.o[a.c])}`}</div><button class="g-big g-next">Continuer ▶</button></div>`;
+  document.body.appendChild(ov); try{ D.fitOpts(ov); }catch(e){} const go=()=>{ if(ov.isConnected) ov.remove(); }; ov.querySelector('.g-next').onclick=go; setTimeout(go,FAST?50:9000); }
 function netSetup(net,S,keys,alive,apply){
+  keys=keys.concat(['qa']);
   const sync=(m,ti,over,extra)=>{ if(!net) return; const st={}; keys.forEach(k=>{ st[k]=S[k]; }); if(extra) Object.assign(st,extra); return net.push(JSON.parse(JSON.stringify(st)),ti===undefined?S.turn:ti,!!over,m||''); };
-  if(net) net.onRemote=g=>{ const st=g.s; if(!st||!alive()) return; keys.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; }); S.busy=false; apply(g,st,cleanMsg(g.msg)); };
+  if(net) net.onRemote=g=>{ const st=g.s; if(!st||!alive()) return; keys.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; }); S.busy=false; apply(g,st,cleanMsg(g.msg)); if(st.qa&&st.qa.id!==S._qs&&st.qa.by!==net.me){ S._qs=st.qa.id; qaView(st.qa); } };
   return sync; }
 /* ================= BATAILLE DE CHIFFRES ================= */
 function frNum(n){
@@ -2548,7 +2561,7 @@ function startCartes(cfg,net){
     box.querySelectorAll('.bn-face').forEach((b,k)=>{ b.disabled=true; b.classList.toggle('ok',k===best); b.classList.toggle('ko',k===i&&!ok); b.querySelector('.bn-v').textContent=S.cards[k].v; });
     const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
     const w=S.cards[best];
-    fb.innerHTML=(ok?`✅ <b>Bravo !</b> `:`❌ <b>Pas tout à fait.</b> `)+`La plus grande : <b>${esc(w.label)}</b> = ${w.v}.`+(ok?` ${byNpc||remote?esc(p.name)+' marque':'Tu marques'} un point.`:'');
+    fb.innerHTML=((byNpc||remote)?`👉 ${esc(p.name)} a choisi : <b>${esc(S.cards[i].label)}</b>.<br>`:'')+(ok?`✅ <b>Bravo !</b> `:`❌ <b>Pas tout à fait.</b> `)+`La plus grande : <b>${esc(w.label)}</b> = ${w.v}.`+(ok?` ${byNpc||remote?esc(p.name)+' marque':'Tu marques'} un point.`:'');
     if(ok&&!remote) S.scores[S.turn]++; info();
     if(!remote) DLverdict(ok,[{t:w.say,l:w.lang}],false,{});
     const nx=box.querySelector('.g-next'); if(remote){ nx.hidden=true; return; } nx.hidden=false;
@@ -2620,7 +2633,7 @@ function startUno(cfg,net){
   async function npcTurn(){
     const pi=S.turn, h=S.hands[pi], t=top(), pl=h.map((_,i)=>i).filter(i=>unOk(h[i],t,S.col));
     if(!pl.length) return penalty(pi,'Aucune carte à poser.');
-    if(Math.random()>=.7) return penalty(pi,'❌ Mauvaise réponse.');
+    if(!(await npcQ(cfg,P(pi)))) return penalty(pi,'❌ Mauvaise réponse.');
     pl.sort((a,b)=>(h[a].c==='w')-(h[b].c==='w')||(/\d/.test(h[a].v)-/\d/.test(h[b].v)));
     const i=pl[0]; let col=S.col; if(h[i].c==='w'){ const cnt={}; h.forEach(c=>{ if(c.c!=='w') cnt[c.c]=(cnt[c.c]||0)+1; }); col=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0]||'r'; }
     commit(pi,i,col); }
@@ -2634,7 +2647,7 @@ function startUno(cfg,net){
     if(!FAST) box.scrollIntoView({behavior:'smooth',block:'nearest'});
     const close=()=>{ box.hidden=true; box.innerHTML=''; };
     let ans=false;
-    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>La carte reste dans ta main et tu pioches.`;
@@ -2726,7 +2739,7 @@ function startPuissance4(cfg,net){
     D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
     if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
     let ans=false;
-    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux poser un jeton.`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu passes ton tour.`;
@@ -2872,7 +2885,7 @@ function startNavale(cfg,net){
     D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
     if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
     let ans=false;
-    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu peux tirer !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Pas de tir ce tour.`;
@@ -2936,8 +2949,8 @@ function startPendu(cfg,net){
   async function guess(ch){
     if(S.busy||S.over||S.used[ch]) return; S.busy=true; const p=P(S.turn), k=pdBase(ch,mode);
     const found=pdGuess(S,k); S.used[ch]=found?'ok':'ko'; if(mode===1&&found){ [...ROWS.join('')].forEach(c=>{ if(pdBase(c,1)===k) S.used[c]='ok'; }); }
-    if(found){ S.scores[S.turn]+=found; paint(); msg(`✅ Il y a <b>${found}</b> « ${ch.toUpperCase()} » ! +${found} point${found>1?'s':''} pour ${p.emoji} <b>${esc(p.name)}</b>.`); }
-    else { S.err++; paint(); msg(`❌ Pas de « ${ch.toUpperCase()} »… ${S.err} erreur${S.err>1?'s':''} sur ${MAX}.`); }
+    if(found){ S.scores[S.turn]+=found; paint(); msg(`${p.emoji} <b>${esc(p.name)}</b> propose « ${ch.toUpperCase()} » : ✅ il y en a <b>${found}</b> ! +${found} point${found>1?'s':''}.`); }
+    else { S.err++; paint(); msg(`${p.emoji} <b>${esc(p.name)}</b> propose « ${ch.toUpperCase()} » : ❌ pas de « ${ch.toUpperCase()} »… ${S.err} erreur${S.err>1?'s':''} sur ${MAX}.`); }
     sync(body.querySelector('#pMsg').innerHTML.replace(/^<span>|<\/span>$/g,''));
     await sleep(FAST?10:900);
     if(done()){ S.scores[S.turn]+=3; paint(); S.over=true; msg(`🎉 Mot trouvé : <b>${esc((S.w.art?S.w.art+' ':'')+S.w.word)}</b> ! +3 points pour ${p.emoji} <b>${esc(p.name)}</b>.`); say((S.w.art?S.w.art+' ':'')+S.w.word,S.w.lang); sync(body.querySelector('#pMsg').innerHTML.replace(/^<span>|<\/span>$/g,'')); return next(); }
@@ -3046,7 +3059,7 @@ function startMoulin(cfg,net){
     D.fitOpts(box); const L=box.querySelector('.g-listen'); if(L) L.onclick=()=>say(q.audio.t,q.audio.l);
     if(q.audio&&q.audio.l==='de') setTimeout(()=>say(q.audio.t,'de'),FAST?0:350);
     let ans=false;
-    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct;
+    box.querySelector('.g-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||ans) return; ans=true; const k=+b.dataset.k, ok=k===q.correct; qaPost(S,p,q,k);
       box.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       const fb=box.querySelector('.g-fb'); fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
       fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu retires un pion adverse !`:`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Pas de pion retiré.`;
