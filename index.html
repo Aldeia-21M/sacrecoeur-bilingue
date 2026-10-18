@@ -924,6 +924,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.13", desc: "Famille : copier code, lien, adresse du site clairs" },
     { v: "10.12", desc: "Impression : fiche à l’échelle, nom du PDF par fiche" },
     { v: "10.11", desc: "Impression : fiche Zahlen pleine page" },
     { v: "10.10", desc: "Impression : un nom de fichier par fiche" },
@@ -5789,9 +5790,16 @@ function famCard(){
   const st=SY.busy?'🔄 Synchronisation…':SY.st==='err'?'⚠️ Hors connexion : on réessaiera':s.last?'✅ Synchronisé à '+new Date(s.last).toLocaleTimeString('fr-CH',{hour:'2-digit',minute:'2-digit'}):'';
   return `<h4 class="u-h" style="margin-top:0">🔑 Code de ${V.famEdit?'la famille':esc(D.fam||'ma famille')} <small>${V.famEdit?'':'<button type="button" class="u-lk" data-act="famed">✏️ renommer</button>'}</small></h4>
   ${V.famEdit?`<div class="u-sv"><input class="u-in" id="uFamN" maxlength="30" value="${esc(D.fam)}" placeholder="Ex. Les Dupont" style="text-transform:none;font-family:inherit;letter-spacing:0"><button type="button" class="u-b pr" data-act="famok">Enregistrer</button></div>`:''}
-  <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier</button></div>
-  <p class="u-note">Code famille · ${st} · Sur un autre appareil : <b>Famille → J’ai déjà un code famille</b>.</p>
-  <p class="u-note">📌 Cet appareil se souvient de la famille et s’y reconnecte tout seul.</p><div class="u-sv"><button type="button" class="u-b" data-act="sylk">🔗 Copier le lien de connexion</button></div>`; }
+  <div class="u-codebox"><code class="u-code">${esc(s.code)}</code><button type="button" class="u-b" data-act="sycp">📋 Copier le code</button></div>
+  <p class="u-note">Code famille · ${st}</p>
+  <p class="u-note">📌 Cet appareil se souvient de la famille et s’y reconnecte tout seul.</p>
+  <h4 class="u-h">➕ Ajouter un appareil à <u>cette</u> famille</h4>
+  <p class="u-note">Envoie ce <b>lien famille</b> aux membres de ta famille : en l’ouvrant, leur appareil rejoint ta famille (mêmes joueurs, mêmes scores). Ou donne-leur le <b>code</b> ci-dessus : <b>Famille → J’ai déjà un code famille</b>.</p>
+  <div class="u-sv"><button type="button" class="u-b pr" data-act="syshare">📤 Envoyer le lien famille</button><button type="button" class="u-b" data-act="sylk">🔗 Copier le lien famille</button></div>
+  <h4 class="u-h">👪 Faire connaître l’appli à <u>une autre</u> famille</h4>
+  <p class="u-note">Donne simplement l’<b>adresse du site</b> : l’autre famille crée ensuite <b>son propre code famille</b>. Ne lui envoie pas ton lien famille, sinon elle entrerait dans la tienne.</p>
+  <div class="u-sv"><button type="button" class="u-b" data-act="syweb">🌐 Copier l’adresse du site</button></div>
+  ${V.manual?`<div class="u-note" style="margin-top:8px"><b>Copie manuelle :</b> touche longuement le texte ci-dessous, puis « Copier ».<input id="uMan" class="u-in" readonly value="${esc(V.manual)}" style="text-transform:none;font-family:inherit;letter-spacing:0;width:100%;margin-top:4px" onfocus="this.select()"></div>`:''}`; }
 const CONF={ k:'dl-conf', get(){ try{ return Object.assign({sz:0,fnt:0,sp:0,calm:0},JSON.parse(localStorage.getItem(this.k)||'{}')); }catch(e){ return {sz:0,fnt:0,sp:0,calm:0}; } },
   set(o){ try{ localStorage.setItem(this.k,JSON.stringify(o)); }catch(e){} this.apply(); },
   apply(){ const c=this.get(),h=document.documentElement.classList; h.toggle('cf-fnt',!!c.fnt); h.toggle('cf-sp',!!c.sp); h.toggle('cf-calm',!!c.calm); h.toggle('cf-sz1',c.sz===1); h.toggle('cf-sz2',c.sz===2); } };
@@ -5962,8 +5970,14 @@ P.addEventListener('click',async e=>{
   if(a==='syjoin'){ V.join=!V.join; V.msg=''; render(); setTimeout(()=>{ const i=$('#uCode'); if(i) i.focus(); },50); return; }
   if(a==='sygo'){ await joinCode(($('#uCode')||{}).value); return; }
   if(a==='sysync'){ V.msg=''; sync(true); render(); return; }
-  if(a==='sylk'){ let ok=false; const l=location.origin+location.pathname+'?famille='+D.sync.code; try{ await navigator.clipboard.writeText(l); ok=true; }catch(x){} V.msg=ok?'✅ Lien copié : ouvre-le sur un appareil pour le rattacher à la famille.':'Copie le lien : '+l; render(); return; }
-  if(a==='sycp'){ let ok=false; try{ await navigator.clipboard.writeText(D.sync.code); ok=true; }catch(x){} V.msg=ok?'✅ Code copié.':'Note le code affiché.'; render(); return; }
+  if(a==='sylk'||a==='sycp'||a==='syweb'||a==='syshare'){ const code=D.sync.code, base=location.origin+location.pathname, fam=base+'?famille='+code;
+    const what=a==='sycp'?code:a==='syweb'?base:fam;
+    if(a==='syshare'){ const txt='Rejoins notre famille sur Sacré-Cœur bilingue : ouvre ce lien. (Code famille : '+code+')'; try{ if(navigator.share){ await navigator.share({title:'Notre famille – Sacré-Cœur bilingue',text:txt,url:fam}); V.msg='✅ Lien famille envoyé.'; V.manual=''; render(); return; } }catch(x){ if(x&&x.name==='AbortError') return; } }
+    let ok=false; try{ await navigator.clipboard.writeText(what); ok=true; }catch(x){}
+    if(!ok){ try{ const ta=document.createElement('textarea'); ta.value=what; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px'; document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,what.length); ok=document.execCommand('copy'); ta.remove(); }catch(x){} }
+    const nm=a==='sycp'?'Code famille':a==='syweb'?'Adresse du site':'Lien famille';
+    V.manual=ok?'':what; V.msg=ok?'✅ '+nm+(a==='syweb'?' copiée':' copié')+(a==='sycp'?' : à taper sur l’autre appareil.':a==='syweb'?' : à donner à une autre famille.':' : à envoyer à ta famille, qui l’ouvre pour la rejoindre.'):'⚠️ Copie automatique bloquée ici : copie le texte ci-dessous à la main.'; render();
+    if(!ok) setTimeout(()=>{ const i=$('#uMan'); if(i){ i.focus(); i.select(); } },80); return; }
   if(a==='syoff'){ if(await ask('Quitter la famille sur <b>cet appareil</b> ?<br><small>Les joueurs restent ici, mais ne seront plus synchronisés. Tu pourras retaper le code famille plus tard.</small>','Quitter',true)){ D.sync=null; unmirror(); save(); V.msg=''; render(); } return; }
   if(a==='fsave'){ const f=V.form, nm=(($('#fName')||{}).value||'').trim();
     if(!nm){ V.msg='⚠️ Écris un prénom ou un pseudo.'; V.form.name=''; render(); return; }
