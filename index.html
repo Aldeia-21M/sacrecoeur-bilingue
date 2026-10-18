@@ -746,6 +746,9 @@ html.cf-sz1 .mx-play,html.cf-sz1 .g-ov,html.cf-sz1 .u-card,html.cf-sz1 #gameRoot
 html.cf-sz2 .mx-play,html.cf-sz2 .g-ov,html.cf-sz2 .u-card,html.cf-sz2 #gameRoot{font-size:1.3em}
 html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 .cf-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}.cf-row .u-b{flex:1 1 auto;min-width:64px}
+/* lecture karaoké */
+.rd-w{display:inline-block;padding:0 2px}.rd-w.cur{background:#fff3bf;border-radius:8px}.rd-s{display:inline-block;transform-origin:50% 80%;transition:transform .12s,color .12s}.rd-s.big{transform:scale(1.5);color:#d6336c;font-weight:900}
+.sn-lg{cursor:pointer;user-select:none}.rd-pop{display:inline-block;animation:rdp .5s}@keyframes rdp{50%{transform:scale(1.6)}}
 </style>
 </head>
 <body>
@@ -841,6 +844,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "9.8", desc: "Lecture : sons au clic, syllabes qui grandissent, lent" },
     { v: "9.7", desc: "Confort DYS : texte, police, interligne, calme" },
     { v: "9.6", desc: "Révision espacée des erreurs, plus de points au hasard" },
     { v: "9.5", desc: "iOS : onglets lisibles, bulles non bloquantes" },
@@ -6310,6 +6314,16 @@ const PW=t=>{ const m=t.match(/^(.*?)([.,!?;:\-]*)$/), sy=m[1].split('·').map(x
 
 const LPL=l=>l.split(' ').map(PW);
 let lpTok=0, lpSpd=1;
+let rdTok=0;
+const V_='aeiouyàâäéèêëîïôöùûüœ';
+function sylW(w){ const m=w.match(/^([^A-Za-zÀ-ÿœŒ]*[A-Za-zÀ-ÿœŒ]*[’'])?(.*?)([^A-Za-zÀ-ÿœŒ]*)$/); const pre=m[1]||'', core=m[2], post=m[3]; const low=core.toLowerCase(); if(!core) return [w];
+  const isV=i=>{ const c=low[i]; if(!V_.includes(c)) return false; if(c==='u'&&i>0&&(low[i-1]==='q'||(low[i-1]==='g'&&'eiy'.includes(low[i+1]||'')))) return false; return true; };
+  const nuc=[]; for(let i=0;i<low.length;){ if(isV(i)){ let j=i; while(j<low.length&&isV(j)) j++; nuc.push([i,j]); i=j; } else i++; }
+  if(nuc.length>1){ const l=nuc[nuc.length-1]; const tl=low.slice(l[0]); if(tl==='e'||tl==='es'||tl==='ent') nuc.pop(); }
+  const cut=[0], CL=/(bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|tr|vr|ch|ph|th|gn|qu)$/;
+  for(let n=0;n<nuc.length-1;n++){ const a=nuc[n][1], b=nuc[n+1][0], c=b-a; if(c===0) continue; cut.push(c===1?a:(CL.test(low.slice(a,b))?b-2:b-1)); }
+  const parts=cut.map((c,i)=>core.slice(c,cut[i+1])); parts[parts.length-1]+=post; const out=parts.filter(Boolean); if(pre) out.unshift(pre); return out; }
+window.DLsyl=sylW;
 const LPS=[{n:'🐌 Très lent',step:720,r:0.45},{n:'🐢 Lent',step:500,r:0.6},{n:'🐇 Normal',step:340,r:0.8}];
 function lineH(l,H){ return `<div class="lp-line"><div class="lp-text">${LPL(l).map((w,wi)=>{ const n=w.word.length, c=n>11?'xs':n>8?'sm':''; return `<div class="lp-w ${c}" data-w="${wi}"><div class="lp-sy">${w.sy.map((x,i)=>`<button class="lp-s" data-s="${i}" style="--c:${LPC[i%3]}">${H?H(x.s):x.s}</button>`).join('')}${w.p?`<span class="lp-pu">${w.p}</span>`:''}</div><button class="lp-ear" data-e="1" aria-label="Écouter le mot">🔊</button></div>`; }).join('')}</div>
   <div class="lp-ctl"><button data-a="say">🔊 La ligne</button><button data-a="gd">${LPS[lpSpd].n.split(' ')[0]} Pas à pas</button></div></div>`; }
@@ -6346,13 +6360,30 @@ function lpPage(ti){
 function read(){
   const pool=shuf(TX).slice(0,3); const used=new Set();
   const html=pool.map(t=>t.replace(/\[([^\]]+)\]/g,(m,k)=>{ const g=MK[k]; if(g) used.add(g); return g?`<span class="sn-m" style="--c:${g.c}">${k}</span>`:k; })).map(x=>`<p>${x}</p>`).join('');
-  root.innerHTML=back()+`<div class="mx-head"><h2>📚 Lis un texte</h2><p>Les sons en couleur t’aident à lire.</p></div><div class="sn-card"><div class="sn-leg">${[...used].map(g=>`<span style="--c:${g.c}">${g.l.split(' · ')[0]}</span>`).join('')}</div><div class="sn-txt" id="snT">${html}</div>
+  root.innerHTML=back()+`<div class="mx-head"><h2>📚 Lis un texte</h2><p>Les sons en couleur t’aident à lire.</p></div><div class="sn-card"><div class="sn-leg">${[...used].map(g=>`<span class="sn-lg" role="button" tabindex="0" data-g="${G.indexOf(g)}" style="--c:${g.c}">🔊 ${g.l.split(' · ')[0]}</span>`).join('')}</div><div class="lp-top" id="rdSp">${LPS.map((x,i)=>`<button data-v="${i}" class="${i===lpSpd?'on':''}">${x.n}</button>`).join('')}</div><div class="sn-txt" id="snT">${html}</div>
     <button class="sn-ask" id="snL">🔊 <span>Écouter le texte</span></button><button class="mx-go big" id="snX">🔀 Un autre texte</button></div>`;
   root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
   const plain=pool.map(t=>t.replace(/[\[\]]/g,''));
-  root.querySelector('#snL').onclick=()=>seq(plain.map(t=>({t,l:'fr',pause:700})));
-  root.querySelector('#snX').onclick=read;
-  root.querySelector('#snT').onclick=e=>{ const p=e.target.closest('p'); if(p) say(p.textContent); };
+  const pEls=[...root.querySelectorAll('#snT p')], orig=pEls.map(p=>p.innerHTML); let on=false;
+  const L=root.querySelector('#snL'), lab=L.querySelector('span');
+  const stop=()=>{ rdTok++; on=false; pEls.forEach((p,i)=>{ p.innerHTML=orig[i]; }); lab.textContent='Écouter le texte'; try{ speechSynthesis.cancel(); }catch(e){} };
+  async function play(){ if(on) return stop(); const my=++rdTok; on=true; lab.textContent='⏹️ Arrêter'; const st=LPS[lpSpd];
+    for(let i=0;i<pEls.length&&my===rdTok;i++){
+      const toks=plain[i].split(' ').map(w=>({w,sy:sylW(w)}));
+      pEls[i].innerHTML=toks.map((t,wi)=>`<span class="rd-w" data-w="${wi}">${t.sy.map(x=>`<span class="rd-s">${x.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}</span>`).join('')}</span>`).join(' ');
+      pEls[i].scrollIntoView({block:'center',behavior:FAST?'auto':'smooth'});
+      const ws=pEls[i].querySelectorAll('.rd-w');
+      for(let k=0;k<toks.length;k++){ if(my!==rdTok) return; const clean=toks[k].w.replace(/[.,!?;:]/g,''); ws[k].classList.add('cur'); if(clean) seq([{t:clean,l:'fr',r:st.r,pause:0}]);
+        for(const sy of ws[k].querySelectorAll('.rd-s')){ if(my!==rdTok) return; sy.classList.add('big'); await sleep(FAST?15:st.step); sy.classList.remove('big'); }
+        await sleep(FAST?10:(/[.!?]$/.test(toks[k].w)?st.step*1.2:st.step*0.4)); ws[k].classList.remove('cur'); }
+      pEls[i].innerHTML=orig[i]; await sleep(FAST?10:500); }
+    if(my===rdTok) stop(); }
+  L.onclick=play;
+  root.querySelector('#rdSp').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; lpSpd=+b.dataset.v; root.querySelectorAll('#rdSp button').forEach(x=>x.classList.toggle('on',+x.dataset.v===lpSpd)); if(on){ stop(); play(); } };
+  root.querySelector('#snX').onclick=()=>{ rdTok++; try{ speechSynthesis.cancel(); }catch(e){} read(); };
+  const snd=g=>{ if(!g) return; stop(); seq([{t:vs(g),l:'fr',r:LPS[lpSpd].r<.6?0.5:0.7,pause:0}]); };
+  root.querySelector('.sn-leg').onclick=e=>{ const c=e.target.closest('.sn-lg'); if(c) snd(G[+c.dataset.g]); };
+  root.querySelector('#snT').onclick=e=>{ if(on) return; const m=e.target.closest('.sn-m'); if(m){ const g=MK[m.textContent]; if(g){ m.classList.add('rd-pop'); setTimeout(()=>m.classList.remove('rd-pop'),600); return snd(g); } } const p=e.target.closest('p'); if(p) seq([{t:p.textContent,l:'fr',r:LPS[lpSpd].r,pause:0}]); };
 }
 /* ---- entraînement ---- */
 function mkQ(){
