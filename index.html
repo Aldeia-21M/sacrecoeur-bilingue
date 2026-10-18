@@ -765,7 +765,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
  @page{size:A4;margin:10mm}
  html,body{background:#fff!important}
  header,#dock,#onbar,#whoPill,#whoModal,#salonBan,#pcFab,#pcNudge,#pcP,#pcG,.toast,.u-toast,.vox,#setbk,.prt-b,.cl-pop,.g-ov,#tabs,
- .gk-nav,.sn-menu,.cj-train,.cj-toggle,.cj-tools,.cj-head,.cj-vrow,.cj-gi,.cj-note,.tr-h,.tr-p,.tr-ctl,.mx-go,.lvl,.cj-groups,.sn-back,.g-ghost,.page>.train,.page>.mn-box,.page>.mx-box.tr{display:none!important}
+ .gk-nav,#prtHelp,.sn-menu,.cj-train,.cj-toggle,.cj-tools,.cj-head,.cj-vrow,.cj-gi,.cj-note,.tr-h,.tr-p,.tr-ctl,.mx-go,.lvl,.cj-groups,.sn-back,.g-ghost,.page>.train,.page>.mn-box,.page>.mx-box.tr{display:none!important}
  main{padding:0!important;margin:0!important}
  .page.on{display:block!important}
  .sheet{max-height:270mm;width:auto!important;margin:0 auto;page-break-inside:avoid}
@@ -868,6 +868,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.5", desc: "Imprimer : message si bloqué sur iPhone" },
     { v: "10.4", desc: "Bouton imprimer près de la fiche" },
     { v: "10.3", desc: "Fiches à imprimer, coop, seconde chance" },
     { v: "10.2", desc: "Navale : duel de flottes, tu joues aussi" },
@@ -6903,7 +6904,12 @@ menu();
 <script>
 /* v10.3 — boutons « Imprimer » placés à côté de ce qu’on imprime */
 (function(){
- const mk=(cls)=>{ const b=document.createElement('button'); b.type='button'; b.className='prt-b '+cls; b.textContent='🖨️ Imprimer'; b.title='Imprimer cette fiche (A4)'; b.onclick=e=>{ e.stopPropagation(); try{ window.print(); }catch(_){ alert('Ouvre le site dans Safari ou Chrome pour imprimer.'); } }; return b; };
+ const mk=(cls)=>{ const b=document.createElement('button'); b.type='button'; b.className='prt-b '+cls; b.textContent='🖨️ Imprimer'; b.title='Imprimer cette fiche (A4)'; b.onclick=e=>{ e.stopPropagation(); let fired=false; const f=()=>{ fired=true; }; window.addEventListener('beforeprint',f,{once:true});
+   try{ window.print(); }catch(_){}
+   setTimeout(()=>{ if(fired) return; let n=document.getElementById('prtHelp'); if(n) n.remove(); n=document.createElement('div'); n.id='prtHelp'; n.className='noprint';
+     n.style.cssText='position:fixed;left:12px;right:12px;bottom:90px;z-index:99999;background:#fff;border:2px solid #f59f00;border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(0,0,0,.3);font:600 15px system-ui,sans-serif;color:#222';
+     n.innerHTML='🖨️ Cette fenêtre ne peut pas imprimer.<br><span style="font-weight:500">Ouvre le site dans <b>Safari</b> (adresse du site → Partager → Ouvrir dans Safari), puis touche « Imprimer ». Sur iPhone/iPad : Partager → Imprimer fonctionne aussi.</span><br><button type="button" style="margin-top:8px;padding:6px 14px;border-radius:99px;border:2px solid #ccc;background:#f8f8f8;font:700 14px system-ui">OK</button>';
+     n.querySelector('button').onclick=()=>n.remove(); document.body.appendChild(n); setTimeout(()=>n.remove(),15000); },1200); }; return b; };
  const SHEETS=['p-zahlen','p-math','p-school','p-cal'];
  function put(host,ref,cls,where){ if(!host||host.querySelector(':scope>.prt-b, .prt-b')&&host.querySelector('.prt-b')) return; const b=mk(cls); if(where==='in') host.appendChild(b); else ref.parentNode.insertBefore(b,ref); }
  function sync(){
