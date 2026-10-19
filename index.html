@@ -924,6 +924,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.15", desc: "Lien famille : alerte rouge données privées" },
     { v: "10.14", desc: "Famille : boutons alignés, rappel avant le lien" },
     { v: "10.13", desc: "Famille : copier code, lien, adresse du site clairs" },
     { v: "10.12", desc: "Impression : fiche à l’échelle, nom du PDF par fiche" },
@@ -5973,7 +5974,7 @@ P.addEventListener('click',async e=>{
   if(a==='sysync'){ V.msg=''; sync(true); render(); return; }
   if(a==='sylk'||a==='sycp'||a==='syweb'||a==='syshare'){ const code=D.sync.code, base=location.origin+location.pathname, fam=base+'?famille='+code;
     const what=a==='sycp'?code:a==='syweb'?base:fam;
-    if(a==='sylk'||a==='syshare'){ if(!await ask('<b>🔗 Lien de la famille « '+esc(D.fam||'ma famille')+' »</b><br><small>Ce lien est un <b>accès à ta famille</b> : la personne qui l’ouvre voit tes joueurs et leurs scores, et rejoint ta famille.<br>À envoyer seulement à ta famille. Pour une autre famille, utilise « Copier l’adresse du site ».</small>',a==='syshare'?'Envoyer':'Copier')) return; }
+    if(a==='sylk'||a==='syshare'){ if(!await ask('<div style="background:#fff0f0;border:2px solid #e03131;color:#c92a2a;border-radius:12px;padding:8px 10px;margin-bottom:8px;font-weight:800">⚠️ Attention : données privées</div><b>🔗 Lien de la famille « '+esc(D.fam||'ma famille')+' »</b><br><small>Ce lien est un <b>accès à ta famille</b> : la personne qui l’ouvre voit tes joueurs et leurs scores, et rejoint ta famille.<br>À envoyer seulement à ta famille. Pour une autre famille, utilise « Copier l’adresse du site ».</small>',a==='syshare'?'Envoyer':'Copier',true)) return; }
     if(a==='syshare'){ const txt='Rejoins notre famille sur Sacré-Cœur bilingue : ouvre ce lien. (Code famille : '+code+')'; try{ if(navigator.share){ await navigator.share({title:'Notre famille – Sacré-Cœur bilingue',text:txt,url:fam}); V.msg='✅ Lien famille envoyé.'; V.manual=''; render(); return; } }catch(x){ if(x&&x.name==='AbortError') return; } }
     let ok=false; try{ await navigator.clipboard.writeText(what); ok=true; }catch(x){}
     if(!ok){ try{ const ta=document.createElement('textarea'); ta.value=what; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px'; document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,what.length); ok=document.execCommand('copy'); ta.remove(); }catch(x){} }
