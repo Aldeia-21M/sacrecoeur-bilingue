@@ -929,6 +929,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.17", desc: "Rimes : cabane, dune (images corrigées)" },
     { v: "10.16", desc: "Famille : deux cartes bleue et verte, plus lisibles" },
     { v: "10.15", desc: "Lien famille : alerte rouge données privées" },
     { v: "10.14", desc: "Famille : boutons alignés, rappel avant le lien" },
@@ -5262,7 +5263,7 @@ const GEN={
 const SIZES=[['🐜',1,'la fourmi','die Ameise'],['🐭',2,'la souris','die Maus'],['🐱',3,'le chat','die Katze'],['🐶',4,'le chien','der Hund'],['🐴',5,'le cheval','das Pferd'],['🐘',6,'l’éléphant','der Elefant'],['🦒',6,'la girafe','die Giraffe']];
 const ODD=[['🐶','🐱','🐴','🐮','🐷'],['🍎','🍌','🍓','🍇','🍊'],['🚗','🚌','🚲','✈️','🚂'],['👕','👖','🧦','👟','🧢'],['🌳','🌸','🍄','🌿','🌵'],['✏️','📖','✂️','📏','🎒'],['⚽','🏀','🎾','🏐','🏈'],['☀️','🌧️','❄️','☁️','🌈']];
 const SYL=[['🐱','chat',1,'Katze',2],['🥖','pain',1,'Brot',1],['🌙','lune',2,'Mond',1],['🍎','pomme',2,'Apfel',2],['🚲','vélo',2,'Rad',1],['🍌','banane',3,'Banane',3],['🦋','papillon',3,'Schmetterling',3],['🐘','éléphant',3,'Elefant',3],['🍫','chocolat',3,'Schokolade',4],['💻','ordinateur',4,'Computer',3]];
-const RHY=[['🐱','chat','🐀','rat'],['🥖','pain','🖐️','main'],['🌙','lune','🍑','prune'],['🐔','poule','⚽','boule'],['🍌','banane','🌴','cabane'],['🌸','fleur','❤️','cœur']];
+const RHY=[['🐱','chat','🐀','rat'],['🥖','pain','🖐️','main'],['🌙','lune','🏜️','dune'],['🐔','poule','⚽','boule'],['🍌','banane','🌴','cabane'],['🌸','fleur','❤️','cœur']];
 Object.assign(window.PETV,{SIZES,ODD,SYL,RHY});
 GEN.sub=function(){ const th=THINGS[rnd(THINGS.length)], a=2+rnd(8), b=1+rnd(a-1), n=a-b; const o=nums(n,0,9);
   return {vis:`<div class="pt-things">${th[0].repeat(a)} ➖ ${th[0].repeat(b)}</div>`,fr:`${NUMF[a]} moins ${NUMF[b]}, ça fait combien ?`,de:`${NUMD[a]} minus ${NUMD[b]}: wie viel ist das?`,opts:o.map(x=>({h:x,n:nn(x),ok:x===n}))}; };
