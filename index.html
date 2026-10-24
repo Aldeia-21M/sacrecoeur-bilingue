@@ -929,6 +929,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.18", desc: "Question piège : texte juste (plus de NaN)" },
     { v: "10.17", desc: "Rimes : cabane, dune (images corrigées)" },
     { v: "10.16", desc: "Famille : deux cartes bleue et verte, plus lisibles" },
     { v: "10.15", desc: "Lien famille : alerte rouge données privées" },
@@ -2035,8 +2036,9 @@ function askQuestion(p,d){
       if(NET&&NXS){ try{ NXS.qa={id:Date.now().toString(36)+Math.floor(Math.random()*1e4),by:NET.me,n:String(p.name||''),pr:String(q.prompt||''),o:q.options.map(String),k:k,c:q.correct,s:String(q.shown||'')}; }catch(e){} }
       ov.querySelectorAll('.g-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
       fb.hidden=false; fb.className='g-fb '+(ok?'ok':'ko');
-      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>Tu avances de <b>${d}</b> case${d>1?'s':''}.`
-                      :`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>Tu avances de <b>${d-1}</b> case${d-1>1?'s':''} (le total moins un).`;
+      const trap=d==='❓';
+      fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(q.shown)}<br>${trap?'Piège évité : tu avances de <b>2</b> cases.':`Tu avances de <b>${d}</b> case${d>1?'s':''}.`}`
+                      :`❌ <b>Pas tout à fait.</b> Bonne réponse : ${esc(q.shown)}<br>${trap?'Piège ! Tu recules de <b>4</b> cases.':`Tu avances de <b>${d-1}</b> case${d-1>1?'s':''} (le total moins un).`}`;
       next.hidden=false; DLverdict(ok,[{t:q.reveal.t,l:q.reveal.l}],false,{wrong:ok?null:DLwrongOf(q.options,k,q.correct,q.reveal)}); curQ=Object.assign({},q,{answered:true});
       next.onclick=()=>{ ov.remove(); res(ok); };
     };
