@@ -345,7 +345,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .vb-off .cj-row .p.vb-pn{background:rgba(255,255,255,.6)}
 .vb-s{border-bottom:3px solid #2a8fe0}.vb-e{background:#ffe066;border-radius:4px;padding:0 1px;font-style:normal}.vb-d{color:#e03131;font-weight:900;border-bottom:3px solid #2a8fe0}.vb-p{border:2px solid #2f9e44;border-radius:999px;padding:0 8px;background:#e4f8e4}
 .cj-lg .vb-s,.cj-lg .vb-d{font-style:normal}
-.vb-bn{background:#59cdf5;border-radius:6px;padding:0 8px}.vb-fr2{font-family:'Segoe Print','Bradley Hand',cursive;color:#e03131;font-weight:700;font-size:.9rem;margin-left:4px}
+.vb-bn{background:#59cdf5;border-radius:6px;padding:0 8px}.vb-fr2{display:block;margin-top:2px;font-family:'Segoe Print','Bradley Hand',cursive;color:#e03131;font-weight:800;font-size:clamp(20px,5.8vw,28px);line-height:1.15}.vb-vc{display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;padding-top:6px!important;padding-bottom:6px!important}.vb-vc small{font-size:.68rem;font-weight:600;color:#8a93a8;margin-top:1px}.vb-vc[aria-pressed=true] small{color:rgba(255,255,255,.85)}
 .vb-hear{border:2px solid rgba(29,36,51,.18);background:#fff;border-radius:999px;min-width:40px;min-height:34px;font-size:15px;vertical-align:middle}
 .vb-song>b:first-child{display:block;margin-bottom:6px}.vb-ch{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:4px 0 8px;text-align:center}.vb-ch span{background:#fff;border:2px solid rgba(29,36,51,.1);border-radius:10px;padding:4px 0}.vb-ch small{display:block;font-size:.68rem;opacity:.6}.vb-ch b{display:inline;margin:0;font-size:1rem;color:#1d2433}.vb-song p{margin:0}
 .vb-modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}.vb-modes button{flex:1 1 40%;min-height:46px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff;font-weight:800;font-size:15px;font-family:inherit}.vb-modes button[aria-pressed=true]{background:#ffe8cc;border-color:#e08a1e}
@@ -959,6 +959,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.24", desc: "Verben : traduction sous chaque verbe" },
     { v: "10.23", desc: "Allemand : verbes 6H, fiches et exercices" },
     { v: "10.22", desc: "7 fiches lecture, bouton Couleurs" },
     { v: "10.21", desc: "Fiches lecture : syllabes, sons, accents" },
@@ -3978,7 +3979,7 @@ const gU=root.querySelector('#vbU'), gV=root.querySelector('#vbV'), gH=root.quer
 function drawPick(){
   const cu=unitOf(verb);
   gU.innerHTML=UN.map((u,i)=>`<button role="tab" data-u="${i}" aria-selected="${i===cu}" style="--gb:${u[2]};--gd:${u[3]}"><b>${u[0]}</b><small>${u[1]}</small></button>`).join('');
-  gV.innerHTML=UN[cu][4].map(k=>`<button data-v="${k}" aria-pressed="${k===verb}">${k}</button>`).join('');
+  gV.innerHTML=UN[cu][4].map(k=>`<button data-v="${k}" aria-pressed="${k===verb}" class="vb-vc"><span>${k}</span><small>${esc(V[k].fr)}</small></button>`).join('');
   gV.style.setProperty('--gb',UN[cu][2]); gV.style.setProperty('--gd',UN[cu][3]);
 }
 gU.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const u=+b.dataset.u; if(u===unitOf(verb)) return; verb=UN[u][4][0]; drawPick(); paint(); };
@@ -3997,7 +3998,7 @@ function fhtml(v,i){
 }
 function paint(){
   const d=V[verb], u=UN[unitOf(verb)];
-  gH.innerHTML=`<div class="cj-mouse">${d.ic}</div><div class="cj-ban"><small>Verb</small><b class="vb-bn">${esc(verb)}</b> <span class="vb-fr2">${esc(d.fr)}</span> <button class="vb-hear" data-say="${esc(verb)}" data-lang="de" aria-label="Écouter le verbe">🔊</button></div><div class="cj-sign"><span>${u[0]}</span><small>${d.irr===2?'très irrégulier':d.irr?'à surveiller':d.sep?'séparable':'régulier'}</small></div>`;
+  gH.innerHTML=`<div class="cj-mouse">${d.ic}</div><div class="cj-ban"><small>Verb</small><b class="vb-bn">${esc(verb)}</b> <button class="vb-hear" data-say="${esc(verb)}" data-lang="de" aria-label="Écouter le verbe">🔊</button><span class="vb-fr2">= ${esc(d.fr)}</span></div><div class="cj-sign"><span>${u[0]}</span><small>${d.irr===2?'très irrégulier':d.irr?'à surveiller':d.sep?'séparable':'régulier'}</small></div>`;
   gN.innerHTML=`<p>💡 ${d.note}</p>`;
   root.querySelector('#vbLg').hidden=!hl;
   const all=PN.map((p,i)=>sayOf(verb,i)).join(', ');
