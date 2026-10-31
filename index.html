@@ -349,7 +349,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .vb-hear{border:2px solid rgba(29,36,51,.18);background:#fff;border-radius:999px;min-width:40px;min-height:34px;font-size:15px;vertical-align:middle}
 .vb-song>b:first-child{display:block;margin-bottom:6px}.vb-ch{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:4px 0 8px;text-align:center}.vb-ch span{background:#fff;border:2px solid rgba(29,36,51,.1);border-radius:10px;padding:4px 0}.vb-ch small{display:block;font-size:.68rem;opacity:.6}.vb-ch b{display:inline;margin:0;font-size:1rem;color:#1d2433}.vb-song p{margin:0}
 .vb-modes{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}.vb-modes button{flex:1 1 40%;min-height:46px;border-radius:14px;border:3px solid rgba(29,36,51,.15);background:#fff;font-weight:800;font-size:15px;font-family:inherit}.vb-modes button[aria-pressed=true]{background:#ffe8cc;border-color:#e08a1e}
-.vb-pfr{font-size:.5em;color:#6b7590;font-weight:600}.vb-sent{margin:8px 0 2px;font-size:clamp(22px,6vw,30px);font-weight:800;line-height:1.3}.vb-gap{display:inline-block;margin:0 4px;padding:0 10px;border-bottom:4px solid #1f5fd6;color:#1f5fd6;font-size:.8em}.vb-fr{font-size:.92rem;font-weight:600;color:#6b7590;margin-top:2px}
+.cj-toggle b{color:#1f5fd6}.cj-gen{margin-top:10px;background:#f1f3f8!important;border-color:#c9d3ea!important}.vb-pfr{font-size:.5em;color:#6b7590;font-weight:600}.vb-sent{margin:8px 0 2px;font-size:clamp(22px,6vw,30px);font-weight:800;line-height:1.3}.vb-gap{display:inline-block;margin:0 4px;padding:0 10px;border-bottom:4px solid #1f5fd6;color:#1f5fd6;font-size:.8em}.vb-fr{font-size:.92rem;font-weight:600;color:#6b7590;margin-top:2px}
 .vb-line{min-height:62px;margin:10px 0;padding:8px;border:3px dashed rgba(29,36,51,.25);border-radius:16px;display:flex;flex-wrap:wrap;gap:8px;background:#fff;align-items:center}.vb-line.ok{border-color:#2f9e44;background:#e4f8e4;border-style:solid}.vb-line.ko{border-color:#e03131;background:#fff0f0;border-style:solid}.vb-line em{opacity:.5;font-size:.95rem}
 .vb-bank{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}.vb-line button,.vb-bank button{min-height:48px;padding:6px 14px;border-radius:14px;border:3px solid rgba(29,36,51,.18);background:#d6ebfb;font-weight:800;font-size:clamp(17px,4.8vw,22px);font-family:inherit}.vb-line button{background:#fff0b8}
 .vb-ctl{display:flex;gap:8px}.vb-ctl button{flex:1;min-height:52px;border-radius:999px;font-weight:800;font-size:16px;font-family:inherit;border:2px solid rgba(29,36,51,.2);background:#fff}.vb-ctl .cj-next{margin:0;flex:2}.vb-ctl .cj-next:disabled{opacity:.4}
@@ -959,6 +959,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.27", desc: "Entraînement : d’abord ce verbe, puis tous" },
     { v: "10.26", desc: "Verben : traduction collée au verbe" },
     { v: "10.25", desc: "Verben : traduction à droite du titre" },
     { v: "10.24", desc: "Verben : traduction sous chaque verbe" },
@@ -3779,7 +3780,9 @@ root.innerHTML=`<div class="cj-head"><h2>📘 La conjugaison <span class="cj-lvl
   <div class="cj-tools"><button class="pill" id="cjHl" aria-pressed="true">🎨 Voir la fin et les pièges</button></div>
   <div class="cj-lg" id="cjLg" hidden><span><i class="t">bleu</i> la fin du verbe</span><span><i class="d">orange</i> petite attention</span></div>
   <div class="cj-grid" id="cjG"></div>
-  <button class="cj-toggle" id="cjT" aria-expanded="false"><span>🎯 Je m’entraîne<small>Choisis la bonne forme du verbe</small></span><span class="ch">▼</span></button>
+  <button class="cj-toggle" id="cjT1" aria-expanded="false"><span>🎯 Je m’entraîne : <b id="cjV1">être</b><small>Les 4 temps de ce verbe seulement</small></span><span class="ch">▼</span></button>
+  <div class="cj-train" id="cjP1" hidden></div>
+  <button class="cj-toggle cj-gen" id="cjT" aria-expanded="false"><span>🎲 Je m’entraîne avec plein d’autres verbes<small>Tous les verbes mélangés, choisis la bonne forme</small></span><span class="ch">▼</span></button>
   <div class="cj-train" id="cjP" hidden></div>`;
 const gv=root.querySelector('#cjV'), gg=root.querySelector('#cjG'), gh=root.querySelector('#cjH'), gn=root.querySelector('#cjN');
 const GR=[['aux','Auxiliaires','être · avoir','#eceff5','#6b7490'],[1,'1er groupe','verbes en -er','#dff4dc','#2f9e44'],[2,'2ᵉ groupe','-ir · nous -issons','#dbeafb','#1f5fd6'],[3,'3ᵉ groupe','irréguliers','#ffe8cc','#e08a1e']];
@@ -3797,8 +3800,8 @@ function drawPick(){
   gv.innerHTML=ALLV.filter(k=>grp(k)===cg).map(k=>`<button data-v="${k}" aria-pressed="${k===verb}">${k}</button>`).join('');
   const c=GR.find(x=>x[0]===cg); gv.style.setProperty('--gb',c[3]); gv.style.setProperty('--gd',c[4]);
 }
-ggr.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const g=b.dataset.g==='aux'?'aux':+b.dataset.g; if(g===grp(verb)) return; verb=ALLV.find(k=>grp(k)===g); drawPick(); paint(); };
-gv.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; verb=b.dataset.v; drawPick(); paint(); };
+ggr.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const g=b.dataset.g==='aux'?'aux':+b.dataset.g; if(g===grp(verb)) return; verb=ALLV.find(k=>grp(k)===g); drawPick(); paint(); if(window.__cjRefresh) __cjRefresh(); };
+gv.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; verb=b.dataset.v; drawPick(); paint(); if(window.__cjRefresh) __cjRefresh(); };
 root.querySelector('#cjHl').onclick=e=>{ hl=!hl; e.currentTarget.setAttribute('aria-pressed',hl); paint(); };
 const LBL=['Je','Tu','Il, elle, on','Nous','Vous','Ils, elles'];
 /* ---- repérage en couleur : radical (rose), terminaison (bleu), difficulté (rouge) ---- */
@@ -3887,10 +3890,12 @@ function paint(){
 drawPick(); paint();
 
 /* ---- entraînement ---- */
-const P=root.querySelector('#cjP'), TG=root.querySelector('#cjT');
-TG.onclick=()=>{ const open=P.hidden; P.hidden=!open; TG.setAttribute('aria-expanded',open); TG.querySelector('.ch').textContent=open?'▲':'▼'; if(open&&!P.dataset.init){ P.dataset.init=1; ask(); } };
+const P=root.querySelector('#cjP'), TG=root.querySelector('#cjT'), P1=root.querySelector('#cjP1'), TG1=root.querySelector('#cjT1');
+function wire(tg,pn,only){ tg.onclick=()=>{ const open=pn.hidden; pn.hidden=!open; tg.setAttribute('aria-expanded',open); tg.querySelector('.ch').textContent=open?'▲':'▼'; if(open&&!pn.dataset.init){ pn.dataset.init=1; ask(pn,only?()=>verb:null); } }; }
+wire(TG,P,false); wire(TG1,P1,true);
+window.__cjRefresh=function(){ root.querySelector('#cjV1').textContent=verb; if(!P1.hidden){ ask(P1,()=>verb); } else delete P1.dataset.init; };
 let Q=null; window.__cj=()=>Q;
-function askGroup(){
+function askGroup(P){
   const L=ALLV.filter(k=>k!=='être'&&k!=='avoir'), vb=L[rnd(L.length)], g=grp(vb), names={1:'1er groupe',2:'2ᵉ groupe',3:'3ᵉ groupe'}, opts=[1,2,3].map(n=>names[n]);
   const why=g===1?'il finit par -er':g===2?'il finit par -ir et fait -issons (nous finissons)':(vb==='aller'?'aller est le seul verbe en -er du 3ᵉ groupe':'ce n’est ni un verbe en -er, ni un verbe en -ir avec -issons');
   P.style.setProperty('--d','#d6336c');
@@ -3901,26 +3906,26 @@ function askGroup(){
     const fb=P.querySelector('.cj-fb'); fb.hidden=false; fb.className='cj-fb '+(ok?'ok':'ko');
     fb.innerHTML=(ok?'✅ <b>Bravo !</b> ':'❌ Pas tout à fait : ')+esc(vb)+' est du <b>'+names[g]+'</b> : '+why+'.';
     try{ DLverdict(ok,[{t:vb+', '+names[g].replace('1er','premier').replace('2ᵉ','deuxième').replace('3ᵉ','troisième'),l:'fr'}]); }catch(e){}
-    const nx=P.querySelector('.cj-next'); nx.hidden=false; nx.onclick=ask; };
+    const nx=P.querySelector('.cj-next'); nx.hidden=false; nx.onclick=()=>ask(P,null); };
 }
-function ask(){
-  if(rnd(5)===0) return askGroup();
-  const vb=ALLV[rnd(ALLV.length)], t=TENSES[rnd(4)], i=rnd(6), F=forms(vb,t.k)[i];
+function ask(P,onlyF){
+  if(!onlyF&&rnd(5)===0) return askGroup(P);
+  const vb=onlyF?onlyF():ALLV[rnd(ALLV.length)], t=TENSES[rnd(4)], i=rnd(6), F=forms(vb,t.k)[i];
   const pool=[]; // distracteurs : même personne, autres temps / autres personnes, même temps
   TENSES.forEach(tt=>{ if(tt.k!==t.k) pool.push(forms(vb,tt.k)[i].f); });
   forms(vb,t.k).forEach((x,j)=>{ if(j!==i) pool.push(x.f); });
   const uniq=[...new Set(pool.filter(x=>x!==F.f))]; const opts=shuffle([F.f].concat(shuffle(uniq).slice(0,3)));
-  Q={vb,t,i,F,opts,correct:opts.indexOf(F.f)};
+  const q=Q={vb,t,i,F,opts,correct:opts.indexOf(F.f)};
   P.style.setProperty('--d',t.d);
   P.innerHTML=`<div class="cj-q">Conjugue <b>${vb}</b> au <b class="tt">${t.t.toLowerCase()}</b> :<div class="cj-pr">${esc(PR[i])} …</div></div>
     <div class="cj-opts">${opts.map((o,k)=>`<button data-k="${k}">${esc(o)}</button>`).join('')}</div><div class="cj-fb" hidden></div><button class="cj-next" hidden>Question suivante ▶</button>`;
   let done=false;
-  P.querySelector('.cj-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||done) return; done=true; const k=+b.dataset.k, ok=k===Q.correct;
-    P.querySelectorAll('.cj-opts button').forEach((x,j)=>{ x.disabled=true; if(j===Q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
+  P.querySelector('.cj-opts').onclick=e=>{ const b=e.target.closest('button'); if(!b||done) return; done=true; const k=+b.dataset.k, ok=k===q.correct;
+    P.querySelectorAll('.cj-opts button').forEach((x,j)=>{ x.disabled=true; if(j===q.correct) x.classList.add('ok'); else if(j===k) x.classList.add('ko'); });
     const fb=P.querySelector('.cj-fb'); fb.hidden=false; fb.className='cj-fb '+(ok?'ok':'ko');
     fb.innerHTML=ok?`✅ <b>Bravo !</b> ${esc(PR[i])} → ${esc(F.pe+F.f)}`:`❌ Pas tout à fait : <b>${esc(F.pe+F.f)}</b>`;
     try{ DLverdict(ok,[{t:F.say,l:'fr'}]); }catch(e){}
-    const nx=P.querySelector('.cj-next'); nx.hidden=false; nx.onclick=ask; };
+    const nx=P.querySelector('.cj-next'); nx.hidden=false; nx.onclick=()=>ask(P,onlyF); };
 }
 })();
 
@@ -3975,7 +3980,9 @@ root.innerHTML=`<div class="cj-head"><h2>🔀 Die Verben <span class="cj-lvl">6H
   <div class="cj-lg" id="vbLg"><span><i class="vb-pn0">ich</i> pronom</span><span><i class="vb-s">radical</i></span><span><i class="vb-e">fin</i> terminaison</span><span><i class="vb-d">piège</i></span><span><i class="vb-p">zu / ein</i> particule</span></div>
   <div class="cj-grid" id="vbG" style="grid-template-columns:1fr"></div>
   <div class="cj-note vb-song" id="vbS"></div>
-  <button class="cj-toggle" id="vbT" aria-expanded="false"><span>🎯 Übungen · je m’entraîne<small>Formes, phrases à compléter, mots à remettre en ordre, questions</small></span><span class="ch">▼</span></button>
+  <button class="cj-toggle" id="vbT1" aria-expanded="false"><span>🎯 Je m’entraîne : <b id="vbV1">haben</b><small>Les exercices de ce verbe seulement</small></span><span class="ch">▼</span></button>
+  <div class="cj-train" id="vbP1" hidden></div>
+  <button class="cj-toggle cj-gen" id="vbT" aria-expanded="false"><span>🎲 Übungen · plein d’autres verbes<small>Tous les verbes mélangés : formes, phrases, ordre des mots, questions</small></span><span class="ch">▼</span></button>
   <div class="cj-train" id="vbP" hidden></div>`;
 const gU=root.querySelector('#vbU'), gV=root.querySelector('#vbV'), gH=root.querySelector('#vbH'), gN=root.querySelector('#vbN'), gG=root.querySelector('#vbG');
 function drawPick(){
@@ -3984,8 +3991,8 @@ function drawPick(){
   gV.innerHTML=UN[cu][4].map(k=>`<button data-v="${k}" aria-pressed="${k===verb}" class="vb-vc"><span>${k}</span><small>${esc(V[k].fr)}</small></button>`).join('');
   gV.style.setProperty('--gb',UN[cu][2]); gV.style.setProperty('--gd',UN[cu][3]);
 }
-gU.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const u=+b.dataset.u; if(u===unitOf(verb)) return; verb=UN[u][4][0]; drawPick(); paint(); };
-gV.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; verb=b.dataset.v; drawPick(); paint(); };
+gU.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const u=+b.dataset.u; if(u===unitOf(verb)) return; verb=UN[u][4][0]; drawPick(); paint(); if(window.__vbRefresh) __vbRefresh(); };
+gV.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; verb=b.dataset.v; drawPick(); paint(); if(window.__vbRefresh) __vbRefresh(); };
 root.querySelector('#vbHl').onclick=e=>{ hl=!hl; e.currentTarget.setAttribute('aria-pressed',hl); paint(); };
 /* repérage : radical (souligné bleu), terminaison (jaune), piège (rouge), particule (cercle vert) */
 function fhtml(v,i){
@@ -4011,23 +4018,27 @@ function paint(){
 }
 drawPick(); paint();
 /* ---- entraînement ---- */
-const P=root.querySelector('#vbP'), TG=root.querySelector('#vbT');
+const P=root.querySelector('#vbP'), TG=root.querySelector('#vbT'), P1=root.querySelector('#vbP1'), TG1=root.querySelector('#vbT1');
 const MODES=[['form','🔀 Les formes'],['satz','✏️ Konjugiere'],['ordne','🧩 Ordne'],['antw','💬 Antworte']];
-let mode='form';
-TG.onclick=()=>{ const open=P.hidden; P.hidden=!open; TG.setAttribute('aria-expanded',open); TG.querySelector('.ch').textContent=open?'▲':'▼'; if(open&&!P.dataset.init){ P.dataset.init=1; start(); } };
-function start(){
-  P.innerHTML=`<div class="vb-modes">${MODES.map(([k,t])=>`<button data-m="${k}" aria-pressed="${k===mode}">${t}</button>`).join('')}</div><div id="vbQ"></div>`;
-  P.querySelector('.vb-modes').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; mode=b.dataset.m; P.querySelectorAll('.vb-modes button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===mode)); next(); };
-  next();
+const SATZV=()=>SATZ.some(s=>s[1]===verb), ORDV=()=>ORD.some(o=>o[3]===verb), ANTWV=()=>unitOf(verb)===2;
+const modesFor=only=>MODES.filter(([k])=>!only||k==='form'||(k==='satz'&&SATZV())||(k==='ordne'&&ORDV())||(k==='antw'&&ANTWV()));
+function wire(tg,pn,only){ tg.onclick=()=>{ const open=pn.hidden; pn.hidden=!open; tg.setAttribute('aria-expanded',open); tg.querySelector('.ch').textContent=open?'▲':'▼'; if(open&&!pn.dataset.init){ pn.dataset.init=1; start(pn,only); } }; }
+wire(TG,P,false); wire(TG1,P1,true);
+window.__vbRefresh=function(){ root.querySelector('#vbV1').textContent=verb; if(!P1.hidden) start(P1,true); else delete P1.dataset.init; };
+function start(pn,only){
+  const ms=modesFor(only); let mode=pn.dataset.m; if(!ms.some(m=>m[0]===mode)) mode='form'; pn.dataset.m=mode;
+  pn.innerHTML=`<div class="vb-modes">${ms.map(([k,t])=>`<button data-m="${k}" aria-pressed="${k===mode}">${t}</button>`).join('')}</div><div class="vbQ"></div>`;
+  pn.querySelector('.vb-modes').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; pn.dataset.m=b.dataset.m; pn.querySelectorAll('.vb-modes button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===pn.dataset.m)); next(pn,only); };
+  next(pn,only);
 }
-function next(){ ({form:askForm,satz:askSatz,ordne:askOrdne,antw:askAntw})[mode](P.querySelector('#vbQ')); try{ window.speechSynthesis&&speechSynthesis.cancel(); }catch(e){} }
+function next(pn,only){ const h=pn.querySelector('.vbQ'); h._nx=()=>next(pn,only); ({form:askForm,satz:askSatz,ordne:askOrdne,antw:askAntw})[pn.dataset.m](h,only); try{ window.speechSynthesis&&speechSynthesis.cancel(); }catch(e){} }
 function feedback(Q,ok,txt,say){
   const fb=Q.querySelector('.cj-fb'); fb.hidden=false; fb.className='cj-fb '+(ok?'ok':'ko'); fb.innerHTML=(ok?'✅ <b>Richtig !</b> ':'❌ Pas tout à fait : ')+txt;
   try{ DLverdict(ok,[{t:say,l:'de'}]); }catch(e){ sayDe(say); }
-  const nx=Q.querySelector('.cj-next.nx'); nx.hidden=false; nx.onclick=next; }
+  const nx=Q.querySelector('.cj-next.nx'); nx.hidden=false; nx.onclick=()=>Q._nx(); }
 /* 1. les formes */
-function askForm(Q){
-  const v=ALL[rnd(ALL.length)], i=rnd(8), d=V[v];
+function askForm(Q,only){
+  const v=only?verb:ALL[rnd(ALL.length)], i=rnd(8), d=V[v];
   const ans=full(v,i); const pool=[...new Set(d.f.map((_,j)=>full(v,j)))].filter(x=>x!==ans);
   const opts=shuffle([ans].concat(shuffle(pool).slice(0,3)));
   Q.innerHTML=`<div class="cj-q">Konjugiere <b>${esc(v)}</b> <small>(${esc(d.fr)})</small> :<div class="cj-pr">${PN[i][0]} <small class="vb-pfr">(${PN[i][1]})</small> …</div></div>
@@ -4054,8 +4065,8 @@ const SATZ=[
  ['Nein, wir ','haben',' keine Katze.',5,'','Non, nous n’avons pas de chat.']
 ];
 SATZ[1]=['Ich ','heissen',' Alex.',0,'','Je m’appelle Alex.'];
-function askSatz(Q){
-  const s=SATZ[rnd(SATZ.length)], v=s[1], i=s[3], ans=V[v].f[i];
+function askSatz(Q,only){
+  const L=only?SATZ.filter(x=>x[1]===verb):SATZ; const s=L[rnd(L.length)], v=s[1], i=s[3], ans=V[v].f[i];
   const pool=[...new Set(V[v].f)].filter(x=>x!==ans); const opts=shuffle([ans].concat(shuffle(pool).slice(0,3)));
   const sent=s[0]+ans+s[2];
   Q.innerHTML=`<div class="cj-q">Konjugiere das Verb in Klammern :<div class="vb-sent">${esc(s[0])}<span class="vb-gap">( ${esc(v)} )</span>${esc(s[2])}</div><div class="vb-fr">${esc(s[5])}</div></div>
@@ -4067,18 +4078,18 @@ function askSatz(Q){
 }
 /* 3. Ordne die Wörter (feuille Einheit 2) */
 const ORD=[
- ['Ich kann bis tausend zählen.','Je sais compter jusqu’à mille.'],
- ['Du hörst mir nicht zu.','Tu ne m’écoutes pas.'],
- ['Wir schreiben einen Brief.','Nous écrivons une lettre.'],
- ['Alex lädt seinen Freund ein.','Alex invite son ami.',['Seinen Freund lädt Alex ein.']],
- ['Die Schüler fragen den Lehrer.','Les élèves interrogent le professeur.',['Den Lehrer fragen die Schüler.']],
- ['Wir wohnen in Sitten.','Nous habitons à Sion.',['In Sitten wohnen wir.']],
- ['Lisa spricht Französisch und Deutsch.','Lisa parle français et allemand.'],
- ['Ich lade meinen Freund ein.','J’invite mon ami.']
+ ['Ich kann bis tausend zählen.','Je sais compter jusqu’à mille.',null,'zählen'],
+ ['Du hörst mir nicht zu.','Tu ne m’écoutes pas.',null,'zuhören'],
+ ['Wir schreiben einen Brief.','Nous écrivons une lettre.',null,'schreiben'],
+ ['Alex lädt seinen Freund ein.','Alex invite son ami.',['Seinen Freund lädt Alex ein.'],'einladen'],
+ ['Die Schüler fragen den Lehrer.','Les élèves interrogent le professeur.',['Den Lehrer fragen die Schüler.'],'fragen'],
+ ['Wir wohnen in Sitten.','Nous habitons à Sion.',['In Sitten wohnen wir.'],'wohnen'],
+ ['Lisa spricht Französisch und Deutsch.','Lisa parle français et allemand.',null,'sprechen'],
+ ['Ich lade meinen Freund ein.','J’invite mon ami.',null,'einladen']
 ];
 const toks=s=>s.replace(/[.!?]$/,'').split(' ');
-function askOrdne(Q){
-  const o=ORD[rnd(ORD.length)], T=toks(o[0]); const okSet=[o[0]].concat(o[2]||[]).map(x=>toks(x).join(' ').toLowerCase());
+function askOrdne(Q,only){
+  const LO=only?ORD.filter(x=>x[3]===verb):ORD; const o=LO[rnd(LO.length)], T=toks(o[0]); const okSet=[o[0]].concat(o[2]||[]).map(x=>toks(x).join(' ').toLowerCase());
   let bank=[], line=[]; const w=T.map((t,i)=>({i,t:i===0&&!/^(Alex|Lisa)$/.test(t)?t.toLowerCase():t}));
   do{ bank=shuffle(w); }while(bank.map(x=>x.i).join()===w.map(x=>x.i).join());
   const draw=()=>{ Q.querySelector('.vb-line').innerHTML=line.map(x=>`<button data-i="${x.i}">${esc(x.t)}</button>`).join('')||'<em>Touche les mots dans l’ordre…</em>';
