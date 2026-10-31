@@ -940,6 +940,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.21", desc: "Fiches lecture : syllabes, sons, accents" },
     { v: "10.20", desc: "Fiche lecture : maîtresse corrigé" },
     { v: "10.19", desc: "Exercices de lecture : fiches de classe T6" },
     { v: "10.18", desc: "Question piège : texte juste (plus de NaN)" },
@@ -6561,12 +6562,12 @@ function guide(){
   root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
   root.querySelector('.sn-grid').onclick=e=>{ const b=e.target.closest('button'); if(b) lpPage(+b.dataset.i); };
 }
-function lpPage(ti){
-  lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null; const T=LP[ti], all=[].concat(...T.b.map(b=>b.l));
-  root.innerHTML=back(0,'← Les fiches')+`<div class="mx-head"><h2>🐢 ${T.t}</h2><p> touche une syllabe, 🔊 pour le mot, « Pas à pas » pour lire avec moi.</p></div>
+function lpPage(ti,LIST){ LIST=LIST||LP; const SH=LIST===FICHES;
+  lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null; const T=LIST[ti], all=[].concat(...T.b.map(b=>b.l));
+  root.innerHTML=back(0,'← Les fiches')+(SH?`<div class="fl-top"><span class="fl-t">${esc(T.tag)}</span><span class="fl-box">${esc(T.box)}</span><span class="fl-c">${T.n}</span></div>`:`<div class="mx-head"><h2>🐢 ${T.t}</h2><p> touche une syllabe, 🔊 pour le mot, « Pas à pas » pour lire avec moi.</p></div>`)+`
   <div class="lp-top" id="lpSp">${LPS.map((x,i)=>`<button data-v="${i}" class="${i===lpSpd?'on':''}">${x.n}</button>`).join('')}</div><div class="lp-top"><button id="lpAll">▶️ Tout le texte, pas à pas</button><button id="lpStop" class="lp-stop">⏹️ Stop</button></div>`
-   +T.b.map(b=>`<h3 class="lp-h">${b.h}</h3>`+b.l.map(l=>lineH(l,T.H)).join('')).join('')+`<button class="mx-go" id="lpN">${LP[(ti+1)%LP.length].e} Fiche suivante : ${LP[(ti+1)%LP.length].t} →</button><h3 class="sn-oth">Une autre fiche</h3><div class="sn-chips" id="lpC">${LP.map((t,i)=>i===ti?'':`<button data-f="${i}" style="--c:${LPC[i%3]}">${t.e} ${t.t}</button>`).join('')}</div>`;
-  root.querySelector('#snB').onclick=()=>{ lpTok++; guide(); }; window.scrollTo(0,0);
+   +T.b.map(b=>`<h3 class="lp-h">${b.h}</h3>`+b.l.map(l=>lineH(l,T.H)).join('')).join('')+`<button class="mx-go" id="lpN">${LIST[(ti+1)%LIST.length].e} Fiche suivante : ${LIST[(ti+1)%LIST.length].t} →</button><h3 class="sn-oth">Une autre fiche</h3><div class="sn-chips" id="lpC">${LIST.map((t,i)=>i===ti?'':`<button data-f="${i}" style="--c:${LPC[i%3]}">${t.e} ${t.t}</button>`).join('')}</div>`;
+  root.querySelector('#snB').onclick=()=>{ lpTok++; SH?fiches():guide(); }; window.scrollTo(0,0);
   const lines=[...root.querySelectorAll('.lp-line')];
   const clear=()=>root.querySelectorAll('.lp-s.big,.lp-w.cur').forEach(e=>e.classList.remove('big','cur'));
   async function playLine(i,my){ const el=lines[i], ws=LPL(all[i]), st=LPS[lpSpd];
@@ -6576,7 +6577,7 @@ function lpPage(ti){
       await sleep(FAST?10:(ws[k].p?st.step:st.step*0.4)); wEl.classList.remove('cur'); }
     return true; }
   const run=async(from,to)=>{ const my=++lpTok; clear(); for(let i=from;i<to;i++){ lines[i].scrollIntoView({block:'center',behavior:FAST?'auto':'smooth'}); if(!await playLine(i,my)) return; await sleep(FAST?10:700); } clear(); };
-  root.onclick=e=>{ const fc=e.target.closest('#lpC button'); if(fc) return lpPage(+fc.dataset.f); if(e.target.closest('#lpN')) return lpPage((ti+1)%LP.length); const sp=e.target.closest('#lpSp button'); if(sp){ lpSpd=+sp.dataset.v; lpTok++; clear(); root.querySelectorAll('#lpSp button').forEach(b=>b.classList.toggle('on',+b.dataset.v===lpSpd)); root.querySelectorAll('[data-a=gd]').forEach(b=>b.textContent=LPS[lpSpd].n.split(' ')[0]+' Pas à pas'); return; }
+  root.onclick=e=>{ const fc=e.target.closest('#lpC button'); if(fc) return lpPage(+fc.dataset.f,LIST); if(e.target.closest('#lpN')) return lpPage((ti+1)%LIST.length,LIST); const sp=e.target.closest('#lpSp button'); if(sp){ lpSpd=+sp.dataset.v; lpTok++; clear(); root.querySelectorAll('#lpSp button').forEach(b=>b.classList.toggle('on',+b.dataset.v===lpSpd)); root.querySelectorAll('[data-a=gd]').forEach(b=>b.textContent=LPS[lpSpd].n.split(' ')[0]+' Pas à pas'); return; }
     if(e.target.closest('#lpStop')){ lpTok++; clear(); try{ speechSynthesis.cancel(); }catch(x){} return; }
     if(e.target.closest('#lpAll')) return run(0,lines.length);
     const ln=e.target.closest('.lp-line'); if(!ln) return; const i=lines.indexOf(ln);
@@ -6613,39 +6614,19 @@ function read(){
   root.querySelector('.sn-leg').onclick=e=>{ const c=e.target.closest('.sn-lg'); if(c) snd(G[+c.dataset.g]); };
   root.querySelector('#snT').onclick=e=>{ if(on) return; const m=e.target.closest('.sn-m'); if(m){ const g=MK[m.textContent]; if(g){ m.classList.add('rd-pop'); setTimeout(()=>m.classList.remove('rd-pop'),600); return snd(g); } } const p=e.target.closest('p'); if(p) seq([{t:p.textContent,l:'fr',r:LPS[lpSpd].r,pause:0}]); };
 }
-/* ---- exercices de lecture : fiches de classe (même présentation que la feuille) ---- */
+/* ---- exercices de lecture : fiches de classe, avec la même logique que « Lis pas à pas » ---- */
 const FICHES=[
- {id:'t6-8',t:'T6',box:'t',n:8,blocks:[{h:'Lis les mots.',cols:2,lines:['une belle invention','la bonne solution','une potion magique','un gros dictionnaire']},{h:'Lis les phrases.',lines:['Les parents ont de la patience.','La maîtresse ne donne pas de punitions.','Les élèves peuvent faire des inventions pendant les jeux.','Bientôt, les grands feront des opérations difficiles.']}]},
- {id:'t6-9',t:'T6',box:'Révision du temps 6',n:9,blocks:[{h:'Lis le texte.',lines:['Alexia et Romain ont organisé une magnifique exposition de dessins d’animaux.','On y trouve des pingouins qui marchent à la queue leu leu dans un pays lointain.','On voit des gorilles qui font des acrobaties dans la forêt tropicale.','Le dessin préféré d’Alexia est celui d’une famille kangourous qui bondit sur des chemins australiens.','Le dessin préféré de Romain est celui d’un dauphin qui fait des sauts périlleux au-dessus de la mer.']}]}
+ {id:'t6-8',t:'Le son « t »',e:'📄',tag:'T6',box:'t',n:8,H:HR(/t/gi),b:[
+  {h:'Lis les mots.',l:['u·ne bel·le in·ven·tion=sion la bon·ne=bonn so·lu·tion=sion','u·ne po·tion=sion ma·gi·que=gik un gros=gro dic·tion=sion·nai=nè·re']},
+  {h:'Lis les phrases.',l:['Les=lè pa·rents=ran ont=on de la pa·tien=sien·ce=sse.','La maî·tres·se=sse ne don·ne=donn pas de pu·ni·tions=sion.','Les=lè é·lè·ves=vess peu·vent=veuv fai·re=fèr des=dè in·ven·tions=sion pen·dant=dan les=lè jeux=jeu.','Bien·tôt=to, les=lè grands=gran fe·ront=ron des=dè o·pé·ra·tions=sion dif·fi·ci·les=cil.']}]},
+ {id:'t6-9',t:'Révision du temps 6',e:'📄',tag:'T6',box:'Révision du temps 6',n:9,H:HR(/[éèêëàâîïôûù]/gi),b:[
+  {h:'Lis le texte.',l:['A·le·xi·a et=é Ro·main=min ont=on or·ga·ni·sé u·ne ma·gni·fi·que=fik ex=èks·po·si·tion=sion de des·sins=sin d\'a·ni·maux=mo.','On y trou·ve des pin·gouins=gouin qui mar·chent=che à la queue=keu leu leu dans=dan un pays=péi loin·tain=tin.','On voit=voi des go·ril·les=riy qui font=fon des a·cro·ba·ties=tis dans=dan la fo·rêt=rè tro·pi·ca·le.','Le des·sin=sin pré·fé·ré d\'A·le·xi·a est=è ce·lui=lui d\'u·ne fa·mil·le=miy kan·gou·rous=rou qui bon·dit sur des che·mins=min aus·tra·liens=lien.','Le des·sin=sin pré·fé·ré de Ro·main=min est=è ce·lui=lui d\'un=dun dau·phin=fin qui fait=fè des sauts=so pé·ril·leux=riyeu au-des·sus=su de la mer=mèr.']}]}
 ];
 function fiches(){
-  try{ speechSynthesis.cancel(); }catch(e){} rdTok++;
-  root.innerHTML=back()+`<div class="mx-head"><h2>📄 Exercices de lecture</h2><p>Les fiches de la classe, comme sur le papier. Touche une fiche.</p></div><div class="fl-list">${FICHES.map(f=>`<button class="fl-pick" data-id="${f.id}"><span class="fl-c">${f.n}</span><b>${esc(f.box==='t'?'Le son « t »':f.box)}</b><small>${f.t} · page ${f.n}</small></button>`).join('')}</div>`;
+  lpTok++; try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null;
+  root.innerHTML=back()+`<div class="mx-head"><h2>📄 Exercices de lecture</h2><p>Les fiches de la classe : syllabes en couleur, 🔊 pour écouter, « Pas à pas » pour lire avec moi.</p></div><div class="fl-list">${FICHES.map(f=>`<button class="fl-pick" data-id="${f.id}"><span class="fl-c">${f.n}</span><b>${esc(f.t)}</b><small>${f.tag} · page ${f.n}</small></button>`).join('')}</div>`;
   root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
-  root.querySelector('.fl-list').onclick=e=>{ const b=e.target.closest('.fl-pick'); if(b) fiche(FICHES.find(x=>x.id===b.dataset.id)); };
-}
-function fiche(f){
-  const lines=[]; const bl=f.blocks.map(b=>`<h4 class="fl-h">${esc(b.h)}</h4><div class="fl-b${b.cols?' c2':''}">${b.lines.map(t=>{ lines.push(t); return `<p data-i="${lines.length-1}">${esc(t)}</p>`; }).join('')}</div>`).join('');
-  root.innerHTML=back('← Les fiches')+`<div class="fl-sheet"><div class="fl-top"><span class="fl-t">${esc(f.t)}</span><span class="fl-box">${esc(f.box)}</span><span class="fl-c">${f.n}</span></div>${bl}</div>
-   <div class="lp-top" id="rdSp">${LPS.map((x,i)=>`<button data-v="${i}" class="${i===lpSpd?'on':''}">${x.n||x.l||x.t||('Vitesse '+(i+1))}</button>`).join('')}</div>
-   <button class="sn-ask" id="snL">🔊 <span>Écouter la fiche</span></button>`;
-  root.querySelector('#snB').onclick=fiches; window.scrollTo(0,0);
-  const pEls=[...root.querySelectorAll('.fl-b p')], orig=pEls.map(p=>p.innerHTML); let on=false;
-  const L=root.querySelector('#snL'), lab=L.querySelector('span');
-  const stop=()=>{ rdTok++; on=false; pEls.forEach((p,i)=>{ p.innerHTML=orig[i]; }); lab.textContent='Écouter la fiche'; try{ speechSynthesis.cancel(); }catch(e){} };
-  async function play(){ if(on) return stop(); const my=++rdTok; on=true; lab.textContent='⏹️ Arrêter'; const st=LPS[lpSpd];
-    for(let i=0;i<pEls.length&&my===rdTok;i++){
-      const toks=lines[i].split(' ').map(w=>({w,sy:sylW(w)}));
-      pEls[i].innerHTML=toks.map((t,wi)=>`<span class="rd-w" data-w="${wi}">${t.sy.map(x=>`<span class="rd-s">${x.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}</span>`).join('')}</span>`).join(' ');
-      const ws=pEls[i].querySelectorAll('.rd-w');
-      for(let k=0;k<toks.length;k++){ if(my!==rdTok) return; const clean=toks[k].w.replace(/[.,!?;:]/g,''); ws[k].classList.add('cur'); if(clean) seq([{t:clean,l:'fr',r:st.r,pause:0}]);
-        for(const sy of ws[k].querySelectorAll('.rd-s')){ if(my!==rdTok) return; sy.classList.add('big'); await sleep(FAST?15:st.step); sy.classList.remove('big'); }
-        await sleep(FAST?10:(/[.!?]$/.test(toks[k].w)?st.step*1.2:st.step*0.4)); ws[k].classList.remove('cur'); }
-      pEls[i].innerHTML=orig[i]; await sleep(FAST?10:500); }
-    if(my===rdTok) stop(); }
-  L.onclick=play;
-  root.querySelector('#rdSp').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; lpSpd=+b.dataset.v; root.querySelectorAll('#rdSp button').forEach(x=>x.classList.toggle('on',+x.dataset.v===lpSpd)); if(on){ stop(); play(); } };
-  root.querySelector('.fl-sheet').onclick=e=>{ if(on) return; const p=e.target.closest('.fl-b p'); if(p){ pEls.forEach(x=>x.classList.remove('hit')); p.classList.add('hit'); seq([{t:lines[+p.dataset.i],l:'fr',r:LPS[lpSpd].r,pause:0}]); } };
+  root.querySelector('.fl-list').onclick=e=>{ const b=e.target.closest('.fl-pick'); if(b) lpPage(FICHES.findIndex(x=>x.id===b.dataset.id),FICHES); };
 }
 /* ---- entraînement ---- */
 function mkQ(){
