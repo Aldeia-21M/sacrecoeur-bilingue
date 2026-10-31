@@ -940,6 +940,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.20", desc: "Fiche lecture : maîtresse corrigé" },
     { v: "10.19", desc: "Exercices de lecture : fiches de classe T6" },
     { v: "10.18", desc: "Question piège : texte juste (plus de NaN)" },
     { v: "10.17", desc: "Rimes : cabane, dune (images corrigées)" },
@@ -6614,7 +6615,7 @@ function read(){
 }
 /* ---- exercices de lecture : fiches de classe (même présentation que la feuille) ---- */
 const FICHES=[
- {id:'t6-8',t:'T6',box:'t',n:8,blocks:[{h:'Lis les mots.',cols:2,lines:['une belle invention','la bonne solution','une potion magique','un gros dictionnaire']},{h:'Lis les phrases.',lines:['Les parents ont de la patience.','La maitresse ne donne pas de punitions.','Les élèves peuvent faire des inventions pendant les jeux.','Bientôt, les grands feront des opérations difficiles.']}]},
+ {id:'t6-8',t:'T6',box:'t',n:8,blocks:[{h:'Lis les mots.',cols:2,lines:['une belle invention','la bonne solution','une potion magique','un gros dictionnaire']},{h:'Lis les phrases.',lines:['Les parents ont de la patience.','La maîtresse ne donne pas de punitions.','Les élèves peuvent faire des inventions pendant les jeux.','Bientôt, les grands feront des opérations difficiles.']}]},
  {id:'t6-9',t:'T6',box:'Révision du temps 6',n:9,blocks:[{h:'Lis le texte.',lines:['Alexia et Romain ont organisé une magnifique exposition de dessins d’animaux.','On y trouve des pingouins qui marchent à la queue leu leu dans un pays lointain.','On voit des gorilles qui font des acrobaties dans la forêt tropicale.','Le dessin préféré d’Alexia est celui d’une famille kangourous qui bondit sur des chemins australiens.','Le dessin préféré de Romain est celui d’un dauphin qui fait des sauts périlleux au-dessus de la mer.']}]}
 ];
 function fiches(){
