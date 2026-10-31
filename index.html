@@ -828,6 +828,17 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
  .pr-sheet .eq i{font-style:normal;font-weight:800;min-width:5.789cqw;text-align:right}.pr-sheet .eq s{text-decoration:none;font-weight:800;margin:0 0.263cqw}
  .pr-sheet .ft{text-align:center;font-size:2.137cqw;font-weight:800;padding-top:0.526cqw}
 }
+
+.fl-tile small{display:block;font-size:.72em;font-weight:600;opacity:.75}
+.fl-list{display:grid;gap:10px}.fl-pick{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;text-align:left;padding:12px 14px;border:3px solid #cbd5e1;border-radius:18px;background:#fff;font:inherit;min-height:64px}
+.fl-pick b{font-size:1.1rem}.fl-pick small{color:#5b6478}.fl-pick .fl-c{grid-row:1/3}
+.fl-c{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:2.5px solid #1d2433;border-radius:50%;font-weight:800;font-size:1.1rem;background:#fff;flex:none}
+.fl-sheet{background:#fff;border:2px solid #d5dae6;border-radius:6px;padding:14px 16px 20px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:"Century Gothic","Avenir Next","Trebuchet MS",system-ui,sans-serif;color:#111}
+.fl-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}.fl-t{font-size:.8rem;font-weight:600;flex:none}
+.fl-box{flex:1;text-align:center;border:2px solid #333;border-radius:10px;padding:8px 10px;font-size:1.05rem}.fl-top .fl-c{width:38px;height:38px;font-size:1rem}
+.fl-h{margin:16px 0 8px 4px;font-size:1.05rem;font-weight:800}
+.fl-b{display:grid;gap:10px}.fl-b.c2{grid-template-columns:1fr 1fr;gap:6px 8px}.fl-b.c2 p{font-size:clamp(15px,4vw,19px);padding:6px 4px}
+.fl-b p{margin:0;padding:6px 8px;font-size:clamp(17px,4.6vw,22px);line-height:1.6;border-radius:10px}.fl-b p.hit{background:#fff3bf}
 </style>
 </head>
 <body>
@@ -929,6 +940,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.19", desc: "Exercices de lecture : fiches de classe T6" },
     { v: "10.18", desc: "Question piège : texte juste (plus de NaN)" },
     { v: "10.17", desc: "Rimes : cabane, dune (images corrigées)" },
     { v: "10.16", desc: "Famille : deux cartes bleue et verte, plus lisibles" },
@@ -6437,8 +6449,8 @@ const addStars=n=>{ try{ localStorage.setItem('dl-pt-stars',String((+localStorag
 function menu(){
   try{ speechSynthesis.cancel(); }catch(e){} root.onclick=null;
   root.innerHTML=`<div class="mx-head"><h2>📖 Lecture</h2><p>Les sons : chaque groupe de lettres fait un son. <b>4H</b></p></div>
-  <div class="sn-menu"><button data-a="learn"><i>🔊</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="exl" class="sn-ex"><i>⚠️</i><span>Lettres pièges</span></button><button data-a="exq" class="sn-ex"><i>🎯</i><span>Entraîne-toi aux pièges</span></button><button data-a="lp" class="wide lp-tile"><i>🐢</i><span>Lis pas à pas</span></button><button data-a="read" class="wide"><i>📚</i><span>Lis un texte</span></button></div>`;
-  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ({learn:()=>{EX=false;learn();},quiz:()=>{EX=false;quiz();},exl:()=>{EX=true;learn();},exq:()=>{EX=true;quiz();},read,lp:guide})[b.dataset.a](); };
+  <div class="sn-menu"><button data-a="learn"><i>🔊</i><span>Découvre les sons</span></button><button data-a="quiz"><i>🎯</i><span>Entraîne-toi</span></button><button data-a="exl" class="sn-ex"><i>⚠️</i><span>Lettres pièges</span></button><button data-a="exq" class="sn-ex"><i>🎯</i><span>Entraîne-toi aux pièges</span></button><button data-a="lp" class="wide lp-tile"><i>🐢</i><span>Lis pas à pas</span></button><button data-a="read" class="wide"><i>📚</i><span>Lis un texte</span></button><button data-a="fiches" class="wide fl-tile"><i>📄</i><span>Exercices de lecture <small>fiches de classe · 4H</small></span></button></div>`;
+  root.querySelector('.sn-menu').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; ({learn:()=>{EX=false;learn();},quiz:()=>{EX=false;quiz();},exl:()=>{EX=true;learn();},exq:()=>{EX=true;quiz();},read,lp:guide,fiches})[b.dataset.a](); };
 }
 function back(f,txt){ return `<button class="g-ghost sn-back" id="snB">${txt||'← Menu'}</button>`; }
 const FL=f=>f==='en'?'um · en':f;
@@ -6599,6 +6611,40 @@ function read(){
   const snd=g=>{ if(!g) return; stop(); seq([{t:vs(g),l:'fr',r:LPS[lpSpd].r<.6?0.5:0.7,pause:0}]); };
   root.querySelector('.sn-leg').onclick=e=>{ const c=e.target.closest('.sn-lg'); if(c) snd(G[+c.dataset.g]); };
   root.querySelector('#snT').onclick=e=>{ if(on) return; const m=e.target.closest('.sn-m'); if(m){ const g=MK[m.textContent]; if(g){ m.classList.add('rd-pop'); setTimeout(()=>m.classList.remove('rd-pop'),600); return snd(g); } } const p=e.target.closest('p'); if(p) seq([{t:p.textContent,l:'fr',r:LPS[lpSpd].r,pause:0}]); };
+}
+/* ---- exercices de lecture : fiches de classe (même présentation que la feuille) ---- */
+const FICHES=[
+ {id:'t6-8',t:'T6',box:'t',n:8,blocks:[{h:'Lis les mots.',cols:2,lines:['une belle invention','la bonne solution','une potion magique','un gros dictionnaire']},{h:'Lis les phrases.',lines:['Les parents ont de la patience.','La maitresse ne donne pas de punitions.','Les élèves peuvent faire des inventions pendant les jeux.','Bientôt, les grands feront des opérations difficiles.']}]},
+ {id:'t6-9',t:'T6',box:'Révision du temps 6',n:9,blocks:[{h:'Lis le texte.',lines:['Alexia et Romain ont organisé une magnifique exposition de dessins d’animaux.','On y trouve des pingouins qui marchent à la queue leu leu dans un pays lointain.','On voit des gorilles qui font des acrobaties dans la forêt tropicale.','Le dessin préféré d’Alexia est celui d’une famille kangourous qui bondit sur des chemins australiens.','Le dessin préféré de Romain est celui d’un dauphin qui fait des sauts périlleux au-dessus de la mer.']}]}
+];
+function fiches(){
+  try{ speechSynthesis.cancel(); }catch(e){} rdTok++;
+  root.innerHTML=back()+`<div class="mx-head"><h2>📄 Exercices de lecture</h2><p>Les fiches de la classe, comme sur le papier. Touche une fiche.</p></div><div class="fl-list">${FICHES.map(f=>`<button class="fl-pick" data-id="${f.id}"><span class="fl-c">${f.n}</span><b>${esc(f.box==='t'?'Le son « t »':f.box)}</b><small>${f.t} · page ${f.n}</small></button>`).join('')}</div>`;
+  root.querySelector('#snB').onclick=menu; window.scrollTo(0,0);
+  root.querySelector('.fl-list').onclick=e=>{ const b=e.target.closest('.fl-pick'); if(b) fiche(FICHES.find(x=>x.id===b.dataset.id)); };
+}
+function fiche(f){
+  const lines=[]; const bl=f.blocks.map(b=>`<h4 class="fl-h">${esc(b.h)}</h4><div class="fl-b${b.cols?' c2':''}">${b.lines.map(t=>{ lines.push(t); return `<p data-i="${lines.length-1}">${esc(t)}</p>`; }).join('')}</div>`).join('');
+  root.innerHTML=back('← Les fiches')+`<div class="fl-sheet"><div class="fl-top"><span class="fl-t">${esc(f.t)}</span><span class="fl-box">${esc(f.box)}</span><span class="fl-c">${f.n}</span></div>${bl}</div>
+   <div class="lp-top" id="rdSp">${LPS.map((x,i)=>`<button data-v="${i}" class="${i===lpSpd?'on':''}">${x.n||x.l||x.t||('Vitesse '+(i+1))}</button>`).join('')}</div>
+   <button class="sn-ask" id="snL">🔊 <span>Écouter la fiche</span></button>`;
+  root.querySelector('#snB').onclick=fiches; window.scrollTo(0,0);
+  const pEls=[...root.querySelectorAll('.fl-b p')], orig=pEls.map(p=>p.innerHTML); let on=false;
+  const L=root.querySelector('#snL'), lab=L.querySelector('span');
+  const stop=()=>{ rdTok++; on=false; pEls.forEach((p,i)=>{ p.innerHTML=orig[i]; }); lab.textContent='Écouter la fiche'; try{ speechSynthesis.cancel(); }catch(e){} };
+  async function play(){ if(on) return stop(); const my=++rdTok; on=true; lab.textContent='⏹️ Arrêter'; const st=LPS[lpSpd];
+    for(let i=0;i<pEls.length&&my===rdTok;i++){
+      const toks=lines[i].split(' ').map(w=>({w,sy:sylW(w)}));
+      pEls[i].innerHTML=toks.map((t,wi)=>`<span class="rd-w" data-w="${wi}">${t.sy.map(x=>`<span class="rd-s">${x.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}</span>`).join('')}</span>`).join(' ');
+      const ws=pEls[i].querySelectorAll('.rd-w');
+      for(let k=0;k<toks.length;k++){ if(my!==rdTok) return; const clean=toks[k].w.replace(/[.,!?;:]/g,''); ws[k].classList.add('cur'); if(clean) seq([{t:clean,l:'fr',r:st.r,pause:0}]);
+        for(const sy of ws[k].querySelectorAll('.rd-s')){ if(my!==rdTok) return; sy.classList.add('big'); await sleep(FAST?15:st.step); sy.classList.remove('big'); }
+        await sleep(FAST?10:(/[.!?]$/.test(toks[k].w)?st.step*1.2:st.step*0.4)); ws[k].classList.remove('cur'); }
+      pEls[i].innerHTML=orig[i]; await sleep(FAST?10:500); }
+    if(my===rdTok) stop(); }
+  L.onclick=play;
+  root.querySelector('#rdSp').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; lpSpd=+b.dataset.v; root.querySelectorAll('#rdSp button').forEach(x=>x.classList.toggle('on',+x.dataset.v===lpSpd)); if(on){ stop(); play(); } };
+  root.querySelector('.fl-sheet').onclick=e=>{ if(on) return; const p=e.target.closest('.fl-b p'); if(p){ pEls.forEach(x=>x.classList.remove('hit')); p.classList.add('hit'); seq([{t:lines[+p.dataset.i],l:'fr',r:LPS[lpSpd].r,pause:0}]); } };
 }
 /* ---- entraînement ---- */
 function mkQ(){
