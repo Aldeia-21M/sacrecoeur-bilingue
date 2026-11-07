@@ -458,7 +458,7 @@ body[data-sec="fr"] .bar nav{justify-content:flex-start}body[data-sec="fr"] .tab
 .cw{cursor:pointer;padding:2px 3px;font-size:inherit;border-radius:6px;border-top:4px solid transparent;border-bottom:4px solid transparent;-webkit-tap-highlight-color:transparent}
 .cw.ul{text-decoration:underline;text-decoration-color:var(--uc);text-decoration-thickness:5px;text-underline-offset:6px;text-decoration-skip-ink:none;border-radius:0}
 .cw.m-g{border-top-color:#5f3dc4}.cw.m-x{background:#b2f2bb}
-.cw.m-D{background:#cfe8ff}.cw.m-N{background:#ffd6e5}.cw.m-J{background:#ffe58a}.cw.m-R{background:#d9f2d1}.cw.m-V{background:#ffc9c9}.cw.m-B{background:#ffd9b3}.cw.m-P{background:#c5f6fa}.cw.m-C{background:#f3d9fa}
+.cw.m-A{background:#ffc9c9}.cw.m-Z{background:#a5d8ff}.cw.m-F{background:#b2f2bb}.cw.m-E{background:#ffd8a8}.cw.m-O{background:#fcc2d7}.cw.m-H{background:#d0bfff}.cw.m-U{background:#99e9f2}.cw.m-W{background:#ffec99}.cw.m-D{background:#cfe8ff}.cw.m-N{background:#ffd6e5}.cw.m-J{background:#ffe58a}.cw.m-R{background:#d9f2d1}.cw.m-V{background:#ffc9c9}.cw.m-B{background:#ffd9b3}.cw.m-P{background:#c5f6fa}.cw.m-C{background:#f3d9fa}
 .tx-run{border:3px solid var(--rc);border-radius:10px;padding:2px 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .cw.miss{outline:3px dashed var(--mc);outline-offset:1px}
 .cw.bad{background:#ffe3ea}
@@ -959,6 +959,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.28", desc: "Colorie la phrase : GN, groupes, homophones" },
     { v: "10.27", desc: "Entraînement : d’abord ce verbe, puis tous" },
     { v: "10.26", desc: "Verben : traduction collée au verbe" },
     { v: "10.25", desc: "Verben : traduction à droite du titre" },
@@ -5038,7 +5039,60 @@ const TXT={
   '(s Mon frère/N et moi) regardons/p un film/N. (s Nous) aimons/p les histoires/N drôles/J.',
   '(s Vous) dessinez/p un château/N. (s Les enfants/N) colorient/p les grandes/J tours/N.',
   '(s La petite/J fille/N) mange/p une glace/N fraîche/J.',
-  '(s Le gentil/J chien/N) garde/p la grande/J maison/N.'],
+  '(s Le gentil/J chien/N) garde/p la grande/J maison/N.',
+  '(s (g Le chat/N noir/J)) dort/p sur (g le canapé/N).',
+  '(s (g Les/x enfants/N)) jouent/p dans (g le jardin/N).',
+  '(s (g Maman/N)) prépare/p (g le repas/N).',
+  '(s (g Papa/N)) lit/p (g le journal/N).',
+  '(s Je) mange/p (g une/y pomme/N rouge/J).',
+  '(s (g Léa/N)) aime/p (g les/x fleurs/N).',
+  '(s Elle) cueille/p (g des/x roses/N rouges/J).',
+  '(s Nous) allons/p à (g l’école/N).',
+  '(s (g Mes/x amis/N)) arrivent/p aussi.',
+  '(s (g Les/x oiseaux/N)) chantent/p (g le matin/N).',
+  '(s Tu) écoutes/p (g leur chanson/N douce/J).',
+  '(s (g Le boulanger/N)) fait/p (g du pain/N chaud/J).',
+  '(s Il) ouvre/p (g son magasin/N) tôt.',
+  '(s (g Mon frère/N) et moi) regardons/p (g un film/N).',
+  '(s Nous) aimons/p (g les/x histoires/N drôles/J).',
+  '(s Vous) dessinez/p (g un château/N).',
+  '(s (g Les/x enfants/N)) colorient/p (g les/x grandes/J tours/N).',
+  '(s (g La/y petite/J fille/N)) mange/p (g une/y glace/N fraîche/J).',
+  '(s (g Le gentil/J chien/N)) garde/p (g la/y grande/J maison/N).',
+  '(s (g La/y maîtresse/N)) écrit/p sur (g le tableau/N).',
+  '(s (g Le petit/J oiseau/N)) vole/p vers (g le grand/J arbre/N).',
+  '(s Elle) porte/p (g une/y jolie/J robe/N bleue/J).',
+  '(s (g Mon grand/J frère/N)) joue/p avec (g son ballon/N).',
+  '(s (g Le vent/N)) souffle/p très fort.',
+  '(s (g Les/x vaches/N)) mangent/p (g l’herbe/N verte/J) dans (g le pré/N).',
+  '(s Ils) regardent/p (g la/y télévision/N) mais (s je) lis/p (g un livre/N).',
+  '(s (g Le soleil/N)) brille/p et (s (g les/x enfants/N)) rient/p.',
+  '(s Tu) chantes/p bien.',
+  '(s (g Mon papa/N)) travaille/p dans (g un grand/J bureau/N).',
+  '(s (g La/y souris/N)) cache/p (g son fromage/N) sous (g le lit/N).',
+  '(s Nous) mangeons/p (g une/y soupe/N chaude/J) avec (g du pain/N).',
+  '(s (g Le facteur/N)) apporte/p (g une/y lettre/N) aujourd’hui.',
+  '(s (g Les/x élèves/N)) écoutent/p (g la/y maîtresse/N).',
+  '(s (g Mon chat/N)) boit/p (g du lait/N frais/J).',
+  '(s Vous) cherchez/p (g votre cahier/N) partout.',
+  '(s (g Ma/y sœur/N)) danse/p devant (g le miroir/N).',
+  '(s (g Le petit/J lapin/N)) mange/p (g une/y carotte/N) et (s il) saute/p beaucoup.',
+  '(s (g Les/x enfants/N)) construisent/p (g un grand/J château/N) sur (g la/y plage/N).',
+  '(s (g La/y lune/N)) éclaire/p (g la/y nuit/N noire/J).',
+  '(s Je) prends/p (g mon sac/N) et (s je) pars/p vite.',
+  '(s (g Papa/N)) répare/p (g la/y vieille/J voiture/N).',
+  '(s (g Les/x fleurs/N)) poussent/p dans (g le jardin/N).',
+  '(s Elles) sont/p (g belles/J).',
+  '(s (g Léa/N)) a/p (g un chat/N) et (s il) est/p gentil/J.',
+  '(s (g Mon frère/N)) va/p à (g la/y piscine/N) et (s il) a/p (g son ballon/N).',
+  '(s (g Mes/x amis/N)) ont/p (g des/x vélos/N) et (s on) roule/p ensemble.',
+  '(s (g Son chien/N) et (g son chat/N)) sont/p gentils/J.',
+  '(s On) va/p à (g l’école/N) à pied/N.',
+  '(s (g Les/x enfants/N)) sont/p à (g la/y plage/N) et (s ils) ont/p (g des/x seaux/N).',
+  '(s (g Ma/y maman/N)) a/p (g un beau/J jardin/N).',
+  '(s On) mange/p (g du pain/N) et (s on) boit/p (g du lait/N).',
+  '(s (g Mes/x cousins/N)) sont/p à (g la/y montagne/N).',
+  '(s (g Son frère/N)) est/p grand/J et (s il) a/p (g un vélo/N).'],
  '6H':[
   '(e Hier,) (s il) pleuvait/i. (e Aujourd’hui,) (s (g le soleil/N)) brille/p. (s (g Les/x enfants/N)) jouent/p (e avec (g des/x ballons/N rouges/Jx)).',
   '(s (g Mon frère/N)) adore/p (o (g les/x bonbons/N sucrés/Jx)). (e Hier,) (s il) mangeait/i (o (g trois gâteaux/N)). (s (g Ma/y sœur/N)) aime/p (o dormir/n). (s Elle) mange/p (o (g des/x fruits/N mûrs/Jx)) (e (g le matin/N)).',
@@ -5052,15 +5106,92 @@ const TXT={
   '(s (g Mon frère/N)) est/p (t grand/J). (s (g Ma/y sœur/N)) semble/p (t fatiguée/Jx). (e Aujourd’hui,) (s (g les/x élèves/N)) sont/p (t contents/Jx) (e à (g l’école/N)).',
   '(s (g Léa/N)) parle/p (k à (g sa/y maîtresse/N)). (s Elle) pense/p (k à (g ses/x vacances/N)). (e Hier,) (s elle) a/c offert/c (o (g un cadeau/N)) (k à (g sa/y sœur/N)).',
   '(s Nous) voulons/p (o jouer/n) (e dehors) mais (s il) pleut/p. (s (g Les/x enfants/N)) restent/p (e dans (g la/y maison/N)) et (s ils) dessinent/p (o (g des/x animaux/N rigolos/Jx)).',
-  '(e (g Le soir/N),) (s (g mon petit/J chien/N)) dort/p (e dans (g son panier/N)). (e (g Le matin/N),) (s il) court/p (e dans (g le jardin/N)) et (s il) joue/p (e avec (g ses/x amis/N)).']
+  '(e (g Le soir/N),) (s (g mon petit/J chien/N)) dort/p (e dans (g son panier/N)). (e (g Le matin/N),) (s il) court/p (e dans (g le jardin/N)) et (s il) joue/p (e avec (g ses/x amis/N)).',
+  '(e (g Ce matin/N),) (s (g le facteur/N)) apporte/p (o (g une/y lettre/N)).',
+  '(s (g Les/x élèves/N)) rangent/p (o (g leurs/x cahiers/N)) (e dans (g la/y classe/N)).',
+  '(e Aujourd’hui,) (s (g ma/y sœur/N)) prépare/p (o (g un gros/J gâteau/N)).',
+  '(s (g Le petit/J garçon/N)) porte/p (o (g un lourd/J sac/N)) (e sur (g son dos/N)).',
+  '(s (g Les/x jardiniers/N)) plantent/p (o (g des/x arbres/N)) (e dans (g le parc/N)).',
+  '(s (g La/y cuisinière/N)) coupe/p (o (g les/x tomates/N mûres/Jx)) (e avec (g un grand/J couteau/N)).',
+  '(e (g Chaque jour/N),) (s (g mon voisin/N)) promène/p (o (g son chien/N)) (e dans (g la/y forêt/N)).',
+  '(s (g Les/x musiciens/N)) jouent/p (o (g une/y belle/Jx chanson/N)) (e devant (g le public/N)).',
+  '(s (g La/y maîtresse/N)) corrige/p (o (g les/x dictées/N)) (e (g le soir/N)).',
+  '(s (g Les/x vaches/N)) mangent/p (o (g l’herbe/N verte/Jx)) (e dans (g le pré/N)).',
+  '(s Nous) lavons/p (o (g la/y voiture/N)) (e devant (g la/y maison/N)).',
+  '(s Vous) cherchez/p (o (g vos/x clés/N)) (e partout).',
+  '(s (g Mes/x cousins/N)) visitent/p (o (g un vieux/J château/N)) (e pendant (g les/x vacances/N)).',
+  '(e (g Le dimanche/N),) (s (g papa/N)) cuisine/p (o (g une/y délicieuse/Jx soupe/N)).',
+  '(s Elle) écrit/p (o (g une/y longue/Jx lettre/N)) (k à (g sa/y grand-mère/N)).',
+  '(e Autrefois,) (s (g mes/x grands-parents/N)) habitaient/i (e dans (g une/y petite/Jx maison/N)).',
+  '(e Hier,) (s il) neigeait/i (e sur (g les/x montagnes/N)).',
+  '(e Avant,) (s nous) jouions/i (e dans (g la/y cour/N)).',
+  '(e (g Le soir/N),) (s (g ma/y mère/N)) racontait/i (o (g une/y histoire/N)).',
+  '(s (g Les/x enfants/N)) riaient/i (e dans (g le jardin/N)).',
+  '(e Pendant (g l’été/N),) (s (g les/x touristes/N)) visitaient/i (o (g le village/N)).',
+  '(e Autrefois,) (s (g le boulanger/N)) faisait/i (o (g du pain/N)) (e (g chaque matin/N)).',
+  '(e Demain,) (s nous) visiterons/u (o (g le musée/N)).',
+  '(e Bientôt,) (s (g les/x hirondelles/N)) reviendront/u (e dans (g notre village/N)).',
+  '(e (g Dimanche/N prochain/J),) (s (g ma/y famille/N)) mangera/u (e dans (g un restaurant/N)).',
+  '(e (g L’été/N prochain/J),) (s je) nagerai/u (e dans (g le lac/N)).',
+  '(e Demain,) (s tu) feras/u (o (g tes/x devoirs/N)) (e avec (g ton ami/N)).',
+  '(s (g Les/x skieurs/N)) partiront/u (e tôt) (e (g le matin/N)).',
+  '(e Bientôt,) (s vous) visiterez/u (o (g plusieurs/x grandes/Jx villes/N)).',
+  '(e Hier,) (s (g Paul/N)) a/c mangé/c (o (g une/y pomme/N)).',
+  '(e (g Samedi/N),) (s nous) avons/c visité/c (o (g un zoo/N)).',
+  '(e (g Ce matin/N),) (s (g les/x enfants/N)) ont/c cueilli/c (o (g des/x fleurs/N)).',
+  '(e Hier,) (s elle) est/c rentrée/cy (e tard).',
+  '(s (g Léa/N)) a/c perdu/c (o (g son stylo/N)) (e dans (g la/y cour/N)).',
+  '(s (g Les/x voisins/N)) sont/c partis/cy (e en (g vacances/N)).',
+  '(s (g Mon frère/N)) a/c cassé/c (o (g un vase/N)).',
+  '(s Nous) avons/c regardé/c (o (g un film/N)) (e hier).',
+  '(s (g Mon frère/N)) est/p (t grand/J).',
+  '(s (g Ma/y sœur/N)) semble/p (t fatiguée/Jx).',
+  '(s (g Les/x élèves/N)) sont/p (t contents/Jx).',
+  '(s (g La/y soupe/N)) devient/p (t froide/Jx).',
+  '(s (g Ce chien/N)) reste/p (t calme/J).',
+  '(s (g Les/x fleurs/N)) sont/p (t belles/Jx).',
+  '(e Hier,) (s (g le ciel/N)) était/i (t gris/J).',
+  '(e Demain,) (s nous) serons/u (t prêts/Jx).',
+  '(s (g Le facteur/N)) parle/p (k à (g la/y voisine/N)).',
+  '(s (g Léa/N)) pense/p (k à (g ses/x vacances/N)).',
+  '(s (g Papa/N)) téléphone/p (k à (g son ami/N)).',
+  '(s (g Les/x enfants/N)) obéissent/p (k à (g leur maîtresse/N)).',
+  '(s Elle) a/c répondu/c (k à (g sa/y cousine/N)).',
+  '(s Ils) parlent/p (k de (g leur voyage/N)).',
+  '(s (g Mes/x sœurs/N)) aiment/p (o danser/n).',
+  '(s Nous) voulons/p (o manger/n (g une/y glace/N)).',
+  '(s (g Léo/N)) adore/p (o nager/n) (e dans (g la/y mer/N)).',
+  '(s Tu) dois/p (o finir/n (g tes/x devoirs/N)).',
+  '(s Elle) préfère/p (o dormir/n) (e tard).',
+  '(s (g Le chat/N)) dort/p (e sur (g le canapé/N)) et (s (g le chien/N)) garde/p (o (g la/y maison/N)).',
+  '(s (g Léa/N)) chante/p et (s (g Paul/N)) danse/p.',
+  '(s (g Ma/y mère/N)) travaille/p mais (s (g mon père/N)) dort/p.',
+  '(s (g Les/x oiseaux/N)) chantent/p et (s (g les/x enfants/N)) écoutent/p.',
+  '(s (g Léa/N)) a/p (o (g un ballon/N)) et (s (g Paul/N)) a/p (o (g un vélo/N)).',
+  '(s (g Mon frère/N)) va/p (e à (g l’école/N)) (e à (g vélo/N)).',
+  '(s (g Le chat/N)) est/p (t gentil/J) et (s il) a/p (o faim/N).',
+  '(s (g Les/x enfants/N)) ont/p (o (g des/x jeux/N)) et (s on) joue/p (e ensemble).',
+  '(s (g Son frère/N) et (g sa/y sœur/N)) sont/p (t gentils/Jx).',
+  '(s (g Marie/N)) a/p (o (g une/y sœur/N)) et (s elle) est/p (t heureuse/Jx).',
+  '(s (g Mes/x parents/N)) ont/p (o (g un jardin/N)) et (s on) joue/p (e dehors).',
+  '(s (g Ses/x chaussures/N)) sont/p (t neuves/Jx).',
+  '(s (g Son père/N)) va/p (e à (g Sion/N)) (e (g chaque lundi/N)).']
 };
 const LEX={D:'le la l’ les un une des du mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs ce cet cette ces chaque trois deux quatre cinq plusieurs',
  R:'je j’ tu il elle on nous vous ils elles me m’ moi se s’ lui eux c’',
- B:'hier aujourd’hui demain maintenant avant autrefois bientôt toujours souvent jamais déjà aussi très trop beaucoup peu bien mal vite doucement dehors ici longtemps tôt tard encore parfois enfin soudain partout',
+ B:'hier aujourd’hui demain maintenant avant autrefois bientôt toujours souvent jamais déjà aussi très trop beaucoup peu bien mal vite doucement dehors ici longtemps tôt tard encore parfois enfin soudain partout fort ensemble',
  P:'à de d’ dans sur sous avec sans pour par en vers chez devant derrière après pendant depuis',
  C:'et ou mais car donc or ni'};
 const LMAP={}; Object.keys(LEX).forEach(k=>LEX[k].split(' ').forEach(w=>LMAP[w]=k));
 const MISSING=[];
+const HMAP={'a':'A','à':'Z','et':'F','est':'E','on':'O','ont':'H','son':'U','sont':'W'};
+const G3=new Set(('va vais vas allons allez vont allait allaient irai iras ira irons irez iront est sont était étaient sera seras serons serez seront suis es sommes êtes a as ont avons avez avait avaient aura auront fait fais faisons faites font faisait faisaient fera feras feront dort dors dormons dormez dorment dormait lit lis lisons lisez lisent lisait vient viens viennent venait viendra viendront reviendront devient deviennent devenait veut veux voulons voulez veulent voulait voudra peut peux pouvons pouvez peuvent pouvait dois doit devons devez doivent devait prends prend prenons prenez prennent prenait pars part partons partez partent partait partira partiront sort sors sortons sortent ouvre ouvres ouvrons ouvrez ouvrent ouvrait offre offrons offrent court cours courons courez courent cueille cueilles cueillons cueillez cueillent pleut pleuvait pleuvra rit ris rions riez rient riaient riait écrit écris écrivons écrivez écrivent écrivait boit bois buvons buvez boivent voit vois voyons voyez voient voyait dit dis disons dites disent met mets mettons mettez mettent sait sais savons savez savent construit construis construisons construisent tient tiens tenons tiennent attend attends attendons attendent entend entends entendons entendent perd perds perdons perdent répond réponds répondons répondent').split(' '));
+const G2=new Set('finis finit finissons finissez finissent finissait grandis grandit grandissent choisis choisit choisissons choisissent remplit remplissent réussit réussis réussissent obéis obéit obéissons obéissez obéissent obéissait ralentit applaudit applaudissent'.split(' '));
+const PP3=new Set('perdu répondu cueilli parti partie partis parties offert fait dit pris mis vu venu venue venus venues entendu attendu écrit su dû pu voulu bu couru ouvert'.split(' ')), PP2=new Set('fini finie finis choisi choisie obéi grandi réussi rempli'.split(' '));
+const AUXV=new Set('a as ont avons avez est es sont sommes êtes ai suis'.split(' '));
+const gPP=w=>/(é|ée|és|ées)$/.test(w)?'1':PP2.has(w)?'2':'3';
+const gInf=w=>w==='aller'?'3':/er$/.test(w)?'1':/^(finir|grandir|choisir|réussir|obéir|remplir)$/.test(w)?'2':'3';
+const gFin=w=>G3.has(w)?'3':G2.has(w)?'2':'1';
 function PARSE(src){
   const out=[], stack=[]; 
   src.split(' ').forEach(raw=>{
@@ -5078,6 +5209,12 @@ function PARSE(src){
     });
     for(let i=0;i<cl;i++) stack.pop();
   });
+  out.forEach((t,i)=>{
+    const lw=t.w.toLowerCase(); if(HMAP[lw]) t.c+=HMAP[lw];
+    if(!/[piucn]/.test(t.c)) return; let g;
+    if(/c/.test(t.c)) g=(AUXV.has(lw)&&out[i+1]&&/c/.test(out[i+1].c))?gPP(out[i+1].w.toLowerCase()):gPP(lw);
+    else if(/n/.test(t.c)) g=gInf(lw); else g=gFin(lw);
+    t.c+=g; });
   /* accords : le nom porte la marque du pluriel quand son déterminant est au pluriel */
   const PLD=/^(les|des|mes|tes|ses|nos|vos|leurs|ces|deux|trois|quatre|cinq|plusieurs)$/i; let plD=false;
   out.forEach((t,i)=>{ if(/D/.test(t.c)){ plD=PLD.test(t.w.replace(/[^\wÀ-ÿ]/g,''))||/x/.test(t.c); if(plD&&!/x/.test(t.c)&&!/[y]/.test(t.c)) t.c+='x'; } else if(/N/.test(t.c)&&plD&&/[sx]$/.test(t.w)&&!/x/.test(t.c)){ t.c+='x'; } if(t.p&&/[.!?]/.test(t.p)) plD=false; });
@@ -5106,14 +5243,30 @@ const CR={
  V:['Verbe (V)','#e03131','Il dit l’action ou l’état. Il change avec je, tu, il… (et l’infinitif aussi est un verbe).'],
  B:['Adverbe (Adv.)','#ffa94d','Il précise le verbe et ne change jamais : <b>hier, bien, vite, longtemps…</b>'],
  P:['Préposition (Prép.)','#3bc9db','Elle relie deux éléments : <b>à, dans, sur, avec, vers…</b>'],
- C:['Conjonction (Conj.)','#e599f7','Elle relie deux mots ou phrases : <b>et, mais, ou, car, donc…</b>']
+ C:['Conjonction (Conj.)','#e599f7','Elle relie deux mots ou phrases : <b>et, mais, ou, car, donc…</b>'],
+ '1':['Verbe du 1er groupe','#f08c00','Le <b>1er groupe</b> : l’infinitif finit par <b>-er</b> (sauf aller) : chanter, jouer, manger. C’est le plus grand groupe.'],
+ '2':['Verbe du 2e groupe','#37b24d','Le <b>2e groupe</b> : l’infinitif finit par <b>-ir</b> et fait <b>-issons</b> avec « nous » : finir → nous finissons, obéir, grandir, choisir.'],
+ '3':['Verbe du 3e groupe','#7950f2','Le <b>3e groupe</b> : tous les autres (aller, être, avoir, faire, dire, prendre, partir, dormir, voir…). Ils changent beaucoup.'],
+ A:['a (verbe avoir)','#e03131','<b>a</b> sans accent = le verbe <b>avoir</b>. Astuce : je peux dire <b>« avait »</b> : il a faim → il avait faim.'],
+ Z:['à (préposition)','#1971c2','<b>à</b> avec accent = une <b>préposition</b>. Astuce : je ne peux pas dire « avait » : il va à l’école.'],
+ F:['et (conjonction)','#2f9e44','<b>et</b> relie deux mots ou deux phrases. Astuce : je peux dire <b>« et puis »</b>. Léa et Paul.'],
+ E:['est (verbe être)','#e8590c','<b>est</b> = le verbe <b>être</b>. Astuce : je peux dire <b>« était »</b> : il est grand → il était grand.'],
+ O:['on (pronom)','#c2255c','<b>on</b> = le pronom. Astuce : je peux dire <b>« il »</b> : on mange → il mange.'],
+ H:['ont (verbe avoir)','#5f3dc4','<b>ont</b> = le verbe <b>avoir</b> avec ils / elles. Astuce : je peux dire <b>« avaient »</b> : ils ont faim → ils avaient faim.'],
+ U:['son (déterminant)','#0b7285','<b>son</b> = un déterminant, il annonce un nom. Astuce : je peux dire <b>« mon »</b> : son chat → mon chat.'],
+ W:['sont (verbe être)','#e67700','<b>sont</b> = le verbe <b>être</b> avec ils / elles. Astuce : je peux dire <b>« étaient »</b> : ils sont gentils → ils étaient gentils.']
 };
 const MODES={
  '4H':[
   ['Les verbes (V)','Trouve le ou les <b>verbes (V)</b> conjugués de la phrase.',['v']],
   ['Le sujet (S) et le verbe (V)','Cherche <b>qui fait l’action</b> : le <b>sujet (S)</b>, puis le <b>verbe (V)</b>.',['s','v']],
   ['Le sujet (S) et le prédicat (P)','De qui parle-t-on ? Le <b>sujet (S)</b>. Que dit-on de lui ? Le <b>prédicat (P)</b>.',['s','q']],
-  ['La nature des mots','Donne la <b>nature</b> de chaque mot : déterminant, nom, adjectif, pronom, verbe, adverbe, préposition, conjonction.',['D','N','J','R','V','B','P','C']]],
+  ['La nature des mots','Donne la <b>nature</b> de chaque mot : déterminant, nom, adjectif, pronom, verbe, adverbe, préposition, conjonction.',['D','N','J','R','V','B','P','C']],
+  ['Le groupe nominal (GN)','Trouve les <b>groupes nominaux (GN)</b> : un <b>déterminant</b> + un <b>nom</b> (+ un <b>adjectif</b>). Un trait au-dessus de chaque mot.',['g']],
+  ['Le nom et ses compagnons','Trouve les <b>déterminants</b>, les <b>noms</b> et les <b>adjectifs</b>.',['D','N','J']],
+  ['Les petits mots qui ne changent pas','Trouve les <b>pronoms</b>, les <b>adverbes</b>, les <b>prépositions</b> et les <b>conjonctions</b>.',['R','B','P','C']],
+  ['Homophones : a / à · et / est','Choisis la bonne couleur : <b>a</b> (avoir) ou <b>à</b> (préposition) ; <b>et</b> (conjonction) ou <b>est</b> (être).',['A','Z','F','E']],
+  ['Homophones : on / ont · son / sont','Choisis la bonne couleur : <b>on</b> (pronom) ou <b>ont</b> (avoir) ; <b>son</b> (déterminant) ou <b>sont</b> (être).',['O','H','U','W']]],
  '6H':[
   ['Les verbes (V) et leur temps','Trouve les <b>verbes (V)</b> et colorie-les selon leur <b>temps</b>.',['p','i','u','c','n']],
   ['Le sujet (S) et le verbe (V)','<b>Qui fait l’action ?</b> Entoure le <b>sujet (S)</b>, puis souligne le <b>verbe (V)</b>.',['s','v']],
@@ -5121,18 +5274,30 @@ const MODES={
   ['La nature des mots','Donne la <b>nature</b> de chaque mot : déterminant, nom, adjectif, pronom, verbe, adverbe, préposition, conjonction.',['D','N','J','R','V','B','P','C']],
   ['Les accords (-s, -x, -e)','Trouve les mots qui portent la <b>marque d’un accord</b> (-s, -x, -e).',['x']],
   ['La fonction des mots : S, V, COD, COI, CP','Cherche le <b>sujet (S)</b>, le <b>verbe (V)</b>, l’<b>attribut</b> et les <b>compléments</b> : <b>COD</b>, <b>COI</b>, <b>CP</b>.',['s','v','o','k','t','e']],
-  ['Tout : GN, S, V et compléments','L’analyse complète : <b>groupes nominaux (GN)</b>, <b>sujet (S)</b>, <b>verbe (V)</b> et <b>compléments</b>.',['g','s','v','o','k','t','e']]]
+  ['Tout : GN, S, V et compléments','L’analyse complète : <b>groupes nominaux (GN)</b>, <b>sujet (S)</b>, <b>verbe (V)</b> et <b>compléments</b>.',['g','s','v','o','k','t','e']],
+  ['Le groupe nominal (GN)','Trouve les <b>groupes nominaux (GN)</b> : un <b>déterminant</b> + un <b>nom</b> (+ un ou des <b>adjectifs</b>). Un trait au-dessus de chaque mot.',['g']],
+  ['Le nom et ses compagnons','Trouve les <b>déterminants</b>, les <b>noms</b> et les <b>adjectifs</b>.',['D','N','J']],
+  ['Les petits mots qui ne changent pas','Trouve les <b>pronoms</b>, les <b>adverbes</b>, les <b>prépositions</b> et les <b>conjonctions</b>.',['R','B','P','C']],
+  ['Les compléments : COD, COI, attribut','Après le verbe, trouve le <b>COD</b> (quoi ? qui ?), le <b>COI</b> (à / de) et l’<b>attribut</b> du sujet.',['o','k','t']],
+  ['Les groupes de verbes (1er, 2e, 3e)','Trouve chaque <b>verbe</b> et colorie-le selon son <b>groupe</b> : 1er (-er), 2e (-ir / -issons), 3e (les autres).',['1','2','3']],
+  ['Homophones : a / à · et / est','Choisis la bonne couleur : <b>a</b> (avoir) ou <b>à</b> (préposition) ; <b>et</b> (conjonction) ou <b>est</b> (être).',['A','Z','F','E']],
+  ['Homophones : on / ont · son / sont','Choisis la bonne couleur : <b>on</b> (pronom) ou <b>ont</b> (avoir) ; <b>son</b> (déterminant) ou <b>sont</b> (être).',['O','H','U','W']]]
 };
-const EXR={s:'<i>Mon frère</i> regarde un film.',q:'Mon frère <i>regarde un film</i>.',e:'<i>Hier,</i> il mangeait. · Il joue <i>dans le jardin</i>.',o:'Il mange <i>une pomme</i>.',k:'Elle parle <i>à sa maîtresse</i>.',t:'Il est <i>grand</i>.',v:'Le chat <i>dort</i>.',p:'Il <i>joue</i>.',i:'Il <i>jouait</i>.',u:'Il <i>jouera</i>.',c:'Il <i>a joué</i>.',n:'Il aime <i>dormir</i>.',D:'<i>Le</i> chat dort.',N:'Le <i>chat</i> dort.',J:'Le chat <i>noir</i> dort.',R:'<i>Il</i> dort.',B:'Il dort <i>bien</i>.',P:'Il dort <i>dans</i> le lit.',C:'Léa <i>et</i> Paul.',g:'<i>Le petit chat</i> dort.',x:'des chat<i>s</i> noir<i>s</i>'};
-const RGRP={'4H':[['Les blocs de la phrase',['s','q']],['Le verbe',['v']],['La nature des mots',['D','N','J','R','B','P','C']]],
- '6H':[['Les blocs de la phrase',['s','q','e']],['Les compléments',['o','k','t']],['Le verbe et son temps',['v','p','i','u','c','n']],['La nature des mots',['D','N','J','R','B','P','C']],['Les groupes et accords',['g','x']]]};
-const SHORT={'4H':['Les verbes','Sujet · verbe','Sujet · prédicat','Nature des mots'],'6H':['Verbes et temps','Sujet · verbe','Sujet · prédicat · CP','Nature des mots','Accords','Fonctions (COD, COI…)','Tout']};
+const EXR={s:'<i>Mon frère</i> regarde un film.',q:'Mon frère <i>regarde un film</i>.',e:'<i>Hier,</i> il mangeait. · Il joue <i>dans le jardin</i>.',o:'Il mange <i>une pomme</i>.',k:'Elle parle <i>à sa maîtresse</i>.',t:'Il est <i>grand</i>.',v:'Le chat <i>dort</i>.',p:'Il <i>joue</i>.',i:'Il <i>jouait</i>.',u:'Il <i>jouera</i>.',c:'Il <i>a joué</i>.',n:'Il aime <i>dormir</i>.',D:'<i>Le</i> chat dort.',N:'Le <i>chat</i> dort.',J:'Le chat <i>noir</i> dort.',R:'<i>Il</i> dort.',B:'Il dort <i>bien</i>.',P:'Il dort <i>dans</i> le lit.',C:'Léa <i>et</i> Paul.',g:'<i>Le petit chat</i> dort.',x:'des chat<i>s</i> noir<i>s</i>',1:'<i>chanter</i>, <i>jouer</i>, <i>manger</i>',2:'<i>finir</i> → nous <i>finissons</i>',3:'<i>aller</i>, <i>faire</i>, <i>dormir</i>, <i>prendre</i>',A:'Il <i>a</i> faim.',Z:'Il va <i>à</i> l’école.',F:'Léa <i>et</i> Paul.',E:'Il <i>est</i> grand.',O:'<i>On</i> mange.',H:'Ils <i>ont</i> faim.',U:'<i>Son</i> chat dort.',W:'Ils <i>sont</i> grands.'};
+const RGRP={'4H':[['Les blocs de la phrase',['s','q']],['Le verbe',['v']],['La nature des mots',['D','N','J','R','B','P','C']],['Le groupe nominal',['g']],['Les homophones',['A','Z','F','E','O','H','U','W']]],
+ '6H':[['Les blocs de la phrase',['s','q','e']],['Les compléments',['o','k','t']],['Le verbe et son temps',['v','p','i','u','c','n']],['La nature des mots',['D','N','J','R','B','P','C']],['Les groupes et accords',['g','x']],['Les groupes de verbes',['1','2','3']],['Les homophones',['A','Z','F','E','O','H','U','W']]]};
+const SHORT={'4H':['Les verbes','Sujet · verbe','Sujet · prédicat','Nature des mots','Groupe nominal (GN)','Dét. · nom · adj.','Petits mots','a/à · et/est','on/ont · son/sont'],'6H':['Verbes et temps','Sujet · verbe','Sujet · prédicat · CP','Nature des mots','Accords','Fonctions (COD, COI…)','Tout','Groupe nominal (GN)','Dét. · nom · adj.','Petits mots','COD · COI · attribut','Groupes de verbes','a/à · et/est','on/ont · son/sont']};
 const METH={
  '4H':[
   ['Lis la phrase en entier.','Ajoute <b>« hier »</b> ou <b>« demain »</b> au début.','Le mot qui <b>change</b>, c’est le <b>verbe</b>.','Ex. : Le chat <u>dort</u> → Hier, le chat <u>dormait</u>.'],
   ['Trouve le <b>verbe</b> (il change avec hier / demain).','Demande : <b>« Qui est-ce qui + verbe ? »</b>','La réponse, c’est le <b>sujet</b> : entoure tous ses mots.','Ex. : Qui est-ce qui dort ? → <b>Le chat noir</b>.'],
   ['Trouve le <b>sujet</b> : « Qui est-ce qui + verbe ? ».','Le <b>prédicat</b>, c’est tout ce qu’on <b>dit du sujet</b> : le verbe et les mots qui vont avec.','Entoure les 2 blocs.','Ex. : [Le chat noir] [dort sur le canapé].'],
-  ['Un mot à la fois.','<b>Déterminant</b> : devant le nom (le, la, un, mes…).','<b>Nom</b> : on peut mettre « un / une » devant.','<b>Adjectif</b> : dit comment est le nom. <b>Verbe</b> : change avec hier / demain.','<b>Pronom</b> : remplace un nom (il, elle…). <b>Adverbe</b>, <b>préposition</b>, <b>conjonction</b> : ils ne changent jamais (jamais de s).']],
+  ['Un mot à la fois.','<b>Déterminant</b> : devant le nom (le, la, un, mes…).','<b>Nom</b> : on peut mettre « un / une » devant.','<b>Adjectif</b> : dit comment est le nom. <b>Verbe</b> : change avec hier / demain.','<b>Pronom</b> : remplace un nom (il, elle…). <b>Adverbe</b>, <b>préposition</b>, <b>conjonction</b> : ils ne changent jamais (jamais de s).'],
+  ['Cherche un <b>nom</b> (on peut mettre « un / une » devant).','Regarde juste <b>avant</b> : le <b>déterminant</b> (le, la, mon, des…).','Regarde aussi s’il y a un <b>adjectif</b> (il dit comment est le nom).','Un trait au-dessus de <b>chaque mot</b> du GN. Ex. : <u>le petit chat</u>.'],
+  ['<b>Déterminant</b> : il est juste devant le nom (le, un, mes…).','<b>Nom</b> : on peut mettre « un / une » devant.','<b>Adjectif</b> : il dit comment est le nom (petit, rouge, doux).'],
+  ['Ces mots <b>ne changent jamais</b> (sauf le pronom qui remplace un nom).','<b>Pronom</b> : il, elle, je, nous… <b>Adverbe</b> : hier, bien, vite…','<b>Préposition</b> : à, dans, sur, avec… <b>Conjonction</b> : et, mais, ou.'],
+  ['Regarde le mot dans la phrase et essaie de le remplacer.','<b>a</b> → « avait » (verbe avoir) ; <b>à</b> → impossible (préposition).','<b>et</b> → « et puis » (conjonction) ; <b>est</b> → « était » (verbe être).'],
+  ['Regarde le mot dans la phrase et essaie de le remplacer.','<b>on</b> → « il » (pronom) ; <b>ont</b> → « avaient » (verbe avoir).','<b>son</b> → « mon » (déterminant) ; <b>sont</b> → « étaient » (verbe être).']],
  '6H':[
   ['Trouve le <b>verbe</b> avec « hier / demain ».','Regarde <b>quand</b> ça se passe : maintenant → <b>présent</b>, avant → <b>imparfait</b> (-ait, -aient), demain → <b>futur</b> (r).','<b>avoir / être + participe</b> = passé composé (2 mots). Verbe qui ne change pas (-er, -ir, -re) = infinitif.'],
   ['Trouve le <b>verbe</b> (il change avec hier / demain).','Demande : <b>« Qui est-ce qui + verbe ? »</b>','La réponse, c’est le <b>sujet</b> : entoure tous ses mots.','Ex. : Qui est-ce qui joue ? → <b>Mes amis</b>.'],
@@ -5140,9 +5305,16 @@ const METH={
   ['Un mot à la fois.','<b>Variables</b> : déterminant, nom, adjectif, pronom, verbe. <b>Invariables</b> : adverbe, préposition, conjonction (jamais de -s).','Astuce : <b>un / une</b> devant → nom ; <b>hier / demain</b> → verbe ; remplace par <b>il / elle</b> → pronom ou GN.'],
   ['Cherche les mots du <b>groupe nominal</b> (déterminant, nom, adjectif).','Au pluriel : <b>-s / -x</b>. Au féminin : <b>-e</b>.','Colorie les mots qui <b>portent la marque</b> de l’accord.'],
   ['Verbe → sujet → compléments.','<b>COD</b> : « quoi ? / qui ? » sans préposition. <b>COI</b> : après <b>à / de</b>.','<b>Attribut</b> : après être / sembler, décrit le sujet. <b>CP</b> : où ? quand ? comment ? (on peut le supprimer).'],
-  ['<b>Verbe</b>, puis <b>sujet</b> (« Qui est-ce qui ? »).','Ensuite les <b>compléments</b> : COD, COI, attribut, CP.','Enfin le <b>GN</b> : un trait au-dessus de chaque mot (déterminant + nom + adjectif).']]
+  ['<b>Verbe</b>, puis <b>sujet</b> (« Qui est-ce qui ? »).','Ensuite les <b>compléments</b> : COD, COI, attribut, CP.','Enfin le <b>GN</b> : un trait au-dessus de chaque mot (déterminant + nom + adjectif).'],
+  ['Cherche un <b>nom</b> : le <b>déterminant</b> est juste devant (et parfois un <b>adjectif</b>).','Un trait au-dessus de <b>chaque mot</b> du GN : le petit chat, mes amis, une grande maison.','Les <b>pronoms</b> (il, elle, nous…) ne sont pas des GN.'],
+  ['<b>Déterminant</b> : devant le nom. <b>Nom</b> : on peut mettre un / une devant.','<b>Adjectif</b> : il dit comment est le nom et il <b>s’accorde</b> avec lui.'],
+  ['Ces mots <b>ne changent pas</b> (sauf le pronom qui remplace un nom).','<b>Pronom</b> : il, elle, nous… <b>Adverbe</b> : hier, bien, tôt… <b>Préposition</b> : à, dans, avec… <b>Conjonction</b> : et, mais, car.'],
+  ['<b>Verbe</b> d’abord. <b>COD</b> : « quoi ? / qui ? » sans préposition. <b>COI</b> : après <b>à</b> ou <b>de</b>.','<b>Attribut</b> : après être, sembler, devenir, rester : il décrit le sujet.'],
+  ['Trouve le <b>verbe</b> et pense à son <b>infinitif</b>.','<b>1er groupe</b> : -er (chanter). <b>2e groupe</b> : -ir et « nous -issons » (finir). <b>3e groupe</b> : tous les autres (aller, faire, dormir…).','Au passé composé : colorie les <b>deux mots</b> avec la couleur du groupe du <b>verbe</b> (mangé → manger = 1er).'],
+  ['Regarde le mot dans la phrase et essaie de le remplacer.','<b>a</b> → « avait » ; <b>à</b> → impossible. <b>et</b> → « et puis » ; <b>est</b> → « était ».'],
+  ['Regarde le mot dans la phrase et essaie de le remplacer.','<b>on</b> → « il » ; <b>ont</b> → « avaient ». <b>son</b> → « mon » ; <b>sont</b> → « étaient ».']]
 };
-const BOX=['s','q','o','k','t','e'], TEN=['p','i','u','c','n','v'], NAT=['D','N','J','R','B','P','C','V'];
+const BOX=['s','q','o','k','t','e'], TEN=['p','i','u','c','n','v','1','2','3'], NAT=['D','N','J','R','B','P','C','V'], HOM=['A','Z','F','E','O','H','U','W'];
 const EXP=(t,x)=>x==='v'?/[piuc]/.test(t.c):t.c.includes(x);
 const PT={}; Object.keys(TXT).forEach(g=>{ PT[g]=[]; TXT[g].forEach(tx=>{ let cur=[]; PARSE(tx).forEach(t=>{ cur.push(t); if(/[.!?]/.test(t.p)){ PT[g].push(cur); cur=[]; } }); if(cur.length) PT[g].push(cur); }); });
 const S={g:'6H',lv:0,cur:null,ti:-1,toks:[],marks:[],done:false};
@@ -5193,7 +5365,7 @@ function paintRules(){ const A=act(); $('txRp').innerHTML=RGRP[S.g].map(([t,l])=
 function paintAll(keep){
   const M=MODES[S.g][S.lv];
   $('txG').innerHTML=segH([['4H','4H'],['6H','6H']],S.g);
-    { const GR={'4H':[['📝 La phrase',[2,1]],['🏷️ Les mots',[3]],['⏱️ Le verbe',[0]]],'6H':[['📝 La phrase',[2,1]],['🏷️ Les mots',[3,4]],['⏱️ Le verbe',[0]],['🚂 Les fonctions',[5,6]]]}[S.g];
+    { const GR={'4H':[['📝 La phrase',[2,1]],['🧱 Le groupe nominal',[4]],['🏷️ Les mots',[3,5,6]],['⏱️ Le verbe',[0]],['👯 Les homophones',[7,8]]],'6H':[['📝 La phrase',[2,1]],['🧱 Le groupe nominal',[7,4]],['🏷️ Les mots',[3,8,9]],['⏱️ Le verbe',[0,11]],['🚂 Les fonctions',[5,6,10]],['👯 Les homophones',[12,13]]]}[S.g];
       $('txL').innerHTML=GR.map(([t,ix])=>`<div class="gk-grp"><div class="gk-gl">${t}</div><div class="gk-row">${ix.map(i=>`<button data-i="${i}" aria-pressed="${i===S.lv}">${SHORT[S.g][i]}</button>`).join('')}</div></div>`).join(''); }
   $('txO').innerHTML='🎯 <b>Ton défi :</b> '+M[1]+'<ol class="cx-meth">'+METH[S.g][S.lv].map(x=>'<li>'+x+'</li>').join('')+'</ol>';
   const A=act(); if(!A.includes(S.cur)) S.cur=A[0];
@@ -5210,14 +5382,14 @@ $('txG').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.g=b.d
 $('txL').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.lv=+b.dataset.i; S.ti=-1; newText(); paintAll(); };
 $('txC').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; S.cur=b.dataset.c; paintAll(true); };
 $('txT').onclick=e=>{ const w=e.target.closest('.cw'); if(!w) return; if(S.revealed){ tipOf(w); return; } if(S.done) return; const k=+w.dataset.i, m=S.marks[k], c=S.cur;
-  const grp=BOX.includes(c)?BOX:TEN.includes(c)?TEN:NAT.includes(c)?NAT:[c];
+  const grp=BOX.includes(c)?BOX:TEN.includes(c)?TEN:NAT.includes(c)?NAT:HOM.includes(c)?HOM:[c];
   S.marks[k]=m.includes(c)?m.filter(x=>x!==c):m.filter(x=>!grp.includes(x)).concat(c);
   paintT(); };
 $('txR').onclick=()=>{ S.marks=S.toks.map(()=>[]); S.done=false; S.revealed=false; paintAll(); };
 $('txN').onclick=()=>{ newText(); paintAll(); };
 const plain=()=>S.toks.map((t,k)=>t.w+t.p+sp(k)).join('');
 $('txS').onclick=()=>say(plain(),'fr');
-const NAME={s:'le sujet',q:'le prédicat',e:'un complément de phrase (CP)',o:'un COD',k:'un COI',t:'un attribut',v:'le verbe',p:'un verbe au présent',i:'un verbe à l’imparfait',u:'un verbe au futur',c:'un verbe au passé composé',n:'un infinitif',g:'un mot du groupe nominal (GN)',x:'un mot qui porte un accord',D:'un déterminant',N:'un nom',J:'un adjectif',R:'un pronom',V:'un verbe',B:'un adverbe',P:'une préposition',C:'une conjonction'};
+const NAME={s:'le sujet',q:'le prédicat',e:'un complément de phrase (CP)',o:'un COD',k:'un COI',t:'un attribut',v:'le verbe',p:'un verbe au présent',i:'un verbe à l’imparfait',u:'un verbe au futur',c:'un verbe au passé composé',n:'un infinitif',1:'un verbe du 1er groupe',2:'un verbe du 2e groupe',3:'un verbe du 3e groupe',A:'« a » (verbe avoir)',Z:'« à » (préposition)',F:'« et » (conjonction)',E:'« est » (verbe être)',O:'« on » (pronom)',H:'« ont » (verbe avoir)',U:'« son » (déterminant)',W:'« sont » (verbe être)',g:'un mot du groupe nominal (GN)',x:'un mot qui porte un accord',D:'un déterminant',N:'un nom',J:'un adjectif',R:'un pronom',V:'un verbe',B:'un adverbe',P:'une préposition',C:'une conjonction'};
 const runs=(idx)=>{ const out=[]; idx.forEach(i=>{ const l=out[out.length-1]; if(l&&l[l.length-1]===i-1) l.push(i); else out.push([i]); }); return out; };
 const txt=r=>r.map((k,j)=>S.toks[k].w+(j<r.length-1?sp(k):'')).join('');
 function explain(){
