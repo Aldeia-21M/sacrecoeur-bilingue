@@ -959,7 +959,8 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
-    { v: "10.29", desc: "Coloriage : GN entouré, exercices rangés" },
+    { v: "10.30", desc: "Allemand : verbe lieben (aimer)" },
+  { v: "10.29", desc: "Coloriage : GN entouré, exercices rangés" },
     { v: "10.28", desc: "Colorie la phrase : GN, groupes, homophones" },
     { v: "10.27", desc: "Entraînement : d’abord ce verbe, puis tous" },
     { v: "10.26", desc: "Verben : traduction collée au verbe" },
@@ -3964,10 +3965,11 @@ mk('reiten','faire du cheval','🐴','reit',{f:['reite','reitest','reitet','reit
 mk('joggen','faire du jogging','🏃','jogg',{note:'Verbe <b>régulier</b> : radical <b>jogg</b> + e, st, t, t, t, en, t, en.'});
 mk('basteln','bricoler','🧩','bastel',{f:['bastle','bastelst','bastelt','bastelt','bastelt','basteln','bastelt','basteln'],e:['e','st','t','t','t','n','t','n'],dm:{},irr:0,note:'Les verbes en <b>-eln</b> perdent un <b>e</b> : ich <b>bastle</b> (pas « bastele »), et à <b>wir / sie</b> la fin est seulement <b>-n</b> : wir basteln.'});
 mk('singen','chanter','🎤','sing',{note:'Verbe <b>régulier</b> : radical <b>sing</b> + e, st, t, t, t, en, t, en.'});
+mk('lieben','aimer','❤️','lieb',{note:'Verbe <b>régulier</b> : radical <b>lieb</b> + e, st, t, t, t, en, t, en. <b>Ich liebe dich</b> = Je t’aime. Pour dire « j’aime bien » (un jeu, un plat), on dit plutôt <b>ich mag</b>.'});
 const UN=[
  ['Einheit 1','Hallo! Und wie heisst du?','#dff4dc','#2f9e44',['haben','sein','heissen','wohnen','kommen','sprechen']],
  ['Einheit 2','In der Sonnenstrasse 13','#dbeafb','#1f5fd6',['einladen','zuhören','schreiben','zählen','fragen']],
- ['Einheit 3','Ich spiele gern …','#ffe8cc','#e08a1e',['machen','schwimmen','lesen','malen','reiten','joggen','basteln','singen']]];
+ ['Einheit 3','Ich spiele gern …','#ffe8cc','#e08a1e',['machen','schwimmen','lesen','malen','reiten','joggen','basteln','singen','lieben']]];
 const unitOf=k=>UN.findIndex(u=>u[4].includes(k));
 const ALL=UN.reduce((a,u)=>a.concat(u[4]),[]);
 const sayOf=(v,i)=>PN[i][0]+' '+V[v].f[i]+(V[v].sep?' '+V[v].sep:'');
@@ -4064,7 +4066,10 @@ const SATZ=[
  ['Welche Sprachen ','sprechen',' dieses Kind?',2,'','Quelles langues parle cet enfant ?'],
  ['Es ','sprechen',' Französisch und Deutsch.',4,'','Il / elle parle français et allemand.'],
  ['','haben',' ihr eine Katze?',6,'','Avez-vous un chat ?'],
- ['Nein, wir ','haben',' keine Katze.',5,'','Non, nous n’avons pas de chat.']
+ ['Nein, wir ','haben',' keine Katze.',5,'','Non, nous n’avons pas de chat.'],
+ ['Ich ','lieben',' meine Katze.',0,'','J’aime mon chat.'],
+ ['Wir ','lieben',' Musik.',5,'','Nous aimons la musique.'],
+ ['','lieben',' du Schokolade?',1,'','Aimes-tu le chocolat ?']
 ];
 SATZ[1]=['Ich ','heissen',' Alex.',0,'','Je m’appelle Alex.'];
 function askSatz(Q,only){
