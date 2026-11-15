@@ -920,7 +920,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 #p-dictee .dc-tag{display:inline-block;background:#f1f3f5;border-radius:99px;padding:2px 10px;margin:2px 4px 2px 0;font-size:14px;font-weight:800}
 #p-dictee .dc-stars{font-size:34px;text-align:center}
 #p-dictee .dc-seg{font-weight:900;text-align:center;font-size:18px;margin:4px 0}
-.lc-list{display:grid;gap:6px}.lc-w{display:grid;grid-template-columns:36px 1fr 1fr 28px;align-items:center;gap:8px;text-align:left;min-height:48px;border:3px solid rgba(29,36,51,.14);border-radius:14px;background:#fff;padding:4px 10px;font:inherit;color:#1d2433}.lc-w:active{background:#fff3bf}.lc-e{font-size:22px;text-align:center}.lc-d{font-weight:900;font-size:clamp(15px,4vw,18px)}.lc-f{opacity:.65;font-size:clamp(13px,3.6vw,15px)}.lc-s{opacity:.5;font-size:14px}
+.lc-list{display:grid;gap:8px}.lc-w{display:grid;grid-template-columns:34px 1fr 1fr;align-items:stretch;gap:6px}.lc-e{font-size:24px;text-align:center;align-self:center}.lc-b{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;min-height:56px;border-radius:14px;border:3px solid rgba(29,36,51,.14);padding:4px 10px;font:inherit;text-align:left;color:#1d2433;-webkit-tap-highlight-color:transparent}.lc-b i{font-style:normal;font-size:12px;opacity:.7;font-weight:800}.lc-b b{font-weight:900;font-size:clamp(15px,4.2vw,19px)}.lc-b span{font-weight:700;font-size:clamp(14px,3.8vw,17px)}.lc-b.de{background:#e7f5ff;border-color:#74c0fc}.lc-b.fr{background:#ebfbee;border-color:#8ce99a}.lc-b:active{transform:scale(.97);background:#fff3bf}
 </style>
 </head>
 <body>
@@ -1025,6 +1025,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.40", desc: "Leçons : son allemand et français" },
     { v: "10.39", desc: "Leçons : Wortschatz 1 et 2" },
     { v: "10.38", desc: "Section Leçons : une entrée par feuille" },
     { v: "10.37", desc: "Allemand : Umwelt, lieux et impressions" },
@@ -5626,9 +5627,9 @@ MkSeries('p-leconS',{title:'📚 Les leçons',intro:'Une entrée pour chaque feu
   grades:[['all','Toutes les classes']],hints:{'all':'Seuls les mots de la feuille choisie sont demandés.'},
   gen:(g,a)=>genLecon(g,a)});
 { const sh=document.getElementById('lcSheet'), box=document.getElementById('p-leconS'); let cur=LECONS[0].id;
-  const paintSheet=()=>{ const L=LECONS.find(x=>x.id===cur)||LECONS[0]; sh.innerHTML=`<div class="mx-box" style="margin-top:14px"><div class="mx-lab">📄 ${L.when.replace('📅 ','')}</div><div style="font-weight:900;font-size:18px;margin:2px 0 8px">${esc(L.title)} <small style="font-weight:700;opacity:.7">· ${esc(L.sub)}</small></div>`+L.parts.map(([t,ws])=>`<div class="mx-lab" style="margin-top:10px">${esc(t)}</div><div class="lc-list">${ws.map((w,i)=>`<button class="lc-w" data-de="${esc(w.de)}"><span class="lc-e">${w.e||'🔹'}</span><span class="lc-d">${esc(w.de)}</span><span class="lc-f">${esc(w.fr)}</span><span class="lc-s">🔊</span></button>`).join('')}</div>`).join('')+`<p class="mx-hint">Touche un mot pour l’entendre.</p></div>`; };
+  const paintSheet=()=>{ const L=LECONS.find(x=>x.id===cur)||LECONS[0]; sh.innerHTML=`<div class="mx-box" style="margin-top:14px"><div class="mx-lab">📄 ${L.when.replace('📅 ','')}</div><div style="font-weight:900;font-size:18px;margin:2px 0 8px">${esc(L.title)} <small style="font-weight:700;opacity:.7">· ${esc(L.sub)}</small></div>`+L.parts.map(([t,ws])=>`<div class="mx-lab" style="margin-top:10px">${esc(t)}</div><div class="lc-list">${ws.map((w,i)=>`<div class="lc-w"><span class="lc-e">${w.e||'🔹'}</span><button class="lc-b de" data-t="${esc(w.de)}" data-l="de" aria-label="Écouter en allemand"><i>🇩🇪 🔊</i><b>${esc(w.de)}</b></button><button class="lc-b fr" data-t="${esc(w.fr)}" data-l="fr" aria-label="Écouter en français"><i>🇫🇷 🔊</i><span>${esc(w.fr)}</span></button></div>`).join('')}</div>`).join('')+`<p class="mx-hint">🇩🇪 Touche l’allemand pour l’entendre en allemand · 🇫🇷 touche le français pour l’entendre en français.</p></div>`; };
   paintSheet();
-  sh.onclick=e=>{ const b=e.target.closest('.lc-w'); if(b) say(b.dataset.de,'de'); };
+  sh.onclick=e=>{ const b=e.target.closest('.lc-b'); if(b) say(b.dataset.t,b.dataset.l); };
   box.addEventListener('click',e=>{ const b=e.target.closest('#p-leconSA button'); if(!b) return; cur=b.dataset.v; setTimeout(paintSheet,0); }); }
 })();
 
