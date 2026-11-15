@@ -909,6 +909,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 #p-dictee .dc-mode button[aria-pressed=true]{background:#fff3bf;border-color:#f08c00}
 #p-dictee .dc-gi{border:0;border-bottom:4px solid #1c7ed6;background:#f1f8ff;font:inherit;font-weight:800;text-align:center;border-radius:6px 6px 0 0;color:#1d2433;padding:0 2px;margin:0 2px;max-width:100%}
 #p-dictee .dc-gi.ok{background:#d3f9d8;border-bottom-color:#2f9e44}#p-dictee .dc-gi.ko{background:#ffe3e3;border-bottom-color:#e03131}
+#p-dictee .dc-gw{display:inline-flex;flex-direction:column;align-items:center;vertical-align:bottom;line-height:1}#p-dictee .dc-gs{border:0;background:transparent;font-size:13px;line-height:1;min-width:30px;min-height:26px;padding:0;opacity:.55;color:#1d2433}#p-dictee .dc-gs:active{opacity:1}
 #p-dictee .dc-gfix{font-size:.62em;color:#c92a2a;font-weight:800;display:block;line-height:1}
 #p-dictee .dc-gl{font-size:clamp(19px,5vw,23px);line-height:2.3;margin:0 0 8px}
 #p-dictee .dc-res{font-size:clamp(19px,5.2vw,24px);line-height:2.1}
@@ -1021,6 +1022,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.34", desc: "Dictée à trous : 🔊 par mot, mots au hasard" },
     { v: "10.33", desc: "Dictée : pièges, accords et futur" },
     { v: "10.32", desc: "Section Dictée : préparer la dictée 2" },
     { v: "10.31", desc: "Wortschatz 3 : directions et comparaisons" },
@@ -7774,20 +7776,25 @@ function s6(){ let mode=SV.mode||'gap', gi=0, punc=true, hidden=false;
     if(n===0) markDone(6); pc(n===0);
     return `<div class="dc-card"><div class="dc-stars">${st}</div><div class="dc-seg">${n===0?'Sans faute !':n+' faute'+(n>1?'s':'')+' sur '+nw+' mots'}</div>${n?`<div>${Object.entries(cnt).map(([k,v])=>`<span class="dc-tag">${v} × ${esc(k)}</span>`).join('')}</div>`:''}<div class="dc-res" style="margin-top:8px">${html}</div><p class="dc-leg">Rose = ta faute (corrigée en dessous) · jaune pointillé = mot oublié · rouge barré = mot en trop. Les mots ratés sont gardés pour l’étape « Mots ».</p></div>`; };
   const paint=()=>{ const head=`<div class="dc-mode">${[['copy','📋 Copier'],['gap','🕳️ À trous'],['full','🎧 Dictée']].map(([k,t])=>`<button data-m="${k}" aria-pressed="${mode===k}">${t}</button>`).join('')}</div>`;
-    if(mode==='gap'){ let ix=0; body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">Écoute chaque phrase et complète les mots avec /k/</div>${S.map((s,si)=>`<div class="dc-gl"><button class="dc-spk" data-a="s" data-i="${si}">🔊</button>${gapSent(s,()=>ix++)}</div>`).join('')}</div><div id="dcFb"></div><button class="dc-go" data-a="gchk">✅ Vérifier</button>`; }
+    if(mode==='gap'){ let ix=0; if(!gapSet) pickGaps(); body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">Écoute chaque phrase et complète les mots à trous</div><div class="dc-ctl"><button class="dc-btn" data-a="regap">🔀 D’autres mots à trous</button></div>${S.map((s,si)=>`<div class="dc-gl"><button class="dc-spk" data-a="s" data-i="${si}">🔊</button>${gapSent(s,()=>ix++)}</div>`).join('')}<p class="dc-leg">Le petit 🔊 au-dessus d’un trou lit seulement ce mot.</p></div><div id="dcFb"></div><button class="dc-go" data-a="gchk">✅ Vérifier</button>`; }
     else if(mode==='copy') body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">Copie la dictée pour t’entraîner</div><div class="dc-ctl"><button class="dc-btn" data-a="all">🔊 Écouter</button><button class="dc-btn" data-a="hid">${hidden?'👁️ Montrer le texte':'🙈 Cacher le texte'}</button></div><div class="dc-text" ${hidden?'hidden':''}>${S.map(s=>`<p>${esc(s)}</p>`).join('')}</div></div><textarea class="dc-in" id="dcTa" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris ici…"></textarea><div id="dcFb"></div><button class="dc-go" data-a="chk">✅ Corriger ma copie</button>`;
     else body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">Écoute et écris ce que tu entends</div><div class="dc-seg">Groupe ${gi+1} / ${D.segs.length}</div><div class="dc-bar"><i style="width:${Math.round((gi+1)/D.segs.length*100)}%"></i></div>
      <div class="dc-ctl" style="justify-content:center"><button class="dc-btn" data-a="prev">⏮</button><button class="dc-btn" data-a="rep">🔊 Répéter</button><button class="dc-btn" data-a="slw">🐢 Lent</button><button class="dc-btn" data-a="nxt">⏭ Suivant</button></div>
      <label class="dc-leg" style="display:block;text-align:center"><input type="checkbox" data-a="pn" ${punc?'checked':''}> Dire la ponctuation (virgule, point)</label></div>
      <textarea class="dc-in" id="dcTa" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris la dictée ici…"></textarea><div id="dcFb"></div><button class="dc-go" data-a="chk">✅ J’ai fini, corriger</button>`; };
+  let gapSet=null; const ELIG=[...new Set(tk.filter(t=>t.pre.length>3&&(t.e.k||t.e.v||t.e.p)).map(t=>t.pre.toLowerCase()))];
+  const TRW=new Set(TR.map(t=>t[0].toLowerCase()));
+  function pickGaps(){ const pool=shuf(ELIG.filter(w=>TRW.has(w)||ELIG.length<12)); const rest=shuf(ELIG.filter(w=>!pool.includes(w))); gapSet=new Set(pool.concat(rest).slice(0,10)); }
   function gapSent(s,nx){ const w=norm(s).split(' ');
-    return w.map(x=>{ const core=x.replace(/[.,;:!?]+$/,''), post=x.slice(core.length), t=tk.find(q=>q.pre===core&&q.e.k); if(!t) return esc(x);
-      const id=nx(); return `<input class="dc-gi" data-g="${esc(core)}" size="${Math.max(3,core.length)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="mot ${id+1}">${esc(post)}`; }).join(' '); }
+    return w.map(x=>{ const core=x.replace(/[.,;:!?]+$/,''), post=x.slice(core.length); if(!gapSet.has(core.toLowerCase())) return esc(x);
+      const id=nx(); return `<span class="dc-gw"><button class="dc-gs" data-a="gs" data-w="${esc(core)}" aria-label="Écouter le mot">🔊</button><input class="dc-gi" data-g="${esc(core)}" size="${Math.max(3,core.length)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="mot ${id+1}"></span>${esc(post)}`; }).join(' '); }
   paint();
   body.onclick=e=>{ const b=e.target.closest('[data-a],[data-m]'); if(!b) return;
     if(b.dataset.m){ mode=b.dataset.m; SV.mode=mode; save(); paint(); return; }
     const a=b.dataset.a;
     if(a==='s') say(S[+b.dataset.i],.7);
+    else if(a==='gs') say(b.dataset.w,.7);
+    else if(a==='regap'){ pickGaps(); paint(); }
     else if(a==='all') seq(S.map(s=>({t:segSay(s),l:'fr',pause:900})));
     else if(a==='hid'){ hidden=!hidden; paint(); }
     else if(a==='rep') say(segSay(D.segs[gi]),.6);
