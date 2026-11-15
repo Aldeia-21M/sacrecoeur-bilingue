@@ -1025,6 +1025,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.39", desc: "Leçons : Wortschatz 1 et 2" },
     { v: "10.38", desc: "Section Leçons : une entrée par feuille" },
     { v: "10.37", desc: "Allemand : Umwelt, lieux et impressions" },
     { v: "10.36", desc: "Tables : nombres tirés dans la sélection" },
@@ -5605,10 +5606,14 @@ MkSeries('p-wort',{title:'🗣️ Wortschatz · le vocabulaire',intro:'Mots, art
 /* ===== LEÇONS : une entrée par feuille de vocabulaire donnée par l'école ===== */
 const lcW=a=>a.map(([fr,de,e])=>({fr,de,e:e||''}));
 const LECONS=[ /* les plus récentes en premier ; on ajoute ici chaque nouvelle feuille */
- {id:'umwelt3',date:'15.11.2026',ic:'🏙️',title:'Wortschatz 3 · Umwelt',sub:'die Atmosphäre : les lieux et l’impression',
+ {id:'umwelt3',date:'15.11.2026',when:'📅 Feuille du 15.11.2026',ic:'🏙️',title:'Wortschatz 3 · Umwelt',sub:'die Atmosphäre : les lieux et l’impression',
   parts:[['Der Ort · les lieux',lcW(THX.umwelt.slice(0,12).map(([e,f,d])=>[f,d,e]))],['Der Eindruck · l’impression laissée par le lieu',lcW(THX.eindruck.map(([e,f,d])=>[f,d,e]))]]},
- {id:'math3',date:'07.11.2026',ic:'📐',title:'Wortschatz 3 · Mathematik',sub:'comparer, directions, points cardinaux',
-  parts:[['Mathematik · Wortschatz 3',lcW(MATH_X.slice(MATH_X.findIndex(x=>x[0]==='moins que')).map(([f,d])=>[f,d,(window.DLEMO&&DLEMO[d])||'']))]]}
+ {id:'math3',date:'07.11.2026',when:'📅 Feuille du 07.11.2026',ic:'📐',title:'Wortschatz 3 · Mathematik',sub:'comparer, directions, points cardinaux',
+  parts:[['Mathematik · Wortschatz 3',lcW(MATH_X.slice(MATH_X.findIndex(x=>x[0]==='moins que')).map(([f,d])=>[f,d,(window.DLEMO&&DLEMO[d])||'']))]]},
+ {id:'wort2',date:'oct. 2026',when:'📅 Feuilles de début d’année (octobre 2026)',ic:'📏',title:'Wortschatz 2 · Mathematik',sub:'les dimensions et les formes',
+  parts:[['Mathematik lernen · Wortschatz 2',lcW([['la largeur','die Breite'],['la longueur','die Länge'],['la hauteur','die Höhe'],['la profondeur','die Tiefe'],['l’épaisseur','die Dicke'],['la grandeur','die Grösse'],['le périmètre','der Umfang'],['le rectangle','das Rechteck'],['le carré','das Quadrat'],['le triangle','das Dreieck']].map(([f,d])=>[f,d,(window.DLEMO&&DLEMO[d])||'']))]]},
+ {id:'wort1',date:'oct. 2026',when:'📅 Feuilles de début d’année (octobre 2026)',ic:'🎒',title:'Wortschatz 1 · Die Schulsachen',sub:'les fournitures scolaires',
+  parts:[['Die Schulsachen',lcW([['le crayon à papier','der Bleistift'],['le livre','das Buch'],['le feutre','der Filzstift'],['le livret','das Heft'],['la colle en bâton','der Klebestift'],['la règle','das Lineal'],['la trousse','das Mäppchen'],['la gomme','der Radiergummi'],['les ciseaux','die Schere'],['le taille-crayon','der Spitzer'],['le sac d’école','die Schultasche']].map(([f,d])=>[f,d,(window.DLEMO&&DLEMO[d])||'']))]]}
 ];
 const lcWords=id=>{ const L=LECONS.find(x=>x.id===id)||LECONS[0]; return [].concat(...L.parts.map(p=>p[1])); };
 function genLecon(g,id){ const A=lcWords(id), w=pick(A), sh=shuffle(A.filter(x=>x.de!==w.de)).slice(0,6), k=rnd(w.e?3:2);
@@ -5617,11 +5622,11 @@ function genLecon(g,id){ const A=lcWords(id), w=pick(A), sh=shuffle(A.filter(x=>
   const o=opts4(w.de,sh.map(x=>x.de)); return {kind:'mcq',vis:`<span class="emo big">${w.e}</span>`,prompt:'Quel est le mot allemand pour cette image ?',options:o,correct:o.indexOf(w.de),explain:`${w.e} = <b>${esc(w.de)}</b>`,after:w.de,say:w.de,lang:'de'}; }
 G.lecon=genLecon;
 MkSeries('p-leconS',{title:'📚 Les leçons',intro:'Une entrée pour chaque feuille de vocabulaire de l’école. Choisis la feuille de la semaine : tu vois les mots, puis tu t’entraînes.',
-  acts:LECONS.map(L=>[L.id,L.ic+' '+L.title,null,'📅 Feuille du '+L.date]),
+  acts:LECONS.map(L=>[L.id,L.ic+' '+L.title,null,L.when]),
   grades:[['all','Toutes les classes']],hints:{'all':'Seuls les mots de la feuille choisie sont demandés.'},
   gen:(g,a)=>genLecon(g,a)});
 { const sh=document.getElementById('lcSheet'), box=document.getElementById('p-leconS'); let cur=LECONS[0].id;
-  const paintSheet=()=>{ const L=LECONS.find(x=>x.id===cur)||LECONS[0]; sh.innerHTML=`<div class="mx-box" style="margin-top:14px"><div class="mx-lab">📄 La feuille du ${L.date}</div><div style="font-weight:900;font-size:18px;margin:2px 0 8px">${esc(L.title)} <small style="font-weight:700;opacity:.7">· ${esc(L.sub)}</small></div>`+L.parts.map(([t,ws])=>`<div class="mx-lab" style="margin-top:10px">${esc(t)}</div><div class="lc-list">${ws.map((w,i)=>`<button class="lc-w" data-de="${esc(w.de)}"><span class="lc-e">${w.e||'🔹'}</span><span class="lc-d">${esc(w.de)}</span><span class="lc-f">${esc(w.fr)}</span><span class="lc-s">🔊</span></button>`).join('')}</div>`).join('')+`<p class="mx-hint">Touche un mot pour l’entendre.</p></div>`; };
+  const paintSheet=()=>{ const L=LECONS.find(x=>x.id===cur)||LECONS[0]; sh.innerHTML=`<div class="mx-box" style="margin-top:14px"><div class="mx-lab">📄 ${L.when.replace('📅 ','')}</div><div style="font-weight:900;font-size:18px;margin:2px 0 8px">${esc(L.title)} <small style="font-weight:700;opacity:.7">· ${esc(L.sub)}</small></div>`+L.parts.map(([t,ws])=>`<div class="mx-lab" style="margin-top:10px">${esc(t)}</div><div class="lc-list">${ws.map((w,i)=>`<button class="lc-w" data-de="${esc(w.de)}"><span class="lc-e">${w.e||'🔹'}</span><span class="lc-d">${esc(w.de)}</span><span class="lc-f">${esc(w.fr)}</span><span class="lc-s">🔊</span></button>`).join('')}</div>`).join('')+`<p class="mx-hint">Touche un mot pour l’entendre.</p></div>`; };
   paintSheet();
   sh.onclick=e=>{ const b=e.target.closest('.lc-w'); if(b) say(b.dataset.de,'de'); };
   box.addEventListener('click',e=>{ const b=e.target.closest('#p-leconSA button'); if(!b) return; cur=b.dataset.v; setTimeout(paintSheet,0); }); }
