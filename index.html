@@ -910,6 +910,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 #p-dictee .dc-gi{border:0;border-bottom:4px solid #1c7ed6;background:#f1f8ff;font:inherit;font-weight:800;text-align:center;border-radius:6px 6px 0 0;color:#1d2433;padding:0 2px;margin:0 2px;max-width:100%}
 #p-dictee .dc-gi.ok{background:#d3f9d8;border-bottom-color:#2f9e44}#p-dictee .dc-gi.ko{background:#ffe3e3;border-bottom-color:#e03131}
 #p-dictee .dc-gw{display:inline-flex;flex-direction:column;align-items:center;vertical-align:bottom;line-height:1}#p-dictee .dc-gs{border:0;background:transparent;font-size:13px;line-height:1;min-width:30px;min-height:26px;padding:0;opacity:.55;color:#1d2433}#p-dictee .dc-gs:active{opacity:1}
+#p-dictee .dc-cv{display:block;width:calc(100% - 36px);margin:0 auto;height:760px;border:3px solid rgba(29,36,51,.2);border-radius:16px;background-color:#fff;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 58px,#a5d8ff 58px,#a5d8ff 60px);background-position:0 -2px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}#p-dictee .dc-btn[aria-pressed=true]{background:#fff3bf;border-color:#f08c00}
 #p-dictee .dc-gfix{font-size:.62em;color:#c92a2a;font-weight:800;display:block;line-height:1}
 #p-dictee .dc-gl{font-size:clamp(19px,5vw,23px);line-height:2.3;margin:0 0 8px}
 #p-dictee .dc-res{font-size:clamp(19px,5.2vw,24px);line-height:2.1}
@@ -1022,6 +1023,7 @@ html.cf-calm *,html.cf-calm *::before,html.cf-calm *::after{animation:none!impor
 /* ===== Historique des versions : à éditer à la main (plus récent en haut) ===== */
 const CHANGELOG = [
   { date: "2026-10-17", versions: [
+    { v: "10.35", desc: "Dictée : écriture au stylet iPad" },
     { v: "10.34", desc: "Dictée à trous : 🔊 par mot, mots au hasard" },
     { v: "10.33", desc: "Dictée : pièges, accords et futur" },
     { v: "10.32", desc: "Section Dictée : préparer la dictée 2" },
@@ -7775,13 +7777,25 @@ function s6(){ let mode=SV.mode||'gap', gi=0, punc=true, hidden=false;
     SV.best=SV.best||{}; if(SV.best[mode]===undefined||n<SV.best[mode]){ SV.best[mode]=n; save(); }
     if(n===0) markDone(6); pc(n===0);
     return `<div class="dc-card"><div class="dc-stars">${st}</div><div class="dc-seg">${n===0?'Sans faute !':n+' faute'+(n>1?'s':'')+' sur '+nw+' mots'}</div>${n?`<div>${Object.entries(cnt).map(([k,v])=>`<span class="dc-tag">${v} × ${esc(k)}</span>`).join('')}</div>`:''}<div class="dc-res" style="margin-top:8px">${html}</div><p class="dc-leg">Rose = ta faute (corrigée en dessous) · jaune pointillé = mot oublié · rouge barré = mot en trop. Les mots ratés sont gardés pour l’étape « Mots ».</p></div>`; };
-  const paint=()=>{ const head=`<div class="dc-mode">${[['copy','📋 Copier'],['gap','🕳️ À trous'],['full','🎧 Dictée']].map(([k,t])=>`<button data-m="${k}" aria-pressed="${mode===k}">${t}</button>`).join('')}</div>`;
+  const paint=()=>{ const head=`<div class="dc-mode">${[['copy','📋 Copier'],['gap','🕳️ À trous'],['full','🎧 Dictée'],['hand','✏️ Stylet']].map(([k,t])=>`<button data-m="${k}" aria-pressed="${mode===k}">${t}</button>`).join('')}</div>`;
     if(mode==='gap'){ let ix=0; if(!gapSet) pickGaps(); body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">Écoute chaque phrase et complète les mots à trous</div><div class="dc-ctl"><button class="dc-btn" data-a="regap">🔀 D’autres mots à trous</button></div>${S.map((s,si)=>`<div class="dc-gl"><button class="dc-spk" data-a="s" data-i="${si}">🔊</button>${gapSent(s,()=>ix++)}</div>`).join('')}<p class="dc-leg">Le petit 🔊 au-dessus d’un trou lit seulement ce mot.</p></div><div id="dcFb"></div><button class="dc-go" data-a="gchk">✅ Vérifier</button>`; }
     else if(mode==='copy') body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">Copie la dictée pour t’entraîner</div><div class="dc-ctl"><button class="dc-btn" data-a="all">🔊 Écouter</button><button class="dc-btn" data-a="hid">${hidden?'👁️ Montrer le texte':'🙈 Cacher le texte'}</button></div><div class="dc-text" ${hidden?'hidden':''}>${S.map(s=>`<p>${esc(s)}</p>`).join('')}</div></div><textarea class="dc-in" id="dcTa" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris ici…"></textarea><div id="dcFb"></div><button class="dc-go" data-a="chk">✅ Corriger ma copie</button>`;
-    else body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">Écoute et écris ce que tu entends</div><div class="dc-seg">Groupe ${gi+1} / ${D.segs.length}</div><div class="dc-bar"><i style="width:${Math.round((gi+1)/D.segs.length*100)}%"></i></div>
+    else { const hand=mode==='hand'; body.innerHTML=`${head}<div class="dc-card"><div class="dc-sub">${hand?'Écoute et écris à la main (Apple Pencil)':'Écoute et écris ce que tu entends'}</div><div class="dc-seg">Groupe ${gi+1} / ${D.segs.length}</div><div class="dc-bar"><i style="width:${Math.round((gi+1)/D.segs.length*100)}%"></i></div>
      <div class="dc-ctl" style="justify-content:center"><button class="dc-btn" data-a="prev">⏮</button><button class="dc-btn" data-a="rep">🔊 Répéter</button><button class="dc-btn" data-a="slw">🐢 Lent</button><button class="dc-btn" data-a="nxt">⏭ Suivant</button></div>
      <label class="dc-leg" style="display:block;text-align:center"><input type="checkbox" data-a="pn" ${punc?'checked':''}> Dire la ponctuation (virgule, point)</label></div>
-     <textarea class="dc-in" id="dcTa" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris la dictée ici…"></textarea><div id="dcFb"></div><button class="dc-go" data-a="chk">✅ J’ai fini, corriger</button>`; };
+     ${hand?`<div class="dc-hw"><div class="dc-ctl" style="justify-content:center"><button class="dc-btn" data-a="hundo">↩️ Annuler</button><button class="dc-btn" data-a="hclr">🗑️ Tout effacer</button><button class="dc-btn" data-a="hfin" aria-pressed="true">✋ Paume posée : stylet seul</button></div><canvas id="dcCv" class="dc-cv"></canvas><p class="dc-leg">Pose ta main comme sur une feuille : seul le stylet écrit, la paume et les doigts sont ignorés. Pour faire défiler la page, touche en dehors de la feuille, sur les bords, ou désactive « Paume posée ».</p></div><div id="dcFb"></div><button class="dc-go" data-a="hcmp">👀 J’ai fini : je compare avec le texte</button>`:`<textarea class="dc-in" id="dcTa" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Écris la dictée ici…"></textarea><p class="dc-leg">✏️ iPad : avec l’Apple Pencil, tu peux écrire directement dans la case (Scribble, réglage « Apple Pencil » de l’iPad).</p><div id="dcFb"></div><button class="dc-go" data-a="chk">✅ J’ai fini, corriger</button>`}`; if(hand) initCv(); } };
+  /* ---- zone d'écriture au stylet ---- */
+  let strokes=[];
+  function initCv(){ const cv=$('dcCv'); if(!cv) return; const dpr=window.devicePixelRatio||1, w=cv.clientWidth||340, h=cv.clientHeight||760; cv.width=w*dpr; cv.height=h*dpr; const c=cv.getContext('2d'); c.scale(dpr,dpr); c.lineCap='round'; c.lineJoin='round'; c.strokeStyle='#1d2433';
+    const redraw=()=>{ c.clearRect(0,0,w,h); strokes.forEach(st=>{ for(let i=1;i<st.length;i++){ c.lineWidth=st[i][2]; c.beginPath(); c.moveTo(st[i-1][0],st[i-1][1]); c.lineTo(st[i][0],st[i][1]); c.stroke(); } if(st.length===1){ c.lineWidth=st[0][2]; c.beginPath(); c.arc(st[0][0],st[0][1],st[0][2]/2,0,7); c.fill(); } }); };
+    cv.style.touchAction='none'; let cur=null;
+    const pt=e=>{ const r=cv.getBoundingClientRect(); return [e.clientX-r.left,e.clientY-r.top,e.pointerType==='pen'?1.6+(e.pressure||.5)*2.6:2.8]; };
+    cv.onpointerdown=e=>{ if(e.pointerType==='touch') return; e.preventDefault(); try{ cv.setPointerCapture(e.pointerId); }catch(x){} cur=[pt(e)]; strokes.push(cur); c.fillStyle='#1d2433'; redraw(); };
+    cv.onpointermove=e=>{ if(!cur) return; e.preventDefault(); const ev=(e.getCoalescedEvents?e.getCoalescedEvents():[e]); (ev.length?ev:[e]).forEach(x=>{ const p=pt(x), q=cur[cur.length-1]; cur.push(p); c.lineWidth=p[2]; c.beginPath(); c.moveTo(q[0],q[1]); c.lineTo(p[0],p[1]); c.stroke(); }); };
+    const end=()=>{ cur=null; }; cv.onpointerup=end; cv.onpointercancel=end;
+    cv.oncontextmenu=e=>e.preventDefault();
+    cv._redraw=redraw; cv._fd=palm=>{ cv.style.touchAction=palm?'none':'pan-y'; }; strokes=[]; }
+  const handScore=()=>`<div class="dc-card"><div class="dc-sub">Compare avec le texte juste</div><div class="dc-res">${S.map(x=>esc(x)).join(' ')}</div><div class="dc-sub" style="margin-top:10px">Combien de fautes as-tu trouvées dans ton texte ?</div><div class="dc-opts">${[0,1,2,3].map(n=>`<button data-a="hs" data-n="${n}">${n}</button>`).join('')}<button data-a="hs" data-n="4" style="grid-column:span 4">4 ou plus</button></div></div>`;
   let gapSet=null; const ELIG=[...new Set(tk.filter(t=>t.pre.length>3&&(t.e.k||t.e.v||t.e.p)).map(t=>t.pre.toLowerCase()))];
   const TRW=new Set(TR.map(t=>t[0].toLowerCase()));
   function pickGaps(){ const pool=shuf(ELIG.filter(w=>TRW.has(w)||ELIG.length<12)); const rest=shuf(ELIG.filter(w=>!pool.includes(w))); gapSet=new Set(pool.concat(rest).slice(0,10)); }
@@ -7794,6 +7808,11 @@ function s6(){ let mode=SV.mode||'gap', gi=0, punc=true, hidden=false;
     const a=b.dataset.a;
     if(a==='s') say(S[+b.dataset.i],.7);
     else if(a==='gs') say(b.dataset.w,.7);
+    else if(a==='hundo'){ strokes.pop(); const cv=$('dcCv'); if(cv&&cv._redraw){ cv.getContext('2d').fillStyle='#1d2433'; cv._redraw(); } }
+    else if(a==='hclr'){ strokes=[]; const cv=$('dcCv'); if(cv&&cv._redraw) cv._redraw(); }
+    else if(a==='hfin'){ const on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',on); b.textContent=on?'✋ Paume posée : stylet seul':'☝️ Doigt libre : défiler'; const cv=$('dcCv'); if(cv&&cv._fd) cv._fd(on); }
+    else if(a==='hcmp'){ $('dcFb').innerHTML=handScore(); $('dcFb').scrollIntoView({behavior:'smooth',block:'start'}); }
+    else if(a==='hs'){ const n=+b.dataset.n; SV.best=SV.best||{}; if(SV.best.hand===undefined||n<SV.best.hand){ SV.best.hand=n; save(); } if(n===0) markDone(6); pc(n===0); $('dcFb').innerHTML=`<div class="dc-card"><div class="dc-stars">${n===0?'🌟🌟🌟':n<=2?'🌟🌟':'🌟'}</div><div class="dc-seg">${n===0?'Bravo, sans faute !':'Recopie les mots ratés, puis recommence.'}</div></div>`; }
     else if(a==='regap'){ pickGaps(); paint(); }
     else if(a==='all') seq(S.map(s=>({t:segSay(s),l:'fr',pause:900})));
     else if(a==='hid'){ hidden=!hidden; paint(); }
